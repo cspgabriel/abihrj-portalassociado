@@ -1,16 +1,17 @@
 import React from 'react';
-import { Benefit, BenefitCategory } from '../types';
-import { BENEFITS_DATA } from '../constants';
+import { Benefit, BenefitCategory, Forum } from '../types';
+import { BENEFITS_DATA, FORUMS_DATA } from '../constants';
 import * as Icons from 'lucide-react';
-import { ChevronRight, Star } from 'lucide-react';
+import { ChevronRight, Star, Users } from 'lucide-react';
 
 interface MegaMenuProps {
   isOpen: boolean;
   onClose: () => void;
   onBenefitClick: (benefit: Benefit) => void;
+  onForumClick?: (forum: Forum) => void; // Optional if passed, though standard nav might be used
 }
 
-const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) => {
+const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick, onForumClick }) => {
   if (!isOpen) return null;
 
   // Group benefits by category
@@ -19,8 +20,6 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) 
     BenefitCategory.COMMERCIAL,
     BenefitCategory.OPERATIONAL,
     BenefitCategory.EVENTS,
-    BenefitCategory.PARTNERS,
-    BenefitCategory.HR
   ];
 
   return (
@@ -31,7 +30,36 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) 
       onMouseLeave={onClose}
     >
       <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          
+          {/* Forums Column (Dedicated) */}
+          <div className="space-y-4 bg-blue-50/50 p-4 rounded-xl -mt-4 -mb-4">
+             <h3 className="text-sm font-bold text-rio-blue uppercase tracking-wider border-b border-blue-100 pb-2 flex items-center gap-2">
+               <Users className="w-4 h-4" />
+               Fóruns HoteisRio
+             </h3>
+             <ul className="space-y-3">
+               {FORUMS_DATA.map((forum) => {
+                 const IconComponent = (Icons as any)[forum.iconName] || Icons.Users;
+                 return (
+                    <li key={forum.id}>
+                      <button
+                        onClick={() => {
+                          if (onForumClick) onForumClick(forum);
+                          onClose();
+                        }}
+                        className="flex items-center gap-2 group w-full text-left p-1 rounded-lg hover:bg-white transition-colors"
+                      >
+                         <IconComponent className="w-4 h-4 text-gray-500 group-hover:text-rio-blue" />
+                         <span className="text-gray-700 font-medium text-sm group-hover:text-rio-blue transition-colors">{forum.title}</span>
+                      </button>
+                    </li>
+                 );
+               })}
+             </ul>
+          </div>
+
+          {/* Standard Benefit Categories */}
           {categoriesToDisplay.map((category) => {
             const benefits = BENEFITS_DATA.filter(b => b.category === category).slice(0, 5);
             

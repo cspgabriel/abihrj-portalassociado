@@ -1,6 +1,6 @@
 
 
-import { Benefit, BenefitCategory, RioEvent } from './types';
+import { Benefit, BenefitCategory, RioEvent, Forum } from './types';
 
 export const MOCK_USER = {
   name: "Carlos Silva",
@@ -24,6 +24,89 @@ export const FOOTER_DATA = {
     facebook: "https://facebook.com/hoteisrio"
   }
 };
+
+export const FORUMS_DATA: Forum[] = [
+  {
+    id: 'forum-comercial',
+    title: 'Fórum Comercial',
+    description: 'Estratégias de vendas, revenue management e análise de mercado.',
+    iconName: 'TrendingUp',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400',
+    nextEdition: {
+      date: '15 de Maio, 09:00',
+      location: 'Windsor Marapendi',
+      topic: 'Estratégias para o Segundo Semestre e Calendário de Eventos 2025'
+    },
+    lastEditions: [
+      { date: 'Abril 2024', summary: 'Análise dos resultados do Carnaval e Verão.' },
+      { date: 'Março 2024', summary: 'Tendências de distribuição e novas OTAs.' }
+    ]
+  },
+  {
+    id: 'forum-rh',
+    title: 'Fórum de RH',
+    description: 'Gestão de pessoas, legislação trabalhista e capacitação.',
+    iconName: 'Users',
+    imageUrl: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=400',
+    nextEdition: {
+      date: '22 de Maio, 14:00',
+      location: 'Sede HoteisRio',
+      topic: 'Convenção Coletiva 2024/2025 e Saúde Mental'
+    },
+    lastEditions: [
+      { date: 'Abril 2024', summary: 'Recrutamento e Seleção na era digital.' },
+      { date: 'Fevereiro 2024', summary: 'Treinamento de equipes para grandes eventos.' }
+    ]
+  },
+  {
+    id: 'forum-mkt',
+    title: 'Fórum de Comunicação & MKT',
+    description: 'Marketing digital, branding e relacionamento com imprensa.',
+    iconName: 'Megaphone',
+    imageUrl: 'https://images.unsplash.com/photo-1533750516457-a7f992034fec?auto=format&fit=crop&q=80&w=400',
+    nextEdition: {
+      date: '05 de Junho, 10:00',
+      location: 'Online (Zoom)',
+      topic: 'Inteligência Artificial aplicada ao Marketing Hoteleiro'
+    },
+    lastEditions: [
+      { date: 'Março 2024', summary: 'Gestão de crises nas redes sociais.' },
+      { date: 'Janeiro 2024', summary: 'Planejamento de campanhas sazonais.' }
+    ]
+  },
+  {
+    id: 'forum-seguranca',
+    title: 'Fórum de Segurança',
+    description: 'Integração com forças policiais e protocolos de risco.',
+    iconName: 'Shield',
+    imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400',
+    nextEdition: {
+      date: '12 de Junho, 10:00',
+      location: 'DEAT - Leblon',
+      topic: 'Preparação para alta temporada e segurança no entorno'
+    },
+    lastEditions: [
+      { date: 'Maio 2024', summary: 'Novos canais de comunicação com a PMERJ.' },
+      { date: 'Março 2024', summary: 'Prevenção a golpes digitais e reservas falsas.' }
+    ]
+  },
+  {
+    id: 'forum-recepcao',
+    title: 'Fórum de Recepção',
+    description: 'Excelência no atendimento e procedimentos de front-office.',
+    iconName: 'ConciergeBell',
+    imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400',
+    nextEdition: {
+      date: '20 de Junho, 15:00',
+      location: 'Hotel Prodigy Santos Dumont',
+      topic: 'Hospitalidade Carioca: O diferencial no check-in'
+    },
+    lastEditions: [
+      { date: 'Abril 2024', summary: 'Upselling e Cross-selling na recepção.' },
+      { date: 'Fevereiro 2024', summary: 'Procedimentos de check-in ágil.' }
+    ]
+  }
+];
 
 export const RIO_EVENTS: RioEvent[] = [
   {

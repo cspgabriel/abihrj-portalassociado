@@ -16,13 +16,15 @@ import AssociationEventsPage from './components/AssociationEventsPage';
 import LawsRegulationPage from './components/LawsRegulationPage';
 import SecurityPage from './components/SecurityPage';
 import RegistrationUpdatePage from './components/RegistrationUpdatePage';
-import { User, Benefit, BenefitCategory } from './types';
-import { BENEFITS_DATA, OTHER_BENEFITS_LIST } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown } from 'lucide-react';
+import ForumPage from './components/ForumPage';
+import { User, Benefit, BenefitCategory, Forum } from './types';
+import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA } from './constants';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight } from 'lucide-react';
 import { authService } from './services/authService';
+import * as Icons from 'lucide-react';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE';
 
 // --- Components ---
 
@@ -227,6 +229,7 @@ const Dashboard: React.FC = () => {
   // View State Management
   const [currentView, setCurrentView] = useState<AppView>('DASHBOARD');
   const [selectedBenefitForDetails, setSelectedBenefitForDetails] = useState<Benefit | null>(null);
+  const [selectedForum, setSelectedForum] = useState<Forum | null>(null);
   
   // Catalog Filter State
   const [selectedCategory, setSelectedCategory] = useState<BenefitCategory | 'Todos'>('Todos');
@@ -274,7 +277,7 @@ const Dashboard: React.FC = () => {
         setCurrentView(view);
         // Reset selection if moving away from details
         if (view !== 'BENEFIT_DETAILS') {
-        setSelectedBenefitForDetails(null);
+          setSelectedBenefitForDetails(null);
         }
     }
   };
@@ -298,6 +301,11 @@ const Dashboard: React.FC = () => {
     
     setSelectedBenefitForDetails(benefit);
     setCurrentView('BENEFIT_DETAILS');
+  };
+
+  const handleForumClick = (forum: Forum) => {
+    setSelectedForum(forum);
+    setCurrentView('FORUM_PAGE');
   };
 
   // Botão "Utilizar": Executa a ação direta (Modal de serviço, Calendário, etc.)
@@ -348,6 +356,7 @@ const Dashboard: React.FC = () => {
   const handleBackToDashboard = () => {
     setCurrentView('DASHBOARD');
     setSelectedBenefitForDetails(null);
+    setSelectedForum(null);
   };
 
   const handleOpenPublicOrderModal = () => {
@@ -378,21 +387,10 @@ const Dashboard: React.FC = () => {
     .filter(b => b.isService === true)
     .sort(sortFunction);
   
-  // 2. Catalog (Non-services or All depending on design choice, currently standard cards) - Filtered & Sorted
+  // 2. Catalog (Non-services or All depending on design choice)
   const filteredCatalogBenefits = BENEFITS_DATA
     .filter(b => {
-       // Filter out services from catalog if desired to avoid dupes, or keep them. 
-       // Keeping logic consistent with previous version: Catalog excludes direct services usually, 
-       // but user said "All blocks". Let's show everything in catalog that matches category.
-       // Previous code: b.isService !== true. 
-       // New request: "todos blocos... classificados por ordem alfabetica". 
-       // I will keep the separation of "Quick Access" and "Catalog", but sort both.
-       
        const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;
-       // We only show non-services in catalog to avoid duplication with top section, OR we show all.
-       // Let's stick to showing non-services + items that are NOT in the top list to avoid clutter,
-       // UNLESS user filters by category, then show everything in that category.
-       
        const isQuickAccess = b.isService === true;
        
        if (selectedCategory !== 'Todos') {
@@ -423,9 +421,23 @@ const Dashboard: React.FC = () => {
     user,
     onLogout: handleLogout,
     onNavigate: handleNavigate,
-    onBenefitClick: handleViewDetails, // Pass down for MegaMenu
+    onBenefitClick: handleViewDetails,
+    onForumClick: handleForumClick, // Pass down to MegaMenu
     currentView
   };
+
+  if (currentView === 'FORUM_PAGE' && selectedForum) {
+    return (
+      <Layout {...commonLayoutProps}>
+        <ForumPage 
+          forum={selectedForum} 
+          onBack={handleBackToDashboard}
+          onRegisterUpdate={() => setCurrentView('REGISTRATION_UPDATE')}
+        />
+        <AiAssistant />
+      </Layout>
+    );
+  }
 
   if (currentView === 'REGISTRATION_UPDATE') {
     return (
@@ -461,7 +473,6 @@ const Dashboard: React.FC = () => {
   }
 
   if (currentView === 'TUTORIAL') {
-    // Legacy view fallback or specific page if needed, but navigation now mainly triggers overlay
     return (
        <Layout {...commonLayoutProps}>
           <PlatformTutorial onBack={handleBackToDashboard} />
@@ -506,7 +517,6 @@ const Dashboard: React.FC = () => {
           onUse={handleUseBenefit}
         />
         <AiAssistant />
-        {/* Modais funcionais globais também acessíveis daqui */}
         {isCalendarOpen && <CalendarModal onClose={() => setIsCalendarOpen(false)} />}
         {serviceRequestBenefit && (
           <ServiceRequestModal 
@@ -522,7 +532,7 @@ const Dashboard: React.FC = () => {
   return (
     <Layout {...commonLayoutProps}>
       
-      {/* Hero Header - Added ID for Tutorial */}
+      {/* Hero Header */}
       <div id="header-welcome" className="bg-gradient-to-r from-rio-blue to-blue-800 rounded-2xl p-6 md:p-8 mb-10 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-16 -mt-16 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 pointer-events-none" />
@@ -543,7 +553,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) - Added ID */}
+      {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) */}
       <div id="quick-access-section" className="mb-12">
          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
@@ -553,7 +563,6 @@ const Dashboard: React.FC = () => {
                <h2 className="text-xl font-bold text-gray-800">Acesso Rápido aos Serviços</h2>
             </div>
             
-            {/* Sorting Controls */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-500 hidden md:inline">Classificar:</span>
               <button 
@@ -578,7 +587,7 @@ const Dashboard: React.FC = () => {
          </div>
       </div>
 
-      {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO (Novos Cards) - Added ID */}
+      {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO */}
       <div id="community-section" className="mb-12">
         <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-purple-100 text-purple-600 rounded-lg">
@@ -588,9 +597,6 @@ const Dashboard: React.FC = () => {
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Cards are static, can sort if needed but usually better fixed order. Leaving fixed for semantic meaning unless requested otherwise. */}
-            
-            {/* Card: Contatos */}
             <div 
               onClick={() => handleNavigate('CONTACTS')}
               className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
@@ -602,7 +608,6 @@ const Dashboard: React.FC = () => {
                <p className="text-sm text-gray-500">Contatos diretos das equipes jurídica, comercial e diretoria.</p>
             </div>
 
-            {/* Card: Grupos WhatsApp */}
             <div 
               onClick={() => handleNavigate('WHATSAPP_GROUPS')}
               className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
@@ -614,7 +619,6 @@ const Dashboard: React.FC = () => {
                <p className="text-sm text-gray-500">Links para entrar nos grupos oficiais de networking por setor.</p>
             </div>
 
-            {/* Card: Agenda/Foruns */}
             <div 
               onClick={() => handleNavigate('ASSOCIATION_EVENTS')}
               className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
@@ -626,7 +630,6 @@ const Dashboard: React.FC = () => {
                <p className="text-sm text-gray-500">Próximos fóruns, reuniões de diretoria e workshops.</p>
             </div>
 
-            {/* Card: Atualização Cadastral */}
             <div 
               onClick={() => handleNavigate('REGISTRATION_UPDATE')}
               className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
@@ -640,10 +643,43 @@ const Dashboard: React.FC = () => {
          </div>
       </div>
 
-      {/* Divider */}
+      {/* SEÇÃO: FORUMS (NOVO) */}
+      <div id="forums-section" className="mb-12">
+         <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+               <Users className="w-6 h-6" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">Fóruns & Comitês</h2>
+         </div>
+         
+         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {FORUMS_DATA.map(forum => {
+              const IconComponent = (Icons as any)[forum.iconName] || Icons.Users;
+              return (
+                <div 
+                  key={forum.id} 
+                  onClick={() => handleForumClick(forum)}
+                  className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-rio-blue transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div className="mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-rio-blue group-hover:text-white transition-colors">
+                      <IconComponent className="w-5 h-5 text-gray-600 group-hover:text-white" />
+                    </div>
+                    <h3 className="font-bold text-gray-800 leading-tight mb-1 group-hover:text-rio-blue">{forum.title}</h3>
+                    <p className="text-xs text-gray-500 line-clamp-2">{forum.description}</p>
+                  </div>
+                  <div className="flex items-center text-xs font-semibold text-rio-blue mt-2">
+                    Ver detalhes <ChevronRight className="w-3 h-3" />
+                  </div>
+                </div>
+              );
+            })}
+         </div>
+      </div>
+
       <hr className="border-gray-200 mb-12" />
 
-      {/* SEÇÃO 2: CATÁLOGO DE BENEFÍCIOS - Added ID */}
+      {/* SEÇÃO 2: CATÁLOGO DE BENEFÍCIOS */}
       <div id="catalog-section">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
            <div className="flex items-center gap-3">
@@ -653,7 +689,6 @@ const Dashboard: React.FC = () => {
               <h2 className="text-xl font-bold text-gray-800">Catálogo de Benefícios & Conquistas</h2>
            </div>
 
-           {/* Sorting Controls for Catalog */}
            <div className="flex items-center gap-2">
               <span className="text-sm text-gray-500 hidden md:inline">Classificar:</span>
               <button 

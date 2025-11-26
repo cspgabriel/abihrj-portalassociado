@@ -40,6 +40,23 @@ export interface Benefit {
   dashboardUrl?: string; // URL para dashboard externo (ex: Ordem Pública)
 }
 
+export interface Forum {
+  id: string;
+  title: string;
+  description: string;
+  iconName: string;
+  imageUrl: string;
+  nextEdition: {
+    date: string;
+    location: string;
+    topic: string;
+  };
+  lastEditions: {
+    date: string;
+    summary: string;
+  }[];
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'model';
