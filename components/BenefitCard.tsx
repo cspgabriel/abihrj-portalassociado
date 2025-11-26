@@ -16,16 +16,12 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onClick }) => {
       onClick={() => onClick(benefit)}
       className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-100 group flex flex-col h-full"
     >
-      <div className="h-32 overflow-hidden relative">
-        <div className="absolute inset-0 bg-rio-blue/20 group-hover:bg-rio-blue/0 transition-colors z-10" />
-        <img 
-          src={benefit.imageUrl} 
-          alt={benefit.title}
-          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-        />
-        <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md z-20">
-          <IconComponent className="w-5 h-5 text-rio-blue" />
-        </div>
+      {/* Icon Header Area instead of Photo */}
+      <div className="h-32 bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-rio-blue/5 rounded-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-rio-gold/10 rounded-full -ml-8 -mb-8" />
+        
+        <IconComponent className="w-16 h-16 text-rio-blue group-hover:scale-110 transition-transform duration-300 z-10 drop-shadow-sm" strokeWidth={1.5} />
       </div>
       
       <div className="p-6 flex-1 flex flex-col">

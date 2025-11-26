@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Benefit } from '../types';
 import { X, Sparkles, Loader2, ArrowRight } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { generateBenefitDetails } from '../services/geminiService';
 
 interface BenefitModalProps {
@@ -26,6 +27,8 @@ const BenefitModal: React.FC<BenefitModalProps> = ({ benefit, onClose }) => {
 
   if (!benefit) return null;
 
+  const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <div 
@@ -34,33 +37,36 @@ const BenefitModal: React.FC<BenefitModalProps> = ({ benefit, onClose }) => {
       />
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto flex flex-col animate-scale-in">
         
-        {/* Header Image */}
-        <div className="relative h-48 sm:h-64 shrink-0">
-          <img 
-            src={benefit.imageUrl} 
-            alt={benefit.title} 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+        {/* Header Icon Area */}
+        <div className="relative h-40 bg-rio-blue shrink-0 flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-rio-blue to-blue-900 opacity-90" />
+          
+          {/* Decorative circles */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-10 -mb-10" />
+
+          <IconComponent className="w-20 h-20 text-white/90 relative z-10 drop-shadow-lg" strokeWidth={1.5} />
+
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur-md transition"
+            className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full backdrop-blur-md transition z-20"
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="absolute bottom-6 left-6 text-white">
-            <span className="bg-rio-gold text-blue-900 text-xs font-bold px-2 py-1 rounded mb-2 inline-block">
-              {benefit.category}
-            </span>
-            <h2 className="text-3xl font-bold">{benefit.title}</h2>
-          </div>
         </div>
 
         {/* Content */}
         <div className="p-8">
-          <div className="mb-6">
-             <h3 className="text-lg font-semibold text-gray-900 mb-2">Descrição Rápida</h3>
-             <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+          <div className="flex items-center gap-3 mb-6">
+             <span className="bg-rio-gold text-blue-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+               {benefit.category}
+             </span>
+             <h2 className="text-2xl font-bold text-gray-800">{benefit.title}</h2>
+          </div>
+
+          <div className="mb-8">
+             <h3 className="text-sm font-bold text-gray-400 uppercase mb-2 tracking-wider">Sobre o Benefício</h3>
+             <p className="text-gray-700 text-lg leading-relaxed">{benefit.description}</p>
           </div>
 
           {/* AI Section */}
@@ -70,7 +76,9 @@ const BenefitModal: React.FC<BenefitModalProps> = ({ benefit, onClose }) => {
              </div>
              
              <div className="flex items-center gap-2 mb-4">
-               <Sparkles className="w-5 h-5 text-rio-blue" />
+               <div className="bg-white p-1.5 rounded-lg shadow-sm">
+                  <Sparkles className="w-5 h-5 text-rio-blue" />
+               </div>
                <h3 className="text-lg font-bold text-rio-blue">Detalhes Inteligentes</h3>
              </div>
 
@@ -86,7 +94,7 @@ const BenefitModal: React.FC<BenefitModalProps> = ({ benefit, onClose }) => {
              )}
           </div>
 
-          <div className="mt-8 flex justify-end gap-3">
+          <div className="mt-8 flex justify-end gap-3 pt-6 border-t border-gray-100">
             <button 
               onClick={onClose}
               className="px-5 py-2.5 rounded-lg text-gray-600 hover:bg-gray-100 font-medium transition"
