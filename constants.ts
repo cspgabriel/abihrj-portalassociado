@@ -171,6 +171,72 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
+  // --- NOVOS PORTAIS (ADICIONADOS) ---
+  {
+    id: 'portal-fornecedores-new',
+    title: 'Portal de Fornecedores',
+    description: 'Acesse o catálogo completo de fornecedores homologados.',
+    category: BenefitCategory.PARTNERS,
+    iconName: 'ShoppingBag',
+    imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://beige-lobster-734094.hostingersite.com/',
+    usageSteps: [
+      "Clique em 'Utilizar' para acessar o portal externo.",
+      "Busque por categoria de produto ou serviço.",
+      "Entre em contato direto com fornecedores parceiros."
+    ]
+  },
+  {
+    id: 'central-rh-new',
+    title: 'Central do RH',
+    description: 'Plataforma exclusiva para gestores de Recursos Humanos.',
+    category: BenefitCategory.HR,
+    iconName: 'Users2',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://centraldorh.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse a Central do RH.",
+      "Consulte convenções coletivas e tabelas salariais.",
+      "Acesse modelos de documentos trabalhistas."
+    ]
+  },
+  {
+    id: 'planejador-feriados-2026',
+    title: 'Feriados 2026 & Comercial',
+    description: 'Planejador comercial com calendário completo de feriados.',
+    category: BenefitCategory.COMMERCIAL,
+    iconName: 'CalendarCheck',
+    imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://planejadordeferiados.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Abra o Planejador Comercial.",
+      "Visualize feriados nacionais e locais de 2026.",
+      "Planeje suas tarifas e pacotes com antecedência."
+    ]
+  },
+  {
+    id: 'central-manutencao-new',
+    title: 'Central da Manutenção',
+    description: 'Hub de serviços técnicos e suporte para engenharia hoteleira.',
+    category: BenefitCategory.OPERATIONAL,
+    iconName: 'Wrench',
+    imageUrl: 'https://images.unsplash.com/photo-1581092921461-eab62e97a782?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://centraldamanutencao.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse a Central da Manutenção.",
+      "Encontre prestadores de serviços técnicos especializados.",
+      "Consulte manuais de boas práticas de manutenção predial."
+    ]
+  },
+
   // --- SERVIÇOS (TOPO DA PÁGINA) ---
   {
     id: 'juridico-01',

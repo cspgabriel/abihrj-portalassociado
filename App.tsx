@@ -251,6 +251,11 @@ const Dashboard: React.FC = () => {
 
   // Botão "Utilizar": Executa a ação direta (Modal de serviço, Calendário, etc.)
   const handleUseBenefit = (benefit: Benefit) => {
+    if (benefit.externalLink) {
+      window.open(benefit.externalLink, '_blank');
+      return;
+    }
+
     if (benefit.id === 'calendar-01') {
       setIsCalendarOpen(true);
     } else if (benefit.id === 'juridico-01' || benefit.id === 'public-order-01') {
@@ -274,9 +279,13 @@ const Dashboard: React.FC = () => {
 
   // --- FILTER LOGIC ---
   const serviceBenefits = BENEFITS_DATA.filter(b => b.isService === true);
-  const filteredCatalogBenefits = BENEFITS_DATA.filter(b => 
-    b.isService !== true && (selectedCategory === 'Todos' || b.category === selectedCategory)
-  );
+  
+  // Ordenação alfabética do catálogo
+  const filteredCatalogBenefits = BENEFITS_DATA
+    .filter(b => 
+      b.isService !== true && (selectedCategory === 'Todos' || b.category === selectedCategory)
+    )
+    .sort((a, b) => a.title.localeCompare(b.title));
 
   if (checkingSession) {
     return (

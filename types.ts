@@ -35,6 +35,7 @@ export interface Benefit {
   isNew?: boolean; // Novo campo para destacar itens novos
   isService?: boolean; // Define se é um serviço online com link/ação direta
   usageSteps?: string[]; // Passo a passo de como utilizar
+  externalLink?: string; // Link externo para portais dedicados
 }
 
 export interface ChatMessage {
