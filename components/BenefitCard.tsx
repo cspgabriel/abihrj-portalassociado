@@ -1,7 +1,7 @@
 import React from 'react';
 import { Benefit } from '../types';
 import * as Icons from 'lucide-react';
-import { Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Sparkles, ArrowRight, CheckCircle2, Download } from 'lucide-react';
 
 interface BenefitCardProps {
   benefit: Benefit;
@@ -60,14 +60,24 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) 
           Detalhes
         </button>
 
-        {/* Button 2: Utilizar */}
-        <button 
-          onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
-        >
-          Utilizar
-          <ArrowRight className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
-        </button>
+        {/* Button 2: Utilizar or Download */}
+        {benefit.downloadUrl ? (
+          <button 
+            onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
+            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
+          >
+            Baixar
+            <Download className="w-3.5 h-3.5 group-hover/btn2:translate-y-0.5 transition-transform" />
+          </button>
+        ) : (
+          <button 
+            onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
+            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
+          >
+            Utilizar
+            <ArrowRight className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
+          </button>
+        )}
       </div>
     </div>
   );

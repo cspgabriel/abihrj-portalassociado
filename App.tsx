@@ -12,13 +12,14 @@ import AiAssistant from './components/AiAssistant';
 import ContactsPage from './components/ContactsPage';
 import WhatsAppGroupsPage from './components/WhatsAppGroupsPage';
 import AssociationEventsPage from './components/AssociationEventsPage';
+import LawsRegulationPage from './components/LawsRegulationPage';
 import { User, Benefit, BenefitCategory } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST } from './constants';
 import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone } from 'lucide-react';
 import { authService } from './services/authService';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS';
 
 // --- Components ---
 
@@ -55,6 +56,7 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
         await authService.login(email, password);
       }
     } catch (err: any) {
+      console.error(err);
       setError(err.message || 'Ocorreu um erro. Tente novamente.');
       setIsLoading(false);
     }
@@ -249,27 +251,51 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Botão "Detalhes": Navega para a página de explicação do benefício
+  const handleViewDetails = (benefit: Benefit) => {
+    // Se for Leis, vai direto pra página especializada também no clique de detalhes
+    if (benefit.id === 'laws-regulations') {
+      setCurrentView('LAWS_REGULATIONS');
+      return;
+    }
+    
+    setSelectedBenefitForDetails(benefit);
+    setCurrentView('BENEFIT_DETAILS');
+  };
+
   // Botão "Utilizar": Executa a ação direta (Modal de serviço, Calendário, etc.)
   const handleUseBenefit = (benefit: Benefit) => {
+    // 0. Download de Arquivos
+    if (benefit.downloadUrl) {
+      // Abre o link em nova aba, iniciando o download
+      window.open(benefit.downloadUrl, '_blank');
+      return;
+    }
+
+    // 1. Links Externos
     if (benefit.externalLink) {
       window.open(benefit.externalLink, '_blank');
       return;
     }
 
+    // 2. Ações Internas Específicas
     if (benefit.id === 'calendar-01') {
       setIsCalendarOpen(true);
-    } else if (benefit.id === 'juridico-01' || benefit.id === 'public-order-01') {
+      return;
+    } 
+    
+    if (benefit.id === 'juridico-01' || benefit.id === 'public-order-01') {
       setServiceRequestBenefit(benefit);
-    } else {
-      // Se não tem ação direta implementada, abre os detalhes/tutorial do benefício
-      handleViewDetails(benefit);
+      return;
     }
-  };
 
-  // Botão "Detalhes": Navega para a página de explicação do benefício
-  const handleViewDetails = (benefit: Benefit) => {
-    setSelectedBenefitForDetails(benefit);
-    setCurrentView('BENEFIT_DETAILS');
+    if (benefit.id === 'laws-regulations') {
+      setCurrentView('LAWS_REGULATIONS');
+      return;
+    }
+
+    // 3. Padrão: Abre página de detalhes
+    handleViewDetails(benefit);
   };
 
   const handleBackToDashboard = () => {
@@ -307,8 +333,18 @@ const Dashboard: React.FC = () => {
     user,
     onLogout: handleLogout,
     onNavigate: handleNavigate,
+    onBenefitClick: handleViewDetails, // Pass down for MegaMenu
     currentView
   };
+
+  if (currentView === 'LAWS_REGULATIONS') {
+    return (
+      <Layout {...commonLayoutProps}>
+        <LawsRegulationPage onBack={handleBackToDashboard} />
+        <AiAssistant />
+      </Layout>
+    );
+  }
 
   if (currentView === 'TUTORIAL') {
     // Legacy view fallback or specific page if needed, but navigation now mainly triggers overlay

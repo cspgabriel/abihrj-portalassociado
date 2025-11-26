@@ -36,6 +36,7 @@ export interface Benefit {
   isService?: boolean; // Define se é um serviço online com link/ação direta
   usageSteps?: string[]; // Passo a passo de como utilizar
   externalLink?: string; // Link externo para portais dedicados
+  downloadUrl?: string; // URL direta para download de arquivos
 }
 
 export interface ChatMessage {

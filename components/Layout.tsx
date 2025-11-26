@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
-import { User } from '../types';
-import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home } from 'lucide-react';
+import { User, Benefit } from '../types';
+import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home, ChevronDown } from 'lucide-react';
+import MegaMenu from './MegaMenu';
+import Footer from './Footer';
 
 // Import AppView type locally or accept string to avoid circular dependency issues if strict
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS';
 
 interface LayoutProps {
   children: React.ReactNode;
   user: User;
   onLogout: () => void;
   onNavigate: (view: AppView) => void;
+  onBenefitClick?: (benefit: Benefit) => void;
   currentView?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, currentView }) => {
+const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, onBenefitClick, currentView }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
 
   const handleNavClick = (view: AppView) => {
     onNavigate(view);
     setIsMobileMenuOpen(false);
+    setIsMegaMenuOpen(false);
   };
 
   const navItems = [
@@ -29,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       {/* Navbar */}
       <nav className="bg-rio-blue text-white shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,7 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
               </div>
               
               {/* Desktop Menu Links */}
-              <div className="hidden md:ml-8 md:flex md:items-center md:space-x-4">
+              <div className="hidden md:ml-8 md:flex md:items-center md:space-x-1">
                 {navItems.map((item) => (
                   <button
                     key={item.label}
@@ -64,6 +69,33 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
                     {item.label}
                   </button>
                 ))}
+
+                {/* Mega Menu Trigger */}
+                <div 
+                  className="relative"
+                  onMouseEnter={() => setIsMegaMenuOpen(true)}
+                  onMouseLeave={() => setIsMegaMenuOpen(false)}
+                >
+                  <button
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1
+                      ${isMegaMenuOpen ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'}
+                    `}
+                    onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
+                  >
+                    Benefícios
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isMegaMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {/* Mega Menu Component */}
+                  <MegaMenu 
+                    isOpen={isMegaMenuOpen} 
+                    onClose={() => setIsMegaMenuOpen(false)} 
+                    onBenefitClick={(benefit) => {
+                      if (onBenefitClick) onBenefitClick(benefit);
+                      setIsMegaMenuOpen(false);
+                    }}
+                  />
+                </div>
               </div>
             </div>
             
@@ -162,11 +194,8 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
         {children}
       </main>
 
-      <footer className="bg-white border-t border-gray-200 py-6 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} HoteisRio - Associação de Hotéis do Rio de Janeiro.</p>
-        </div>
-      </footer>
+      {/* New Elegant Footer */}
+      <Footer />
     </div>
   );
 };

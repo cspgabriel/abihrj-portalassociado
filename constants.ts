@@ -1,9 +1,25 @@
+
 import { Benefit, BenefitCategory, RioEvent } from './types';
 
 export const MOCK_USER = {
   name: "Carlos Silva",
   hotel: "Copacabana Palace View",
   role: "Gerente Geral"
+};
+
+export const FOOTER_DATA = {
+  address: "Av. Nilo Peçanha, 50 - Gr 2409 - Centro, Rio de Janeiro - RJ",
+  cep: "20020-906",
+  phone: "(21) 2220-3030",
+  email: "contato@hoteisrio.com.br",
+  razaoSocial: "Associação de Hotéis do Rio de Janeiro - ABIH-RJ",
+  cnpj: "33.662.138/0001-44",
+  socials: {
+    instagram: "https://instagram.com/hoteisrio",
+    linkedin: "https://linkedin.com/company/hoteisrio",
+    youtube: "https://youtube.com/hoteisrio",
+    facebook: "https://facebook.com/hoteisrio"
+  }
 };
 
 export const RIO_EVENTS: RioEvent[] = [
@@ -157,6 +173,66 @@ export const ASSOCIATION_EVENTS = [
   }
 ];
 
+// Lista de Decretos e Leis
+export const RJ_LAWS_DATA = [
+  {
+    id: 'law-001',
+    number: 'Decreto Rio nº 29.881',
+    date: '18/09/2008',
+    description: 'Institui o Programa de Incentivo ao Turismo na Cidade do Rio de Janeiro e concede incentivos fiscais para hotéis (Redução IPTU).',
+    category: 'Tributário',
+    link: 'http://mail.camara.rj.gov.br/APL/Legislativos/contlei.nsf/50ad008247b8f030032579ea0073d588/6676101c569777f9032576ac0072b2c3?OpenDocument'
+  },
+  {
+    id: 'law-002',
+    number: 'Lei Estadual nº 2.895',
+    date: '19/05/1998',
+    description: 'Dispõe sobre a obrigatoriedade de disponibilização de cardápios em Braille em bares, restaurantes e hotéis.',
+    category: 'Operacional',
+    link: '#'
+  },
+  {
+    id: 'law-003',
+    number: 'Lei Federal nº 11.771 (Lei Geral do Turismo)',
+    date: '17/09/2008',
+    description: 'Dispõe sobre a Política Nacional de Turismo, definindo as atribuições do setor hoteleiro e cadastro no Cadastur.',
+    category: 'Institucional',
+    link: 'http://www.planalto.gov.br/ccivil_03/_ato2007-2010/2008/lei/l11771.htm'
+  },
+  {
+    id: 'law-004',
+    number: 'Lei Estadual nº 5.517 (Lei Antifumo RJ)',
+    date: '17/08/2009',
+    description: 'Proíbe o consumo de cigarros em ambientes de uso coletivo, total ou parcialmente fechados, incluindo hotéis.',
+    category: 'Operacional',
+    link: '#'
+  },
+  {
+    id: 'law-005',
+    number: 'Decreto nº 49.333',
+    date: '26/08/2021',
+    description: 'Regulamenta procedimentos de licenciamento sanitário e vigilância em estabelecimentos hoteleiros.',
+    category: 'Operacional',
+    link: '#'
+  },
+  {
+    id: 'law-006',
+    number: 'Lei Federal nº 8.069 (ECA - Art. 82)',
+    date: '13/07/1990',
+    description: 'Proíbe a hospedagem de criança ou adolescente em hotel, salvo se autorizado ou acompanhado pelos pais.',
+    category: 'Jurídico',
+    link: 'http://www.planalto.gov.br/ccivil_03/leis/l8069.htm'
+  },
+  {
+    id: 'law-007',
+    number: 'Convenção Coletiva de Trabalho 2024/2025',
+    date: '01/01/2024',
+    description: 'Estabelece as diretrizes trabalhistas, pisos salariais e benefícios da categoria hoteleira no Rio de Janeiro.',
+    category: 'Trabalhista',
+    link: '#'
+  }
+];
+
 // Lista de texto simples para a seção "Outros Benefícios Permanentes"
 export const OTHER_BENEFITS_LIST = [
   "Monitoramento de novas leis (civil, trabalhista, tributária)",
@@ -171,7 +247,7 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
-  // --- NOVOS PORTAIS (ADICIONADOS) ---
+  // --- NOVOS PORTAIS ---
   {
     id: 'portal-fornecedores-new',
     title: 'Portal de Fornecedores',
@@ -206,8 +282,8 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'planejador-feriados-2026',
-    title: 'Feriados 2026 & Comercial',
-    description: 'Planejador comercial com calendário completo de feriados.',
+    title: 'Calendário de Feriados 2026',
+    description: 'Datas de feriados nacionais, estaduais e principais emissores.',
     category: BenefitCategory.COMMERCIAL,
     iconName: 'CalendarCheck',
     imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
@@ -215,9 +291,25 @@ export const BENEFITS_DATA: Benefit[] = [
     isNew: true,
     externalLink: 'https://planejadordeferiados.sindhoteisrj.com.br/',
     usageSteps: [
-      "Abra o Planejador Comercial.",
-      "Visualize feriados nacionais e locais de 2026.",
-      "Planeje suas tarifas e pacotes com antecedência."
+      "Consulte feriados nacionais e internacionais.",
+      "Verifique as datas dos principais emissores de turistas para o RJ.",
+      "Planeje suas escalas operacionais com antecedência."
+    ]
+  },
+  {
+    id: 'comercial-planner-2026',
+    title: 'Planejador Comercial 2026',
+    description: 'Ferramenta para gerar ações comerciais baseadas em datas.',
+    category: BenefitCategory.COMMERCIAL,
+    iconName: 'TrendingUp',
+    imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://planejadordeferiados.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse o Planejador Comercial.",
+      "Selecione uma data comemorativa ou feriado.",
+      "Gere insights de pacotes e promoções específicas para a data."
     ]
   },
   {
@@ -237,6 +329,25 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
 
+  // --- BENEFICIO PLACAS OBRIGATORIAS (NOVO) ---
+  {
+    id: 'placas-obrigatorias',
+    title: 'Placas Obrigatórias',
+    description: 'Kit completo com todas as placas de sinalização exigidas por lei.',
+    category: BenefitCategory.LEGAL,
+    iconName: 'ClipboardList',
+    imageUrl: 'https://images.unsplash.com/photo-1563215579-24da5a2df85e?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    downloadUrl: 'https://sindhoteisrj.com.br/placas-obrigatorias-download.zip', // Mock URL
+    usageSteps: [
+      "Clique no botão de download para baixar o pacote ZIP.",
+      "Descompacte o arquivo em seu computador.",
+      "Imprima as placas em alta resolução.",
+      "Fixe na recepção e áreas comuns conforme a legislação indicada em cada arquivo."
+    ]
+  },
+
   // --- SERVIÇOS (TOPO DA PÁGINA) ---
   {
     id: 'juridico-01',
@@ -251,6 +362,21 @@ export const BENEFITS_DATA: Benefit[] = [
       "Preencha os dados do hotel e o tipo de demanda (Trabalhista, Cível ou Tributária).",
       "Anexe documentos relevantes se houver.",
       "Aguarde o retorno da equipe jurídica em até 48 horas úteis via e-mail."
+    ]
+  },
+  {
+    id: 'laws-regulations',
+    title: 'Decretos e Leis RJ',
+    description: 'Consulta completa à legislação hoteleira vigente no Rio.',
+    category: BenefitCategory.LEGAL,
+    iconName: 'Gavel',
+    imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Acesse a base atualizada de leis e decretos.",
+      "Filtre por categoria (Trabalhista, Operacional, Tributário).",
+      "Visualize o número da lei, data e resumo da obrigatoriedade.",
+      "Acesse o link oficial do diário oficial quando disponível."
     ]
   },
   {
