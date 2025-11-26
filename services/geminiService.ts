@@ -1,14 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
+// Chave fornecida pelo usuário
+const apiKey = "AIzaSyAnxQYwWPILArKbm3Mfzyu_-r_sf9F4Zl4";
 
-// Initialize the client only if the key exists to avoid immediate crash, 
-// though we will handle the missing key in the logic.
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+// Initialize the client
+const ai = new GoogleGenAI({ apiKey });
 
 export const generateBenefitDetails = async (benefitTitle: string): Promise<string> => {
-  if (!ai) return "Erro: Chave de API não configurada.";
-
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
@@ -30,8 +28,6 @@ export const generateBenefitDetails = async (benefitTitle: string): Promise<stri
 };
 
 export const sendChatMessage = async (history: string[], message: string): Promise<string> => {
-  if (!ai) return "Erro: Chave de API não configurada.";
-
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
@@ -46,6 +42,6 @@ export const sendChatMessage = async (history: string[], message: string): Promi
     return response.text || "Desculpe, não entendi.";
   } catch (error) {
     console.error("Chat Error:", error);
-    return "Erro de conexão com o assistente.";
+    return "Erro de conexão com o assistente. Verifique sua internet.";
   }
 };
