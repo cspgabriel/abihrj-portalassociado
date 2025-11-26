@@ -95,32 +95,6 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
             </div>
           </div>
 
-           {/* Section: AI Insight */}
-           <div className="bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-xl p-6 md:p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10">
-              <Sparkles className="w-32 h-32 text-rio-blue" />
-            </div>
-            
-            <div className="flex items-center gap-3 mb-4 relative z-10">
-              <div className="bg-white p-2 rounded-lg shadow-sm">
-                <Sparkles className="w-5 h-5 text-rio-gold" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-800">Insight Inteligente</h2>
-            </div>
-
-            {loadingAi ? (
-              <div className="flex items-center gap-3 text-gray-500 py-4">
-                <Loader2 className="w-5 h-5 animate-spin text-rio-blue" />
-                <span className="text-sm">Gerando explicação personalizada via IA...</span>
-              </div>
-            ) : (
-              <div className="text-gray-700 leading-relaxed whitespace-pre-line relative z-10 text-sm md:text-base bg-white/60 p-4 rounded-lg border border-white/50">
-                {aiAnalysis}
-              </div>
-            )}
-            <p className="text-[10px] text-gray-400 mt-4 text-right">Powered by Gemini AI</p>
-          </div>
-
           {/* Section: Usage Steps */}
           {benefit.usageSteps && benefit.usageSteps.length > 0 && (
             <div className="bg-white border border-gray-100 rounded-xl p-6 md:p-8 shadow-sm">
@@ -142,6 +116,33 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
               </div>
             </div>
           )}
+
+           {/* Section: AI Insight (Moved to Bottom) */}
+           <div className="bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-xl p-6 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 opacity-10">
+              <Sparkles className="w-32 h-32 text-rio-blue" />
+            </div>
+            
+            <div className="flex items-center gap-3 mb-4 relative z-10">
+              <div className="bg-white p-2 rounded-lg shadow-sm">
+                <Sparkles className="w-5 h-5 text-rio-gold" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-800">Vantagens & Insights</h2>
+            </div>
+
+            {loadingAi ? (
+              <div className="flex items-center gap-3 text-gray-500 py-4">
+                <Loader2 className="w-5 h-5 animate-spin text-rio-blue" />
+                <span className="text-sm">Gerando análise de vantagens via IA...</span>
+              </div>
+            ) : (
+              <div className="text-gray-700 leading-relaxed whitespace-pre-line relative z-10 text-sm md:text-base bg-white/60 p-4 rounded-lg border border-white/50">
+                {aiAnalysis}
+              </div>
+            )}
+            <p className="text-[10px] text-gray-400 mt-4 text-right">Powered by Gemini AI</p>
+          </div>
+
         </div>
 
         {/* Right Column (Actions & Info) */}

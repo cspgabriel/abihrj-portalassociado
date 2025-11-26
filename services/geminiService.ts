@@ -17,12 +17,12 @@ export const generateBenefitDetails = async (benefitTitle: string): Promise<stri
       model: 'gemini-2.5-flash',
       contents: `Você é um assistente virtual do HoteisRio (Associação de Hotéis do Rio de Janeiro).
       
-      Escreva uma explicação detalhada e profissional (máximo 3 parágrafos) sobre como o benefício "${benefitTitle}" ajuda um hoteleiro no Rio de Janeiro.
+      Para o benefício "${benefitTitle}", forneça uma resposta curta e direta seguindo estritamente este formato:
       
-      Inclua:
-      1. O valor agregado.
-      2. Um exemplo prático de uso.
-      3. Um tom acolhedor e corporativo.`,
+      1. Um resumo de no máximo 2 frases explicando o benefício.
+      2. Uma lista com bullet points (•) citando exatamente 3 vantagens principais para o hoteleiro.
+      
+      Seja conciso.`,
     });
 
     return response.text || "Não foi possível carregar os detalhes no momento.";
