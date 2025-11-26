@@ -108,6 +108,54 @@ export const FORUMS_DATA: Forum[] = [
   }
 ];
 
+// Dados para a seção Comunidade para permitir ordenação/visualização
+export const COMMUNITY_ITEMS_DATA = [
+  {
+    id: 'contacts',
+    title: 'Fale Conosco',
+    description: 'Contatos diretos das equipes jurídica, comercial e diretoria.',
+    iconName: 'Phone',
+    colorClass: 'text-orange-600',
+    bgClass: 'bg-orange-50',
+    hoverTextClass: 'group-hover:text-orange-600',
+    hoverBgClass: 'group-hover:bg-orange-600',
+    viewTarget: 'CONTACTS'
+  },
+  {
+    id: 'whatsapp',
+    title: 'Grupos do WhatsApp',
+    description: 'Links para entrar nos grupos oficiais de networking por setor.',
+    iconName: 'MessageCircle',
+    colorClass: 'text-green-600',
+    bgClass: 'bg-green-50',
+    hoverTextClass: 'group-hover:text-green-600',
+    hoverBgClass: 'group-hover:bg-green-600',
+    viewTarget: 'WHATSAPP_GROUPS'
+  },
+  {
+    id: 'events',
+    title: 'Agenda HoteisRio',
+    description: 'Próximos fóruns, reuniões de diretoria e workshops.',
+    iconName: 'Calendar',
+    colorClass: 'text-indigo-600',
+    bgClass: 'bg-indigo-50',
+    hoverTextClass: 'group-hover:text-indigo-600',
+    hoverBgClass: 'group-hover:bg-indigo-600',
+    viewTarget: 'ASSOCIATION_EVENTS'
+  },
+  {
+    id: 'registration',
+    title: 'Atualização Cadastral',
+    description: 'Inscreva-se para receber informativos e convites oficiais.',
+    iconName: 'UserCog',
+    colorClass: 'text-rio-blue',
+    bgClass: 'bg-blue-50',
+    hoverTextClass: 'group-hover:text-rio-blue',
+    hoverBgClass: 'group-hover:bg-rio-blue',
+    viewTarget: 'REGISTRATION_UPDATE'
+  }
+];
+
 export const RIO_EVENTS: RioEvent[] = [
   {
     id: 'ev-01',
@@ -334,6 +382,21 @@ export const OTHER_BENEFITS_LIST = [
 
 export const BENEFITS_DATA: Benefit[] = [
   // --- NOVOS PORTAIS ---
+  {
+    id: 'forums-overview',
+    title: 'Fóruns da Hotelaria',
+    description: 'Acesse o calendário completo dos comitês e fóruns.',
+    category: BenefitCategory.EVENTS,
+    iconName: 'Users',
+    imageUrl: 'https://images.unsplash.com/photo-1515168816902-8408aa648c5e?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    usageSteps: [
+      "Visualize todos os fóruns disponíveis (Comercial, RH, Segurança, etc).",
+      "Confira as datas das próximas reuniões.",
+      "Inscreva-se ou sugira pautas para os encontros."
+    ]
+  },
   {
     id: 'central-ia-new',
     title: 'Central da IA',

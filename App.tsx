@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -15,15 +17,16 @@ import LawsRegulationPage from './components/LawsRegulationPage';
 import SecurityPage from './components/SecurityPage';
 import RegistrationUpdatePage from './components/RegistrationUpdatePage';
 import ForumPage from './components/ForumPage';
+import ForumsOverviewPage from './components/ForumsOverviewPage'; // New Component
 import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import { User, Benefit, BenefitCategory, Forum } from './types';
-import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA } from './constants';
+import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA } from './constants';
 import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW';
 
 // --- Components ---
 
@@ -217,10 +220,20 @@ const Dashboard: React.FC = () => {
   // Catalog Filter State
   const [selectedCategory, setSelectedCategory] = useState<BenefitCategory | 'Todos'>('Todos');
   const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Quick Access Filter State
   const [quickAccessCategory, setQuickAccessCategory] = useState<BenefitCategory | 'Todos'>('Todos');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [quickAccessViewMode, setQuickAccessViewMode] = useState<'grid' | 'list'>('grid');
+  const [quickAccessSortOrder, setQuickAccessSortOrder] = useState<'az' | 'za'>('az');
+
+  // Community Filter State
+  const [communityViewMode, setCommunityViewMode] = useState<'grid' | 'list'>('grid');
+  const [communitySortOrder, setCommunitySortOrder] = useState<'az' | 'za'>('az');
+
+  // Forums Section Filter State
+  const [forumsViewMode, setForumsViewMode] = useState<'grid' | 'list'>('grid');
+  const [forumsSortOrder, setForumsSortOrder] = useState<'az' | 'za'>('az');
   
   // Functional Modals State
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -299,6 +312,11 @@ const Dashboard: React.FC = () => {
       setCurrentView('REGISTRATION_UPDATE');
       return;
     }
+
+    if (benefit.id === 'forums-overview') {
+      setCurrentView('FORUMS_OVERVIEW');
+      return;
+    }
     
     setSelectedBenefitForDetails(benefit);
     setCurrentView('BENEFIT_DETAILS');
@@ -350,6 +368,11 @@ const Dashboard: React.FC = () => {
       return;
     }
 
+    if (benefit.id === 'forums-overview') {
+      setCurrentView('FORUMS_OVERVIEW');
+      return;
+    }
+
     // 3. Padrão: Abre página de detalhes
     handleViewDetails(benefit);
   };
@@ -368,30 +391,33 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const toggleSort = () => {
-    setSortOrder(prev => prev === 'az' ? 'za' : 'az');
-  };
-
-  const toggleViewMode = () => {
-    setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
-  };
-
   // --- FILTER & SORT LOGIC ---
   
-  // Common Sort Function
-  const sortFunction = (a: Benefit, b: Benefit) => {
-    if (sortOrder === 'az') {
-      return a.title.localeCompare(b.title);
-    } else {
-      return b.title.localeCompare(a.title);
-    }
+  const toggleSort = () => setSortOrder(prev => prev === 'az' ? 'za' : 'az');
+  const toggleViewMode = () => setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+
+  const toggleQuickAccessSort = () => setQuickAccessSortOrder(prev => prev === 'az' ? 'za' : 'az');
+  const toggleQuickAccessView = () => setQuickAccessViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+
+  const toggleCommunitySort = () => setCommunitySortOrder(prev => prev === 'az' ? 'za' : 'az');
+  const toggleCommunityView = () => setCommunityViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+
+  const toggleForumsSort = () => setForumsSortOrder(prev => prev === 'az' ? 'za' : 'az');
+  const toggleForumsView = () => setForumsViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+
+  // Common Sort Helper
+  const getSortedData = <T extends { title: string }>(data: T[], order: 'az' | 'za') => {
+    return [...data].sort((a, b) => {
+        if (order === 'az') return a.title.localeCompare(b.title);
+        return b.title.localeCompare(a.title);
+    });
   };
 
   // 1. Quick Access (Services only)
   const serviceBenefits = BENEFITS_DATA
     .filter(b => b.isService === true)
-    .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory)
-    .sort(sortFunction);
+    .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory);
+  const sortedServiceBenefits = getSortedData(serviceBenefits, quickAccessSortOrder);
   
   // 2. Catalog (Non-services or All depending on design choice)
   const filteredCatalogBenefits = BENEFITS_DATA
@@ -404,8 +430,14 @@ const Dashboard: React.FC = () => {
        } else {
          return !isQuickAccess && matchesCategory;
        }
-    })
-    .sort(sortFunction);
+    });
+  const sortedCatalogBenefits = getSortedData(filteredCatalogBenefits, sortOrder);
+
+  // 3. Community Items
+  const sortedCommunityItems = getSortedData(COMMUNITY_ITEMS_DATA, communitySortOrder);
+
+  // 4. Forums
+  const sortedForums = getSortedData(FORUMS_DATA, forumsSortOrder);
 
   // Get unique categories for dropdowns
   const availableCategories = Object.values(BenefitCategory);
@@ -442,6 +474,18 @@ const Dashboard: React.FC = () => {
           forum={selectedForum} 
           onBack={handleBackToDashboard}
           onRegisterUpdate={() => setCurrentView('REGISTRATION_UPDATE')}
+        />
+        <AiAssistant />
+      </Layout>
+    );
+  }
+
+  if (currentView === 'FORUMS_OVERVIEW') {
+    return (
+      <Layout {...commonLayoutProps}>
+        <ForumsOverviewPage 
+          onBack={handleBackToDashboard}
+          onForumClick={handleForumClick}
         />
         <AiAssistant />
       </Layout>
@@ -591,36 +635,36 @@ const Dashboard: React.FC = () => {
               <div className="w-px h-6 bg-gray-300 mx-1 hidden md:block"></div>
 
               <button 
-                onClick={toggleSort}
+                onClick={toggleQuickAccessSort}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
                 title="Ordenar"
               >
-                {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
+                {quickAccessSortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
               </button>
               
               <button 
-                onClick={toggleViewMode}
+                onClick={toggleQuickAccessView}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
                 title="Mudar Visualização"
               >
-                {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+                {quickAccessViewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
               </button>
             </div>
          </div>
          
          <div className={`
-           ${viewMode === 'grid' 
+           ${quickAccessViewMode === 'grid' 
              ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5' 
              : 'flex flex-col gap-3'}
          `}>
-            {serviceBenefits.length > 0 ? (
-                serviceBenefits.map(benefit => (
+            {sortedServiceBenefits.length > 0 ? (
+                sortedServiceBenefits.map(benefit => (
                    <BenefitCard 
                      key={benefit.id}
                      benefit={benefit}
                      onDetails={handleViewDetails}
                      onUse={handleUseBenefit}
-                     layout={viewMode}
+                     layout={quickAccessViewMode}
                    />
                 ))
             ) : (
@@ -633,87 +677,144 @@ const Dashboard: React.FC = () => {
 
       {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO */}
       <div id="community-section" className="mb-12">
-        <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-purple-100 text-purple-600 rounded-lg">
-               <Users className="w-6 h-6" />
-            </div>
-            <h2 className="text-xl font-bold text-gray-800">Comunidade & Conexão</h2>
-         </div>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+           <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-100 text-purple-600 rounded-lg">
+                 <Users className="w-6 h-6" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-800">Comunidade & Conexão</h2>
+           </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div 
-              onClick={() => handleNavigate('CONTACTS')}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
-            >
-               <div className="w-12 h-12 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center mb-4 group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                 <Phone className="w-6 h-6" />
-               </div>
-               <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-orange-600">Fale Conosco</h3>
-               <p className="text-sm text-gray-500">Contatos diretos das equipes jurídica, comercial e diretoria.</p>
-            </div>
+           <div className="flex flex-wrap items-center gap-2">
+             <button 
+                onClick={toggleCommunitySort}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Ordenar"
+              >
+                {communitySortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
+              </button>
+              <button 
+                onClick={toggleCommunityView}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Mudar Visualização"
+              >
+                {communityViewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+              </button>
+           </div>
+        </div>
 
-            <div 
-              onClick={() => handleNavigate('WHATSAPP_GROUPS')}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
-            >
-               <div className="w-12 h-12 rounded-lg bg-green-50 text-green-600 flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                 <MessageCircle className="w-6 h-6" />
-               </div>
-               <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-green-600">Grupos da Hotelaria</h3>
-               <p className="text-sm text-gray-500">Links para entrar nos grupos oficiais de networking por setor.</p>
-            </div>
-
-            <div 
-              onClick={() => handleNavigate('ASSOCIATION_EVENTS')}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
-            >
-               <div className="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                 <Calendar className="w-6 h-6" />
-               </div>
-               <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-indigo-600">Agenda HoteisRio</h3>
-               <p className="text-sm text-gray-500">Próximos fóruns, reuniões de diretoria e workshops.</p>
-            </div>
-
-            <div 
-              onClick={() => handleNavigate('REGISTRATION_UPDATE')}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
-            >
-               <div className="w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center mb-4 group-hover:bg-rio-blue group-hover:text-white transition-colors">
-                 <UserCog className="w-6 h-6" />
-               </div>
-               <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-rio-blue">Atualização Cadastral</h3>
-               <p className="text-sm text-gray-500">Inscreva-se para receber informativos e convites oficiais.</p>
-            </div>
+         <div className={`
+           ${communityViewMode === 'grid' 
+             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6' 
+             : 'flex flex-col gap-3'}
+         `}>
+            {sortedCommunityItems.map(item => {
+               const IconComponent = (Icons as any)[item.iconName] || Icons.HelpCircle;
+               const isList = communityViewMode === 'list';
+               
+               return (
+                  <div 
+                    key={item.id}
+                    onClick={() => handleNavigate(item.viewTarget as any)}
+                    className={`
+                      bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all
+                      ${isList ? 'flex flex-row items-center p-4 gap-4' : 'flex flex-col p-6'}
+                    `}
+                  >
+                     <div className={`
+                       rounded-lg flex items-center justify-center transition-colors
+                       ${item.bgClass} ${item.colorClass} ${item.hoverBgClass} group-hover:text-white
+                       ${isList ? 'w-10 h-10 shrink-0' : 'w-12 h-12 mb-4'}
+                     `}>
+                       <IconComponent className={`${isList ? 'w-5 h-5' : 'w-6 h-6'}`} />
+                     </div>
+                     <div className="flex-1">
+                        <h3 className={`font-bold text-gray-800 group-hover:text-opacity-80 transition-colors ${isList ? 'text-base mb-0' : 'text-lg mb-1'}`}>
+                          {item.title}
+                        </h3>
+                        <p className={`text-gray-500 ${isList ? 'text-xs line-clamp-1' : 'text-sm'}`}>
+                          {item.description}
+                        </p>
+                     </div>
+                     {isList && (
+                       <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-gray-500" />
+                     )}
+                  </div>
+               );
+            })}
          </div>
       </div>
 
-      {/* SEÇÃO: FORUMS (NOVO) */}
+      {/* SEÇÃO: FORUMS */}
       <div id="forums-section" className="mb-12">
-         <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
-               <Users className="w-6 h-6" />
+         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+               <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                  <Users className="w-6 h-6" />
+               </div>
+               <h2 className="text-xl font-bold text-gray-800">Fóruns da Hotelaria</h2>
             </div>
-            <h2 className="text-xl font-bold text-gray-800">Fóruns da Hotelaria</h2>
+            
+            <div className="flex flex-wrap items-center gap-2">
+             <button 
+                onClick={toggleForumsSort}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Ordenar"
+              >
+                {forumsSortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
+              </button>
+              <button 
+                onClick={toggleForumsView}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Mudar Visualização"
+              >
+                {forumsViewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+              </button>
+           </div>
          </div>
          
-         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {FORUMS_DATA.map(forum => {
+         <div className={`
+           ${forumsViewMode === 'grid'
+             ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4'
+             : 'flex flex-col gap-3'}
+         `}>
+            {sortedForums.map(forum => {
               const IconComponent = (Icons as any)[forum.iconName] || Icons.Users;
+              const isList = forumsViewMode === 'list';
+
               return (
                 <div 
                   key={forum.id} 
                   onClick={() => handleForumClick(forum)}
-                  className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-rio-blue transition-all cursor-pointer group flex flex-col justify-between"
+                  className={`
+                    bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-rio-blue transition-all cursor-pointer group
+                    ${isList ? 'flex flex-row items-center p-4 gap-4' : 'p-4 flex flex-col justify-between'}
+                  `}
                 >
-                  <div className="mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-rio-blue group-hover:text-white transition-colors">
+                  <div className={`${isList ? 'flex items-center gap-4 flex-1' : 'mb-4'}`}>
+                    <div className={`
+                      rounded-lg bg-gray-50 flex items-center justify-center group-hover:bg-rio-blue group-hover:text-white transition-colors
+                      ${isList ? 'w-10 h-10 shrink-0' : 'w-10 h-10 mb-3'}
+                    `}>
                       <IconComponent className="w-5 h-5 text-gray-600 group-hover:text-white" />
                     </div>
-                    <h3 className="font-bold text-gray-800 leading-tight mb-1 group-hover:text-rio-blue">{forum.title}</h3>
-                    <p className="text-xs text-gray-500 line-clamp-2">{forum.description}</p>
+                    
+                    <div>
+                      <h3 className={`font-bold text-gray-800 leading-tight group-hover:text-rio-blue ${isList ? 'mb-0' : 'mb-1'}`}>
+                        {forum.title}
+                      </h3>
+                      <p className={`text-xs text-gray-500 ${isList ? 'line-clamp-1' : 'line-clamp-2'}`}>
+                        {forum.description}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center text-xs font-semibold text-rio-blue mt-2">
-                    Ver detalhes <ChevronRight className="w-3 h-3" />
+                  
+                  <div className={`flex items-center text-xs font-semibold text-rio-blue ${isList ? 'shrink-0' : 'mt-2'}`}>
+                    {isList ? <ChevronRight className="w-4 h-4" /> : (
+                      <>
+                        Ver detalhes <ChevronRight className="w-3 h-3 ml-1" />
+                      </>
+                    )}
                   </div>
                 </div>
               );
@@ -756,7 +857,6 @@ const Dashboard: React.FC = () => {
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
               >
                 {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
-                {sortOrder === 'az' ? 'A - Z' : 'Z - A'}
               </button>
 
               <button 
@@ -776,7 +876,7 @@ const Dashboard: React.FC = () => {
             : 'flex flex-col gap-4'}
           mb-12
         `}>
-          {filteredCatalogBenefits.map((benefit) => (
+          {sortedCatalogBenefits.map((benefit) => (
             <BenefitCard 
               key={benefit.id} 
               benefit={benefit} 
@@ -788,7 +888,7 @@ const Dashboard: React.FC = () => {
         </div>
         
         {/* Empty State */}
-        {filteredCatalogBenefits.length === 0 && (
+        {sortedCatalogBenefits.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200 mb-12">
             <p className="text-gray-500">Nenhum benefício encontrado nesta categoria.</p>
             <button 

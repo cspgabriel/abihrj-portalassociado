@@ -29,14 +29,17 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
     <div 
       className={`
         bg-white rounded-xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_-4px_rgba(0,74,173,0.15)] 
-        border border-gray-100 relative transition-all duration-300 group
+        border border-gray-100 relative transition-all duration-300 group cursor-default
         ${isList ? 'flex flex-row items-center p-4 gap-4 h-auto' : 'flex flex-col h-full p-5'}
       `}
     >
       
       {/* Icon Section */}
       <div className={`${isList ? 'shrink-0' : 'flex justify-between items-start mb-4'}`}>
-        <div className="w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300">
+        <div className={`
+          w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center 
+          group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300
+        `}>
           <IconComponent className="w-6 h-6" strokeWidth={1.5} />
         </div>
         
@@ -65,19 +68,19 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
              <span className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">NOVO</span>
           )}
         </div>
-        <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+        <p className={`text-gray-500 text-xs leading-relaxed ${isList ? 'line-clamp-1' : 'line-clamp-2'}`}>
           {benefit.description}
         </p>
       </div>
       
       {/* Actions Section */}
-      <div className={`${isList ? 'shrink-0 min-w-[200px]' : 'mt-auto'}`}>
+      <div className={`${isList ? 'shrink-0 flex gap-2' : 'mt-auto'}`}>
         {benefit.dashboardUrl ? (
           // Dashboard Buttons
-          <div className="grid grid-cols-2 gap-2">
+          <div className={`grid ${isList ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-2'}`}>
             <button 
               onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm"
+              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm whitespace-nowrap"
               title={benefit.externalLink ? "Abrir Link Externo" : "Utilizar Serviço"}
             >
               {benefit.externalLink ? 'Acessar' : 'Utilizar'}
@@ -85,7 +88,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
             </button>
             <button 
               onClick={handleDashboardClick}
-              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-indigo-50 text-indigo-700 border border-transparent text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
+              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-indigo-50 text-indigo-700 border border-transparent text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-sm whitespace-nowrap"
               title="Ver Dashboard de Dados"
             >
               Dashboard
@@ -94,10 +97,10 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
           </div>
         ) : (
           // Standard Buttons
-          <div className="grid grid-cols-2 gap-3">
+          <div className={`grid ${isList ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-3'}`}>
             <button 
               onClick={(e) => { e.stopPropagation(); onDetails(benefit); }}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1"
+              className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1 whitespace-nowrap"
               title="Ver resumo inteligente"
             >
               <Sparkles className="w-3.5 h-3.5 text-rio-gold" />
@@ -107,7 +110,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
             {benefit.downloadUrl ? (
               <button 
                 onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
               >
                 Baixar
                 <Download className="w-3.5 h-3.5 group-hover/btn2:translate-y-0.5 transition-transform" />
@@ -115,7 +118,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
             ) : (
               <button 
                 onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
               >
                 {benefit.externalLink ? 'Acessar' : 'Utilizar'}
                 {benefit.externalLink ? (
