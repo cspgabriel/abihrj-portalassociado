@@ -399,6 +399,23 @@ export const BENEFITS_DATA: Benefit[] = [
       "Fixe na recepção e áreas comuns conforme a legislação indicada em cada arquivo."
     ]
   },
+  
+  // --- NOVO BENEFICIO: CONVENIO ECAD ---
+  {
+    id: 'ecad-agreement',
+    title: 'Convênio ECAD (Desconto de 60%)',
+    description: 'Parceria exclusiva garante descontos em débitos e mensalidades.',
+    category: BenefitCategory.INSTITUTIONAL,
+    iconName: 'Music',
+    imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=400',
+    isNew: true,
+    usageSteps: [
+      "Verifique se o hotel está adimplente com a mensalidade associativa.",
+      "O benefício oferece até 60% de desconto em débitos passados.",
+      "Descontos especiais para mensalidades de áreas comuns e quartos (inclusive Simples Nacional).",
+      "Solicite sua adesão enviando e-mail para: julio.correa@hoteisrio.com.br ou julio.correa@abihrj.com.br."
+    ]
+  },
 
   // --- SERVIÇOS (TOPO DA PÁGINA) ---
   {

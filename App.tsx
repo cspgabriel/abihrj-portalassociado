@@ -18,7 +18,7 @@ import SecurityPage from './components/SecurityPage';
 import RegistrationUpdatePage from './components/RegistrationUpdatePage';
 import { User, Benefit, BenefitCategory } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, Star } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown } from 'lucide-react';
 import { authService } from './services/authService';
 
 // --- Types for View Management ---
@@ -27,31 +27,17 @@ type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHAT
 // --- Components ---
 
 const WeatherWidget = () => {
-  const days = [
-    { day: 'Hoje', temp: '28°', icon: Sun, color: 'text-yellow-400' },
-    { day: 'Amanhã', temp: '26°', icon: CloudSun, color: 'text-orange-300' },
-    { day: 'Qua', temp: '24°', icon: CloudRain, color: 'text-blue-300' },
-    { day: 'Qui', temp: '27°', icon: Sun, color: 'text-yellow-400' },
-    { day: 'Sex', temp: '29°', icon: Sun, color: 'text-yellow-400' },
-    { day: 'Sáb', temp: '30°', icon: Sun, color: 'text-yellow-400' },
-    { day: 'Dom', temp: '28°', icon: CloudSun, color: 'text-orange-300' }
-  ];
-
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 mt-4 md:mt-0 md:ml-auto md:w-auto w-full">
-       <div className="flex items-center gap-2 mb-3">
-         <CloudSun className="w-5 h-5 text-yellow-300" />
-         <span className="font-semibold text-sm">Previsão Rio de Janeiro</span>
-       </div>
-       <div className="flex justify-between gap-3 overflow-x-auto pb-1 scrollbar-hide">
-         {days.map((d, i) => (
-           <div key={i} className="flex flex-col items-center gap-1 min-w-[36px]">
-             <span className="text-[10px] uppercase opacity-80">{d.day}</span>
-             <d.icon className={`w-5 h-5 ${d.color}`} />
-             <span className="text-xs font-bold">{d.temp}</span>
-           </div>
-         ))}
-       </div>
+    <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 border border-white/20 mt-4 md:mt-0 md:ml-auto md:w-auto w-full overflow-hidden">
+       <iframe 
+         src="https://www.meteoblue.com/en/weather/widget/three/rio-de-janeiro_brazil_3451190?geoloc=fixed&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=image" 
+         frameBorder="0" 
+         scrolling="no" 
+         allowTransparency={true} 
+         sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" 
+         style={{ width: '270px', height: '220px' }}
+         className="rounded-lg"
+       ></iframe>
     </div>
   );
 };
@@ -244,7 +230,7 @@ const Dashboard: React.FC = () => {
   
   // Catalog Filter State
   const [selectedCategory, setSelectedCategory] = useState<BenefitCategory | 'Todos'>('Todos');
-  const [quickAccessSort, setQuickAccessSort] = useState<'default' | 'az' | 'category'>('default');
+  const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
   
   // Functional Modals State
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -254,6 +240,14 @@ const Dashboard: React.FC = () => {
   const [showInteractiveTutorial, setShowInteractiveTutorial] = useState(false);
 
   const [checkingSession, setCheckingSession] = useState(true);
+
+  // Date Logic
+  const today = new Date().toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   // Check for existing session on load using Firebase Real Listener
   useEffect(() => {
@@ -364,22 +358,50 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // --- FILTER LOGIC ---
-  let serviceBenefits = BENEFITS_DATA.filter(b => b.isService === true);
+  const toggleSort = () => {
+    setSortOrder(prev => prev === 'az' ? 'za' : 'az');
+  };
+
+  // --- FILTER & SORT LOGIC ---
   
-  // Sorting for Quick Access
-  if (quickAccessSort === 'az') {
-    serviceBenefits = [...serviceBenefits].sort((a, b) => a.title.localeCompare(b.title));
-  } else if (quickAccessSort === 'category') {
-    serviceBenefits = [...serviceBenefits].sort((a, b) => a.category.localeCompare(b.category));
-  }
+  // Common Sort Function
+  const sortFunction = (a: Benefit, b: Benefit) => {
+    if (sortOrder === 'az') {
+      return a.title.localeCompare(b.title);
+    } else {
+      return b.title.localeCompare(a.title);
+    }
+  };
+
+  // 1. Quick Access (Services only) - Always Sorted
+  const serviceBenefits = BENEFITS_DATA
+    .filter(b => b.isService === true)
+    .sort(sortFunction);
   
-  // Ordenação alfabética do catálogo
+  // 2. Catalog (Non-services or All depending on design choice, currently standard cards) - Filtered & Sorted
   const filteredCatalogBenefits = BENEFITS_DATA
-    .filter(b => 
-      b.isService !== true && (selectedCategory === 'Todos' || b.category === selectedCategory)
-    )
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .filter(b => {
+       // Filter out services from catalog if desired to avoid dupes, or keep them. 
+       // Keeping logic consistent with previous version: Catalog excludes direct services usually, 
+       // but user said "All blocks". Let's show everything in catalog that matches category.
+       // Previous code: b.isService !== true. 
+       // New request: "todos blocos... classificados por ordem alfabetica". 
+       // I will keep the separation of "Quick Access" and "Catalog", but sort both.
+       
+       const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;
+       // We only show non-services in catalog to avoid duplication with top section, OR we show all.
+       // Let's stick to showing non-services + items that are NOT in the top list to avoid clutter,
+       // UNLESS user filters by category, then show everything in that category.
+       
+       const isQuickAccess = b.isService === true;
+       
+       if (selectedCategory !== 'Todos') {
+         return matchesCategory;
+       } else {
+         return !isQuickAccess && matchesCategory;
+       }
+    })
+    .sort(sortFunction);
 
   if (checkingSession) {
     return (
@@ -506,14 +528,13 @@ const Dashboard: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 pointer-events-none" />
         
         <div className="relative z-10">
+          <div className="inline-block px-3 py-1 mb-3 rounded-full bg-white/10 border border-white/20 text-xs font-medium backdrop-blur-sm">
+             {today}
+          </div>
           <h1 className="text-3xl font-bold mb-2">Central do Associado</h1>
           <p className="text-blue-100 max-w-xl text-lg mb-4">
             Bem-vindo, {user.name.split(' ')[0]}. Acesse abaixo as ferramentas de gestão do seu hotel.
           </p>
-          <div className="inline-flex items-center gap-2 bg-blue-900/30 px-3 py-1 rounded-full text-xs font-medium border border-blue-400/30">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            Sistema Operacional Normal
-          </div>
         </div>
 
         {/* Weather Widget */}
@@ -533,24 +554,14 @@ const Dashboard: React.FC = () => {
             </div>
             
             {/* Sorting Controls */}
-            <div className="flex bg-gray-100 p-1 rounded-lg self-start md:self-auto">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 hidden md:inline">Classificar:</span>
               <button 
-                onClick={() => setQuickAccessSort('default')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${quickAccessSort === 'default' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                onClick={toggleSort}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
               >
-                <Star className="w-3 h-3" /> Padrão
-              </button>
-              <button 
-                onClick={() => setQuickAccessSort('az')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${quickAccessSort === 'az' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                <ArrowDownAZ className="w-3 h-3" /> A-Z
-              </button>
-              <button 
-                onClick={() => setQuickAccessSort('category')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${quickAccessSort === 'category' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                <Filter className="w-3 h-3" /> Categoria
+                {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
+                {sortOrder === 'az' ? 'A - Z' : 'Z - A'}
               </button>
             </div>
          </div>
@@ -577,6 +588,8 @@ const Dashboard: React.FC = () => {
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Cards are static, can sort if needed but usually better fixed order. Leaving fixed for semantic meaning unless requested otherwise. */}
+            
             {/* Card: Contatos */}
             <div 
               onClick={() => handleNavigate('CONTACTS')}
@@ -632,13 +645,25 @@ const Dashboard: React.FC = () => {
 
       {/* SEÇÃO 2: CATÁLOGO DE BENEFÍCIOS - Added ID */}
       <div id="catalog-section">
-        <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
            <div className="flex items-center gap-3">
               <div className="p-2 bg-gray-100 text-gray-600 rounded-lg">
                  <LayoutGrid className="w-6 h-6" />
               </div>
               <h2 className="text-xl font-bold text-gray-800">Catálogo de Benefícios & Conquistas</h2>
            </div>
+
+           {/* Sorting Controls for Catalog */}
+           <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 hidden md:inline">Classificar:</span>
+              <button 
+                onClick={toggleSort}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
+                {sortOrder === 'az' ? 'A - Z' : 'Z - A'}
+              </button>
+            </div>
         </div>
 
         {/* Category Tabs */}
@@ -649,13 +674,14 @@ const Dashboard: React.FC = () => {
                 key={cat}
                 onClick={() => setSelectedCategory(cat as any)}
                 className={`
-                  px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all
+                  px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2
                   ${selectedCategory === cat 
-                    ? 'bg-white text-gray-900 shadow-sm' 
+                    ? 'bg-white text-rio-blue shadow-sm' 
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'}
                 `}
               >
                 {cat}
+                {selectedCategory === cat && <ChevronDown className="w-3 h-3" />}
               </button>
             ))}
           </div>
@@ -677,6 +703,12 @@ const Dashboard: React.FC = () => {
         {filteredCatalogBenefits.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200 mb-12">
             <p className="text-gray-500">Nenhum benefício encontrado nesta categoria.</p>
+            <button 
+               onClick={() => setSelectedCategory('Todos')}
+               className="mt-2 text-rio-blue hover:underline text-sm font-medium"
+            >
+               Ver todos os benefícios
+            </button>
           </div>
         )}
       </div>
@@ -688,7 +720,7 @@ const Dashboard: React.FC = () => {
             Mais Vantagens Institucionais
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-            {OTHER_BENEFITS_LIST.map((item, index) => (
+            {OTHER_BENEFITS_LIST.sort().map((item, index) => (
               <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                 <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                 <span className="text-gray-700 font-medium text-sm">{item}</span>
