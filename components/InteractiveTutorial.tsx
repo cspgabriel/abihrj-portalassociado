@@ -53,7 +53,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
   // Update target position on step change or resize
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
+    let timeoutId: any;
 
     const updatePosition = () => {
       const step = steps[currentStep];

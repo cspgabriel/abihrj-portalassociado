@@ -1,10 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the client using process.env.API_KEY as per guidelines
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Lazy initialization to prevent top-level crashes if environment is not ready immediately
+let aiInstance: GoogleGenAI | null = null;
+
+const getAiClient = () => {
+  if (!aiInstance) {
+    aiInstance = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  }
+  return aiInstance;
+};
 
 export const generateBenefitDetails = async (benefitTitle: string): Promise<string> => {
   try {
+    const ai = getAiClient();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: `Você é um assistente virtual do HoteisRio (Associação de Hotéis do Rio de Janeiro).
@@ -26,6 +34,7 @@ export const generateBenefitDetails = async (benefitTitle: string): Promise<stri
 
 export const sendChatMessage = async (history: string[], message: string): Promise<string> => {
   try {
+    const ai = getAiClient();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: `Histórico da conversa:

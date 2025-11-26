@@ -1,8 +1,3 @@
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -246,12 +241,26 @@ const Dashboard: React.FC = () => {
 
   // Check for existing session on load using Firebase Real Listener
   useEffect(() => {
+    let timeoutId: any;
+    
     const unsubscribe = authService.subscribeToAuthChanges((currentUser) => {
       setUser(currentUser);
       setCheckingSession(false);
+      if (timeoutId) clearTimeout(timeoutId);
     });
 
-    return () => unsubscribe();
+    // Safety timeout: If Firebase takes too long (e.g. network issue), stop loading to allow manual interaction or error display
+    timeoutId = setTimeout(() => {
+        if (checkingSession) {
+            console.warn("Auth check timed out, forcing render");
+            setCheckingSession(false);
+        }
+    }, 3000);
+
+    return () => {
+        unsubscribe();
+        if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   const handleLogout = async () => {
