@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { X, AlertTriangle, ShieldCheck, LayoutDashboard } from 'lucide-react';
 import { Benefit } from '../types';
 
 interface ServiceRequestModalProps {
@@ -15,6 +15,12 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({ benefit, onCl
   const LEGAL_FORM_URL = "https://forms.zohopublic.com/hoteisrio/form/AssessoriaJuridicaHotisRIO/formperma/fu39bcu4m02hW1cSina-onTXjx9GomFvznNKYqkP0j8";
 
   const currentUrl = isLegal ? LEGAL_FORM_URL : PUBLIC_ORDER_FORM_URL;
+
+  const handleDashboardClick = () => {
+    if (benefit.dashboardUrl) {
+      window.open(benefit.dashboardUrl, '_blank');
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
@@ -37,9 +43,21 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({ benefit, onCl
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-white/80 hover:text-white transition">
-            <X className="w-6 h-6" />
-          </button>
+          
+          <div className="flex items-center gap-3">
+             {benefit.dashboardUrl && (
+               <button 
+                 onClick={handleDashboardClick}
+                 className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium transition-colors"
+               >
+                 <LayoutDashboard className="w-4 h-4" />
+                 Acessar Dashboard
+               </button>
+             )}
+             <button onClick={onClose} className="text-white/80 hover:text-white transition">
+               <X className="w-6 h-6" />
+             </button>
+          </div>
         </div>
 
         {/* Content Body - Iframe */}

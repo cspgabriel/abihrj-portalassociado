@@ -1,7 +1,9 @@
+
+
 import React from 'react';
 import { Benefit } from '../types';
 import * as Icons from 'lucide-react';
-import { Sparkles, ArrowRight, CheckCircle2, Download } from 'lucide-react';
+import { Sparkles, ArrowRight, CheckCircle2, Download, LayoutDashboard, ExternalLink } from 'lucide-react';
 
 interface BenefitCardProps {
   benefit: Benefit;
@@ -12,6 +14,13 @@ interface BenefitCardProps {
 const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) => {
   // Dynamically resolve icon
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
+
+  const handleDashboardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (benefit.dashboardUrl) {
+      window.open(benefit.dashboardUrl, '_blank');
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_-4px_rgba(0,74,173,0.15)] border border-gray-100 flex flex-col h-full relative transition-all duration-300 group">
@@ -48,35 +57,64 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) 
         </p>
       </div>
       
-      {/* Actions Footer - 2 Buttons */}
-      <div className="mt-auto grid grid-cols-2 gap-3">
-        {/* Button 1: Detalhes (IA) */}
-        <button 
-          onClick={(e) => { e.stopPropagation(); onDetails(benefit); }}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1"
-          title="Ver resumo inteligente"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-rio-gold" />
-          Detalhes
-        </button>
-
-        {/* Button 2: Utilizar or Download */}
-        {benefit.downloadUrl ? (
-          <button 
-            onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
-          >
-            Baixar
-            <Download className="w-3.5 h-3.5 group-hover/btn2:translate-y-0.5 transition-transform" />
-          </button>
+      {/* Actions Footer */}
+      <div className="mt-auto">
+        {benefit.dashboardUrl ? (
+          // Special Layout for cards with Dashboard (like Public Order, Sustainability, Stats)
+          <div className="grid grid-cols-2 gap-2">
+            <button 
+              onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
+              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm"
+              title={benefit.externalLink ? "Abrir Link Externo" : "Utilizar Serviço"}
+            >
+              {benefit.externalLink ? 'Acessar' : 'Utilizar'}
+              <ArrowRight className="w-3 h-3" />
+            </button>
+            <button 
+              onClick={handleDashboardClick}
+              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-indigo-50 text-indigo-700 border border-transparent text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
+              title="Ver Dashboard de Dados"
+            >
+              Dashboard
+              <LayoutDashboard className="w-3 h-3" />
+            </button>
+          </div>
         ) : (
-          <button 
-            onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
-          >
-            Utilizar
-            <ArrowRight className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
-          </button>
+          // Standard Layout
+          <div className="grid grid-cols-2 gap-3">
+            {/* Button 1: Detalhes (IA) */}
+            <button 
+              onClick={(e) => { e.stopPropagation(); onDetails(benefit); }}
+              className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1"
+              title="Ver resumo inteligente"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-rio-gold" />
+              Detalhes
+            </button>
+
+            {/* Button 2: Utilizar or Download */}
+            {benefit.downloadUrl ? (
+              <button 
+                onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
+              >
+                Baixar
+                <Download className="w-3.5 h-3.5 group-hover/btn2:translate-y-0.5 transition-transform" />
+              </button>
+            ) : (
+              <button 
+                onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2"
+              >
+                {benefit.externalLink ? 'Acessar' : 'Utilizar'}
+                {benefit.externalLink ? (
+                    <ExternalLink className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
+                ) : (
+                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
+                )}
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>

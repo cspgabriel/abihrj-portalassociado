@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { ArrowLeft, Gavel, Search, ExternalLink, FileText, AlertCircle } from 'lucide-react';
 import { RJ_LAWS_DATA } from '../constants';
@@ -26,25 +27,25 @@ const LawsRegulationPage: React.FC<LawsRegulationPageProps> = ({ onBack }) => {
   return (
     <div className="animate-fade-in bg-gray-50 min-h-screen pb-12">
       {/* Header */}
-      <div className="bg-slate-900 text-white pt-8 pb-16 px-6 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-rio-blue to-blue-800 text-white pt-8 pb-16 px-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-2xl" />
         
         <div className="max-w-6xl mx-auto relative z-10">
           <button 
             onClick={onBack}
-            className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors mb-6"
           >
             <ArrowLeft className="w-5 h-5" />
             Voltar para Dashboard
           </button>
 
           <div className="flex items-center gap-4 mb-4">
-             <div className="bg-slate-700 p-3 rounded-xl">
+             <div className="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/10">
                <Gavel className="w-8 h-8 text-rio-gold" />
              </div>
              <div>
                 <h1 className="text-3xl font-bold">Decretos e Leis RJ</h1>
-                <p className="text-slate-400">Consulta à legislação vigente que impacta a hotelaria carioca.</p>
+                <p className="text-blue-100">Consulta à legislação vigente que impacta a hotelaria carioca.</p>
              </div>
           </div>
         </div>
@@ -77,7 +78,7 @@ const LawsRegulationPage: React.FC<LawsRegulationPageProps> = ({ onBack }) => {
                      onClick={() => setSelectedCategory(cat)}
                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors
                        ${selectedCategory === cat 
-                         ? 'bg-slate-800 text-white' 
+                         ? 'bg-blue-800 text-white shadow-md' 
                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}
                      `}
                    >

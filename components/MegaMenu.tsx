@@ -2,7 +2,7 @@ import React from 'react';
 import { Benefit, BenefitCategory } from '../types';
 import { BENEFITS_DATA } from '../constants';
 import * as Icons from 'lucide-react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Star } from 'lucide-react';
 
 interface MegaMenuProps {
   isOpen: boolean;
@@ -25,7 +25,9 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) 
 
   return (
     <div 
-      className="absolute top-full left-0 w-full bg-white shadow-2xl border-t border-gray-100 z-50 animate-fade-in-down"
+      className="fixed top-16 left-0 w-full bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] border-t border-gray-100 z-50 animate-fade-in-down"
+      style={{ height: 'auto', maxHeight: '80vh', overflowY: 'auto' }}
+      onMouseEnter={() => {}} // Keep open when hovering the menu itself
       onMouseLeave={onClose}
     >
       <div className="max-w-7xl mx-auto p-8">
@@ -48,7 +50,7 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) 
                             onBenefitClick(benefit);
                             onClose();
                           }}
-                          className="flex items-start gap-2 group w-full text-left"
+                          className="flex items-start gap-2 group w-full text-left p-1 rounded-lg hover:bg-gray-50 transition-colors"
                         >
                           <IconComponent className="w-4 h-4 text-rio-blue mt-0.5 opacity-70 group-hover:opacity-100" />
                           <div className="flex-1">
@@ -66,7 +68,7 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) 
                   })}
                   {BENEFITS_DATA.filter(b => b.category === category).length > 5 && (
                     <li>
-                      <span className="text-xs text-blue-500 hover:underline cursor-pointer">Ver todos de {category}</span>
+                      <span className="text-xs text-blue-500 hover:underline cursor-pointer ml-1">Ver todos de {category}</span>
                     </li>
                   )}
                 </ul>
@@ -76,21 +78,24 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick }) 
         </div>
         
         {/* Footer Promocional do Menu */}
-        <div className="mt-8 pt-6 border-t border-gray-100 bg-gray-50 -mx-8 -mb-8 px-8 pb-8 rounded-b-xl flex justify-between items-center">
+        <div className="mt-8 pt-6 border-t border-gray-100 bg-gray-50 -mx-8 -mb-8 px-8 pb-8 flex justify-between items-center">
            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-rio-blue rounded-lg flex items-center justify-center text-white">
-                 <Icons.Star className="w-6 h-6" />
+              <div className="w-12 h-12 bg-rio-blue rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                 <Star className="w-6 h-6" />
               </div>
               <div>
                 <h4 className="font-bold text-gray-800">Clube de Benefícios HoteisRio</h4>
                 <p className="text-sm text-gray-500">Mais de 20 serviços exclusivos para associados.</p>
               </div>
            </div>
-           <button onClick={onClose} className="text-sm text-rio-blue font-semibold hover:underline">
+           <button onClick={onClose} className="text-sm text-rio-blue font-semibold hover:underline bg-white px-4 py-2 rounded-lg border border-blue-100 shadow-sm">
              Fechar Menu
            </button>
         </div>
       </div>
+      
+      {/* Backdrop for outside click simulation if needed, though mouseleave handles desktop */}
+      <div className="absolute inset-0 -z-10 bg-white" />
     </div>
   );
 };

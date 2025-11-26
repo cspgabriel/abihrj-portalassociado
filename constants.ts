@@ -1,4 +1,5 @@
 
+
 import { Benefit, BenefitCategory, RioEvent } from './types';
 
 export const MOCK_USER = {
@@ -6,6 +7,8 @@ export const MOCK_USER = {
   hotel: "Copacabana Palace View",
   role: "Gerente Geral"
 };
+
+export const CRM_LINK = "https://hoteisrio.com.br/crm/inscricao-newsletter";
 
 export const FOOTER_DATA = {
   address: "Av. Nilo Peçanha, 50 - Gr 2409 - Centro, Rio de Janeiro - RJ",
@@ -238,16 +241,48 @@ export const OTHER_BENEFITS_LIST = [
   "Monitoramento de novas leis (civil, trabalhista, tributária)",
   "Reuniões periódicas sobre Segurança",
   "Fóruns mensais/bimestrais por área hoteleira",
-  "Boletim online mensal com notícias",
+  "Informativo mensal com notícias e eventos",
   "Negociação de convenções coletivas",
   "Pesquisas de ocupação hoteleira",
-  "Marketing e divulgação do destino Rio",
+  "Divulgação do destino Rio",
   "Calendário de eventos da cidade",
   "Parcerias com empresas de energia renovável"
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
   // --- NOVOS PORTAIS ---
+  {
+    id: 'central-ia-new',
+    title: 'Central da IA',
+    description: 'Ferramentas de Inteligência Artificial exclusivas para hoteleiros.',
+    category: BenefitCategory.TECHNOLOGY,
+    iconName: 'Bot',
+    imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://iaparahoteis.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse a Central da IA.",
+      "Utilize os assistentes virtuais para marketing e atendimento.",
+      "Explore os cursos de capacitação em tecnologia."
+    ]
+  },
+  {
+    id: 'sustainability-raiox',
+    title: 'Raio-X de Sustentabilidade',
+    description: 'Avaliação gratuita e online da maturidade sustentável do seu hotel.',
+    category: BenefitCategory.OPERATIONAL,
+    iconName: 'Leaf',
+    imageUrl: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://sustetanbilidade-hoteisrio.figma.site/',
+    usageSteps: [
+      "Acesse o Raio-X Online.",
+      "Responda ao questionário simplificado sobre suas práticas.",
+      "Receba um relatório imediato com sua pontuação e sugestões de melhoria."
+    ]
+  },
   {
     id: 'portal-fornecedores-new',
     title: 'Portal de Fornecedores',
@@ -329,6 +364,23 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
 
+  // --- BENEFICIO ATUALIZAÇÃO CADASTRAL (NOVO) ---
+  {
+    id: 'registration-update',
+    title: 'Atualização Cadastral',
+    description: 'Receba o Informativo Mensal, convites para eventos e alertas.',
+    category: BenefitCategory.COMMUNICATION,
+    iconName: 'UserCog',
+    imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    usageSteps: [
+      "Clique em 'Utilizar' para acessar a área de cadastro.",
+      "Atualize seu e-mail para receber comunicados oficiais e convites.",
+      "Compartilhe o link de inscrição com sua equipe via WhatsApp."
+    ]
+  },
+
   // --- BENEFICIO PLACAS OBRIGATORIAS (NOVO) ---
   {
     id: 'placas-obrigatorias',
@@ -349,6 +401,21 @@ export const BENEFITS_DATA: Benefit[] = [
   },
 
   // --- SERVIÇOS (TOPO DA PÁGINA) ---
+  {
+    id: 'security',
+    title: 'Segurança',
+    description: 'Parceria com forças policiais para segurança turística.',
+    category: BenefitCategory.OPERATIONAL,
+    iconName: 'Shield',
+    imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Utilize o Canal Ordem Pública para reportes não emergenciais.",
+      "Em caso de emergência, utilize o botão de pânico (se disponível) ou ligue 190.",
+      "Participe das reuniões mensais com o BPTur e DEAT.",
+      "Receba orientações preventivas para hóspedes."
+    ]
+  },
   {
     id: 'juridico-01',
     title: 'Assessoria Jurídica',
@@ -387,6 +454,7 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'ShieldAlert',
     imageUrl: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=80&w=400',
     isService: true,
+    dashboardUrl: 'https://ordempublica.sindhoteisrj.com.br/',
     usageSteps: [
       "Identifique uma irregularidade no entorno do hotel (ex: camelôs, lixo, insegurança).",
       "Acesse o formulário clicando em 'Utilizar'.",
@@ -474,20 +542,6 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
   {
-    id: 'influencers',
-    title: 'Influenciadores Digitais',
-    description: 'Ações conectando hotéis a criadores de conteúdo relevantes.',
-    category: BenefitCategory.COMMUNICATION,
-    iconName: 'Camera',
-    imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=400',
-    usageSteps: [
-      "Cadastre seu interesse em receber press trips.",
-      "A HoteisRio fará a curadoria de influenciadores alinhados ao seu perfil.",
-      "Defina as cortesias (hospedagem/alimentação) oferecidas.",
-      "Receba o mídia kit e relatórios pós-visita do influenciador."
-    ]
-  },
-  {
     id: 'imprensa',
     title: 'Comunicação e Imprensa',
     description: 'Assessoria de imprensa e visibilidade na mídia para o setor.',
@@ -499,35 +553,6 @@ export const BENEFITS_DATA: Benefit[] = [
       "Nossa equipe transformará em pauta para a mídia especializada.",
       "Acompanhe o clipping de notícias enviado mensalmente.",
       "Participe das entrevistas coletivas organizadas pela associação."
-    ]
-  },
-  {
-    id: 'mkt-digital',
-    title: 'Marketing Digital',
-    description: 'Estratégias e consultoria para presença digital do seu hotel.',
-    category: BenefitCategory.COMMERCIAL,
-    iconName: 'Globe',
-    imageUrl: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=80&w=400',
-    usageSteps: [
-      "Solicite um diagnóstico da presença digital do seu hotel.",
-      "Participe dos workshops de capacitação em redes sociais.",
-      "Receba dicas de SEO e performance periodicamente.",
-      "Acesse descontos com agências parceiras homologadas."
-    ]
-  },
-  {
-    id: 'ai-news',
-    title: 'Inteligência Artificial',
-    description: 'Ferramentas de IA para otimizar a gestão e atendimento.',
-    category: BenefitCategory.TECHNOLOGY,
-    iconName: 'Bot',
-    imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=400',
-    isNew: true,
-    usageSteps: [
-      "Utilize nosso Chatbot no portal para tirar dúvidas rápidas.",
-      "Participe dos cursos de 'IA para Hotelaria'.",
-      "Implemente soluções parceiras de atendimento automatizado.",
-      "Acompanhe as tendências tecnológicas no nosso boletim Tech."
     ]
   },
   {
@@ -573,45 +598,18 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
   {
-    id: 'security',
-    title: 'Segurança',
-    description: 'Parceria com forças policiais para segurança turística.',
-    category: BenefitCategory.OPERATIONAL,
-    iconName: 'Shield',
-    imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400',
-    usageSteps: [
-      "Utilize o Canal Ordem Pública para reportes não emergenciais.",
-      "Em caso de emergência, utilize o botão de pânico (se disponível) ou ligue 190.",
-      "Participe das reuniões mensais com o BPTur e DEAT.",
-      "Receba orientações preventivas para hóspedes."
-    ]
-  },
-  {
     id: 'sustainability',
     title: 'Sustentabilidade',
-    description: 'Programas e certificações de práticas sustentáveis (ESG).',
+    description: 'Certificações ESG e Dashboard de Sustentabilidade.',
     category: BenefitCategory.OPERATIONAL,
     iconName: 'Leaf',
     imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=400',
+    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiMzM1NGQyMGYtZGU4NS00ZTQ1LTg3ZjAtMjYzZjhlZjU2YmY2IiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
     usageSteps: [
+      "Acesse o Dashboard para ver os indicadores de sustentabilidade do Rio.",
       "Inscreva-se no programa de certificação HoteisRio Sustentável.",
       "Receba a visita técnica de diagnóstico.",
-      "Implemente as melhorias sugeridas (gestão de resíduos, energia, etc).",
-      "Receba o selo verde para divulgar em seus canais."
-    ]
-  },
-  {
-    id: 'lobby',
-    title: 'Lobby e Advocacy',
-    description: 'Defesa dos interesses da hotelaria junto ao poder público.',
-    category: BenefitCategory.INSTITUTIONAL,
-    iconName: 'Landmark',
-    imageUrl: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=400',
-    usageSteps: [
-      "Acompanhe as pautas legislativas no boletim semanal.",
-      "Participe de audiências públicas quando convocado.",
-      "Envie sugestões de melhorias regulatórias para a diretoria.",
-      "Utilize os pareceres jurídicos da associação para defesa do seu negócio."
+      "Implemente melhorias de gestão de resíduos e energia."
     ]
   },
   {
@@ -644,30 +642,32 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'newsletter',
-    title: 'Boletim Online',
-    description: 'Notícias semanais e atualizações do setor no seu email.',
+    title: 'Informativo Mensal',
+    description: 'Notícias, convites para eventos e atualizações do setor.',
     category: BenefitCategory.COMMUNICATION,
     iconName: 'Mail',
     imageUrl: 'https://images.unsplash.com/photo-1557568192-238a63f66318?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
-      "Cadastre os e-mails da sua equipe para receber o boletim.",
-      "Verifique sua caixa de entrada toda terça e quinta-feira.",
-      "Clique nos links para ler as matérias completas no site.",
+      "Cadastre os e-mails da sua equipe na seção 'Atualização Cadastral'.",
+      "Receba convites para eventos e lançamentos de produtos.",
+      "Acompanhe as notícias legislativas e de mercado.",
       "Compartilhe informações relevantes com seu time operacional."
     ]
   },
   {
     id: 'occupation-stats',
     title: 'Pesquisas de Ocupação',
-    description: 'Dados estatísticos e comparativos de desempenho hoteleiro.',
+    description: 'Participe e acesse dados vitais de ocupação do Rio de Janeiro.',
     category: BenefitCategory.STATISTICS,
     iconName: 'PieChart',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400',
+    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiOGU2NTUyNjMtN2I3OS00N2E1LTkzNDItNWFjZmZmNTVmZDFkIiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
+    externalLink: CRM_LINK, // Link to update mailing/signup for surveys
     usageSteps: [
-      "Responda ao formulário de ocupação enviado semanalmente/mensalmente.",
-      "Receba o relatório consolidado com a média do mercado.",
-      "Compare seu desempenho (RevPAR, Diária Média) com a média da região.",
-      "Utilize os dados para planejamento estratégico."
+      "Acesse o Dashboard para visualizar a performance do mercado.",
+      "Clique em 'Utilizar' para atualizar seu cadastro e garantir o recebimento das pesquisas.",
+      "Responda às pesquisas semanais e de feriados.",
+      "Seus dados são confidenciais e fundamentais para a estatística do setor."
     ]
   },
   {

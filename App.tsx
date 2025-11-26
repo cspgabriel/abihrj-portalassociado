@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -13,15 +14,47 @@ import ContactsPage from './components/ContactsPage';
 import WhatsAppGroupsPage from './components/WhatsAppGroupsPage';
 import AssociationEventsPage from './components/AssociationEventsPage';
 import LawsRegulationPage from './components/LawsRegulationPage';
+import SecurityPage from './components/SecurityPage';
+import RegistrationUpdatePage from './components/RegistrationUpdatePage';
 import { User, Benefit, BenefitCategory } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, Star } from 'lucide-react';
 import { authService } from './services/authService';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE';
 
 // --- Components ---
+
+const WeatherWidget = () => {
+  const days = [
+    { day: 'Hoje', temp: '28°', icon: Sun, color: 'text-yellow-400' },
+    { day: 'Amanhã', temp: '26°', icon: CloudSun, color: 'text-orange-300' },
+    { day: 'Qua', temp: '24°', icon: CloudRain, color: 'text-blue-300' },
+    { day: 'Qui', temp: '27°', icon: Sun, color: 'text-yellow-400' },
+    { day: 'Sex', temp: '29°', icon: Sun, color: 'text-yellow-400' },
+    { day: 'Sáb', temp: '30°', icon: Sun, color: 'text-yellow-400' },
+    { day: 'Dom', temp: '28°', icon: CloudSun, color: 'text-orange-300' }
+  ];
+
+  return (
+    <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 mt-4 md:mt-0 md:ml-auto md:w-auto w-full">
+       <div className="flex items-center gap-2 mb-3">
+         <CloudSun className="w-5 h-5 text-yellow-300" />
+         <span className="font-semibold text-sm">Previsão Rio de Janeiro</span>
+       </div>
+       <div className="flex justify-between gap-3 overflow-x-auto pb-1 scrollbar-hide">
+         {days.map((d, i) => (
+           <div key={i} className="flex flex-col items-center gap-1 min-w-[36px]">
+             <span className="text-[10px] uppercase opacity-80">{d.day}</span>
+             <d.icon className={`w-5 h-5 ${d.color}`} />
+             <span className="text-xs font-bold">{d.temp}</span>
+           </div>
+         ))}
+       </div>
+    </div>
+  );
+};
 
 const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -211,6 +244,7 @@ const Dashboard: React.FC = () => {
   
   // Catalog Filter State
   const [selectedCategory, setSelectedCategory] = useState<BenefitCategory | 'Todos'>('Todos');
+  const [quickAccessSort, setQuickAccessSort] = useState<'default' | 'az' | 'category'>('default');
   
   // Functional Modals State
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -253,9 +287,18 @@ const Dashboard: React.FC = () => {
 
   // Botão "Detalhes": Navega para a página de explicação do benefício
   const handleViewDetails = (benefit: Benefit) => {
-    // Se for Leis, vai direto pra página especializada também no clique de detalhes
     if (benefit.id === 'laws-regulations') {
       setCurrentView('LAWS_REGULATIONS');
+      return;
+    }
+    
+    if (benefit.id === 'security') {
+      setCurrentView('SECURITY_PAGE');
+      return;
+    }
+
+    if (benefit.id === 'registration-update') {
+      setCurrentView('REGISTRATION_UPDATE');
       return;
     }
     
@@ -294,6 +337,16 @@ const Dashboard: React.FC = () => {
       return;
     }
 
+    if (benefit.id === 'security') {
+      setCurrentView('SECURITY_PAGE');
+      return;
+    }
+
+    if (benefit.id === 'registration-update') {
+      setCurrentView('REGISTRATION_UPDATE');
+      return;
+    }
+
     // 3. Padrão: Abre página de detalhes
     handleViewDetails(benefit);
   };
@@ -303,8 +356,23 @@ const Dashboard: React.FC = () => {
     setSelectedBenefitForDetails(null);
   };
 
+  const handleOpenPublicOrderModal = () => {
+    // Manually trigger the modal for public order
+    const publicOrderBenefit = BENEFITS_DATA.find(b => b.id === 'public-order-01');
+    if (publicOrderBenefit) {
+      setServiceRequestBenefit(publicOrderBenefit);
+    }
+  };
+
   // --- FILTER LOGIC ---
-  const serviceBenefits = BENEFITS_DATA.filter(b => b.isService === true);
+  let serviceBenefits = BENEFITS_DATA.filter(b => b.isService === true);
+  
+  // Sorting for Quick Access
+  if (quickAccessSort === 'az') {
+    serviceBenefits = [...serviceBenefits].sort((a, b) => a.title.localeCompare(b.title));
+  } else if (quickAccessSort === 'category') {
+    serviceBenefits = [...serviceBenefits].sort((a, b) => a.category.localeCompare(b.category));
+  }
   
   // Ordenação alfabética do catálogo
   const filteredCatalogBenefits = BENEFITS_DATA
@@ -337,11 +405,35 @@ const Dashboard: React.FC = () => {
     currentView
   };
 
+  if (currentView === 'REGISTRATION_UPDATE') {
+    return (
+      <Layout {...commonLayoutProps}>
+        <RegistrationUpdatePage onBack={handleBackToDashboard} />
+        <AiAssistant />
+      </Layout>
+    );
+  }
+
   if (currentView === 'LAWS_REGULATIONS') {
     return (
       <Layout {...commonLayoutProps}>
         <LawsRegulationPage onBack={handleBackToDashboard} />
         <AiAssistant />
+      </Layout>
+    );
+  }
+
+  if (currentView === 'SECURITY_PAGE') {
+    return (
+      <Layout {...commonLayoutProps}>
+        <SecurityPage onBack={handleBackToDashboard} onReport={handleOpenPublicOrderModal} />
+        <AiAssistant />
+        {serviceRequestBenefit && (
+          <ServiceRequestModal 
+            benefit={serviceRequestBenefit}
+            onClose={() => setServiceRequestBenefit(null)}
+          />
+        )}
       </Layout>
     );
   }
@@ -409,25 +501,58 @@ const Dashboard: React.FC = () => {
     <Layout {...commonLayoutProps}>
       
       {/* Hero Header - Added ID for Tutorial */}
-      <div id="header-welcome" className="bg-gradient-to-r from-rio-blue to-blue-800 rounded-2xl p-8 mb-10 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in relative overflow-hidden">
+      <div id="header-welcome" className="bg-gradient-to-r from-rio-blue to-blue-800 rounded-2xl p-6 md:p-8 mb-10 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-16 -mt-16 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 pointer-events-none" />
         
         <div className="relative z-10">
           <h1 className="text-3xl font-bold mb-2">Central do Associado</h1>
-          <p className="text-blue-100 max-w-xl text-lg">
+          <p className="text-blue-100 max-w-xl text-lg mb-4">
             Bem-vindo, {user.name.split(' ')[0]}. Acesse abaixo as ferramentas de gestão do seu hotel.
           </p>
+          <div className="inline-flex items-center gap-2 bg-blue-900/30 px-3 py-1 rounded-full text-xs font-medium border border-blue-400/30">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            Sistema Operacional Normal
+          </div>
+        </div>
+
+        {/* Weather Widget */}
+        <div className="relative z-10 w-full md:w-auto">
+          <WeatherWidget />
         </div>
       </div>
 
       {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) - Added ID */}
       <div id="quick-access-section" className="mb-12">
-         <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-blue-100 text-rio-blue rounded-lg">
-               <Laptop2 className="w-6 h-6" />
+         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+               <div className="p-2 bg-blue-100 text-rio-blue rounded-lg">
+                  <Laptop2 className="w-6 h-6" />
+               </div>
+               <h2 className="text-xl font-bold text-gray-800">Acesso Rápido aos Serviços</h2>
             </div>
-            <h2 className="text-xl font-bold text-gray-800">Acesso Rápido aos Serviços</h2>
+            
+            {/* Sorting Controls */}
+            <div className="flex bg-gray-100 p-1 rounded-lg self-start md:self-auto">
+              <button 
+                onClick={() => setQuickAccessSort('default')}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${quickAccessSort === 'default' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <Star className="w-3 h-3" /> Padrão
+              </button>
+              <button 
+                onClick={() => setQuickAccessSort('az')}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${quickAccessSort === 'az' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <ArrowDownAZ className="w-3 h-3" /> A-Z
+              </button>
+              <button 
+                onClick={() => setQuickAccessSort('category')}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${quickAccessSort === 'category' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <Filter className="w-3 h-3" /> Categoria
+              </button>
+            </div>
          </div>
          
          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
@@ -451,7 +576,7 @@ const Dashboard: React.FC = () => {
             <h2 className="text-xl font-bold text-gray-800">Comunidade & Conexão</h2>
          </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card: Contatos */}
             <div 
               onClick={() => handleNavigate('CONTACTS')}
@@ -486,6 +611,18 @@ const Dashboard: React.FC = () => {
                </div>
                <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-indigo-600">Agenda HoteisRio</h3>
                <p className="text-sm text-gray-500">Próximos fóruns, reuniões de diretoria e workshops.</p>
+            </div>
+
+            {/* Card: Atualização Cadastral */}
+            <div 
+              onClick={() => handleNavigate('REGISTRATION_UPDATE')}
+              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg border border-gray-100 cursor-pointer group transition-all"
+            >
+               <div className="w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center mb-4 group-hover:bg-rio-blue group-hover:text-white transition-colors">
+                 <UserCog className="w-6 h-6" />
+               </div>
+               <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-rio-blue">Atualização Cadastral</h3>
+               <p className="text-sm text-gray-500">Inscreva-se para receber informativos e convites oficiais.</p>
             </div>
          </div>
       </div>

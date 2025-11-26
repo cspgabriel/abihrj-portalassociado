@@ -37,6 +37,7 @@ export interface Benefit {
   usageSteps?: string[]; // Passo a passo de como utilizar
   externalLink?: string; // Link externo para portais dedicados
   downloadUrl?: string; // URL direta para download de arquivos
+  dashboardUrl?: string; // URL para dashboard externo (ex: Ordem Pública)
 }
 
 export interface ChatMessage {
