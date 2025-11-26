@@ -41,7 +41,34 @@ export const RIO_EVENTS: RioEvent[] = [
   }
 ];
 
+// Lista de texto simples para a seção "Outros Benefícios Permanentes"
+export const OTHER_BENEFITS_LIST = [
+  "Monitoramento de novas leis (civil, trabalhista, tributária)",
+  "Reuniões periódicas sobre Segurança",
+  "Fóruns mensais/bimestrais por área hoteleira",
+  "Boletim online mensal com notícias",
+  "Programa de Fornecedores Parceiros",
+  "Negociação de convenções coletivas",
+  "Pesquisas de ocupação hoteleira",
+  "Marketing e divulgação do destino Rio",
+  "App exclusivo para colaboradores",
+  "Calendário de eventos da cidade",
+  "Grupos de WhatsApp por departamento",
+  "Parcerias com empresas de energia renovável"
+];
+
 export const BENEFITS_DATA: Benefit[] = [
+  // --- Destaque Conquista (IPTU) ---
+  {
+    id: 'iptu-01',
+    title: 'Desconto de 40% no IPTU',
+    description: 'Benefício renovado até 2028 para todos os hotéis associados.',
+    category: BenefitCategory.INSTITUTIONAL,
+    iconName: 'Percent',
+    imageUrl: '',
+    isNew: true
+  },
+  
   // --- 3 Primeiros Mantidos (Funcionais) ---
   {
     id: 'calendar-01',

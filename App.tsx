@@ -6,15 +6,24 @@ import CalendarModal from './components/CalendarModal';
 import ServiceRequestModal from './components/ServiceRequestModal';
 import AiAssistant from './components/AiAssistant';
 import { User, Benefit, BenefitCategory } from './types';
-import { BENEFITS_DATA } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle } from 'lucide-react';
+import { BENEFITS_DATA, OTHER_BENEFITS_LIST } from './constants';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { authService } from './services/authService';
 
 // --- Components ---
 
 const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) => {
+  const [isRegistering, setIsRegistering] = useState(false);
+  
+  // Login State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  // Register State
+  const [name, setName] = useState('');
+  const [hotel, setHotel] = useState('');
+  const [role, setRole] = useState('');
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,25 +33,41 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
     setIsLoading(true);
 
     try {
-      const user = await authService.login(email, password);
-      // O listener do useEffect no Dashboard vai capturar a mudança de estado
-      // Mas chamamos onLogin para feedback imediato se necessário
+      if (isRegistering) {
+        // Fluxo de Cadastro
+        if (!name || !hotel || !role) {
+          throw new Error("Por favor, preencha todos os campos.");
+        }
+        await authService.register(email, password, name, hotel, role);
+        // Após registro, o Firebase faz login automático e o listener do Dashboard resolve.
+      } else {
+        // Fluxo de Login
+        await authService.login(email, password);
+      }
     } catch (err: any) {
-      setError(err.message || 'Ocorreu um erro ao tentar entrar.');
+      setError(err.message || 'Ocorreu um erro. Tente novamente.');
       setIsLoading(false);
     }
+  };
+
+  const toggleMode = () => {
+    setIsRegistering(!isRegistering);
+    setError('');
+    setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=2670&auto=format&fit=crop")' }}>
       <div className="absolute inset-0 bg-blue-900/60 backdrop-blur-sm"></div>
       
-      <div className="relative bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md animate-fade-in mx-4">
-        <div className="text-center mb-8">
+      <div className="relative bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md animate-fade-in mx-4 my-8">
+        <div className="text-center mb-6">
           <div className="bg-rio-blue w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg rotate-3">
              <Building2 className="text-white w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Portal do Associado</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            {isRegistering ? 'Criar Nova Conta' : 'Portal do Associado'}
+          </h1>
           <p className="text-gray-500 mt-2">HoteisRio</p>
         </div>
 
@@ -54,6 +79,45 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          
+          {isRegistering && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                <input 
+                  type="text" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ex: Ana Souza"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue focus:border-rio-blue outline-none transition"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Hotel</label>
+                <input 
+                  type="text" 
+                  value={hotel}
+                  onChange={(e) => setHotel(e.target.value)}
+                  placeholder="Ex: Hotel Atlântico Rio"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue focus:border-rio-blue outline-none transition"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
+                <input 
+                  type="text" 
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  placeholder="Ex: Gerente Geral"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue focus:border-rio-blue outline-none transition"
+                  required
+                />
+              </div>
+            </>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email Corporativo</label>
             <input 
@@ -74,35 +138,46 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
               placeholder="••••••"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue focus:border-rio-blue outline-none transition"
               required
+              minLength={6}
             />
           </div>
+          
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md transition-all transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md transition-all transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
           >
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Acessando...
+                {isRegistering ? 'Cadastrando...' : 'Acessando...'}
               </>
             ) : (
-              'Acessar Portal'
+              isRegistering ? 'Criar Conta' : 'Acessar Portal'
             )}
           </button>
         </form>
 
-        <div className="mt-4 flex flex-col items-center gap-4">
+        <div className="mt-6 flex flex-col items-center gap-3 border-t border-gray-100 pt-4">
            <button 
-             onClick={() => alert('Para criar uma conta, contate a administração do HoteisRio ou cadastre-se no Firebase Console.')}
-             className="text-sm text-rio-blue hover:underline"
+             onClick={toggleMode}
+             className="text-sm text-rio-blue hover:underline font-medium flex items-center gap-1"
            >
-             Não tenho conta
+             {isRegistering ? (
+               <>
+                <ArrowLeft className="w-4 h-4" />
+                Já tenho uma conta
+               </>
+             ) : (
+               'Não tenho conta: Cadastrar agora'
+             )}
            </button>
            
-           <p className="text-xs text-gray-400 flex items-center justify-center gap-1 mt-2">
-             <Lock className="w-3 h-3" /> Ambiente Seguro v1.2
-           </p>
+           {!isRegistering && (
+             <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
+               <Lock className="w-3 h-3" /> Ambiente Seguro v1.2
+             </p>
+           )}
         </div>
       </div>
     </div>
@@ -216,8 +291,8 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Benefits Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Benefits Grid (Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {filteredBenefits.map((benefit) => (
           <BenefitCard 
             key={benefit.id} 
@@ -227,48 +302,30 @@ const Dashboard: React.FC = () => {
           />
         ))}
       </div>
-
-      {/* Empty State */}
+      
+      {/* Empty State for Cards */}
       {filteredBenefits.length === 0 && (
-        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
+        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200 mb-12">
           <p className="text-gray-500">Nenhum benefício encontrado nesta categoria.</p>
         </div>
       )}
 
-      {/* Latest News / Quick Actions (Secondary Section) */}
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
-         <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Últimas Notícias do Setor</h2>
-            <div className="space-y-4">
-               {[1, 2].map((i) => (
-                 <div key={i} className="flex gap-4 items-start pb-4 border-b border-gray-100 last:border-0 last:pb-0 group cursor-pointer">
-                    <div className="overflow-hidden rounded-lg w-20 h-20 flex-shrink-0">
-                      <img src={`https://picsum.photos/seed/news${i}/100/100`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="News" />
-                    </div>
-                    <div>
-                       <span className="text-xs text-rio-blue font-semibold">Turismo</span>
-                       <h3 className="font-semibold text-gray-800 group-hover:text-rio-blue transition-colors">
-                         Ocupação hoteleira no Rio supera expectativas para o próximo feriado
-                       </h3>
-                       <p className="text-xs text-gray-500 mt-1">Há 2 horas</p>
-                    </div>
-                 </div>
-               ))}
-            </div>
-         </div>
-         <div className="bg-rio-blue rounded-xl shadow-lg p-6 text-white relative overflow-hidden">
-            <div className="relative z-10">
-               <h2 className="text-xl font-bold mb-2">Central de Atendimento</h2>
-               <p className="text-blue-100 text-sm mb-6">
-                 Dúvidas sobre sua associação ou mensalidades?
-               </p>
-               <button className="w-full bg-white text-rio-blue font-bold py-2 rounded-lg hover:bg-rio-gold transition-colors">
-                 Falar com Consultor
-               </button>
-            </div>
-            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-         </div>
-      </div>
+      {/* NEW: Outros Benefícios Permanentes (List View) */}
+      {selectedCategory === 'Todos' && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 animate-fade-in">
+          <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100">
+            Outros Benefícios Permanentes
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+            {OTHER_BENEFITS_LIST.map((item, index) => (
+              <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                <span className="text-gray-700 font-medium text-sm">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Interactive Elements */}
       <BenefitModal 

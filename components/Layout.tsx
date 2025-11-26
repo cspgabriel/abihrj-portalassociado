@@ -24,13 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
               </div>
               <div className="hidden md:ml-8 md:flex md:space-x-8">
                 <a href="#" className="border-b-2 border-rio-gold text-white px-1 pt-1 text-sm font-medium">
-                  Portal do Associado
-                </a>
-                <a href="#" className="border-b-2 border-transparent hover:border-gray-300 text-gray-200 px-1 pt-1 text-sm font-medium transition-colors">
-                  Notícias
-                </a>
-                <a href="#" className="border-b-2 border-transparent hover:border-gray-300 text-gray-200 px-1 pt-1 text-sm font-medium transition-colors">
-                  Agenda
+                  Benefícios e Conquistas
                 </a>
               </div>
             </div>
@@ -82,9 +76,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                     <p className="text-blue-300 text-xs">{user.hotel}</p>
                  </div>
               </div>
-              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-900">Portal</a>
-              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-blue-200 hover:text-white hover:bg-blue-700">Notícias</a>
-              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-blue-200 hover:text-white hover:bg-blue-700">Agenda</a>
+              <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-900">Benefícios</a>
               <button onClick={onLogout} className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-300 hover:text-red-100 hover:bg-blue-700 mt-4">
                 Sair
               </button>
