@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
 // BenefitModal replaced by BenefitPage
 import BenefitPage from './components/BenefitPage';
 import PlatformTutorial from './components/PlatformTutorial';
+import InteractiveTutorial from './components/InteractiveTutorial'; // Importar novo componente
 import CalendarModal from './components/CalendarModal';
 import ServiceRequestModal from './components/ServiceRequestModal';
 import AiAssistant from './components/AiAssistant';
@@ -212,6 +214,9 @@ const Dashboard: React.FC = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [serviceRequestBenefit, setServiceRequestBenefit] = useState<Benefit | null>(null);
   
+  // Tutorial State
+  const [showInteractiveTutorial, setShowInteractiveTutorial] = useState(false);
+
   const [checkingSession, setCheckingSession] = useState(true);
 
   // Check for existing session on load using Firebase Real Listener
@@ -232,10 +237,15 @@ const Dashboard: React.FC = () => {
   // --- ACTIONS ---
   
   const handleNavigate = (view: AppView) => {
-    setCurrentView(view);
-    // Reset selection if moving away from details
-    if (view !== 'BENEFIT_DETAILS') {
-      setSelectedBenefitForDetails(null);
+    if (view === 'TUTORIAL') {
+        // Agora o botão de tutorial abre o interativo se estiver no Dashboard, ou a página estática se não
+        setShowInteractiveTutorial(true);
+    } else {
+        setCurrentView(view);
+        // Reset selection if moving away from details
+        if (view !== 'BENEFIT_DETAILS') {
+        setSelectedBenefitForDetails(null);
+        }
     }
   };
 
@@ -292,6 +302,7 @@ const Dashboard: React.FC = () => {
   };
 
   if (currentView === 'TUTORIAL') {
+    // Legacy view fallback or specific page if needed, but navigation now mainly triggers overlay
     return (
        <Layout {...commonLayoutProps}>
           <PlatformTutorial onBack={handleBackToDashboard} />
@@ -352,8 +363,8 @@ const Dashboard: React.FC = () => {
   return (
     <Layout {...commonLayoutProps}>
       
-      {/* Hero Header */}
-      <div className="bg-gradient-to-r from-rio-blue to-blue-800 rounded-2xl p-8 mb-10 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in relative overflow-hidden">
+      {/* Hero Header - Added ID for Tutorial */}
+      <div id="header-welcome" className="bg-gradient-to-r from-rio-blue to-blue-800 rounded-2xl p-8 mb-10 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-16 -mt-16 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 pointer-events-none" />
         
@@ -365,8 +376,8 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) */}
-      <div className="mb-12">
+      {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) - Added ID */}
+      <div id="quick-access-section" className="mb-12">
          <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-blue-100 text-rio-blue rounded-lg">
                <Laptop2 className="w-6 h-6" />
@@ -386,8 +397,8 @@ const Dashboard: React.FC = () => {
          </div>
       </div>
 
-      {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO (Novos Cards) */}
-      <div className="mb-12">
+      {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO (Novos Cards) - Added ID */}
+      <div id="community-section" className="mb-12">
         <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-purple-100 text-purple-600 rounded-lg">
                <Users className="w-6 h-6" />
@@ -437,8 +448,8 @@ const Dashboard: React.FC = () => {
       {/* Divider */}
       <hr className="border-gray-200 mb-12" />
 
-      {/* SEÇÃO 2: CATÁLOGO DE BENEFÍCIOS */}
-      <div>
+      {/* SEÇÃO 2: CATÁLOGO DE BENEFÍCIOS - Added ID */}
+      <div id="catalog-section">
         <div className="flex items-center justify-between gap-3 mb-6">
            <div className="flex items-center gap-3">
               <div className="p-2 bg-gray-100 text-gray-600 rounded-lg">
@@ -516,6 +527,10 @@ const Dashboard: React.FC = () => {
           benefit={serviceRequestBenefit}
           onClose={() => setServiceRequestBenefit(null)}
         />
+      )}
+
+      {showInteractiveTutorial && (
+        <InteractiveTutorial onClose={() => setShowInteractiveTutorial(false)} />
       )}
       
       <AiAssistant />

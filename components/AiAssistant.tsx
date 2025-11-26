@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles } from 'lucide-react';
 import { ChatMessage } from '../types';
@@ -123,8 +124,9 @@ const AiAssistant: React.FC = () => {
         </div>
       )}
 
-      {/* Toggle Button */}
+      {/* Toggle Button - Added ID for Tutorial */}
       <button
+        id="ai-assistant-btn"
         onClick={() => setIsOpen(!isOpen)}
         className={`${isOpen ? 'scale-0' : 'scale-100'} transition-transform duration-300 bg-rio-blue hover:bg-blue-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center group relative`}
       >
