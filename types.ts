@@ -18,7 +18,7 @@ export enum BenefitCategory {
   PARTNERS = 'Parceiros',
   OPERATIONAL = 'Operacional',
   INSTITUTIONAL = 'Institucional',
-  COMMUNICATION = 'Comunicação',
+  COMMUNICATION = 'Comunicação & Marketing',
   TECHNOLOGY = 'Tecnologia',
   HR = 'Recursos Humanos',
   SUPPORT = 'Suporte'

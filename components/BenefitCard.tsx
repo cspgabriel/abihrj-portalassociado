@@ -9,9 +9,10 @@ interface BenefitCardProps {
   benefit: Benefit;
   onDetails: (benefit: Benefit) => void;
   onUse: (benefit: Benefit) => void;
+  layout?: 'grid' | 'list';
 }
 
-const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) => {
+const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, layout = 'grid' }) => {
   // Dynamically resolve icon
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
 
@@ -22,45 +23,57 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) 
     }
   };
 
+  const isList = layout === 'list';
+
   return (
-    <div className="bg-white rounded-xl p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_-4px_rgba(0,74,173,0.15)] border border-gray-100 flex flex-col h-full relative transition-all duration-300 group">
+    <div 
+      className={`
+        bg-white rounded-xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_-4px_rgba(0,74,173,0.15)] 
+        border border-gray-100 relative transition-all duration-300 group
+        ${isList ? 'flex flex-row items-center p-4 gap-4 h-auto' : 'flex flex-col h-full p-5'}
+      `}
+    >
       
-      {/* Header: Icon & Status */}
-      <div className="flex justify-between items-start mb-4">
+      {/* Icon Section */}
+      <div className={`${isList ? 'shrink-0' : 'flex justify-between items-start mb-4'}`}>
         <div className="w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300">
           <IconComponent className="w-6 h-6" strokeWidth={1.5} />
         </div>
         
-        <div className="flex flex-col items-end gap-2">
-          {/* Status Badge */}
-          <div className="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-green-100">
-            <CheckCircle2 className="w-3 h-3" />
-            Ativo
-          </div>
-          
-          {/* New Badge */}
-          {benefit.isNew && (
-            <div className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
-              NOVO
+        {!isList && (
+          <div className="flex flex-col items-end gap-2">
+            <div className="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-green-100">
+              <CheckCircle2 className="w-3 h-3" />
+              Ativo
             </div>
-          )}
-        </div>
+            {benefit.isNew && (
+              <div className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
+                NOVO
+              </div>
+            )}
+          </div>
+        )}
       </div>
       
-      {/* Content */}
-      <div className="flex-1 mb-6">
-        <h3 className="text-lg font-bold text-gray-800 mb-2 leading-tight group-hover:text-rio-blue transition-colors">
-          {benefit.title}
-        </h3>
+      {/* Content Section */}
+      <div className={`flex-1 ${isList ? 'flex flex-col justify-center' : 'mb-6'}`}>
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="text-lg font-bold text-gray-800 leading-tight group-hover:text-rio-blue transition-colors">
+            {benefit.title}
+          </h3>
+          {isList && benefit.isNew && (
+             <span className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">NOVO</span>
+          )}
+        </div>
         <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
           {benefit.description}
         </p>
       </div>
       
-      {/* Actions Footer */}
-      <div className="mt-auto">
+      {/* Actions Section */}
+      <div className={`${isList ? 'shrink-0 min-w-[200px]' : 'mt-auto'}`}>
         {benefit.dashboardUrl ? (
-          // Special Layout for cards with Dashboard (like Public Order, Sustainability, Stats)
+          // Dashboard Buttons
           <div className="grid grid-cols-2 gap-2">
             <button 
               onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
@@ -80,9 +93,8 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) 
             </button>
           </div>
         ) : (
-          // Standard Layout
+          // Standard Buttons
           <div className="grid grid-cols-2 gap-3">
-            {/* Button 1: Detalhes (IA) */}
             <button 
               onClick={(e) => { e.stopPropagation(); onDetails(benefit); }}
               className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1"
@@ -92,7 +104,6 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse }) 
               Detalhes
             </button>
 
-            {/* Button 2: Utilizar or Download */}
             {benefit.downloadUrl ? (
               <button 
                 onClick={(e) => { e.stopPropagation(); onUse(benefit); }}

@@ -351,6 +351,22 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
   {
+    id: 'influencers',
+    title: 'Influenciadores Digitais',
+    description: 'Catálogo de creators homologados para ações de marketing.',
+    category: BenefitCategory.COMMUNICATION, // Comunicação & Marketing
+    iconName: 'Camera',
+    imageUrl: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://hoteisrio.com.br/influenciadores', // Mock URL
+    usageSteps: [
+      "Acesse o catálogo de influenciadores.",
+      "Filtre por nicho (gastronomia, lifestyle, viagens).",
+      "Veja o media kit e entre em contato direto para parcerias."
+    ]
+  },
+  {
     id: 'sustainability-raiox',
     title: 'Raio-X de Sustentabilidade',
     description: 'Avaliação gratuita e online da maturidade sustentável do seu hotel.',
@@ -645,7 +661,7 @@ export const BENEFITS_DATA: Benefit[] = [
     id: 'imprensa',
     title: 'Comunicação e Imprensa',
     description: 'Assessoria de imprensa e visibilidade na mídia para o setor.',
-    category: BenefitCategory.COMMUNICATION,
+    category: BenefitCategory.COMMUNICATION, // Comunicação & Marketing
     iconName: 'Megaphone',
     imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -659,7 +675,7 @@ export const BENEFITS_DATA: Benefit[] = [
     id: 'whatsapp-groups',
     title: 'Grupos WhatsApp',
     description: 'Networking e informações rápidas entre gestores e a associação.',
-    category: BenefitCategory.COMMUNICATION,
+    category: BenefitCategory.COMMUNICATION, // Comunicação & Marketing
     iconName: 'MessageCircle',
     imageUrl: 'https://images.unsplash.com/photo-1611746347311-3a9957777cfa?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -744,7 +760,7 @@ export const BENEFITS_DATA: Benefit[] = [
     id: 'newsletter',
     title: 'Informativo Mensal',
     description: 'Notícias, convites para eventos e atualizações do setor.',
-    category: BenefitCategory.COMMUNICATION,
+    category: BenefitCategory.COMMUNICATION, // Comunicação & Marketing
     iconName: 'Mail',
     imageUrl: 'https://images.unsplash.com/photo-1557568192-238a63f66318?auto=format&fit=crop&q=80&w=400',
     usageSteps: [

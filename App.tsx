@@ -1,6 +1,8 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -21,7 +23,7 @@ import ForumPage from './components/ForumPage';
 import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import { User, Benefit, BenefitCategory, Forum } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -220,6 +222,10 @@ const Dashboard: React.FC = () => {
   // Catalog Filter State
   const [selectedCategory, setSelectedCategory] = useState<BenefitCategory | 'Todos'>('Todos');
   const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
+
+  // Quick Access Filter State
+  const [quickAccessCategory, setQuickAccessCategory] = useState<BenefitCategory | 'Todos'>('Todos');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   // Functional Modals State
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -357,6 +363,10 @@ const Dashboard: React.FC = () => {
     setSortOrder(prev => prev === 'az' ? 'za' : 'az');
   };
 
+  const toggleViewMode = () => {
+    setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+  };
+
   // --- FILTER & SORT LOGIC ---
   
   // Common Sort Function
@@ -368,9 +378,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // 1. Quick Access (Services only) - Always Sorted
+  // 1. Quick Access (Services only)
   const serviceBenefits = BENEFITS_DATA
     .filter(b => b.isService === true)
+    .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory)
     .sort(sortFunction);
   
   // 2. Catalog (Non-services or All depending on design choice)
@@ -386,6 +397,9 @@ const Dashboard: React.FC = () => {
        }
     })
     .sort(sortFunction);
+
+  // Get unique categories for dropdowns
+  const availableCategories = Object.values(BenefitCategory);
 
   if (checkingSession) {
     return (
@@ -549,27 +563,62 @@ const Dashboard: React.FC = () => {
                <h2 className="text-xl font-bold text-gray-800">Acesso Rápido aos Serviços</h2>
             </div>
             
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 hidden md:inline">Classificar:</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm text-gray-500 hidden md:inline">Filtrar:</span>
+              
+              {/* Category Dropdown */}
+              <div className="relative">
+                <select 
+                   value={quickAccessCategory}
+                   onChange={(e) => setQuickAccessCategory(e.target.value as any)}
+                   className="appearance-none bg-white border border-gray-200 text-gray-700 py-1.5 pl-3 pr-8 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
+                >
+                   <option value="Todos">Todas as Categorias</option>
+                   {availableCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+                <Filter className="w-4 h-4 text-gray-400 absolute right-2.5 top-2 pointer-events-none" />
+              </div>
+
+              <div className="w-px h-6 bg-gray-300 mx-1 hidden md:block"></div>
+
               <button 
                 onClick={toggleSort}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Ordenar"
               >
                 {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
-                {sortOrder === 'az' ? 'A - Z' : 'Z - A'}
+              </button>
+              
+              <button 
+                onClick={toggleViewMode}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Mudar Visualização"
+              >
+                {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
               </button>
             </div>
          </div>
          
-         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-            {serviceBenefits.map(benefit => (
-               <BenefitCard 
-                 key={benefit.id}
-                 benefit={benefit}
-                 onDetails={handleViewDetails}
-                 onUse={handleUseBenefit}
-               />
-            ))}
+         <div className={`
+           ${viewMode === 'grid' 
+             ? 'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5' 
+             : 'flex flex-col gap-3'}
+         `}>
+            {serviceBenefits.length > 0 ? (
+                serviceBenefits.map(benefit => (
+                   <BenefitCard 
+                     key={benefit.id}
+                     benefit={benefit}
+                     onDetails={handleViewDetails}
+                     onUse={handleUseBenefit}
+                     layout={viewMode}
+                   />
+                ))
+            ) : (
+                <div className="col-span-full py-8 text-center text-gray-500 bg-gray-100 rounded-xl border border-dashed border-gray-300">
+                    Nenhum serviço encontrado nesta categoria.
+                </div>
+            )}
          </div>
       </div>
 
@@ -635,7 +684,7 @@ const Dashboard: React.FC = () => {
             <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
                <Users className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-gray-800">Fóruns & Comitês</h2>
+            <h2 className="text-xl font-bold text-gray-800">Fóruns da Hotelaria</h2>
          </div>
          
          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -675,8 +724,24 @@ const Dashboard: React.FC = () => {
               <h2 className="text-xl font-bold text-gray-800">Catálogo de Benefícios & Conquistas</h2>
            </div>
 
-           <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 hidden md:inline">Classificar:</span>
+           <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm text-gray-500 hidden md:inline">Filtrar:</span>
+              
+              {/* Category Dropdown (Replacing Tabs visually or complementing them) */}
+              <div className="relative">
+                <select 
+                   value={selectedCategory}
+                   onChange={(e) => setSelectedCategory(e.target.value as any)}
+                   className="appearance-none bg-white border border-gray-200 text-gray-700 py-1.5 pl-3 pr-8 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
+                >
+                   <option value="Todos">Todas as Categorias</option>
+                   {availableCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+                <Filter className="w-4 h-4 text-gray-400 absolute right-2.5 top-2 pointer-events-none" />
+              </div>
+
+              <div className="w-px h-6 bg-gray-300 mx-1 hidden md:block"></div>
+
               <button 
                 onClick={toggleSort}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
@@ -684,38 +749,31 @@ const Dashboard: React.FC = () => {
                 {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
                 {sortOrder === 'az' ? 'A - Z' : 'Z - A'}
               </button>
+
+              <button 
+                onClick={toggleViewMode}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                title="Mudar Visualização"
+              >
+                {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+              </button>
             </div>
         </div>
 
-        {/* Category Tabs */}
-        <div className="mb-8 overflow-x-auto pb-1 scrollbar-hide">
-          <div className="flex space-x-2 bg-gray-100 p-1.5 rounded-xl w-max">
-            {['Todos', ...Object.values(BenefitCategory)].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat as any)}
-                className={`
-                  px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2
-                  ${selectedCategory === cat 
-                    ? 'bg-white text-rio-blue shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'}
-                `}
-              >
-                {cat}
-                {selectedCategory === cat && <ChevronDown className="w-3 h-3" />}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Catalog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+        <div className={`
+          ${viewMode === 'grid' 
+            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
+            : 'flex flex-col gap-4'}
+          mb-12
+        `}>
           {filteredCatalogBenefits.map((benefit) => (
             <BenefitCard 
               key={benefit.id} 
               benefit={benefit} 
               onDetails={handleViewDetails}
               onUse={handleUseBenefit}
+              layout={viewMode}
             />
           ))}
         </div>
