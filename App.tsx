@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -17,6 +18,7 @@ import LawsRegulationPage from './components/LawsRegulationPage';
 import SecurityPage from './components/SecurityPage';
 import RegistrationUpdatePage from './components/RegistrationUpdatePage';
 import ForumPage from './components/ForumPage';
+import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import { User, Benefit, BenefitCategory, Forum } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA } from './constants';
 import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight } from 'lucide-react';
@@ -27,22 +29,6 @@ import * as Icons from 'lucide-react';
 type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE';
 
 // --- Components ---
-
-const WeatherWidget = () => {
-  return (
-    <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 border border-white/20 mt-4 md:mt-0 md:ml-auto md:w-auto w-full overflow-hidden">
-       <iframe 
-         src="https://www.meteoblue.com/en/weather/widget/three/rio-de-janeiro_brazil_3451190?geoloc=fixed&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=image" 
-         frameBorder="0" 
-         scrolling="no" 
-         allowTransparency={true} 
-         sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" 
-         style={{ width: '270px', height: '220px' }}
-         className="rounded-lg"
-       ></iframe>
-    </div>
-  );
-};
 
 const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -547,8 +533,8 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Weather Widget */}
-        <div className="relative z-10 w-full md:w-auto">
+        {/* Real-time Custom Weather Widget */}
+        <div className="relative z-10 w-full md:w-auto md:min-w-[300px]">
           <WeatherWidget />
         </div>
       </div>

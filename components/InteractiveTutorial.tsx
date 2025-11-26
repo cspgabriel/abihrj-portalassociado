@@ -53,6 +53,8 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
   // Update target position on step change or resize
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
     const updatePosition = () => {
       const step = steps[currentStep];
       const element = document.getElementById(step.targetId);
@@ -62,21 +64,33 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
         // Wait for scroll to finish a bit or just grab rect immediately
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
             const rect = element.getBoundingClientRect();
             setTargetRect(rect);
-        }, 100); // Small delay to allow scroll adjustment
+        }, 400); // Increased delay to allow scroll animation to settle
       }
     };
 
     updatePosition();
-    window.addEventListener('resize', () => {
-        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-        updatePosition();
-    });
     
-    return () => window.removeEventListener('resize', updatePosition);
-  }, [currentStep, windowSize]);
+    // Add resize listener
+    const handleResize = () => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+        // Recalculate immediately on resize
+        const step = steps[currentStep];
+        const element = document.getElementById(step.targetId);
+        if (element) setTargetRect(element.getBoundingClientRect());
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleResize); // Recalc on scroll too for safety
+    
+    return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', handleResize);
+        clearTimeout(timeoutId);
+    };
+  }, [currentStep]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -96,7 +110,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
   // Calculate Tooltip Position
   const getTooltipStyle = () => {
-    if (!targetRect) return {};
+    if (!targetRect) return { opacity: 0 };
     
     const spacing = 20;
     const tooltipWidth = 320; // approximate width from w-80 class
@@ -110,7 +124,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
         left = targetRect.left + (targetRect.width / 2) - (tooltipWidth / 2);
         break;
       case 'top':
-        top = targetRect.top - spacing - 200; // approximate height
+        top = targetRect.top - spacing - 220; // approximate height
         left = targetRect.left + (targetRect.width / 2) - (tooltipWidth / 2);
         break;
       case 'left':
@@ -126,8 +140,9 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
     // Boundary checks to keep tooltip on screen
     if (left < 10) left = 10;
     if (left + tooltipWidth > window.innerWidth - 10) left = window.innerWidth - tooltipWidth - 10;
+    if (top < 10) top = 10;
 
-    return { top, left };
+    return { top, left, opacity: 1 };
   };
 
   if (!targetRect) return null;
@@ -136,7 +151,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
     <div className="fixed inset-0 z-[60] overflow-hidden">
       {/* Background Mask - Using a massive box-shadow on the highlight element to create the "hole" effect */}
       <div 
-        className="absolute transition-all duration-500 ease-in-out border-2 border-rio-gold rounded-xl animate-pulse shadow-[0_0_0_9999px_rgba(0,0,0,0.75)] pointer-events-none"
+        className="absolute transition-all duration-300 ease-in-out border-2 border-rio-gold rounded-xl animate-pulse shadow-[0_0_0_9999px_rgba(0,0,0,0.75)] pointer-events-none"
         style={{
           top: targetRect.top - 5,
           left: targetRect.left - 5,
@@ -147,7 +162,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
       {/* Animated Pointer/Hand */}
       <div 
-        className="absolute transition-all duration-500 ease-in-out z-[70] pointer-events-none"
+        className="absolute transition-all duration-300 ease-in-out z-[70] pointer-events-none"
         style={{
             top: targetRect.bottom - 10,
             left: targetRect.right - 20,
@@ -160,7 +175,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
       {/* Tooltip Card */}
       <div 
-        className="absolute z-[70] w-80 bg-white rounded-2xl shadow-2xl p-6 border-t-4 border-rio-blue animate-scale-in transition-all duration-500"
+        className="absolute z-[70] w-80 bg-white rounded-2xl shadow-2xl p-6 border-t-4 border-rio-blue transition-all duration-300"
         style={getTooltipStyle()}
       >
         <div className="flex justify-between items-start mb-3">

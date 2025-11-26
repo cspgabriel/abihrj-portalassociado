@@ -11,9 +11,9 @@ export const MOCK_USER = {
 export const CRM_LINK = "https://hoteisrio.com.br/crm/inscricao-newsletter";
 
 export const FOOTER_DATA = {
-  address: "Av. Nilo Peçanha, 50 - Gr 2409 - Centro, Rio de Janeiro - RJ",
-  cep: "20020-906",
-  phone: "(21) 2220-3030",
+  address: "Rua Maria Eugenia, 300 - Humaitá, Rio de Janeiro - RJ",
+  cep: "22261-080",
+  phone: "(21) 2226-2520",
   email: "contato@hoteisrio.com.br",
   razaoSocial: "Associação de Hotéis do Rio de Janeiro - ABIH-RJ",
   cnpj: "33.662.138/0001-44",

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Benefit } from '../types';
 import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home, ChevronDown } from 'lucide-react';
 import MegaMenu from './MegaMenu';
 import Footer from './Footer';
+import { BENEFITS_DATA } from '../constants';
 
 // Import AppView type locally or accept string to avoid circular dependency issues if strict
 type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS';
@@ -19,11 +20,36 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, onBenefitClick, currentView }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  
+  // Search State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<Benefit[]>([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchTerm.length >= 2) {
+      const results = BENEFITS_DATA.filter(b => 
+        b.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        b.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(results);
+      setIsSearchOpen(true);
+    } else {
+      setSearchResults([]);
+      setIsSearchOpen(false);
+    }
+  }, [searchTerm]);
 
   const handleNavClick = (view: AppView) => {
     onNavigate(view);
     setIsMobileMenuOpen(false);
     setIsMegaMenuOpen(false);
+  };
+
+  const handleSearchResultClick = (benefit: Benefit) => {
+    if (onBenefitClick) onBenefitClick(benefit);
+    setSearchTerm('');
+    setIsSearchOpen(false);
   };
 
   const navItems = [
@@ -101,13 +127,42 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
             
             {/* Right Side Icons */}
             <div className="hidden md:flex items-center gap-4">
+               
+               {/* Search Bar - Instant AJAX Style */}
                <div className="relative">
                 <input 
                   type="text" 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Buscar benefício..." 
-                  className="bg-blue-800 text-white placeholder-blue-300 rounded-full px-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-rio-gold w-64"
+                  className="bg-blue-800 text-white placeholder-blue-300 rounded-full px-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-rio-gold w-64 transition-all"
                 />
-                <Search className="absolute right-3 top-1.5 h-4 w-4 text-blue-300" />
+                <Search className="absolute right-3 top-1.5 h-4 w-4 text-blue-300 pointer-events-none" />
+                
+                {/* Search Results Dropdown */}
+                {isSearchOpen && (
+                  <div className="absolute top-full mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden animate-fade-in z-50 right-0 text-gray-800">
+                    {searchResults.length > 0 ? (
+                      <ul className="max-h-64 overflow-y-auto">
+                        {searchResults.map(result => (
+                          <li key={result.id}>
+                            <button 
+                              onClick={() => handleSearchResultClick(result)}
+                              className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0 flex flex-col"
+                            >
+                              <span className="font-bold text-sm text-rio-blue">{result.title}</span>
+                              <span className="text-xs text-gray-500 truncate w-full">{result.description}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="p-4 text-center text-sm text-gray-500">
+                        Nenhum resultado encontrado.
+                      </div>
+                    )}
+                  </div>
+                )}
                </div>
                
                <button 

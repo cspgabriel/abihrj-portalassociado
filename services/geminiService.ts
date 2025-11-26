@@ -1,10 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Chave fornecida pelo usuário
-const apiKey = "AIzaSyAnxQYwWPILArKbm3Mfzyu_-r_sf9F4Zl4";
-
-// Initialize the client
-const ai = new GoogleGenAI({ apiKey });
+// Initialize the client using process.env.API_KEY as per guidelines
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateBenefitDetails = async (benefitTitle: string): Promise<string> => {
   try {
