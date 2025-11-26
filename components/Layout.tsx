@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { User, Benefit } from '../types';
 import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home, ChevronDown } from 'lucide-react';
@@ -14,10 +15,11 @@ interface LayoutProps {
   onLogout: () => void;
   onNavigate: (view: AppView) => void;
   onBenefitClick?: (benefit: Benefit) => void;
+  onForumClick?: (forum: any) => void;
   currentView?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, onBenefitClick, currentView }) => {
+const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, onBenefitClick, onForumClick, currentView }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   
@@ -62,12 +64,12 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       {/* Navbar */}
-      <nav className="bg-rio-blue text-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+      <nav className="bg-rio-blue text-white shadow-lg sticky top-0 z-50 h-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex justify-between h-full">
             
             {/* Logo & Desktop Nav */}
-            <div className="flex items-center">
+            <div className="flex items-center h-full">
               <div 
                 className="flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity" 
                 onClick={() => handleNavClick('DASHBOARD')}
@@ -79,8 +81,8 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
                 />
               </div>
               
-              {/* Desktop Menu Links */}
-              <div className="hidden md:ml-8 md:flex md:items-center md:space-x-1">
+              {/* Desktop Menu Links - h-full ensures no gap for mouse leave */}
+              <div className="hidden md:ml-8 md:flex md:items-center md:space-x-1 h-full">
                 {navItems.map((item) => (
                   <button
                     key={item.label}
@@ -96,9 +98,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
                   </button>
                 ))}
 
-                {/* Mega Menu Trigger */}
+                {/* Mega Menu Trigger - Wrapped in h-full to bridge the gap to the menu */}
                 <div 
-                  className="relative"
+                  className="relative h-full flex items-center"
                   onMouseEnter={() => setIsMegaMenuOpen(true)}
                   onMouseLeave={() => setIsMegaMenuOpen(false)}
                 >
@@ -118,6 +120,10 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
                     onClose={() => setIsMegaMenuOpen(false)} 
                     onBenefitClick={(benefit) => {
                       if (onBenefitClick) onBenefitClick(benefit);
+                      setIsMegaMenuOpen(false);
+                    }}
+                    onForumClick={(forum) => {
+                      if (onForumClick) onForumClick(forum);
                       setIsMegaMenuOpen(false);
                     }}
                   />
