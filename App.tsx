@@ -106,7 +106,7 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
            </div>
            
            <p className="text-xs text-gray-400 flex items-center justify-center gap-1 mt-2">
-             <Lock className="w-3 h-3" /> Ambiente Seguro
+             <Lock className="w-3 h-3" /> Ambiente Seguro v1.2
            </p>
         </div>
       </div>
