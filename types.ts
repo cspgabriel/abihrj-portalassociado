@@ -16,7 +16,12 @@ export enum BenefitCategory {
   EVENTS = 'Eventos',
   STATISTICS = 'Estatísticas',
   PARTNERS = 'Parceiros',
-  OPERATIONAL = 'Operacional'
+  OPERATIONAL = 'Operacional',
+  INSTITUTIONAL = 'Institucional',
+  COMMUNICATION = 'Comunicação',
+  TECHNOLOGY = 'Tecnologia',
+  HR = 'Recursos Humanos',
+  SUPPORT = 'Suporte'
 }
 
 export interface Benefit {
@@ -27,6 +32,7 @@ export interface Benefit {
   iconName: string; // We map string to icon component in UI
   imageUrl: string;
   fullDetails?: string;
+  isNew?: boolean; // Novo campo para destacar itens novos
 }
 
 export interface ChatMessage {
