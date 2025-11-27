@@ -428,7 +428,72 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
-  // --- CONCURSO DE NATAL 2025 (DESTAQUE MÁXIMO) ---
+  // --- DESTAQUE 1: CURSO BEBIDAS (NOVO) ---
+  {
+    id: 'highlight-drinks',
+    title: 'Curso: Identificação de Bebidas Falsas',
+    description: 'Workshop técnico em parceria com ABBD e Procon RJ.',
+    category: BenefitCategory.TRAINING,
+    iconName: 'Wine',
+    imageUrl: 'https://images.unsplash.com/photo-1569937756447-e1603f99e69c?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    usageSteps: [
+      "Data: 11 de Dezembro, de 10h às 12h.",
+      "Local: Rio Othon Palace (Copacabana).",
+      "Objetivo: Capacitar equipes de A&B a identificar destilados falsificados.",
+      "Clique em 'Utilizar' para realizar a inscrição gratuita."
+    ]
+  },
+  // --- DESTAQUE 2: ROCK IN RIO (NOVO) ---
+  {
+    id: 'highlight-rir',
+    title: 'Hotel Parceiro Rock in Rio',
+    description: 'Credencie seu hotel para a oferta oficial do festival.',
+    category: BenefitCategory.COMMERCIAL,
+    iconName: 'Music',
+    imageUrl: 'https://images.unsplash.com/photo-1459749411177-0473ef485078?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    usageSteps: [
+      "Preencha o formulário de adesão no botão abaixo.",
+      "Garanta visibilidade nos canais oficiais do Rock in Rio.",
+      "Acesse tarifas negociadas e pacotes exclusivos."
+    ]
+  },
+  // --- DESTAQUE 3: FEIRA EMPREGABILIDADE (NOVO) ---
+  {
+    id: 'highlight-job-fair',
+    title: 'Feira de Empregabilidade',
+    description: 'Parceria com a Secretaria de Trabalho para captar talentos.',
+    category: BenefitCategory.HR,
+    iconName: 'Briefcase',
+    imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    usageSteps: [
+      "Cadastre suas vagas abertas na plataforma.",
+      "Participe do evento presencial de recrutamento.",
+      "Receba currículos triados pela Secretaria."
+    ]
+  },
+  // --- DESTAQUE 4: CADASTRO GRANDES EVENTOS (NOVO) ---
+  {
+    id: 'highlight-events-reg',
+    title: 'Cadastro de Grandes Eventos',
+    description: 'Procedimento obrigatório via SETUR-RJ e órgãos de segurança.',
+    category: BenefitCategory.OPERATIONAL,
+    iconName: 'FileCheck',
+    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    usageSteps: [
+      "Acesse o formulário unificado da SETUR-RJ.",
+      "Registre eventos acima de 500 pessoas no seu hotel.",
+      "Automaticamente integrado com Polícia, Bombeiros e CET-Rio."
+    ]
+  },
+  // --- CONCURSO DE NATAL 2025 (DESTAQUE) ---
   {
     id: 'natal-2025',
     title: 'Concurso de Decoração Natalina 2025',

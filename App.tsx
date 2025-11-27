@@ -21,7 +21,7 @@ import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -244,6 +244,9 @@ const Dashboard: React.FC = () => {
   const [showInteractiveTutorial, setShowInteractiveTutorial] = useState(false);
 
   const [checkingSession, setCheckingSession] = useState(true);
+
+  // Slider State (Classic View)
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   // Date Logic
   const today = new Date().toLocaleDateString('pt-BR', {
@@ -539,8 +542,56 @@ const Dashboard: React.FC = () => {
   // Get unique categories for dropdowns
   const availableCategories = Object.values(BenefitCategory);
 
-  // Retrieve Christmas Benefit for the Classic Slider
-  const christmasBenefit = BENEFITS_DATA.find(b => b.id === 'natal-2025');
+  // --- SLIDER LOGIC ---
+  const highlightIds = [
+      'natal-2025', 
+      'highlight-drinks', 
+      'highlight-rir', 
+      'highlight-job-fair', 
+      'highlight-events-reg'
+  ];
+  
+  const highlightSlides = highlightIds
+    .map(id => BENEFITS_DATA.find(b => b.id === id))
+    .filter(Boolean) as Benefit[];
+
+  useEffect(() => {
+    if (highlightSlides.length <= 1) return;
+    const interval = setInterval(() => {
+        setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
+    }, 5000); // 5 seconds rotation
+    return () => clearInterval(interval);
+  }, [highlightSlides.length]);
+
+  const nextSlide = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
+  };
+
+  const prevSlide = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentSlideIndex((prev) => (prev - 1 + highlightSlides.length) % highlightSlides.length);
+  };
+
+  const getSlideGradient = (id: string) => {
+      switch (id) {
+          case 'natal-2025': return 'from-red-700 to-red-900 border-red-800/50';
+          case 'highlight-drinks': return 'from-blue-700 to-slate-800 border-blue-800/50';
+          case 'highlight-rir': return 'from-purple-900 to-black border-purple-800/50';
+          case 'highlight-job-fair': return 'from-green-700 to-teal-900 border-green-800/50';
+          default: return 'from-gray-700 to-gray-900 border-gray-600/50';
+      }
+  };
+
+  const getSlideAccentColor = (id: string) => {
+      switch (id) {
+          case 'natal-2025': return 'text-yellow-300 bg-yellow-400 text-red-900';
+          case 'highlight-drinks': return 'text-cyan-300 bg-cyan-400 text-blue-900';
+          case 'highlight-rir': return 'text-pink-400 bg-pink-500 text-white';
+          case 'highlight-job-fair': return 'text-green-300 bg-green-400 text-green-900';
+          default: return 'text-white bg-gray-500 text-white';
+      }
+  };
 
   if (checkingSession) {
     return (
@@ -678,41 +729,81 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* CHRISTMAS SLIDER/BANNER (CLASSIC VIEW) */}
-      {christmasBenefit && (
-          <div className="mb-12 relative group cursor-pointer animate-fade-in" onClick={() => handleUseBenefit(christmasBenefit)}>
-             {/* Banner Content */}
-             <div className="bg-gradient-to-r from-red-700 to-red-900 rounded-2xl p-8 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 border border-red-800/50">
-                {/* Decorations */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-yellow-400/10 rounded-full -ml-10 -mb-10 blur-xl pointer-events-none" />
-
-                {/* Icon */}
-                <div className="bg-white/10 p-5 rounded-full backdrop-blur-sm shrink-0 border border-white/20 shadow-inner">
-                   <Gift className="w-12 h-12 text-yellow-300" />
-                </div>
-
-                {/* Text */}
-                <div className="flex-1 text-center md:text-left z-10">
-                   <div className="inline-block bg-yellow-400 text-red-900 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wide shadow-sm">
-                      Destaque do Mês
-                   </div>
-                   <h2 className="text-3xl font-bold text-white mb-2">Concurso de Decoração Natalina 2025</h2>
-                   <p className="text-red-100 text-lg">Inscrições abertas! Destaque seu hotel e encante seus hóspedes.</p>
-                </div>
-
-                {/* Action */}
-                <button className="bg-white text-red-800 font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-gray-50 transition-transform group-hover:scale-105 flex items-center gap-2 whitespace-nowrap">
-                   Participar
-                   <ArrowRight className="w-5 h-5" />
-                </button>
+      {/* HIGHLIGHT SLIDER (CLASSIC VIEW) */}
+      {highlightSlides.length > 0 && (
+          <div className="mb-12 relative group animate-fade-in">
+             <div className="flex items-center gap-3 mb-4">
+                 <div className="p-2 bg-yellow-100 text-yellow-700 rounded-lg">
+                    <Star className="w-5 h-5" />
+                 </div>
+                 <h2 className="text-xl font-bold text-gray-800">Destaques para Você</h2>
              </div>
+
+             {/* Slide Item */}
+             {highlightSlides.map((slide, index) => {
+                 if (index !== currentSlideIndex) return null;
+                 const IconComponent = (Icons as any)[slide.iconName] || Icons.HelpCircle;
+                 
+                 // Split gradient logic just for rendering style
+                 const gradientClass = getSlideGradient(slide.id);
+                 const accentClass = getSlideAccentColor(slide.id).split(' '); // [text, bg, badgeText]
+
+                 return (
+                    <div 
+                        key={slide.id}
+                        className={`bg-gradient-to-r ${gradientClass} rounded-2xl p-8 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 border transition-all duration-500`}
+                        onClick={() => handleUseBenefit(slide)}
+                    >
+                        {/* Decorations */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
+                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 blur-xl pointer-events-none" />
+
+                        {/* Icon */}
+                        <div className="bg-white/10 p-5 rounded-full backdrop-blur-sm shrink-0 border border-white/20 shadow-inner">
+                            <IconComponent className={`w-12 h-12 ${accentClass[0]}`} />
+                        </div>
+
+                        {/* Text */}
+                        <div className="flex-1 text-center md:text-left z-10">
+                            <div className={`inline-block ${accentClass[1]} ${accentClass[2]} text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wide shadow-sm`}>
+                                Novidade
+                            </div>
+                            <h2 className="text-3xl font-bold text-white mb-2">{slide.title}</h2>
+                            <p className="text-white/80 text-lg">{slide.description}</p>
+                        </div>
+
+                        {/* Action */}
+                        <button className="bg-white text-gray-800 font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-gray-50 transition-transform group-hover:scale-105 flex items-center gap-2 whitespace-nowrap z-10 cursor-pointer">
+                            Ver Detalhes
+                            <ArrowRight className="w-5 h-5" />
+                        </button>
+                    </div>
+                 );
+             })}
              
-             {/* Slider Dots Simulation */}
+             {/* Slider Arrows */}
+             <button 
+                onClick={prevSlide} 
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+             >
+                <ChevronLeft className="w-6 h-6" />
+             </button>
+             <button 
+                onClick={nextSlide} 
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+             >
+                <ChevronRight className="w-6 h-6" />
+             </button>
+             
+             {/* Slider Indicators */}
              <div className="flex justify-center gap-2 mt-4">
-                <div className="w-8 h-1.5 bg-rio-blue rounded-full"></div>
-                <div className="w-2 h-1.5 bg-gray-300 rounded-full"></div>
-                <div className="w-2 h-1.5 bg-gray-300 rounded-full"></div>
+                {highlightSlides.map((_, idx) => (
+                    <button 
+                        key={idx}
+                        onClick={() => setCurrentSlideIndex(idx)}
+                        className={`w-2 h-2 rounded-full transition-all ${idx === currentSlideIndex ? 'bg-rio-blue w-6' : 'bg-gray-300 hover:bg-gray-400'}`}
+                    />
+                ))}
              </div>
           </div>
       )}

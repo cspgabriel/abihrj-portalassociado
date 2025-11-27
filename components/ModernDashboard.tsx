@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Benefit, BenefitCategory } from '../types';
 import { BENEFITS_DATA, RIO_EVENTS, COMMUNITY_ITEMS_DATA } from '../constants';
 import BenefitCard from './BenefitCard';
 import WeatherWidget from './WeatherWidget';
 import GamificationWidget from './GamificationWidget';
-import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, Filter, List, Grid, Gift } from 'lucide-react';
+import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, Filter, List, Grid, Gift, ChevronLeft, ChevronRight } from 'lucide-react';
 import * as Icons from 'lucide-react';
 
 interface ModernDashboardProps {
@@ -20,6 +20,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
   const [activeTab, setActiveTab] = useState<TabType>('HOME');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   // --- FILTERS ---
   const services = BENEFITS_DATA.filter(b => b.isService);
@@ -32,8 +33,58 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
   // --- HOME DATA ---
   const suggestedActions = BENEFITS_DATA.filter(b => b.isNew || b.id === 'calendar-01').slice(0, 3);
-  const quickTools = services.filter(b => b.id !== 'natal-2025').slice(0, 6); // Remove natal from quick tools to avoid duplicate if shown in banner
-  const christmasBenefit = BENEFITS_DATA.find(b => b.id === 'natal-2025');
+  const quickTools = services.filter(b => !['natal-2025', 'highlight-drinks', 'highlight-rir', 'highlight-job-fair'].includes(b.id)).slice(0, 6);
+
+  // --- SLIDER LOGIC ---
+  const highlightIds = [
+      'natal-2025', 
+      'highlight-drinks', 
+      'highlight-rir', 
+      'highlight-job-fair', 
+      'highlight-events-reg'
+  ];
+  
+  const highlightSlides = highlightIds
+    .map(id => BENEFITS_DATA.find(b => b.id === id))
+    .filter(Boolean) as Benefit[];
+
+  useEffect(() => {
+    if (highlightSlides.length <= 1) return;
+    const interval = setInterval(() => {
+        setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
+    }, 5000); 
+    return () => clearInterval(interval);
+  }, [highlightSlides.length]);
+
+  const nextSlide = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
+  };
+
+  const prevSlide = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentSlideIndex((prev) => (prev - 1 + highlightSlides.length) % highlightSlides.length);
+  };
+
+  const getSlideGradient = (id: string) => {
+      switch (id) {
+          case 'natal-2025': return 'from-red-600 to-red-800';
+          case 'highlight-drinks': return 'from-blue-600 to-slate-800';
+          case 'highlight-rir': return 'from-purple-800 to-gray-900';
+          case 'highlight-job-fair': return 'from-green-600 to-teal-800';
+          default: return 'from-gray-600 to-gray-800';
+      }
+  };
+
+  const getSlideAccentColor = (id: string) => {
+      switch (id) {
+          case 'natal-2025': return 'text-yellow-300 bg-yellow-400 text-red-900';
+          case 'highlight-drinks': return 'text-cyan-300 bg-cyan-400 text-blue-900';
+          case 'highlight-rir': return 'text-pink-400 bg-pink-500 text-white';
+          case 'highlight-job-fair': return 'text-green-300 bg-green-400 text-green-900';
+          default: return 'text-white bg-gray-500 text-white';
+      }
+  };
 
   return (
     <div className="animate-fade-in pb-12">
@@ -141,30 +192,68 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              {activeTab === 'HOME' && (
                <div className="space-y-8 animate-fade-in">
                   
-                  {/* CHRISTMAS BANNER (HIGH PRIORITY) */}
-                  {christmasBenefit && (
-                      <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden text-white flex flex-col md:flex-row items-center gap-6 group cursor-pointer hover:scale-[1.01] transition-transform"
-                           onClick={() => onUseBenefit(christmasBenefit)}
-                      >
-                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
-                         <div className="absolute bottom-0 left-0 w-40 h-40 bg-yellow-400/20 rounded-full -ml-10 -mb-10 pointer-events-none blur-xl" />
+                  {/* HIGHLIGHT SLIDER (MODERN VIEW) */}
+                  {highlightSlides.length > 0 && (
+                      <div className="relative group overflow-hidden rounded-2xl shadow-xl">
+                         {highlightSlides.map((slide, index) => {
+                             if (index !== currentSlideIndex) return null;
+                             const IconComponent = (Icons as any)[slide.iconName] || Icons.HelpCircle;
+                             const gradientClass = getSlideGradient(slide.id);
+                             const accentClass = getSlideAccentColor(slide.id).split(' ');
+
+                             return (
+                                <div 
+                                    key={slide.id}
+                                    className={`bg-gradient-to-r ${gradientClass} p-8 flex flex-col md:flex-row items-center gap-6 cursor-pointer hover:scale-[1.01] transition-transform duration-500`}
+                                    onClick={() => onUseBenefit(slide)}
+                                >
+                                   {/* Decorations */}
+                                   <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
+                                   
+                                   <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm shrink-0 shadow-lg">
+                                      <IconComponent className={`w-10 h-10 ${accentClass[0]}`} />
+                                   </div>
+
+                                   <div className="flex-1 text-center md:text-left relative z-10">
+                                      <div className={`inline-block ${accentClass[1]} ${accentClass[2]} text-xs font-bold px-3 py-1 rounded-full mb-2 uppercase tracking-wide`}>
+                                          Em Destaque
+                                      </div>
+                                      <h2 className="text-2xl md:text-3xl font-bold mb-2 text-white">{slide.title}</h2>
+                                      <p className="text-white/90 mb-0">{slide.description}</p>
+                                   </div>
+
+                                   <button className="bg-white text-gray-800 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 z-10">
+                                      {slide.externalLink ? 'Inscrever Agora' : 'Ver Detalhes'}
+                                      <ArrowRight className="w-4 h-4" />
+                                   </button>
+                                </div>
+                             )
+                         })}
                          
-                         <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm shrink-0">
-                            <Gift className="w-10 h-10 text-yellow-300" />
-                         </div>
-
-                         <div className="flex-1 text-center md:text-left relative z-10">
-                            <div className="inline-block bg-yellow-400 text-red-900 text-xs font-bold px-3 py-1 rounded-full mb-2 uppercase tracking-wide">
-                                Inscrições Abertas
-                            </div>
-                            <h2 className="text-2xl md:text-3xl font-bold mb-2">Concurso de Decoração Natalina 2025</h2>
-                            <p className="text-red-100 mb-0">Participe da tradição e destaque seu hotel na magia do Natal carioca.</p>
-                         </div>
-
-                         <button className="bg-white text-red-700 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0">
-                            Inscrever Agora
-                            <ArrowRight className="w-4 h-4" />
+                         {/* Slider Arrows */}
+                         <button 
+                            onClick={prevSlide} 
+                            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                         >
+                            <ChevronLeft className="w-6 h-6" />
                          </button>
+                         <button 
+                            onClick={nextSlide} 
+                            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                         >
+                            <ChevronRight className="w-6 h-6" />
+                         </button>
+
+                         {/* Slider Dots */}
+                         <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
+                            {highlightSlides.map((_, idx) => (
+                                <button 
+                                    key={idx}
+                                    onClick={(e) => { e.stopPropagation(); setCurrentSlideIndex(idx); }}
+                                    className={`w-2 h-2 rounded-full transition-all shadow-sm ${idx === currentSlideIndex ? 'bg-white w-6' : 'bg-white/40 hover:bg-white/60'}`}
+                                />
+                            ))}
+                         </div>
                       </div>
                   )}
 
@@ -175,7 +264,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                         Destaques para você
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {suggestedActions.filter(b => b.id !== 'natal-2025').map(benefit => (
+                        {suggestedActions.filter(b => !highlightIds.includes(b.id)).map(benefit => (
                             <BenefitCard 
                                 key={benefit.id} 
                                 benefit={benefit} 
