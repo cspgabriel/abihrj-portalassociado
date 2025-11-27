@@ -1,10 +1,12 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory } from '../types';
-import { BENEFITS_DATA, RIO_EVENTS } from '../constants';
+import { BENEFITS_DATA, RIO_EVENTS, COMMUNITY_ITEMS_DATA } from '../constants';
 import BenefitCard from './BenefitCard';
 import WeatherWidget from './WeatherWidget';
 import GamificationWidget from './GamificationWidget';
-import { Sparkles, Calendar, ArrowRight, Zap, Target } from 'lucide-react';
+import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, Filter, List, Grid, Gift } from 'lucide-react';
+import * as Icons from 'lucide-react';
 
 interface ModernDashboardProps {
   user: User;
@@ -12,18 +14,32 @@ interface ModernDashboardProps {
   onViewDetails: (benefit: Benefit) => void;
 }
 
+type TabType = 'HOME' | 'SERVICES' | 'BENEFITS' | 'COMMUNITY';
+
 const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, onViewDetails }) => {
-  // 1. Filtrar Ações Sugeridas (Ex: Novos ou Mais Usados)
+  const [activeTab, setActiveTab] = useState<TabType>('HOME');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
+
+  // --- FILTERS ---
+  const services = BENEFITS_DATA.filter(b => b.isService);
+  const benefitsCatalog = BENEFITS_DATA.filter(b => !b.isService); // Only non-direct services
+
+  const filteredServices = services.filter(b => selectedCategory === 'Todos' || b.category === selectedCategory);
+  const filteredBenefits = benefitsCatalog.filter(b => selectedCategory === 'Todos' || b.category === selectedCategory);
+
+  const categories = ['Todos', ...Object.values(BenefitCategory)];
+
+  // --- HOME DATA ---
   const suggestedActions = BENEFITS_DATA.filter(b => b.isNew || b.id === 'calendar-01').slice(0, 3);
-  
-  // 2. Filtrar Serviços Rápidos (Tools)
-  const quickTools = BENEFITS_DATA.filter(b => b.isService).slice(0, 6);
+  const quickTools = services.filter(b => b.id !== 'natal-2025').slice(0, 6); // Remove natal from quick tools to avoid duplicate if shown in banner
+  const christmasBenefit = BENEFITS_DATA.find(b => b.id === 'natal-2025');
 
   return (
     <div className="animate-fade-in pb-12">
-       {/* Top Header Dark Mode Style */}
-       <div className="bg-gray-900 text-white p-8 rounded-3xl mb-8 relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rio-blue opacity-20 rounded-full blur-3xl -mr-20 -mt-40 pointer-events-none" />
+       {/* Top Header - RIO BLUE IDENTITY */}
+       <div className="bg-gradient-to-r from-rio-blue to-blue-900 text-white p-8 rounded-3xl mb-8 relative overflow-hidden shadow-2xl">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-10 rounded-full blur-3xl -mr-20 -mt-40 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-rio-gold opacity-10 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none" />
           
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -34,8 +50,8 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                    <span className="text-xs font-bold uppercase tracking-wider">Painel Executivo</span>
                 </div>
                 <h1 className="text-4xl font-bold mb-3">Olá, {user.name.split(' ')[0]}</h1>
-                <p className="text-gray-300 text-lg max-w-xl">
-                   Aqui está o resumo da sua operação hoje. Você tem <span className="text-rio-gold font-bold">3 novas oportunidades</span> de economia.
+                <p className="text-blue-100 text-lg max-w-xl">
+                   Bem-vindo à Central do Associado. Você tem <span className="text-rio-gold font-bold">3 novas oportunidades</span> de economia hoje.
                 </p>
              </div>
              
@@ -46,25 +62,53 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
           </div>
        </div>
 
-       {/* Main Grid Layout */}
+       {/* Internal Tabs Navigation */}
+       <div className="flex overflow-x-auto gap-2 mb-8 pb-2 scrollbar-hide">
+          <button 
+            onClick={() => setActiveTab('HOME')}
+            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'HOME' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+          >
+            Visão Geral
+          </button>
+          <button 
+            onClick={() => setActiveTab('SERVICES')}
+            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'SERVICES' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+          >
+            Todos os Serviços
+          </button>
+          <button 
+            onClick={() => setActiveTab('BENEFITS')}
+            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'BENEFITS' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+          >
+            Catálogo de Benefícios
+          </button>
+          <button 
+            onClick={() => setActiveTab('COMMUNITY')}
+            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'COMMUNITY' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+          >
+            Comunidade
+          </button>
+       </div>
+
+       {/* CONTENT AREA */}
        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Left Column: Gamification & Primary Actions */}
+          {/* Left Column: Gamification & Primary Actions (ALWAYS VISIBLE) */}
           <div className="lg:col-span-4 space-y-8">
              {/* Gamification Status */}
              {user.gamification && <GamificationWidget profile={user.gamification} />}
 
-             {/* Daily Challenge Mock */}
-             <div className="bg-gradient-to-br from-rio-blue to-blue-800 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+             {/* Daily Challenge */}
+             <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
                 <div className="flex items-center gap-2 mb-3">
-                   <Target className="w-5 h-5 text-rio-gold" />
+                   <Target className="w-5 h-5 text-yellow-300" />
                    <h3 className="font-bold text-sm uppercase">Missão do Dia</h3>
                 </div>
                 <p className="font-medium text-lg mb-4">Acesse o Calendário de Eventos para planejar o próximo feriado.</p>
                 <div className="w-full bg-white/20 h-2 rounded-full mb-2">
-                   <div className="w-0 h-full bg-rio-gold rounded-full" />
+                   <div className="w-0 h-full bg-yellow-400 rounded-full" />
                 </div>
-                <p className="text-xs text-blue-200">+50 XP ao completar</p>
+                <p className="text-xs text-purple-200">+50 XP ao completar</p>
              </div>
 
              {/* Upcoming Events Mini Feed */}
@@ -90,48 +134,179 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              </div>
           </div>
 
-          {/* Center/Right Column: Services & Recommendations */}
-          <div className="lg:col-span-8 space-y-8">
+          {/* Center/Right Column: Dynamic Content based on Tab */}
+          <div className="lg:col-span-8">
              
-             {/* Suggested Actions (Cards) */}
-             <div>
-                <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                   <Zap className="w-6 h-6 text-rio-gold fill-rio-gold" />
-                   Ações Recomendadas
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                   {suggestedActions.map(benefit => (
-                      <BenefitCard 
-                         key={benefit.id} 
-                         benefit={benefit} 
-                         onUse={onUseBenefit} 
-                         onDetails={onViewDetails}
-                         layout="grid"
-                      />
-                   ))}
-                </div>
-             </div>
+             {/* --- TAB: HOME --- */}
+             {activeTab === 'HOME' && (
+               <div className="space-y-8 animate-fade-in">
+                  
+                  {/* CHRISTMAS BANNER (HIGH PRIORITY) */}
+                  {christmasBenefit && (
+                      <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden text-white flex flex-col md:flex-row items-center gap-6 group cursor-pointer hover:scale-[1.01] transition-transform"
+                           onClick={() => onUseBenefit(christmasBenefit)}
+                      >
+                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
+                         <div className="absolute bottom-0 left-0 w-40 h-40 bg-yellow-400/20 rounded-full -ml-10 -mb-10 pointer-events-none blur-xl" />
+                         
+                         <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm shrink-0">
+                            <Gift className="w-10 h-10 text-yellow-300" />
+                         </div>
 
-             {/* Quick Access Tools Grid */}
-             <div>
-                <div className="flex justify-between items-end mb-4">
-                   <h2 className="text-xl font-bold text-gray-800">Ferramentas de Gestão</h2>
-                   <button className="text-sm text-rio-blue font-medium hover:underline flex items-center gap-1">
-                      Ver catálogo completo <ArrowRight className="w-4 h-4" />
-                   </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                   {quickTools.map(benefit => (
-                      <BenefitCard 
-                         key={benefit.id} 
-                         benefit={benefit} 
-                         onUse={onUseBenefit} 
-                         onDetails={onViewDetails}
-                         layout="list"
-                      />
-                   ))}
-                </div>
-             </div>
+                         <div className="flex-1 text-center md:text-left relative z-10">
+                            <div className="inline-block bg-yellow-400 text-red-900 text-xs font-bold px-3 py-1 rounded-full mb-2 uppercase tracking-wide">
+                                Inscrições Abertas
+                            </div>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2">Concurso de Decoração Natalina 2025</h2>
+                            <p className="text-red-100 mb-0">Participe da tradição e destaque seu hotel na magia do Natal carioca.</p>
+                         </div>
+
+                         <button className="bg-white text-red-700 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0">
+                            Inscrever Agora
+                            <ArrowRight className="w-4 h-4" />
+                         </button>
+                      </div>
+                  )}
+
+                  {/* Suggested Actions */}
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <Zap className="w-6 h-6 text-rio-gold fill-rio-gold" />
+                        Destaques para você
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {suggestedActions.filter(b => b.id !== 'natal-2025').map(benefit => (
+                            <BenefitCard 
+                                key={benefit.id} 
+                                benefit={benefit} 
+                                onUse={onUseBenefit} 
+                                onDetails={onViewDetails}
+                                layout="grid"
+                            />
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Quick Access Grid */}
+                  <div>
+                    <div className="flex justify-between items-end mb-4">
+                        <h2 className="text-xl font-bold text-gray-800">Serviços Rápidos</h2>
+                        <button 
+                           onClick={() => setActiveTab('SERVICES')}
+                           className="text-sm text-rio-blue font-medium hover:underline flex items-center gap-1"
+                        >
+                            Ver todos <ArrowRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {quickTools.map(benefit => (
+                            <BenefitCard 
+                                key={benefit.id} 
+                                benefit={benefit} 
+                                onUse={onUseBenefit} 
+                                onDetails={onViewDetails}
+                                layout="list"
+                            />
+                        ))}
+                    </div>
+                  </div>
+               </div>
+             )}
+
+             {/* --- TAB: SERVICES (FULL LIST) --- */}
+             {activeTab === 'SERVICES' && (
+               <div className="space-y-6 animate-fade-in">
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <Zap className="w-6 h-6 text-rio-blue" />
+                        Todos os Serviços
+                      </h2>
+                      <div className="flex gap-2">
+                         <select 
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-rio-blue"
+                         >
+                            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                         </select>
+                         <button onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')} className="p-2 bg-gray-50 rounded-lg hover:bg-gray-100">
+                            {viewMode === 'grid' ? <List className="w-5 h-5 text-gray-600" /> : <Grid className="w-5 h-5 text-gray-600" />}
+                         </button>
+                      </div>
+                  </div>
+
+                  <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'} gap-6`}>
+                     {filteredServices.map(benefit => (
+                        <BenefitCard 
+                            key={benefit.id} 
+                            benefit={benefit} 
+                            onUse={onUseBenefit} 
+                            onDetails={onViewDetails}
+                            layout={viewMode}
+                        />
+                     ))}
+                  </div>
+               </div>
+             )}
+
+             {/* --- TAB: BENEFITS (CATALOG) --- */}
+             {activeTab === 'BENEFITS' && (
+               <div className="space-y-6 animate-fade-in">
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <LayoutGrid className="w-6 h-6 text-purple-600" />
+                        Catálogo de Benefícios
+                      </h2>
+                      <div className="flex gap-2">
+                         <select 
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-rio-blue"
+                         >
+                            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                         </select>
+                      </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     {filteredBenefits.map(benefit => (
+                        <BenefitCard 
+                            key={benefit.id} 
+                            benefit={benefit} 
+                            onUse={onUseBenefit} 
+                            onDetails={onViewDetails}
+                            layout="grid"
+                        />
+                     ))}
+                  </div>
+               </div>
+             )}
+
+             {/* --- TAB: COMMUNITY --- */}
+             {activeTab === 'COMMUNITY' && (
+               <div className="space-y-6 animate-fade-in">
+                  <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                     <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <Users className="w-6 h-6 text-green-600" />
+                        Conecte-se com o Setor
+                     </h2>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {COMMUNITY_ITEMS_DATA.map(item => {
+                           const IconComponent = (Icons as any)[item.iconName] || Icons.HelpCircle;
+                           return (
+                             <div key={item.id} className="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:border-rio-blue transition-colors cursor-pointer group">
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${item.bgClass} ${item.colorClass}`}>
+                                   <IconComponent className="w-6 h-6" />
+                                </div>
+                                <h3 className="font-bold text-gray-800 text-lg mb-1">{item.title}</h3>
+                                <p className="text-sm text-gray-500">{item.description}</p>
+                             </div>
+                           )
+                        })}
+                     </div>
+                  </div>
+               </div>
+             )}
 
           </div>
        </div>

@@ -1,3 +1,4 @@
+
 import { LucideIcon } from 'lucide-react';
 
 export interface User {
@@ -10,9 +11,20 @@ export interface User {
   gamification?: UserGamificationProfile;
 }
 
+export interface GamificationBadge {
+  id: string;
+  name: string;
+  description: string;
+  iconName: string;
+  requiredXP: number;
+}
+
 export interface UserGamificationProfile {
   xp: number;
   level: 'BRONZE' | 'SILVER' | 'GOLD' | 'DIAMOND' | 'MASTER';
+  streak: number; // Dias seguidos de acesso
+  lastLoginDate: string; // Data do último login para calcular streak
+  badges: string[]; // IDs das medalhas conquistadas
   completedActions: string[];
 }
 

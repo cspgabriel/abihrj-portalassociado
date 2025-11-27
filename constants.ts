@@ -1,6 +1,5 @@
 
-
-import { Benefit, BenefitCategory, RioEvent, Forum } from './types';
+import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge } from './types';
 
 export const MOCK_USER = {
   name: "Carlos Silva",
@@ -47,6 +46,37 @@ export const XP_REWARDS = {
   VIEW_DETAILS: 2,
   LOGIN_DAILY: 5
 };
+
+export const GAMIFICATION_BADGES: GamificationBadge[] = [
+  {
+    id: 'badge-first-login',
+    name: 'Bem-vindo a bordo',
+    description: 'Realizou o primeiro acesso ao portal.',
+    iconName: 'Medal',
+    requiredXP: 0
+  },
+  {
+    id: 'badge-explorer',
+    name: 'Explorador',
+    description: 'Acessou 5 serviços diferentes.',
+    iconName: 'Compass',
+    requiredXP: 50
+  },
+  {
+    id: 'badge-social',
+    name: 'Conectado',
+    description: 'Entrou em um grupo de WhatsApp.',
+    iconName: 'Users',
+    requiredXP: 100
+  },
+  {
+    id: 'badge-legend',
+    name: 'Lenda Hoteleira',
+    description: 'Atingiu o nível Mestre.',
+    iconName: 'Crown',
+    requiredXP: 1000
+  }
+];
 
 export const FORUMS_DATA: Forum[] = [
   {
@@ -131,7 +161,6 @@ export const FORUMS_DATA: Forum[] = [
   }
 ];
 
-// Dados para a seção Comunidade para permitir ordenação/visualização
 export const COMMUNITY_ITEMS_DATA = [
   {
     id: 'contacts',
@@ -214,7 +243,6 @@ export const RIO_EVENTS: RioEvent[] = [
   }
 ];
 
-// Dados das Equipes HoteisRio
 export const TEAM_CONTACTS = [
   {
     sector: "Presidência & Superintendência",
@@ -254,7 +282,6 @@ export const TEAM_CONTACTS = [
   }
 ];
 
-// Dados dos Grupos de WhatsApp
 export const WHATSAPP_GROUPS = [
   {
     id: 'gp-gm',
@@ -294,7 +321,6 @@ export const WHATSAPP_GROUPS = [
   }
 ];
 
-// Dados dos Eventos da Associação (Fóruns)
 export const ASSOCIATION_EVENTS = [
   {
     id: 'forum-comercial',
@@ -330,7 +356,6 @@ export const ASSOCIATION_EVENTS = [
   }
 ];
 
-// Lista de Decretos e Leis
 export const RJ_LAWS_DATA = [
   {
     id: 'law-001',
@@ -390,7 +415,6 @@ export const RJ_LAWS_DATA = [
   }
 ];
 
-// Lista de texto simples para a seção "Outros Benefícios Permanentes"
 export const OTHER_BENEFITS_LIST = [
   "Monitoramento de novas leis (civil, trabalhista, tributária)",
   "Reuniões periódicas sobre Segurança",
@@ -404,7 +428,42 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
-  // --- CURSOS ONLINE (NOVO - TOPO) ---
+  // --- CONCURSO DE NATAL 2025 (DESTAQUE MÁXIMO) ---
+  {
+    id: 'natal-2025',
+    title: 'Concurso de Decoração Natalina 2025',
+    description: 'Inscrições abertas! Participe e destaque seu hotel na celebração mais mágica do Rio.',
+    category: BenefitCategory.EVENTS,
+    iconName: 'Gift',
+    imageUrl: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://forms.zohopublic.com/hoteisrio/form/InscriodeHotelNatalHotisRIO2025/formperma/BykHl55SbDyK0cT3wbCmtDBCjB_msRFBMTia8b-IchI',
+    usageSteps: [
+      "Acesse o formulário de inscrição.",
+      "Preencha os dados do hotel e a categoria de decoração.",
+      "Aguarde o cronograma de visitas da comissão julgadora.",
+      "Participe da cerimônia de premiação."
+    ]
+  },
+  // --- SHUTTLE SERVICE (NOVO) ---
+  {
+    id: 'shuttle-service',
+    title: 'Shuttle Service',
+    description: 'Sistema de transporte compartilhado e logística para eventos.',
+    category: BenefitCategory.OPERATIONAL,
+    iconName: 'Bus',
+    imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://depth-mural-35413640.figma.site/',
+    usageSteps: [
+      "Acesse a plataforma de agendamento do Shuttle.",
+      "Verifique as rotas disponíveis (Aeroportos, Centros de Convenção).",
+      "Solicite o serviço para seus hóspedes ou grupos corporativos."
+    ]
+  },
+  // --- CURSOS ONLINE ---
   {
     id: 'online-courses',
     title: 'Cursos Online',
@@ -483,7 +542,8 @@ export const BENEFITS_DATA: Benefit[] = [
     usageSteps: [
       "Acesse o Raio-X Online.",
       "Responda ao questionário simplificado sobre suas práticas.",
-      "Receba um relatório imediato com sua pontuação e sugestões de melhoria."
+      "Receba a visita técnica de diagnóstico.",
+      "Implemente melhorias de gestão de resíduos e energia."
     ]
   },
   {
@@ -882,7 +942,7 @@ export const BENEFITS_DATA: Benefit[] = [
     category: BenefitCategory.STATISTICS,
     iconName: 'PieChart',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400',
-    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiOGU2NTUyNjMtN2I3OS00N2E1LTg3NDItNWFjZmZmNTVmZDFkIiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
+    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiOGU2NTUyNjMtN2I3OS00N2E1LTg3ZjAtMjYzZjhlZjU2YmY2IiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
     externalLink: CRM_LINK, // Link to update mailing/signup for surveys
     usageSteps: [
       "Acesse o Dashboard para visualizar a performance do mercado.",

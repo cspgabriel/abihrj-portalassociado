@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -21,8 +20,8 @@ import ForumsOverviewPage from './components/ForumsOverviewPage'; // New Compone
 import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
-import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate } from 'lucide-react';
+import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES } from './constants';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -260,16 +259,56 @@ const Dashboard: React.FC = () => {
     
     const unsubscribe = authService.subscribeToAuthChanges((currentUser) => {
       if (currentUser) {
-        // Init Gamification if missing (Mock implementation)
+        // Init Gamification if missing
         const storedGamification = localStorage.getItem('rio_gamification');
+        let profile = currentUser.gamification;
+
         if (storedGamification) {
-           currentUser.gamification = JSON.parse(storedGamification);
-        } else if (!currentUser.gamification) {
-           currentUser.gamification = {
+           profile = JSON.parse(storedGamification);
+        } else if (!profile) {
+           profile = {
              xp: 0,
              level: 'BRONZE',
+             streak: 1,
+             lastLoginDate: new Date().toISOString(),
+             badges: [],
              completedActions: []
            };
+        }
+
+        // --- STREAK CALCULATION LOGIC ---
+        if (profile) {
+            const lastLogin = new Date(profile.lastLoginDate);
+            const now = new Date();
+            
+            // Zerar horas para comparar apenas dias
+            const lastDate = new Date(lastLogin.getFullYear(), lastLogin.getMonth(), lastLogin.getDate());
+            const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            const diffTime = Math.abs(todayDate.getTime() - lastDate.getTime());
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+            if (diffDays === 1) {
+                // Login consecutivo, aumenta streak
+                profile.streak += 1;
+                profile.lastLoginDate = now.toISOString();
+            } else if (diffDays > 1) {
+                // Quebrou a streak, reseta
+                profile.streak = 1;
+                profile.lastLoginDate = now.toISOString();
+            } else {
+                // Mesmo dia, apenas atualiza hora se necessário
+                profile.lastLoginDate = now.toISOString();
+            }
+
+            // Check First Login Badge
+            if (!profile.badges.includes('badge-first-login')) {
+                profile.badges.push('badge-first-login');
+                profile.xp += 10;
+            }
+
+            currentUser.gamification = profile;
+            localStorage.setItem('rio_gamification', JSON.stringify(profile));
         }
       }
       setUser(currentUser);
@@ -277,7 +316,6 @@ const Dashboard: React.FC = () => {
       if (timeoutId) clearTimeout(timeoutId);
     });
 
-    // Safety timeout: If Firebase takes too long (e.g. network issue), stop loading to allow manual interaction or error display
     timeoutId = setTimeout(() => {
         if (checkingSession) {
             console.warn("Auth check timed out, forcing render");
@@ -300,7 +338,6 @@ const Dashboard: React.FC = () => {
   const awardXP = (amount: number, actionId: string) => {
     if (!user || !user.gamification) return;
     
-    // Check if duplicate action (optional, here we allow repeatable for engagement)
     const newXP = user.gamification.xp + amount;
     
     // Calculate new Level
@@ -310,10 +347,25 @@ const Dashboard: React.FC = () => {
     else if (newXP >= LEVEL_THRESHOLDS.GOLD) newLevel = 'GOLD';
     else if (newXP >= LEVEL_THRESHOLDS.SILVER) newLevel = 'SILVER';
 
+    // Badge Check Logic
+    const currentBadges = [...user.gamification.badges];
+    
+    // Check Explorer Badge
+    const uniqueActions = new Set([...user.gamification.completedActions, actionId]);
+    if (uniqueActions.size >= 5 && !currentBadges.includes('badge-explorer')) {
+        currentBadges.push('badge-explorer');
+    }
+    
+    // Check Legend Badge
+    if (newLevel === 'MASTER' && !currentBadges.includes('badge-legend')) {
+        currentBadges.push('badge-legend');
+    }
+
     const updatedProfile: UserGamificationProfile = {
        ...user.gamification,
        xp: newXP,
        level: newLevel,
+       badges: currentBadges,
        completedActions: [...user.gamification.completedActions, actionId]
     };
 
@@ -487,6 +539,9 @@ const Dashboard: React.FC = () => {
   // Get unique categories for dropdowns
   const availableCategories = Object.values(BenefitCategory);
 
+  // Retrieve Christmas Benefit for the Classic Slider
+  const christmasBenefit = BENEFITS_DATA.find(b => b.id === 'natal-2025');
+
   if (checkingSession) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 flex-col gap-4">
@@ -622,6 +677,45 @@ const Dashboard: React.FC = () => {
           <WeatherWidget />
         </div>
       </div>
+
+      {/* CHRISTMAS SLIDER/BANNER (CLASSIC VIEW) */}
+      {christmasBenefit && (
+          <div className="mb-12 relative group cursor-pointer animate-fade-in" onClick={() => handleUseBenefit(christmasBenefit)}>
+             {/* Banner Content */}
+             <div className="bg-gradient-to-r from-red-700 to-red-900 rounded-2xl p-8 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 border border-red-800/50">
+                {/* Decorations */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-yellow-400/10 rounded-full -ml-10 -mb-10 blur-xl pointer-events-none" />
+
+                {/* Icon */}
+                <div className="bg-white/10 p-5 rounded-full backdrop-blur-sm shrink-0 border border-white/20 shadow-inner">
+                   <Gift className="w-12 h-12 text-yellow-300" />
+                </div>
+
+                {/* Text */}
+                <div className="flex-1 text-center md:text-left z-10">
+                   <div className="inline-block bg-yellow-400 text-red-900 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wide shadow-sm">
+                      Destaque do Mês
+                   </div>
+                   <h2 className="text-3xl font-bold text-white mb-2">Concurso de Decoração Natalina 2025</h2>
+                   <p className="text-red-100 text-lg">Inscrições abertas! Destaque seu hotel e encante seus hóspedes.</p>
+                </div>
+
+                {/* Action */}
+                <button className="bg-white text-red-800 font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-gray-50 transition-transform group-hover:scale-105 flex items-center gap-2 whitespace-nowrap">
+                   Participar
+                   <ArrowRight className="w-5 h-5" />
+                </button>
+             </div>
+             
+             {/* Slider Dots Simulation */}
+             <div className="flex justify-center gap-2 mt-4">
+                <div className="w-8 h-1.5 bg-rio-blue rounded-full"></div>
+                <div className="w-2 h-1.5 bg-gray-300 rounded-full"></div>
+                <div className="w-2 h-1.5 bg-gray-300 rounded-full"></div>
+             </div>
+          </div>
+      )}
 
       {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) */}
       <div id="quick-access-section" className="mb-12">
