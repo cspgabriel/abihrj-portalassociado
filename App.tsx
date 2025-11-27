@@ -19,9 +19,10 @@ import RegistrationUpdatePage from './components/RegistrationUpdatePage';
 import ForumPage from './components/ForumPage';
 import ForumsOverviewPage from './components/ForumsOverviewPage'; // New Component
 import WeatherWidget from './components/WeatherWidget'; // New custom widget
-import { User, Benefit, BenefitCategory, Forum } from './types';
-import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid } from 'lucide-react';
+import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
+import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
+import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS } from './constants';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -211,7 +212,8 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  
+  const [layoutMode, setLayoutMode] = useState<'CLASSIC' | 'MODERN'>('MODERN'); // Default to modern based on user preference
+
   // View State Management
   const [currentView, setCurrentView] = useState<AppView>('DASHBOARD');
   const [selectedBenefitForDetails, setSelectedBenefitForDetails] = useState<Benefit | null>(null);
@@ -257,6 +259,19 @@ const Dashboard: React.FC = () => {
     let timeoutId: any;
     
     const unsubscribe = authService.subscribeToAuthChanges((currentUser) => {
+      if (currentUser) {
+        // Init Gamification if missing (Mock implementation)
+        const storedGamification = localStorage.getItem('rio_gamification');
+        if (storedGamification) {
+           currentUser.gamification = JSON.parse(storedGamification);
+        } else if (!currentUser.gamification) {
+           currentUser.gamification = {
+             xp: 0,
+             level: 'BRONZE',
+             completedActions: []
+           };
+        }
+      }
       setUser(currentUser);
       setCheckingSession(false);
       if (timeoutId) clearTimeout(timeoutId);
@@ -281,6 +296,32 @@ const Dashboard: React.FC = () => {
     // Listener updates user state
   };
 
+  // --- GAMIFICATION LOGIC ---
+  const awardXP = (amount: number, actionId: string) => {
+    if (!user || !user.gamification) return;
+    
+    // Check if duplicate action (optional, here we allow repeatable for engagement)
+    const newXP = user.gamification.xp + amount;
+    
+    // Calculate new Level
+    let newLevel: UserGamificationProfile['level'] = 'BRONZE';
+    if (newXP >= LEVEL_THRESHOLDS.MASTER) newLevel = 'MASTER';
+    else if (newXP >= LEVEL_THRESHOLDS.DIAMOND) newLevel = 'DIAMOND';
+    else if (newXP >= LEVEL_THRESHOLDS.GOLD) newLevel = 'GOLD';
+    else if (newXP >= LEVEL_THRESHOLDS.SILVER) newLevel = 'SILVER';
+
+    const updatedProfile: UserGamificationProfile = {
+       ...user.gamification,
+       xp: newXP,
+       level: newLevel,
+       completedActions: [...user.gamification.completedActions, actionId]
+    };
+
+    const updatedUser = { ...user, gamification: updatedProfile };
+    setUser(updatedUser);
+    localStorage.setItem('rio_gamification', JSON.stringify(updatedProfile));
+  };
+
   // --- ACTIONS ---
   
   const handleNavigate = (view: AppView) => {
@@ -298,6 +339,8 @@ const Dashboard: React.FC = () => {
 
   // Botão "Detalhes": Navega para a página de explicação do benefício
   const handleViewDetails = (benefit: Benefit) => {
+    awardXP(XP_REWARDS.VIEW_DETAILS, `view-${benefit.id}`);
+
     if (benefit.id === 'laws-regulations') {
       setCurrentView('LAWS_REGULATIONS');
       return;
@@ -329,6 +372,8 @@ const Dashboard: React.FC = () => {
 
   // Botão "Utilizar": Executa a ação direta (Modal de serviço, Calendário, etc.)
   const handleUseBenefit = (benefit: Benefit) => {
+    awardXP(XP_REWARDS.USE_BENEFIT, `use-${benefit.id}`);
+
     // 0. Download de Arquivos
     if (benefit.downloadUrl) {
       // Abre o link em nova aba, iniciando o download
@@ -467,125 +512,97 @@ const Dashboard: React.FC = () => {
     currentView
   };
 
-  if (currentView === 'FORUM_PAGE' && selectedForum) {
+  // Wrap all non-dashboard views with standard layout logic
+  if (currentView !== 'DASHBOARD') {
     return (
-      <Layout {...commonLayoutProps}>
-        <ForumPage 
-          forum={selectedForum} 
-          onBack={handleBackToDashboard}
-          onRegisterUpdate={() => setCurrentView('REGISTRATION_UPDATE')}
-        />
-        <AiAssistant />
-      </Layout>
+        <Layout {...commonLayoutProps}>
+            {currentView === 'FORUM_PAGE' && selectedForum && (
+                <ForumPage 
+                    forum={selectedForum} 
+                    onBack={handleBackToDashboard}
+                    onRegisterUpdate={() => setCurrentView('REGISTRATION_UPDATE')}
+                />
+            )}
+            {currentView === 'FORUMS_OVERVIEW' && (
+                 <ForumsOverviewPage 
+                    onBack={handleBackToDashboard}
+                    onForumClick={handleForumClick}
+                 />
+            )}
+            {currentView === 'REGISTRATION_UPDATE' && (
+                <RegistrationUpdatePage onBack={handleBackToDashboard} />
+            )}
+            {currentView === 'LAWS_REGULATIONS' && (
+                <LawsRegulationPage onBack={handleBackToDashboard} />
+            )}
+            {currentView === 'SECURITY_PAGE' && (
+                <>
+                <SecurityPage onBack={handleBackToDashboard} onReport={handleOpenPublicOrderModal} />
+                {serviceRequestBenefit && (
+                  <ServiceRequestModal 
+                    benefit={serviceRequestBenefit}
+                    onClose={() => setServiceRequestBenefit(null)}
+                  />
+                )}
+                </>
+            )}
+            {currentView === 'TUTORIAL' && (
+                <PlatformTutorial onBack={handleBackToDashboard} />
+            )}
+            {currentView === 'CONTACTS' && (
+                <ContactsPage onBack={handleBackToDashboard} />
+            )}
+            {currentView === 'WHATSAPP_GROUPS' && (
+                <WhatsAppGroupsPage onBack={handleBackToDashboard} />
+            )}
+            {currentView === 'ASSOCIATION_EVENTS' && (
+                <AssociationEventsPage onBack={handleBackToDashboard} />
+            )}
+            {currentView === 'BENEFIT_DETAILS' && selectedBenefitForDetails && (
+                 <>
+                 <BenefitPage 
+                    benefit={selectedBenefitForDetails}
+                    onBack={handleBackToDashboard}
+                    onUse={handleUseBenefit}
+                 />
+                 {isCalendarOpen && <CalendarModal onClose={() => setIsCalendarOpen(false)} />}
+                 {serviceRequestBenefit && (
+                   <ServiceRequestModal 
+                     benefit={serviceRequestBenefit}
+                     onClose={() => setServiceRequestBenefit(null)}
+                   />
+                 )}
+                 </>
+            )}
+            <AiAssistant />
+        </Layout>
     );
   }
 
-  if (currentView === 'FORUMS_OVERVIEW') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <ForumsOverviewPage 
-          onBack={handleBackToDashboard}
-          onForumClick={handleForumClick}
-        />
-        <AiAssistant />
-      </Layout>
-    );
-  }
-
-  if (currentView === 'REGISTRATION_UPDATE') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <RegistrationUpdatePage onBack={handleBackToDashboard} />
-        <AiAssistant />
-      </Layout>
-    );
-  }
-
-  if (currentView === 'LAWS_REGULATIONS') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <LawsRegulationPage onBack={handleBackToDashboard} />
-        <AiAssistant />
-      </Layout>
-    );
-  }
-
-  if (currentView === 'SECURITY_PAGE') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <SecurityPage onBack={handleBackToDashboard} onReport={handleOpenPublicOrderModal} />
-        <AiAssistant />
-        {serviceRequestBenefit && (
-          <ServiceRequestModal 
-            benefit={serviceRequestBenefit}
-            onClose={() => setServiceRequestBenefit(null)}
-          />
-        )}
-      </Layout>
-    );
-  }
-
-  if (currentView === 'TUTORIAL') {
-    return (
-       <Layout {...commonLayoutProps}>
-          <PlatformTutorial onBack={handleBackToDashboard} />
-          <AiAssistant />
-       </Layout>
-    );
-  }
-
-  if (currentView === 'CONTACTS') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <ContactsPage onBack={handleBackToDashboard} />
-        <AiAssistant />
-      </Layout>
-    );
-  }
-
-  if (currentView === 'WHATSAPP_GROUPS') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <WhatsAppGroupsPage onBack={handleBackToDashboard} />
-        <AiAssistant />
-      </Layout>
-    );
-  }
-
-  if (currentView === 'ASSOCIATION_EVENTS') {
-    return (
-      <Layout {...commonLayoutProps}>
-        <AssociationEventsPage onBack={handleBackToDashboard} />
-        <AiAssistant />
-      </Layout>
-    );
-  }
-
-  if (currentView === 'BENEFIT_DETAILS' && selectedBenefitForDetails) {
-    return (
-      <Layout {...commonLayoutProps}>
-        <BenefitPage 
-          benefit={selectedBenefitForDetails}
-          onBack={handleBackToDashboard}
-          onUse={handleUseBenefit}
-        />
-        <AiAssistant />
-        {isCalendarOpen && <CalendarModal onClose={() => setIsCalendarOpen(false)} />}
-        {serviceRequestBenefit && (
-          <ServiceRequestModal 
-            benefit={serviceRequestBenefit}
-            onClose={() => setServiceRequestBenefit(null)}
-          />
-        )}
-      </Layout>
-    );
-  }
-
-  // VIEW PADRÃO: DASHBOARD
+  // VIEW PADRÃO: DASHBOARD (COM TOGGLE DE LAYOUT)
   return (
     <Layout {...commonLayoutProps}>
       
-      {/* Hero Header */}
+      {/* Layout Toggle Button */}
+      <div className="flex justify-end mb-4">
+          <button 
+             onClick={() => setLayoutMode(prev => prev === 'CLASSIC' ? 'MODERN' : 'CLASSIC')}
+             className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+             <LayoutTemplate className="w-4 h-4 text-rio-blue" />
+             {layoutMode === 'CLASSIC' ? 'Mudar para Visual Moderno' : 'Mudar para Visual Clássico'}
+          </button>
+      </div>
+
+      {layoutMode === 'MODERN' ? (
+          <ModernDashboard 
+             user={user} 
+             onUseBenefit={handleUseBenefit} 
+             onViewDetails={handleViewDetails} 
+          />
+      ) : (
+      <>
+      {/* CLASSIC HERO */}
       <div id="header-welcome" className="bg-gradient-to-r from-rio-blue to-blue-800 rounded-2xl p-6 md:p-8 mb-10 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-16 -mt-16 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 pointer-events-none" />
@@ -916,6 +933,8 @@ const Dashboard: React.FC = () => {
             ))}
           </div>
         </div>
+      )}
+      </>
       )}
 
       {/* Interactive Elements */}

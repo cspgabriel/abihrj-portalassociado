@@ -25,6 +25,29 @@ export const FOOTER_DATA = {
   }
 };
 
+// --- GAMIFICATION CONSTANTS ---
+export const LEVEL_THRESHOLDS = {
+  BRONZE: 0,
+  SILVER: 100,
+  GOLD: 300,
+  DIAMOND: 600,
+  MASTER: 1000
+};
+
+export const LEVEL_NAMES = {
+  BRONZE: 'Associado Bronze',
+  SILVER: 'Associado Prata',
+  GOLD: 'Associado Ouro',
+  DIAMOND: 'Associado Diamante',
+  MASTER: 'Embaixador da Hotelaria'
+};
+
+export const XP_REWARDS = {
+  USE_BENEFIT: 10,
+  VIEW_DETAILS: 2,
+  LOGIN_DAILY: 5
+};
+
 export const FORUMS_DATA: Forum[] = [
   {
     id: 'forum-comercial',
@@ -384,8 +407,8 @@ export const BENEFITS_DATA: Benefit[] = [
   // --- CURSOS ONLINE (NOVO - TOPO) ---
   {
     id: 'online-courses',
-    title: 'Cursos Online (EAD)',
-    description: 'Plataforma oficial de ensino a distância da Universidade HoteisRio.',
+    title: 'Cursos Online',
+    description: 'Plataforma oficial de ensino e capacitação para associados.',
     category: BenefitCategory.TRAINING,
     iconName: 'MonitorPlay',
     imageUrl: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=400',
@@ -697,9 +720,10 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'TabletSmartphone',
     imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=400',
     isService: true,
+    externalLink: 'https://app.hoteisrio.com.br/',
     usageSteps: [
-      "Acesse a loja de aplicativos (Google Play ou App Store).",
-      "Busque por 'HoteisRio Associados'.",
+      "Acesse o link oficial do Web App.",
+      "Adicione à tela inicial do seu celular para acesso rápido.",
       "Faça login com as mesmas credenciais deste portal.",
       "Receba notificações push em tempo real sobre segurança e legislação."
     ]

@@ -7,6 +7,13 @@ export interface User {
   hotel: string;
   role: string;
   avatarUrl?: string;
+  gamification?: UserGamificationProfile;
+}
+
+export interface UserGamificationProfile {
+  xp: number;
+  level: 'BRONZE' | 'SILVER' | 'GOLD' | 'DIAMOND' | 'MASTER';
+  completedActions: string[];
 }
 
 export enum BenefitCategory {
