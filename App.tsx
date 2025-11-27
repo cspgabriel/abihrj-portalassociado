@@ -211,7 +211,7 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [layoutMode, setLayoutMode] = useState<'CLASSIC' | 'MODERN'>('MODERN'); // Default to modern based on user preference
+  const [layoutMode, setLayoutMode] = useState<'CLASSIC' | 'MODERN'>('CLASSIC'); // Default to classic based on user preference
 
   // View State Management
   const [currentView, setCurrentView] = useState<AppView>('DASHBOARD');
