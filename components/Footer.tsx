@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import { FOOTER_DATA, WHATSAPP_GROUPS } from '../constants';
 import { MapPin, Phone, Mail, Instagram, Linkedin, Youtube, Facebook, ArrowUpRight } from 'lucide-react';
@@ -104,7 +106,7 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center text-xs text-blue-300 gap-4">
-          <p>&copy; {currentYear} {FOOTER_DATA.razaoSocial}. Todos os direitos reservados.</p>
+          <p>&copy; {currentYear} {FOOTER_DATA.razaoSocial}. Todos os direitos reservados. (v2.0)</p>
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2">
               CNPJ: {FOOTER_DATA.cnpj}

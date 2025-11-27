@@ -381,6 +381,24 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
+  // --- CURSOS ONLINE (NOVO - TOPO) ---
+  {
+    id: 'online-courses',
+    title: 'Cursos Online (EAD)',
+    description: 'Plataforma oficial de ensino a distância da Universidade HoteisRio.',
+    category: BenefitCategory.TRAINING,
+    iconName: 'MonitorPlay',
+    imageUrl: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://cursos.hoteisrio.com.br/',
+    usageSteps: [
+      "Acesse a plataforma de cursos clicando em 'Acessar'.",
+      "Escolha entre cursos de governança, recepção, idiomas e gestão.",
+      "Inscreva seus colaboradores e acompanhe o progresso.",
+      "Emita certificados digitais após a conclusão."
+    ]
+  },
   // --- NOVOS PORTAIS ---
   {
     id: 'forums-overview',
@@ -840,7 +858,7 @@ export const BENEFITS_DATA: Benefit[] = [
     category: BenefitCategory.STATISTICS,
     iconName: 'PieChart',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400',
-    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiOGU2NTUyNjMtN2I3OS00N2E1LTkzNDItNWFjZmZmNTVmZDFkIiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
+    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiOGU2NTUyNjMtN2I3OS00N2E1LTg3NDItNWFjZmZmNTVmZDFkIiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
     externalLink: CRM_LINK, // Link to update mailing/signup for surveys
     usageSteps: [
       "Acesse o Dashboard para visualizar a performance do mercado.",
