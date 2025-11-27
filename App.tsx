@@ -548,7 +548,8 @@ const Dashboard: React.FC = () => {
       'highlight-drinks', 
       'highlight-rir', 
       'highlight-job-fair', 
-      'highlight-events-reg'
+      'highlight-events-reg',
+      'portal-fornecedores-new'
   ];
   
   const highlightSlides = highlightIds
@@ -579,6 +580,7 @@ const Dashboard: React.FC = () => {
           case 'highlight-drinks': return 'from-blue-700 to-slate-800 border-blue-800/50';
           case 'highlight-rir': return 'from-purple-900 to-black border-purple-800/50';
           case 'highlight-job-fair': return 'from-green-700 to-teal-900 border-green-800/50';
+          case 'portal-fornecedores-new': return 'from-orange-600 to-amber-700 border-orange-600/50';
           default: return 'from-gray-700 to-gray-900 border-gray-600/50';
       }
   };
@@ -589,6 +591,7 @@ const Dashboard: React.FC = () => {
           case 'highlight-drinks': return 'text-cyan-300 bg-cyan-400 text-blue-900';
           case 'highlight-rir': return 'text-pink-400 bg-pink-500 text-white';
           case 'highlight-job-fair': return 'text-green-300 bg-green-400 text-green-900';
+          case 'portal-fornecedores-new': return 'text-orange-900 bg-white text-orange-900';
           default: return 'text-white bg-gray-500 text-white';
       }
   };
@@ -774,7 +777,7 @@ const Dashboard: React.FC = () => {
 
                         {/* Action */}
                         <button className="bg-white text-gray-800 font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-gray-50 transition-transform group-hover:scale-105 flex items-center gap-2 whitespace-nowrap z-10 cursor-pointer">
-                            Ver Detalhes
+                            Inscreva-se
                             <ArrowRight className="w-5 h-5" />
                         </button>
                     </div>

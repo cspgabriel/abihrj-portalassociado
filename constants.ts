@@ -614,17 +614,18 @@ export const BENEFITS_DATA: Benefit[] = [
   {
     id: 'portal-fornecedores-new',
     title: 'Portal de Fornecedores',
-    description: 'Acesse o catálogo completo de fornecedores homologados.',
+    description: 'Encontre parceiros homologados e negociações exclusivas.',
     category: BenefitCategory.PARTNERS,
-    iconName: 'ShoppingBag',
+    iconName: 'Handshake',
     imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
-    externalLink: 'https://beige-lobster-734094.hostingersite.com/',
+    externalLink: 'https://portaldefornecedores.sindhoteisrj.com.br/',
     usageSteps: [
-      "Clique em 'Utilizar' para acessar o portal externo.",
-      "Busque por categoria de produto ou serviço.",
-      "Entre em contato direto com fornecedores parceiros."
+      "Acesse o Portal de Fornecedores.",
+      "Busque por produtos ou serviços.",
+      "Entre em contato direto com empresas homologadas.",
+      "Aproveite condições especiais para associados."
     ]
   },
   {

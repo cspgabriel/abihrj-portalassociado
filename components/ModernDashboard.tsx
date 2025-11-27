@@ -41,7 +41,8 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
       'highlight-drinks', 
       'highlight-rir', 
       'highlight-job-fair', 
-      'highlight-events-reg'
+      'highlight-events-reg',
+      'portal-fornecedores-new'
   ];
   
   const highlightSlides = highlightIds
@@ -52,7 +53,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
     if (highlightSlides.length <= 1) return;
     const interval = setInterval(() => {
         setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
-    }, 5000); 
+    }, 5000); // 5 seconds rotation
     return () => clearInterval(interval);
   }, [highlightSlides.length]);
 
@@ -68,11 +69,12 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
   const getSlideGradient = (id: string) => {
       switch (id) {
-          case 'natal-2025': return 'from-red-600 to-red-800';
-          case 'highlight-drinks': return 'from-blue-600 to-slate-800';
-          case 'highlight-rir': return 'from-purple-800 to-gray-900';
-          case 'highlight-job-fair': return 'from-green-600 to-teal-800';
-          default: return 'from-gray-600 to-gray-800';
+          case 'natal-2025': return 'from-red-700 to-red-900 border-red-800/50';
+          case 'highlight-drinks': return 'from-blue-700 to-slate-800 border-blue-800/50';
+          case 'highlight-rir': return 'from-purple-900 to-black border-purple-800/50';
+          case 'highlight-job-fair': return 'from-green-700 to-teal-900 border-green-800/50';
+          case 'portal-fornecedores-new': return 'from-orange-600 to-amber-700 border-orange-600/50';
+          default: return 'from-gray-700 to-gray-900 border-gray-600/50';
       }
   };
 
@@ -82,6 +84,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
           case 'highlight-drinks': return 'text-cyan-300 bg-cyan-400 text-blue-900';
           case 'highlight-rir': return 'text-pink-400 bg-pink-500 text-white';
           case 'highlight-job-fair': return 'text-green-300 bg-green-400 text-green-900';
+          case 'portal-fornecedores-new': return 'text-orange-900 bg-white text-orange-900';
           default: return 'text-white bg-gray-500 text-white';
       }
   };
@@ -223,7 +226,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                                    </div>
 
                                    <button className="bg-white text-gray-800 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 z-10">
-                                      {slide.externalLink ? 'Inscrever Agora' : 'Ver Detalhes'}
+                                      Inscreva-se
                                       <ArrowRight className="w-4 h-4" />
                                    </button>
                                 </div>
