@@ -1,4 +1,5 @@
 
+
 import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge } from './types';
 
 export const MOCK_USER = {
@@ -428,6 +429,23 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
+  // --- DESTAQUE 0: PREMIO TOP HOTEL (NOVO) ---
+  {
+    id: 'highlight-top-hotel-25',
+    title: 'Prêmio Top Hotel RJ 2025',
+    description: 'Confira os vencedores e as melhores práticas do setor.',
+    category: BenefitCategory.EVENTS,
+    iconName: 'Trophy',
+    imageUrl: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://premiotophotel.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse a página oficial do prêmio.",
+      "Confira a lista completa dos vencedores por categoria.",
+      "Veja as fotos da cerimônia de premiação."
+    ]
+  },
   // --- DESTAQUE 1: CURSO BEBIDAS (NOVO) ---
   {
     id: 'highlight-drinks',

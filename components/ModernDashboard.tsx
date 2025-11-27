@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { User, Benefit, BenefitCategory } from '../types';
 import { BENEFITS_DATA, RIO_EVENTS, COMMUNITY_ITEMS_DATA } from '../constants';
@@ -33,10 +34,11 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
   // --- HOME DATA ---
   const suggestedActions = BENEFITS_DATA.filter(b => b.isNew || b.id === 'calendar-01').slice(0, 3);
-  const quickTools = services.filter(b => !['natal-2025', 'highlight-drinks', 'highlight-rir', 'highlight-job-fair'].includes(b.id)).slice(0, 6);
+  const quickTools = services.filter(b => !['highlight-top-hotel-25', 'natal-2025', 'highlight-drinks', 'highlight-rir', 'highlight-job-fair'].includes(b.id)).slice(0, 6);
 
   // --- SLIDER LOGIC ---
   const highlightIds = [
+      'highlight-top-hotel-25',
       'natal-2025', 
       'highlight-drinks', 
       'highlight-rir', 
@@ -69,6 +71,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
   const getSlideGradient = (id: string) => {
       switch (id) {
+          case 'highlight-top-hotel-25': return 'from-yellow-500 to-amber-600 border-yellow-600/50';
           case 'natal-2025': return 'from-red-700 to-red-900 border-red-800/50';
           case 'highlight-drinks': return 'from-blue-700 to-slate-800 border-blue-800/50';
           case 'highlight-rir': return 'from-purple-900 to-black border-purple-800/50';
@@ -80,6 +83,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
   const getSlideAccentColor = (id: string) => {
       switch (id) {
+          case 'highlight-top-hotel-25': return 'text-yellow-900 bg-white text-yellow-900';
           case 'natal-2025': return 'text-yellow-300 bg-yellow-400 text-red-900';
           case 'highlight-drinks': return 'text-cyan-300 bg-cyan-400 text-blue-900';
           case 'highlight-rir': return 'text-pink-400 bg-pink-500 text-white';
