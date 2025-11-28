@@ -1,5 +1,7 @@
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import { User, Benefit, BenefitCategory } from '../types';
 import { BENEFITS_DATA, RIO_EVENTS, COMMUNITY_ITEMS_DATA } from '../constants';
@@ -230,7 +232,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                                    </div>
 
                                    <button className="bg-white text-gray-800 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 z-10">
-                                      Inscreva-se
+                                      {slide.customCta || "Inscreva-se"}
                                       <ArrowRight className="w-4 h-4" />
                                    </button>
                                 </div>

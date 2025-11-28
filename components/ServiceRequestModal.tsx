@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import { X, AlertTriangle, ShieldCheck, LayoutDashboard } from 'lucide-react';
 import { Benefit } from '../types';
@@ -37,7 +39,7 @@ const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({ benefit, onCl
               {isLegal ? <ShieldCheck className="w-6 h-6" /> : <AlertTriangle className="w-6 h-6" />}
             </div>
             <div>
-              <h2 className="text-xl font-bold">{isLegal ? 'Assessoria Jurídica' : 'Reportar Ordem Pública'}</h2>
+              <h2 className="text-xl font-bold">{isLegal ? 'Assessoria Jurídica' : 'Demanda de Ordem Pública'}</h2>
               <p className="text-xs opacity-80">
                 {isLegal ? 'Formulário Oficial Jurídico' : 'Formulário Oficial de Demandas'}
               </p>

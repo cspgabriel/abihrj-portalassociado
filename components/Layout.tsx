@@ -1,7 +1,8 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { User, Benefit } from '../types';
-import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home, ChevronDown } from 'lucide-react';
+import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home, ChevronDown, Star } from 'lucide-react';
 import MegaMenu from './MegaMenu';
 import Footer from './Footer';
 import { BENEFITS_DATA } from '../constants';
@@ -22,6 +23,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, onBenefitClick, onForumClick, currentView }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [megaMenuMode, setMegaMenuMode] = useState<'BENEFITS' | 'HIGHLIGHTS'>('BENEFITS');
   
   // Search State
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,8 +60,12 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
     { label: 'Início', view: 'DASHBOARD' as AppView, icon: Home },
     { label: 'Equipe', view: 'CONTACTS' as AppView, icon: Users },
     { label: 'Grupos', view: 'WHATSAPP_GROUPS' as AppView, icon: MessageCircle },
-    { label: 'Agenda', view: 'ASSOCIATION_EVENTS' as AppView, icon: Calendar },
   ];
+
+  const handleMegaMenuOpen = (mode: 'BENEFITS' | 'HIGHLIGHTS') => {
+    setMegaMenuMode(mode);
+    setIsMegaMenuOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
@@ -98,25 +104,49 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
                   </button>
                 ))}
 
-                {/* Mega Menu Trigger - Wrapped in h-full to bridge the gap to the menu */}
+                {/* Highlights Menu Trigger */}
                 <div 
                   className="relative h-full flex items-center"
-                  onMouseEnter={() => setIsMegaMenuOpen(true)}
+                  onMouseEnter={() => handleMegaMenuOpen('HIGHLIGHTS')}
                   onMouseLeave={() => setIsMegaMenuOpen(false)}
                 >
                   <button
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1
-                      ${isMegaMenuOpen ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'}
+                      ${isMegaMenuOpen && megaMenuMode === 'HIGHLIGHTS' ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'}
                     `}
-                    onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
+                    onClick={() => {
+                        setMegaMenuMode('HIGHLIGHTS');
+                        setIsMegaMenuOpen(!isMegaMenuOpen);
+                    }}
+                  >
+                    <Star className="w-4 h-4" />
+                    Destaques
+                  </button>
+                </div>
+
+                {/* Benefits Mega Menu Trigger */}
+                <div 
+                  className="relative h-full flex items-center"
+                  onMouseEnter={() => handleMegaMenuOpen('BENEFITS')}
+                  onMouseLeave={() => setIsMegaMenuOpen(false)}
+                >
+                  <button
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1
+                      ${isMegaMenuOpen && megaMenuMode === 'BENEFITS' ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'}
+                    `}
+                    onClick={() => {
+                        setMegaMenuMode('BENEFITS');
+                        setIsMegaMenuOpen(!isMegaMenuOpen);
+                    }}
                   >
                     Benefícios
-                    <ChevronDown className={`w-4 h-4 transition-transform ${isMegaMenuOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isMegaMenuOpen && megaMenuMode === 'BENEFITS' ? 'rotate-180' : ''}`} />
                   </button>
                   
-                  {/* Mega Menu Component */}
+                  {/* Mega Menu Component - Shared Position */}
                   <MegaMenu 
-                    isOpen={isMegaMenuOpen} 
+                    isOpen={isMegaMenuOpen}
+                    mode={megaMenuMode} 
                     onClose={() => setIsMegaMenuOpen(false)} 
                     onBenefitClick={(benefit) => {
                       if (onBenefitClick) onBenefitClick(benefit);

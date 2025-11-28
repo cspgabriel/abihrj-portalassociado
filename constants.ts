@@ -1,5 +1,3 @@
-
-
 import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge } from './types';
 
 export const MOCK_USER = {
@@ -440,6 +438,7 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     isNew: true,
     externalLink: 'https://premiotophotel.sindhoteisrj.com.br/',
+    customCta: 'Confira os vencedores',
     usageSteps: [
       "Acesse a página oficial do prêmio.",
       "Confira a lista completa dos vencedores por categoria.",
@@ -466,17 +465,18 @@ export const BENEFITS_DATA: Benefit[] = [
   // --- DESTAQUE 2: ROCK IN RIO (NOVO) ---
   {
     id: 'highlight-rir',
-    title: 'Hotel Parceiro Rock in Rio',
-    description: 'Credencie seu hotel para a oferta oficial do festival.',
+    title: 'Viva o Rio com o Rock in Rio 2026',
+    description: 'Cadastre seu hotel no hub oficial de benefícios do festival. Adesão gratuita.',
     category: BenefitCategory.COMMERCIAL,
     iconName: 'Music',
     imageUrl: 'https://images.unsplash.com/photo-1459749411177-0473ef485078?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
     usageSteps: [
-      "Preencha o formulário de adesão no botão abaixo.",
-      "Garanta visibilidade nos canais oficiais do Rock in Rio.",
-      "Acesse tarifas negociadas e pacotes exclusivos."
+      "Clique em 'Utilizar' para ver os detalhes completos da ação.",
+      "Acesse o formulário de cadastro.",
+      "Defina as vantagens que seu hotel oferecerá.",
+      "Garanta visibilidade nos canais oficiais do Rock in Rio 2026."
     ]
   },
   // --- DESTAQUE 3: FEIRA EMPREGABILIDADE (NOVO) ---
@@ -489,6 +489,8 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
+    externalLink: 'https://forms.gle/aoApFdqm5KxVw4dDA',
+    customCta: 'Inscreva seu Hotel',
     usageSteps: [
       "Cadastre suas vagas abertas na plataforma.",
       "Participe do evento presencial de recrutamento.",
@@ -505,10 +507,29 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
+    customCta: 'Mais informações',
     usageSteps: [
       "Acesse o formulário unificado da SETUR-RJ.",
       "Registre eventos acima de 500 pessoas no seu hotel.",
       "Automaticamente integrado com Polícia, Bombeiros e CET-Rio."
+    ]
+  },
+  // --- DESTAQUE 5: PORTAL DE NOTICIAS (NOVO) ---
+  {
+    id: 'news-portal',
+    title: 'Portal de Notícias HoteisRio',
+    description: 'Fique por dentro das últimas novidades da hotelaria carioca e nacional.',
+    category: BenefitCategory.COMMUNICATION,
+    iconName: 'Newspaper',
+    imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://sindhoteisrj.com.br/noticias',
+    customCta: 'Ler Notícias',
+    usageSteps: [
+      "Acesse o portal para ler artigos, entrevistas e comunicados.",
+      "Compartilhe notícias relevantes com sua equipe.",
+      "Filtre por categorias como Legislação, Eventos ou Mercado."
     ]
   },
   // --- CONCURSO DE NATAL 2025 (DESTAQUE) ---
@@ -598,14 +619,14 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'influencers',
-    title: 'Influenciadores Digitais',
-    description: 'Catálogo de creators homologados para ações de marketing.',
+    title: 'Influenciadores Digitais (EM BREVE)',
+    description: 'Em breve: Catálogo de creators homologados para ações de marketing.',
     category: BenefitCategory.COMMUNICATION, // Comunicação & Marketing
     iconName: 'Camera',
     imageUrl: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
-    externalLink: 'https://hoteisrio.com.br/influenciadores', // Mock URL
+    customCta: 'Em Breve',
     usageSteps: [
       "Acesse o catálogo de influenciadores.",
       "Filtre por nicho (gastronomia, lifestyle, viagens).",
@@ -639,6 +660,7 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     isNew: true,
     externalLink: 'https://portaldefornecedores.sindhoteisrj.com.br/',
+    customCta: 'Acessar',
     usageSteps: [
       "Acesse o Portal de Fornecedores.",
       "Busque por produtos ou serviços.",
@@ -774,7 +796,7 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400',
     isService: true,
     usageSteps: [
-      "Utilize o Canal Ordem Pública para reportes não emergenciais.",
+      "Utilize o Demanda de Ordem Pública para reportes não emergenciais.",
       "Em caso de emergência, utilize o botão de pânico (se disponível) ou ligue 190.",
       "Participe das reuniões mensais com o BPTur e DEAT.",
       "Receba orientações preventivas para hóspedes."
@@ -812,7 +834,7 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'public-order-01',
-    title: 'Canal Ordem Pública',
+    title: 'Demanda de Ordem Pública',
     description: 'Reporte irregularidades e solicite apoio de segurança no entorno.',
     category: BenefitCategory.OPERATIONAL,
     iconName: 'ShieldAlert',

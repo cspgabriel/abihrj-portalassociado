@@ -1,17 +1,19 @@
+
 import React from 'react';
 import { Benefit, BenefitCategory, Forum } from '../types';
 import { BENEFITS_DATA, FORUMS_DATA } from '../constants';
 import * as Icons from 'lucide-react';
-import { ChevronRight, Star, Users } from 'lucide-react';
+import { ChevronRight, Star, Users, Zap } from 'lucide-react';
 
 interface MegaMenuProps {
   isOpen: boolean;
+  mode?: 'BENEFITS' | 'HIGHLIGHTS';
   onClose: () => void;
   onBenefitClick: (benefit: Benefit) => void;
-  onForumClick?: (forum: Forum) => void; // Optional if passed, though standard nav might be used
+  onForumClick?: (forum: Forum) => void; 
 }
 
-const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick, onForumClick }) => {
+const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, mode = 'BENEFITS', onClose, onBenefitClick, onForumClick }) => {
   if (!isOpen) return null;
 
   // Group benefits by category
@@ -22,6 +24,8 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick, on
     BenefitCategory.EVENTS,
   ];
 
+  const highlights = BENEFITS_DATA.filter(b => b.isNew || ['news-portal', 'highlight-top-hotel-25'].includes(b.id)).slice(0, 6);
+
   return (
     <div 
       className="fixed top-16 left-0 w-full bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] border-t border-gray-100 z-50 animate-fade-in-down"
@@ -30,6 +34,58 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick, on
       onMouseLeave={onClose}
     >
       <div className="max-w-7xl mx-auto p-8">
+        
+        {/* MODE: HIGHLIGHTS */}
+        {mode === 'HIGHLIGHTS' && (
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               <div className="lg:col-span-2">
+                 <h3 className="text-sm font-bold text-rio-gold uppercase tracking-wider border-b border-gray-100 pb-2 mb-4 flex items-center gap-2">
+                    <Star className="w-4 h-4" />
+                    Novidades & Destaques
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {highlights.map(benefit => {
+                        const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
+                        return (
+                           <div 
+                             key={benefit.id}
+                             onClick={() => { onBenefitClick(benefit); onClose(); }}
+                             className="flex gap-4 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors group border border-transparent hover:border-gray-100"
+                           >
+                              <div className="bg-blue-50 text-rio-blue p-3 rounded-lg h-fit shrink-0 group-hover:bg-rio-blue group-hover:text-white transition-colors">
+                                 <IconComponent className="w-6 h-6" />
+                              </div>
+                              <div>
+                                 <h4 className="font-bold text-gray-800 text-sm group-hover:text-rio-blue transition-colors mb-1">
+                                   {benefit.title}
+                                 </h4>
+                                 <p className="text-xs text-gray-500 line-clamp-2">{benefit.description}</p>
+                              </div>
+                           </div>
+                        )
+                    })}
+                 </div>
+               </div>
+               
+               <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                  <h3 className="text-sm font-bold text-gray-800 mb-2">Central de Notícias</h3>
+                  <p className="text-xs text-gray-500 mb-4">Acompanhe as últimas atualizações do setor hoteleiro.</p>
+                  <button 
+                    onClick={() => {
+                        const news = BENEFITS_DATA.find(b => b.id === 'news-portal');
+                        if(news) onBenefitClick(news);
+                        onClose();
+                    }}
+                    className="w-full bg-white border border-gray-200 text-rio-blue font-bold py-2 rounded-lg text-sm hover:bg-rio-blue hover:text-white transition-colors shadow-sm"
+                  >
+                    Acessar Portal de Notícias
+                  </button>
+               </div>
+           </div>
+        )}
+
+        {/* MODE: BENEFITS */}
+        {mode === 'BENEFITS' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           
           {/* Forums Column (Dedicated) */}
@@ -104,12 +160,13 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, onClose, onBenefitClick, on
             );
           })}
         </div>
+        )}
         
         {/* Footer Promocional do Menu */}
         <div className="mt-8 pt-6 border-t border-gray-100 bg-gray-50 -mx-8 -mb-8 px-8 pb-8 flex justify-between items-center">
            <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-rio-blue rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                 <Star className="w-6 h-6" />
+                 <Zap className="w-6 h-6" />
               </div>
               <div>
                 <h4 className="font-bold text-gray-800">Clube de Benefícios HoteisRio</h4>

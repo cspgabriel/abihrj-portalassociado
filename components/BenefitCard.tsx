@@ -83,7 +83,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
               className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm whitespace-nowrap"
               title={benefit.externalLink ? "Abrir Link Externo" : "Utilizar Serviço"}
             >
-              {benefit.externalLink ? 'Acessar' : 'Utilizar'}
+              {benefit.customCta || (benefit.externalLink ? 'Acessar' : 'Utilizar')}
               <ArrowRight className="w-3 h-3" />
             </button>
             <button 
@@ -120,7 +120,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
                 onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
                 className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
               >
-                {benefit.externalLink ? 'Acessar' : 'Utilizar'}
+                {benefit.customCta || (benefit.externalLink ? 'Acessar' : 'Utilizar')}
                 {benefit.externalLink ? (
                     <ExternalLink className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
                 ) : (

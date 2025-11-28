@@ -54,9 +54,6 @@ const Footer: React.FC = () => {
               Acesso Rápido
             </h3>
             <ul className="space-y-3">
-              <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Associe-se</a></li>
-              <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Estatuto Social</a></li>
-              <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Portal da Transparência</a></li>
               <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Calendário de Eventos</a></li>
               <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Central de Notícias</a></li>
             </ul>

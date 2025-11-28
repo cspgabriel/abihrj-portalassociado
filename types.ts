@@ -57,6 +57,7 @@ export interface Benefit {
   externalLink?: string; // Link externo para portais dedicados
   downloadUrl?: string; // URL direta para download de arquivos
   dashboardUrl?: string; // URL para dashboard externo (ex: Ordem Pública)
+  customCta?: string; // Texto personalizado para o botão de ação
 }
 
 export interface Forum {

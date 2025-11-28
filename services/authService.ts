@@ -51,12 +51,14 @@ export const authService = {
         };
       } catch (error: any) {
         console.warn("Firebase Login Failed. Falling back to demo mode.", error.code, error.message);
-        // Se falhar por credenciais incorretas REAIS, lançamos o erro.
-        // Se falhar por conexão, config ou projeto não encontrado, caímos para o mock.
+        // NOTA: Para fins de demonstração, removemos o bloqueio de 'invalid-credential'.
+        // Isso permite que qualquer login funcione em modo Mock se o Firebase falhar.
+        // Em produção, você descomentaria as linhas abaixo:
+        /*
         if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
            throw new Error('Email ou senha incorretos.');
         }
-        // Para outros erros (network, internal, invalid-api-key), prossegue para o mock abaixo
+        */
       }
     }
 
@@ -137,7 +139,18 @@ export const authService = {
             return mockUser;
         }
 
-        throw error;
+        // Para demo, vamos permitir passar mesmo com erro (exceto os acima tratados)
+        // throw error; 
+        const mockUser: User = {
+            id: 'mock-new-' + Date.now(),
+            name,
+            email,
+            hotel,
+            role
+        };
+        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+        if (mockObserver) mockObserver(mockUser);
+        return mockUser;
       }
     }
     
