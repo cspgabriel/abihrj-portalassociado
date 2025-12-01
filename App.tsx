@@ -3,6 +3,10 @@
 
 
 
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -25,8 +29,8 @@ import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
 import RockInRioPage from './components/RockInRioPage'; // New Rock in Rio Page
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
-import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft } from 'lucide-react';
+import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES, NEWS_ITEMS } from './constants';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -572,21 +576,20 @@ const Dashboard: React.FC = () => {
     .map(id => BENEFITS_DATA.find(b => b.id === id))
     .filter(Boolean) as Benefit[];
 
+  // No longer use automatic full width rotation for Classic, but we keep state for potential future use or mobile
   useEffect(() => {
     if (highlightSlides.length <= 1) return;
     const interval = setInterval(() => {
         setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
-    }, 5000); // 5 seconds rotation
+    }, 5000); 
     return () => clearInterval(interval);
   }, [highlightSlides.length]);
 
-  const nextSlide = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const nextSlide = () => {
     setCurrentSlideIndex((prev) => (prev + 1) % highlightSlides.length);
   };
 
-  const prevSlide = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const prevSlide = () => {
     setCurrentSlideIndex((prev) => (prev - 1 + highlightSlides.length) % highlightSlides.length);
   };
 
@@ -753,71 +756,79 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* HIGHLIGHT SLIDER (CLASSIC VIEW) */}
+      {/* HIGHLIGHT SLIDER (CLASSIC VIEW) - CHANGED TO 3 COLUMN GRID */}
       {highlightSlides.length > 0 && (
           <div className="mb-12 relative group animate-fade-in">
-             <div className="flex items-center gap-3 mb-4">
-                 <div className="p-2 bg-yellow-100 text-yellow-700 rounded-lg">
-                    <Star className="w-5 h-5" />
-                 </div>
-                 <h2 className="text-xl font-bold text-gray-800">Destaques para Você</h2>
+             <div className="flex items-center justify-between mb-4">
+               <div className="flex items-center gap-3">
+                   <div className="p-2 bg-yellow-100 text-yellow-700 rounded-lg">
+                      <Star className="w-5 h-5" />
+                   </div>
+                   <h2 className="text-xl font-bold text-gray-800">Destaques para Você</h2>
+               </div>
              </div>
 
-             {/* Slide Item */}
-             {highlightSlides.map((slide, index) => {
-                 if (index !== currentSlideIndex) return null;
-                 const IconComponent = (Icons as any)[slide.iconName] || Icons.HelpCircle;
-                 
-                 // Split gradient logic just for rendering style
-                 const gradientClass = getSlideGradient(slide.id);
-                 const accentClass = getSlideAccentColor(slide.id).split(' '); // [text, bg, badgeText]
+             <div className="relative">
+                {/* Navigation Arrows */}
+                <button 
+                  onClick={prevSlide}
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 shadow-md text-gray-700 p-2 rounded-full hover:bg-white hover:text-rio-blue transition-all border border-gray-100"
+                  aria-label="Anterior"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
 
-                 return (
-                    <div 
-                        key={slide.id}
-                        className={`bg-gradient-to-r ${gradientClass} rounded-2xl p-8 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center gap-8 border transition-all duration-500`}
-                        onClick={() => handleUseBenefit(slide)}
-                    >
-                        {/* Decorations */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse" />
-                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-10 -mb-10 blur-xl pointer-events-none" />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {[0, 1, 2].map((offset) => {
+                    // Calculate index to display 3 distinct items wrapping around array
+                    const slideIndex = (currentSlideIndex + offset) % highlightSlides.length;
+                    const slide = highlightSlides[slideIndex];
+                    
+                    const IconComponent = (Icons as any)[slide.iconName] || Icons.HelpCircle;
+                    const gradientClass = getSlideGradient(slide.id);
+                    const accentClass = getSlideAccentColor(slide.id).split(' '); // [text, bg, badgeText]
 
-                        {/* Icon */}
-                        <div className="bg-white/10 p-5 rounded-full backdrop-blur-sm shrink-0 border border-white/20 shadow-inner">
-                            <IconComponent className={`w-12 h-12 ${accentClass[0]}`} />
-                        </div>
+                    return (
+                        <div 
+                            key={`${slide.id}-${offset}`}
+                            className={`bg-gradient-to-r ${gradientClass} rounded-2xl p-6 shadow-lg relative overflow-hidden flex flex-col items-start gap-4 border transition-all duration-500 hover:scale-[1.02] cursor-pointer h-full`}
+                            onClick={() => handleUseBenefit(slide)}
+                        >
+                            {/* Decorations */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-8 -mt-8 pointer-events-none" />
 
-                        {/* Text */}
-                        <div className="flex-1 text-center md:text-left z-10">
-                            <div className={`inline-block ${accentClass[1]} ${accentClass[2]} text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wide shadow-sm`}>
-                                Novidade
+                            {/* Icon */}
+                            <div className="bg-white/10 p-3 rounded-full backdrop-blur-sm shrink-0 border border-white/20 shadow-inner">
+                                <IconComponent className={`w-8 h-8 ${accentClass[0]}`} />
                             </div>
-                            <h2 className="text-3xl font-bold text-white mb-2">{slide.title}</h2>
-                            <p className="text-white/80 text-lg">{slide.description}</p>
-                        </div>
 
-                        {/* Action */}
-                        <button className="bg-white text-gray-800 font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-gray-50 transition-transform group-hover:scale-105 flex items-center gap-2 whitespace-nowrap z-10 cursor-pointer">
-                            {slide.customCta || "Inscreva-se"}
-                            <ArrowRight className="w-5 h-5" />
-                        </button>
-                    </div>
-                 );
-             })}
-             
-             {/* Slider Arrows */}
-             <button 
-                onClick={prevSlide} 
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-             >
-                <ChevronLeft className="w-6 h-6" />
-             </button>
-             <button 
-                onClick={nextSlide} 
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-             >
-                <ChevronRight className="w-6 h-6" />
-             </button>
+                            {/* Text */}
+                            <div className="flex-1 text-left z-10 w-full">
+                                <div className={`inline-block ${accentClass[1]} ${accentClass[2]} text-[10px] font-bold px-2 py-0.5 rounded-full mb-2 uppercase tracking-wide shadow-sm`}>
+                                    Novidade
+                                </div>
+                                <h2 className="text-xl font-bold text-white mb-2 leading-tight">{slide.title}</h2>
+                                <p className="text-white/80 text-sm line-clamp-2">{slide.description}</p>
+                            </div>
+
+                            {/* Action */}
+                            <button className="w-full bg-white text-gray-800 font-bold py-2.5 px-4 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 whitespace-nowrap z-10 text-sm">
+                                {slide.customCta || "Inscreva-se"}
+                                <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    );
+                  })}
+                </div>
+
+                <button 
+                  onClick={nextSlide}
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 shadow-md text-gray-700 p-2 rounded-full hover:bg-white hover:text-rio-blue transition-all border border-gray-100"
+                  aria-label="Próximo"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+             </div>
              
              {/* Slider Indicators */}
              <div className="flex justify-center gap-2 mt-4">
@@ -1129,7 +1140,7 @@ const Dashboard: React.FC = () => {
 
       {/* SEÇÃO 3: LISTA COMPLEMENTAR */}
       {selectedCategory === 'Todos' && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 animate-fade-in mt-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 animate-fade-in mt-8 mb-12">
           <h2 className="text-lg font-bold text-gray-800 mb-6 pb-2 border-b border-gray-100">
             Mais Vantagens Institucionais
           </h2>
@@ -1143,6 +1154,49 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* SEÇÃO 4: NOTÍCIAS (Ações Realizadas) - NOVO */}
+      <div id="news-section" className="mb-8">
+        <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+               <div className="p-2 bg-gray-100 text-gray-600 rounded-lg">
+                  <Newspaper className="w-6 h-6" />
+               </div>
+               <h2 className="text-xl font-bold text-gray-800">Ações Realizadas</h2>
+            </div>
+            <a href="https://sindhoteisrj.com.br/category/acoes-realizadas" target="_blank" rel="noreferrer" className="text-sm font-bold text-rio-blue hover:underline flex items-center gap-1">
+                Ver todas <ExternalLink className="w-4 h-4" />
+            </a>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {NEWS_ITEMS.map((news) => (
+                <div key={news.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+                    <div className="h-40 overflow-hidden relative">
+                         <img src={news.image} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-gray-700">
+                             {news.category}
+                         </div>
+                    </div>
+                    <div className="p-5">
+                        <div className="text-xs text-gray-400 mb-2 font-medium">{news.date}</div>
+                        <h3 className="text-lg font-bold text-gray-800 mb-3 leading-tight group-hover:text-rio-blue transition-colors line-clamp-2">
+                            {news.title}
+                        </h3>
+                        <a 
+                           href={news.link} 
+                           target="_blank" 
+                           rel="noreferrer"
+                           className="text-sm font-bold text-rio-blue flex items-center gap-1 hover:gap-2 transition-all"
+                        >
+                            Ler Matéria <ArrowRight className="w-4 h-4" />
+                        </a>
+                    </div>
+                </div>
+            ))}
+        </div>
+      </div>
+
       </>
       )}
 

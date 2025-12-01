@@ -1,3 +1,4 @@
+
 import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge } from './types';
 
 export const MOCK_USER = {
@@ -22,6 +23,33 @@ export const FOOTER_DATA = {
     facebook: "https://facebook.com/hoteisrio"
   }
 };
+
+export const NEWS_ITEMS = [
+  {
+    id: 1,
+    title: "HotéisRIO divulga 2ª prévia de ocupação para o Réveillon 2025",
+    date: "27 Nov, 2024",
+    category: "Pesquisas",
+    image: "https://images.unsplash.com/photo-1576180362397-9ae0062a4d04?auto=format&fit=crop&q=80&w=400",
+    link: "https://sindhoteisrj.com.br/category/acoes-realizadas"
+  },
+  {
+    id: 2,
+    title: "Encontro com Comandante do BPTur reforça segurança para o verão",
+    date: "25 Nov, 2024",
+    category: "Segurança",
+    image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400",
+    link: "https://sindhoteisrj.com.br/category/acoes-realizadas"
+  },
+  {
+    id: 3,
+    title: "Fórum Comercial debate estratégias de Revenue Management",
+    date: "20 Nov, 2024",
+    category: "Eventos",
+    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400",
+    link: "https://sindhoteisrj.com.br/category/acoes-realizadas"
+  }
+];
 
 // --- GAMIFICATION CONSTANTS ---
 export const LEVEL_THRESHOLDS = {
