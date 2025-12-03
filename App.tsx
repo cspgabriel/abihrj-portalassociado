@@ -340,8 +340,18 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
-    await authService.logout();
-    // Listener updates user state
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error("Erro ao sair:", error);
+    } finally {
+      // Force UI Update Immediately to avoid stuck state
+      setUser(null);
+      setCurrentView('DASHBOARD');
+      // Limpa dados sensíveis da view
+      setSelectedBenefitForDetails(null);
+      setSelectedForum(null);
+    }
   };
 
   // --- GAMIFICATION LOGIC ---

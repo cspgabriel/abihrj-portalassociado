@@ -1,16 +1,11 @@
 
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { User, Benefit, BenefitCategory } from '../types';
 import { BENEFITS_DATA, RIO_EVENTS, COMMUNITY_ITEMS_DATA } from '../constants';
 import BenefitCard from './BenefitCard';
 import WeatherWidget from './WeatherWidget';
 import GamificationWidget from './GamificationWidget';
-import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, Filter, List, Grid, Gift, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, List, Grid, ChevronLeft, ChevronRight, ArrowDownAZ, ArrowUpAZ } from 'lucide-react';
 import * as Icons from 'lucide-react';
 
 interface ModernDashboardProps {
@@ -25,6 +20,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
   const [activeTab, setActiveTab] = useState<TabType>('HOME');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
+  const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az'); // New State for Sorting
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   // --- FILTERS ---
@@ -35,6 +31,17 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
   const filteredBenefits = benefitsCatalog.filter(b => selectedCategory === 'Todos' || b.category === selectedCategory);
 
   const categories = ['Todos', ...Object.values(BenefitCategory)];
+
+  // --- SORTING HELPER ---
+  const sortData = (data: Benefit[]) => {
+    return [...data].sort((a, b) => {
+        if (sortOrder === 'az') return a.title.localeCompare(b.title);
+        return b.title.localeCompare(a.title);
+    });
+  };
+
+  const sortedServices = sortData(filteredServices);
+  const sortedBenefits = sortData(filteredBenefits);
 
   // --- HOME DATA ---
   const suggestedActions = BENEFITS_DATA.filter(b => b.isNew || b.id === 'calendar-01').slice(0, 3);
@@ -100,14 +107,14 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
   return (
     <div className="animate-fade-in pb-12">
        {/* Top Header - RIO BLUE IDENTITY */}
-       <div className="bg-gradient-to-r from-rio-blue to-blue-900 text-white p-8 rounded-3xl mb-8 relative overflow-hidden shadow-2xl">
+       <div className="bg-gradient-to-r from-rio-blue to-blue-900 text-white p-8 rounded-[2.5rem] mb-8 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-10 rounded-full blur-3xl -mr-20 -mt-40 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-rio-gold opacity-10 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none" />
           
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
              {/* Welcome Area */}
              <div className="lg:col-span-2 flex flex-col justify-center">
-                <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full w-fit mb-4 border border-white/5 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full w-fit mb-4 border border-white/5 backdrop-blur-sm">
                    <Sparkles className="w-4 h-4 text-rio-gold" />
                    <span className="text-xs font-bold uppercase tracking-wider">Painel Executivo</span>
                 </div>
@@ -125,28 +132,28 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
        </div>
 
        {/* Internal Tabs Navigation */}
-       <div className="flex overflow-x-auto gap-2 mb-8 pb-2 scrollbar-hide">
+       <div className="flex overflow-x-auto gap-3 mb-8 pb-2 scrollbar-hide px-1">
           <button 
             onClick={() => setActiveTab('HOME')}
-            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'HOME' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+            className={`px-6 py-3 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'HOME' ? 'bg-rio-blue text-white shadow-lg ring-2 ring-blue-200 ring-offset-2' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 shadow-sm'}`}
           >
             Visão Geral
           </button>
           <button 
             onClick={() => setActiveTab('SERVICES')}
-            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'SERVICES' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+            className={`px-6 py-3 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'SERVICES' ? 'bg-rio-blue text-white shadow-lg ring-2 ring-blue-200 ring-offset-2' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 shadow-sm'}`}
           >
             Todos os Serviços
           </button>
           <button 
             onClick={() => setActiveTab('BENEFITS')}
-            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'BENEFITS' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+            className={`px-6 py-3 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'BENEFITS' ? 'bg-rio-blue text-white shadow-lg ring-2 ring-blue-200 ring-offset-2' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 shadow-sm'}`}
           >
             Catálogo de Benefícios
           </button>
           <button 
             onClick={() => setActiveTab('COMMUNITY')}
-            className={`px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'COMMUNITY' ? 'bg-rio-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'}`}
+            className={`px-6 py-3 rounded-full font-bold text-sm whitespace-nowrap transition-all ${activeTab === 'COMMUNITY' ? 'bg-rio-blue text-white shadow-lg ring-2 ring-blue-200 ring-offset-2' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 shadow-sm'}`}
           >
             Comunidade
           </button>
@@ -161,7 +168,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              {user.gamification && <GamificationWidget profile={user.gamification} />}
 
              {/* Daily Challenge */}
-             <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+             <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
                 <div className="flex items-center gap-2 mb-3">
                    <Target className="w-5 h-5 text-yellow-300" />
                    <h3 className="font-bold text-sm uppercase">Missão do Dia</h3>
@@ -174,15 +181,15 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              </div>
 
              {/* Upcoming Events Mini Feed */}
-             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
                 <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                    <Calendar className="w-5 h-5 text-rio-blue" />
                    Próximos Eventos
                 </h3>
                 <div className="space-y-4">
                    {RIO_EVENTS.slice(0, 3).map(ev => (
-                      <div key={ev.id} className="flex gap-3 items-center group cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition">
-                         <div className="bg-gray-100 text-gray-600 font-bold rounded-lg w-12 h-12 flex flex-col items-center justify-center shrink-0 group-hover:bg-rio-blue group-hover:text-white transition">
+                      <div key={ev.id} className="flex gap-3 items-center group cursor-pointer hover:bg-gray-50 p-2 rounded-xl transition">
+                         <div className="bg-gray-100 text-gray-600 font-bold rounded-xl w-12 h-12 flex flex-col items-center justify-center shrink-0 group-hover:bg-rio-blue group-hover:text-white transition">
                             <span className="text-xs">{ev.date.split(' ')[1].substring(0,3)}</span>
                             <span className="text-lg leading-none">{ev.date.split(' ')[0].split('-')[0]}</span>
                          </div>
@@ -205,7 +212,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                   
                   {/* HIGHLIGHT SLIDER (MODERN VIEW) */}
                   {highlightSlides.length > 0 && (
-                      <div className="relative group overflow-hidden rounded-2xl shadow-xl">
+                      <div className="relative group overflow-hidden rounded-[2rem] shadow-xl">
                          {highlightSlides.map((slide, index) => {
                              if (index !== currentSlideIndex) return null;
                              const IconComponent = (Icons as any)[slide.iconName] || Icons.HelpCircle;
@@ -233,7 +240,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                                       <p className="text-white/90 mb-0">{slide.description}</p>
                                    </div>
 
-                                   <button className="bg-white text-gray-800 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 z-10">
+                                   <button className="bg-white text-gray-800 font-bold py-3 px-6 rounded-full shadow-lg hover:bg-gray-50 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 z-10">
                                       {slide.customCta || "Inscreva-se"}
                                       <ArrowRight className="w-4 h-4" />
                                    </button>
@@ -270,7 +277,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
                   {/* Suggested Actions */}
                   <div>
-                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 px-2">
                         <Zap className="w-6 h-6 text-rio-gold fill-rio-gold" />
                         Destaques para você
                     </h2>
@@ -289,7 +296,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
                   {/* Quick Access Grid */}
                   <div>
-                    <div className="flex justify-between items-end mb-4">
+                    <div className="flex justify-between items-end mb-4 px-2">
                         <h2 className="text-xl font-bold text-gray-800">Serviços Rápidos</h2>
                         <button 
                            onClick={() => setActiveTab('SERVICES')}
@@ -316,27 +323,44 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              {/* --- TAB: SERVICES (FULL LIST) --- */}
              {activeTab === 'SERVICES' && (
                <div className="space-y-6 animate-fade-in">
-                  <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm">
+                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 pl-2">
                         <Zap className="w-6 h-6 text-rio-blue" />
                         Todos os Serviços
                       </h2>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap items-center gap-3">
+                         {/* Category Filter */}
                          <select 
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-rio-blue"
+                            className="bg-gray-50 border border-gray-200 rounded-full text-sm px-4 py-2.5 outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
                          >
                             {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                          </select>
-                         <button onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')} className="p-2 bg-gray-50 rounded-lg hover:bg-gray-100">
-                            {viewMode === 'grid' ? <List className="w-5 h-5 text-gray-600" /> : <Grid className="w-5 h-5 text-gray-600" />}
+
+                         {/* Sort Button (A-Z) - Round */}
+                         <button 
+                            onClick={() => setSortOrder(prev => prev === 'az' ? 'za' : 'az')}
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100 transition-colors"
+                            title="Ordenar por Nome"
+                         >
+                             {sortOrder === 'az' ? <ArrowDownAZ className="w-5 h-5" /> : <ArrowUpAZ className="w-5 h-5" />}
+                             <span className="text-sm font-medium hidden sm:inline">{sortOrder === 'az' ? 'A-Z' : 'Z-A'}</span>
+                         </button>
+                         
+                         {/* View Toggle - Round */}
+                         <button 
+                            onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')} 
+                            className="p-2.5 bg-gray-50 rounded-full border border-gray-200 hover:bg-gray-100 text-gray-600"
+                            title="Alterar Visualização"
+                         >
+                            {viewMode === 'grid' ? <List className="w-5 h-5" /> : <Grid className="w-5 h-5" />}
                          </button>
                       </div>
                   </div>
 
                   <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'} gap-6`}>
-                     {filteredServices.map(benefit => (
+                     {sortedServices.map(benefit => (
                         <BenefitCard 
                             key={benefit.id} 
                             benefit={benefit} 
@@ -352,24 +376,34 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              {/* --- TAB: BENEFITS (CATALOG) --- */}
              {activeTab === 'BENEFITS' && (
                <div className="space-y-6 animate-fade-in">
-                  <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm">
+                      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 pl-2">
                         <LayoutGrid className="w-6 h-6 text-purple-600" />
                         Catálogo de Benefícios
                       </h2>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap items-center gap-3">
                          <select 
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2 outline-none focus:ring-2 focus:ring-rio-blue"
+                            className="bg-gray-50 border border-gray-200 rounded-full text-sm px-4 py-2.5 outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
                          >
                             {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                          </select>
+
+                         {/* Sort Button (A-Z) - Round */}
+                         <button 
+                            onClick={() => setSortOrder(prev => prev === 'az' ? 'za' : 'az')}
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100 transition-colors"
+                            title="Ordenar por Nome"
+                         >
+                             {sortOrder === 'az' ? <ArrowDownAZ className="w-5 h-5" /> : <ArrowUpAZ className="w-5 h-5" />}
+                             <span className="text-sm font-medium hidden sm:inline">{sortOrder === 'az' ? 'A-Z' : 'Z-A'}</span>
+                         </button>
                       </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     {filteredBenefits.map(benefit => (
+                     {sortedBenefits.map(benefit => (
                         <BenefitCard 
                             key={benefit.id} 
                             benefit={benefit} 
@@ -385,7 +419,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
              {/* --- TAB: COMMUNITY --- */}
              {activeTab === 'COMMUNITY' && (
                <div className="space-y-6 animate-fade-in">
-                  <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                  <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
                      <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                         <Users className="w-6 h-6 text-green-600" />
                         Conecte-se com o Setor
@@ -394,8 +428,8 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                         {COMMUNITY_ITEMS_DATA.map(item => {
                            const IconComponent = (Icons as any)[item.iconName] || Icons.HelpCircle;
                            return (
-                             <div key={item.id} className="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:border-rio-blue transition-colors cursor-pointer group">
-                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${item.bgClass} ${item.colorClass}`}>
+                             <div key={item.id} className="bg-gray-50 rounded-2xl p-6 border border-gray-200 hover:border-rio-blue transition-colors cursor-pointer group">
+                                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${item.bgClass} ${item.colorClass}`}>
                                    <IconComponent className="w-6 h-6" />
                                 </div>
                                 <h3 className="font-bold text-gray-800 text-lg mb-1">{item.title}</h3>

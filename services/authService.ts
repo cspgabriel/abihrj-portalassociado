@@ -233,5 +233,8 @@ export const authService = {
     }
     localStorage.removeItem(LOCAL_STORAGE_SESSION_KEY);
     if (mockObserver) mockObserver(null);
+    
+    // Force reload to clear any lingering React state or context
+    window.location.reload();
   }
 };
