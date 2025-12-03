@@ -41,7 +41,7 @@ export const authService = {
           console.warn("Não foi possível buscar detalhes do usuário no Firestore", e);
         }
 
-        return {
+        const user: User = {
           id: firebaseUser.uid,
           name: firebaseUser.displayName || email.split('@')[0],
           email: firebaseUser.email || '',
@@ -49,20 +49,29 @@ export const authService = {
           role: role,
           avatarUrl: firebaseUser.photoURL || undefined
         };
+        
+        // Persistir sessão localmente para evitar flash de logout
+        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(user));
+        return user;
+        
       } catch (error: any) {
-        console.warn("Firebase Login Failed. Falling back to demo mode.", error.code, error.message);
-        // NOTA: Para fins de demonstração, removemos o bloqueio de 'invalid-credential'.
-        // Isso permite que qualquer login funcione em modo Mock se o Firebase falhar.
-        // Em produção, você descomentaria as linhas abaixo:
-        /*
-        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        console.warn("Firebase Login Failed.", error.code);
+        
+        // CORREÇÃO: Tratamento explícito de senha incorreta para não cair no Mock
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
            throw new Error('Email ou senha incorretos.');
         }
-        */
+        
+        if (error.code === 'auth/too-many-requests') {
+           throw new Error('Muitas tentativas falhas. Tente novamente mais tarde.');
+        }
+
+        // Se for outro erro (ex: network), tentamos o fallback apenas se não for erro de credencial
+        console.log("Falling back to demo mode due to network/config error.");
       }
     }
 
-    // Fallback Mock (Modo Demo)
+    // Fallback Mock (Modo Demo) - Apenas se não for erro de senha
     // Permite login "fake" se o Firebase falhar ou não estiver configurado
     console.log("Usando login simulado (Demo Mode)");
     
@@ -108,13 +117,17 @@ export const authService = {
             console.warn("Erro ao salvar no Firestore (pode ser permissão), seguindo com Auth apenas.");
         }
 
-        return {
+        const newUser: User = {
           id: firebaseUser.uid,
           name: name,
           email: firebaseUser.email || email,
           hotel: hotel,
           role: role
         };
+        
+        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(newUser));
+        return newUser;
+
       } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
           throw new Error('Este email já está cadastrado.');
@@ -124,7 +137,8 @@ export const authService = {
         }
         // Se o erro for de configuração/network no registro, jogamos erro (não fazemos mock de registro persistente complexo)
         console.error("Erro no registro Firebase:", error);
-        // Fallback simples para demo
+        
+        // Fallback simples para demo em caso de erro de API Key
         if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/admin-restricted-operation' || error.code === 'auth/api-key-not-valid.-please-pass-a-valid-api-key.') {
             // Permitir "registrar" localmente para a sessão
             const mockUser: User = {
@@ -139,22 +153,12 @@ export const authService = {
             return mockUser;
         }
 
-        // Para demo, vamos permitir passar mesmo com erro (exceto os acima tratados)
-        // throw error; 
-        const mockUser: User = {
-            id: 'mock-new-' + Date.now(),
-            name,
-            email,
-            hotel,
-            role
-        };
-        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
-        if (mockObserver) mockObserver(mockUser);
-        return mockUser;
+        // Para outros erros reais, lançamos a exceção
+        throw new Error("Erro ao criar conta: " + error.message);
       }
     }
     
-    // Fallback Local Register
+    // Fallback Local Register (sem firebase configurado)
     const mockUser: User = {
         id: 'mock-new-' + Date.now(),
         name,
@@ -185,14 +189,18 @@ export const authService = {
              }
           } catch (e) { console.log("Erro ao carregar perfil extendido"); }
 
-          callback({
+          const userObj: User = {
             id: firebaseUser.uid,
             name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuario',
             email: firebaseUser.email || '',
             hotel: hotel,
             role: role,
             avatarUrl: firebaseUser.photoURL || undefined
-          });
+          };
+          
+          // Atualiza cache local
+          localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(userObj));
+          callback(userObj);
         } else {
           // Checa fallback local apenas se não houver auth real do firebase
           // Isso mantém a sessão "demo" ativa mesmo se o Firebase falhar

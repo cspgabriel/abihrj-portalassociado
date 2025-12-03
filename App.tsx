@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -51,16 +52,22 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
     setIsLoading(true);
 
     try {
+      let loggedUser: User;
+      
       if (isRegistering) {
         // Fluxo de Cadastro
         if (!name || !hotel || !role) {
           throw new Error("Por favor, preencha todos os campos.");
         }
-        await authService.register(email, password, name, hotel, role);
-        // Após registro, o Firebase faz login automático e o listener do Dashboard resolve.
+        loggedUser = await authService.register(email, password, name, hotel, role);
       } else {
         // Fluxo de Login
-        await authService.login(email, password);
+        loggedUser = await authService.login(email, password);
+      }
+
+      // CORREÇÃO: Forçar atualização imediata do estado se o login retornar um usuário
+      if (loggedUser) {
+        onLogin(loggedUser);
       }
     } catch (err: any) {
       console.error(err);
@@ -97,7 +104,7 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center gap-2">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center gap-2 animate-pulse">
             <AlertCircle className="w-4 h-4 shrink-0" />
             {error}
           </div>
