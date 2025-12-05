@@ -8,6 +8,7 @@ import PlatformTutorial from './components/PlatformTutorial';
 import InteractiveTutorial from './components/InteractiveTutorial'; // Importar novo componente
 import CalendarModal from './components/CalendarModal';
 import ServiceRequestModal from './components/ServiceRequestModal';
+import CalculatorModal from './components/CalculatorModal'; // New Import
 import AiAssistant from './components/AiAssistant';
 import ContactsPage from './components/ContactsPage';
 import WhatsAppGroupsPage from './components/WhatsAppGroupsPage';
@@ -246,6 +247,7 @@ const Dashboard: React.FC = () => {
   // Functional Modals State
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [serviceRequestBenefit, setServiceRequestBenefit] = useState<Benefit | null>(null);
+  const [calculatorType, setCalculatorType] = useState<string | null>(null); // New state for calculator
   
   // Tutorial State
   const [showInteractiveTutorial, setShowInteractiveTutorial] = useState(false);
@@ -461,6 +463,12 @@ const Dashboard: React.FC = () => {
     // 1. Links Externos
     if (benefit.externalLink) {
       window.open(benefit.externalLink, '_blank');
+      return;
+    }
+
+    // 1.5 Calculadoras (NEW)
+    if (benefit.id.startsWith('calc-')) {
+      setCalculatorType(benefit.id);
       return;
     }
 
@@ -717,6 +725,9 @@ const Dashboard: React.FC = () => {
                      benefit={serviceRequestBenefit}
                      onClose={() => setServiceRequestBenefit(null)}
                    />
+                 )}
+                 {calculatorType && (
+                    <CalculatorModal type={calculatorType} onClose={() => setCalculatorType(null)} />
                  )}
                  </>
             )}
@@ -1254,6 +1265,10 @@ const Dashboard: React.FC = () => {
           benefit={serviceRequestBenefit}
           onClose={() => setServiceRequestBenefit(null)}
         />
+      )}
+
+      {calculatorType && (
+         <CalculatorModal type={calculatorType} onClose={() => setCalculatorType(null)} />
       )}
 
       {showInteractiveTutorial && (

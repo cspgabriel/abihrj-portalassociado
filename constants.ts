@@ -814,7 +814,69 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
 
-  // --- NOVAS FERRAMENTAS & UTILITÁRIOS ONLINE ---
+  // --- CALCULADORAS HOTELEIRAS (NOVO) ---
+  {
+    id: 'calc-adr',
+    title: 'Calculadora de ADR',
+    description: 'Calcule a Tarifa Diária Média (Average Daily Rate) da sua propriedade.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'DollarSign',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular ADR'
+  },
+  {
+    id: 'calc-revpar',
+    title: 'Calculadora de RevPAR',
+    description: 'Calcule a Receita por Quarto Disponível (Revenue Per Available Room).',
+    category: BenefitCategory.TOOLS,
+    iconName: 'TrendingUp',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular RevPAR'
+  },
+  {
+    id: 'calc-goppar',
+    title: 'Calculadora de GOPPAR',
+    description: 'Calcule o Lucro Operacional Bruto por Quarto Disponível.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Calculator',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular GOPPAR'
+  },
+  {
+    id: 'calc-trevpar',
+    title: 'Calculadora de TRevPAR',
+    description: 'Calcule a Receita Total da sua propriedade por quarto disponível.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'TrendingUp',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular TRevPAR'
+  },
+  {
+    id: 'calc-trevpab',
+    title: 'Calculadora de TRevPAB',
+    description: 'Calcule a Receita Total por Cama ou Lugar Disponível.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'DollarSign',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular TRevPAB'
+  },
+  {
+    id: 'calc-occupancy',
+    title: 'Calculadora de Ocupação',
+    description: 'Calcule a Taxa de Ocupação (Occupancy Rate) da sua propriedade.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Percent',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular Ocupação'
+  },
+
+  // --- FERRAMENTAS & UTILITÁRIOS ONLINE ---
   {
     id: 'tool-youtube-summary',
     title: 'Resumir Vídeo YouTube',
