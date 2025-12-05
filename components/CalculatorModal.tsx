@@ -5,7 +5,7 @@ import { X, Calculator, RefreshCw, DollarSign, Percent, TrendingUp, Building2, B
 type CalculatorType = 'calc-adr' | 'calc-revpar' | 'calc-goppar' | 'calc-trevpar' | 'calc-trevpab' | 'calc-occupancy' | 'calc-all-in-one';
 
 interface CalculatorModalProps {
-  type: string; // We use string to match the benefit ID
+  type: string;
   onClose: () => void;
 }
 
@@ -127,11 +127,11 @@ const ComplexCalculator: React.FC = () => {
         if (days <= 0 || rooms <= 0) return;
 
         const availableRoomNights = rooms * days;
-        const occupancy = (sold / availableRoomNights) * 100;
+        const occupancy = availableRoomNights > 0 ? (sold / availableRoomNights) * 100 : 0;
         const adr = sold > 0 ? rev / sold : 0;
-        const revPar = rev / availableRoomNights;
+        const revPar = availableRoomNights > 0 ? rev / availableRoomNights : 0;
         const netRev = rev - comm;
-        const netRevPar = netRev / availableRoomNights;
+        const netRevPar = availableRoomNights > 0 ? netRev / availableRoomNights : 0;
         
         // Market Indexes
         const mpi = cOcc > 0 ? (occupancy / cOcc) * 100 : 0;

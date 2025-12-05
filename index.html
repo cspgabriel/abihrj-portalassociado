@@ -4,9 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+    
+    <!-- Security Meta Tags (Fallback para headers do servidor) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://aistudiocdn.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://generativelanguage.googleapis.com https://api.open-meteo.com; object-src 'none'; base-uri 'self';" />
+
     <title>HoteisRio - Portal do Associado</title>
+    
+    <!-- CSS & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script>
       tailwind.config = {
         theme: {
@@ -26,34 +36,28 @@
       }
     </script>
     <style>
-      body {
-        background-color: #f3f6f9;
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: .5; }
-      }
-      .loading-text {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
+      body { background-color: #f3f6f9; }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+      .loading-text { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
-  }
-}
-</script>
-<!-- Deploy fix v2.2: Security Headers Implementation -->
-</head>
+
+    <!-- Application Dependencies (Protected by CSP) -->
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+        "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
+        "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
+      }
+    }
+    </script>
+  </head>
   <body>
     <div id="root">
       <!-- Fallback visual enquanto o React carrega -->
@@ -65,7 +69,7 @@
         <p class="loading-text font-semibold">Carregando Portal HoteisRio...</p>
       </div>
     </div>
-    <!-- Script essencial para iniciar a aplicação -->
+    <!-- Entry Point -->
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
