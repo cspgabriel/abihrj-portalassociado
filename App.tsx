@@ -22,7 +22,7 @@ import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
 import RockInRioPage from './components/RockInRioPage'; // New Rock in Rio Page
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES, NEWS_ITEMS } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, PenTool, Wrench } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -540,22 +540,27 @@ const Dashboard: React.FC = () => {
     });
   };
 
-  // 1. Quick Access (Services only)
+  // 1. Quick Access (Services only, exclude Tools)
   const serviceBenefits = BENEFITS_DATA
-    .filter(b => b.isService === true)
+    .filter(b => b.isService === true && b.category !== BenefitCategory.TOOLS)
     .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory);
   const sortedServiceBenefits = getSortedData(serviceBenefits, quickAccessSortOrder);
-  
+
+  // 1.1 Tools Only
+  const toolsBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS);
+
   // 2. Catalog (Non-services or All depending on design choice)
   const filteredCatalogBenefits = BENEFITS_DATA
     .filter(b => {
        const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;
        const isQuickAccess = b.isService === true;
+       const isTool = b.category === BenefitCategory.TOOLS;
        
        if (selectedCategory !== 'Todos') {
          return matchesCategory;
        } else {
-         return !isQuickAccess && matchesCategory;
+         // Show only non-quick-access and non-tool benefits in the main catalog to avoid duplication
+         return !isQuickAccess && !isTool && matchesCategory;
        }
     });
   const sortedCatalogBenefits = getSortedData(filteredCatalogBenefits, sortOrder);
@@ -918,6 +923,36 @@ const Dashboard: React.FC = () => {
                 </div>
             )}
          </div>
+      </div>
+
+      {/* SEÇÃO NOVO: FERRAMENTAS DO HOTELEIRO (TOOLS) */}
+      <div id="tools-section" className="mb-12">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+           <div className="flex items-center gap-3">
+              <div className="p-2 bg-slate-100 text-slate-600 rounded-lg">
+                 <Wrench className="w-6 h-6" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-800">Ferramentas Online</h2>
+           </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+           {toolsBenefits.map(tool => {
+              const IconComponent = (Icons as any)[tool.iconName] || Icons.HelpCircle;
+              return (
+                 <button 
+                    key={tool.id}
+                    onClick={() => handleUseBenefit(tool)}
+                    className="flex flex-col items-center justify-center p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md hover:border-rio-blue transition-all group text-center"
+                 >
+                    <div className="w-10 h-10 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center mb-3 group-hover:bg-rio-blue group-hover:text-white transition-colors">
+                       <IconComponent className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-700 leading-tight group-hover:text-rio-blue">{tool.title}</span>
+                 </button>
+              )
+           })}
+        </div>
       </div>
 
       {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO */}

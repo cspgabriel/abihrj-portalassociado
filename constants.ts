@@ -814,6 +814,151 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
 
+  // --- NOVAS FERRAMENTAS & UTILITÁRIOS ONLINE ---
+  {
+    id: 'tool-youtube-summary',
+    title: 'Resumir Vídeo YouTube',
+    description: 'Gere resumos e transcrições automáticas de vídeos.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Youtube',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://glasp.co/youtube-summary',
+    customCta: 'Acessar Ferramenta'
+  },
+  {
+    id: 'tool-pdf-to-word',
+    title: 'PDF para Word',
+    description: 'Converta documentos PDF para DOCX editável.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'FileText',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.ilovepdf.com/pt/pdf_para_word',
+    customCta: 'Converter'
+  },
+  {
+    id: 'tool-word-to-pdf',
+    title: 'Word para PDF',
+    description: 'Salve documentos do Word como PDF.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'FileText',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.ilovepdf.com/pt/word_para_pdf',
+    customCta: 'Converter'
+  },
+  {
+    id: 'tool-pdf-to-jpg',
+    title: 'PDF para Imagem',
+    description: 'Extraia páginas do PDF como JPG ou PNG.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Image',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.ilovepdf.com/pt/pdf_para_jpg',
+    customCta: 'Converter'
+  },
+  {
+    id: 'tool-jpg-to-pdf',
+    title: 'Imagem para PDF',
+    description: 'Transforme suas fotos e scans em um arquivo PDF.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Image',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.ilovepdf.com/pt/jpg_para_pdf',
+    customCta: 'Converter'
+  },
+  {
+    id: 'tool-remove-bg',
+    title: 'Removedor de Fundo',
+    description: 'Remova o fundo de fotos automaticamente com IA.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Scissors',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.remove.bg/pt-br',
+    customCta: 'Remover Fundo'
+  },
+  {
+    id: 'tool-image-compress',
+    title: 'Compressor de Imagem',
+    description: 'Reduza o peso das fotos sem perder qualidade.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Minimize2',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://tinypng.com/',
+    customCta: 'Comprimir'
+  },
+  {
+    id: 'tool-qr-code',
+    title: 'Gerador de QR Code',
+    description: 'Crie QR Codes gratuitos para links, Wi-Fi e mais.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'QrCode',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://br.qr-code-generator.com/',
+    customCta: 'Criar QR Code'
+  },
+  {
+    id: 'tool-speed-test',
+    title: 'Teste de Velocidade',
+    description: 'Verifique a velocidade da internet do seu hotel.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Wifi',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://fast.com/pt/',
+    customCta: 'Testar Agora'
+  },
+  {
+    id: 'tool-translator',
+    title: 'Tradutor de Documentos',
+    description: 'Traduza PDFs e arquivos mantendo a formatação.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Languages',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.onlinedoctranslator.com/pt/',
+    customCta: 'Traduzir'
+  },
+  {
+    id: 'tool-currency',
+    title: 'Conversor de Moedas',
+    description: 'Taxas de câmbio atualizadas em tempo real.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Coins',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.xe.com/pt/currencyconverter/',
+    customCta: 'Converter'
+  },
+  {
+    id: 'tool-merge-pdf',
+    title: 'Juntar PDFs',
+    description: 'Mescle vários arquivos PDF em um único documento.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Files',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.ilovepdf.com/pt/juntar_pdf',
+    customCta: 'Juntar'
+  },
+  {
+    id: 'tool-sign-pdf',
+    title: 'Assinar PDF',
+    description: 'Assine documentos digitalmente de forma gratuita.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'PenTool',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://www.ilovepdf.com/pt/assinar-pdf',
+    customCta: 'Assinar'
+  },
+
   // --- SERVIÇOS (TOPO DA PÁGINA) ---
   {
     id: 'security',

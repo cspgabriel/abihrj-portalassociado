@@ -40,7 +40,8 @@ export enum BenefitCategory {
   COMMUNICATION = 'Comunicação & Marketing',
   TECHNOLOGY = 'Tecnologia',
   HR = 'Recursos Humanos',
-  SUPPORT = 'Suporte'
+  SUPPORT = 'Suporte',
+  TOOLS = 'Ferramentas Úteis'
 }
 
 export interface Benefit {
