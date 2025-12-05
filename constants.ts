@@ -814,7 +814,19 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
 
-  // --- CALCULADORAS HOTELEIRAS (NOVO) ---
+  // --- CALCULADORA HOTELEIRA COMPLETA (NOVO) ---
+  {
+    id: 'calc-all-in-one',
+    title: 'Calculadora Hoteleira Completa',
+    description: 'Calcule RevPAR, ADR, Ocupação, MPI e RGI em um único lugar.',
+    category: BenefitCategory.TOOLS,
+    iconName: 'Calculator',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    customCta: 'Calcular Métricas'
+  },
+  // --- CALCULADORAS INDIVIDUAIS ---
   {
     id: 'calc-adr',
     title: 'Calculadora de ADR',

@@ -23,7 +23,7 @@ import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
 import RockInRioPage from './components/RockInRioPage'; // New Rock in Rio Page
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES, NEWS_ITEMS } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, PenTool, Wrench } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, PenTool, Wrench, Calculator } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
@@ -548,14 +548,17 @@ const Dashboard: React.FC = () => {
     });
   };
 
-  // 1. Quick Access (Services only, exclude Tools)
+  // 1. Quick Access (Services only, exclude Tools and Calculators)
   const serviceBenefits = BENEFITS_DATA
     .filter(b => b.isService === true && b.category !== BenefitCategory.TOOLS)
     .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory);
   const sortedServiceBenefits = getSortedData(serviceBenefits, quickAccessSortOrder);
 
-  // 1.1 Tools Only
-  const toolsBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS);
+  // 1.1 Calculators Only
+  const calculatorBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && b.id.startsWith('calc-'));
+
+  // 1.2 Tools Only (General Tools)
+  const toolsBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && !b.id.startsWith('calc-'));
 
   // 2. Catalog (Non-services or All depending on design choice)
   const filteredCatalogBenefits = BENEFITS_DATA
@@ -934,6 +937,42 @@ const Dashboard: React.FC = () => {
                 </div>
             )}
          </div>
+      </div>
+
+      {/* SEÇÃO CALCULADORAS HOTELEIRAS (NOVO) */}
+      <div id="calculators-section" className="mb-12">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+           <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 text-green-600 rounded-lg">
+                 <Calculator className="w-6 h-6" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-800">Calculadoras Hoteleiras</h2>
+           </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+           {calculatorBenefits.map(calc => {
+              const IconComponent = (Icons as any)[calc.iconName] || Icons.Calculator;
+              const isHighlight = calc.id === 'calc-all-in-one';
+              return (
+                 <button 
+                    key={calc.id}
+                    onClick={() => handleUseBenefit(calc)}
+                    className={`flex flex-col items-center justify-center p-6 bg-white border rounded-xl shadow-sm hover:shadow-md transition-all group text-center
+                        ${isHighlight ? 'border-rio-gold/50 ring-1 ring-rio-gold/20' : 'border-gray-100 hover:border-rio-blue'}
+                    `}
+                 >
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-3 transition-colors
+                        ${isHighlight ? 'bg-rio-gold text-blue-900 shadow-md' : 'bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white'}
+                    `}>
+                       <IconComponent className="w-6 h-6" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-700 leading-tight group-hover:text-green-600">{calc.title}</span>
+                    {isHighlight && <span className="text-[10px] bg-rio-gold/20 text-blue-900 px-2 py-0.5 rounded mt-2 font-bold">Completa</span>}
+                 </button>
+              )
+           })}
+        </div>
       </div>
 
       {/* SEÇÃO NOVO: FERRAMENTAS DO HOTELEIRO (TOOLS) */}

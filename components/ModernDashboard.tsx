@@ -5,7 +5,7 @@ import { BENEFITS_DATA, RIO_EVENTS, COMMUNITY_ITEMS_DATA } from '../constants';
 import BenefitCard from './BenefitCard';
 import WeatherWidget from './WeatherWidget';
 import GamificationWidget from './GamificationWidget';
-import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, List, Grid, ChevronLeft, ChevronRight, ArrowDownAZ, ArrowUpAZ, Wrench } from 'lucide-react';
+import { Sparkles, Calendar, ArrowRight, Zap, Target, LayoutGrid, Users, List, Grid, ChevronLeft, ChevronRight, ArrowDownAZ, ArrowUpAZ, Wrench, Calculator } from 'lucide-react';
 import * as Icons from 'lucide-react';
 
 interface ModernDashboardProps {
@@ -44,7 +44,8 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
   const sortedBenefits = sortData(filteredBenefits);
   
   // Specific list for Tools
-  const toolsBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS);
+  const toolsBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && !b.id.startsWith('calc-'));
+  const calculatorBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && b.id.startsWith('calc-'));
 
   // --- HOME DATA ---
   const suggestedActions = BENEFITS_DATA.filter(b => b.isNew || b.id === 'calendar-01').slice(0, 3);
@@ -277,12 +278,43 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                          </div>
                       </div>
                   )}
+
+                  {/* Calculadoras Section */}
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 px-2">
+                        <Calculator className="w-6 h-6 text-green-600" />
+                        Calculadoras Hoteleiras
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {calculatorBenefits.map(calc => {
+                           const IconComponent = (Icons as any)[calc.iconName] || Icons.Calculator;
+                           const isHighlight = calc.id === 'calc-all-in-one';
+                           return (
+                             <button 
+                               key={calc.id}
+                               onClick={() => onUseBenefit(calc)}
+                               className={`flex flex-col items-center justify-center p-4 rounded-2xl border shadow-sm hover:shadow-md transition-all group
+                                    ${isHighlight ? 'bg-white border-rio-gold/50 ring-1 ring-rio-gold/20' : 'bg-white border-gray-100 hover:border-rio-blue'}
+                               `}
+                             >
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-2 transition-colors
+                                     ${isHighlight ? 'bg-rio-gold text-blue-900' : 'bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white'}
+                                `}>
+                                   <IconComponent className="w-5 h-5" />
+                                </div>
+                                <span className="text-xs font-bold text-gray-700 text-center">{calc.title}</span>
+                                {isHighlight && <span className="text-[10px] bg-rio-gold/20 text-blue-900 px-2 py-0.5 rounded mt-1 font-bold">Completa</span>}
+                             </button>
+                           )
+                        })}
+                    </div>
+                  </div>
                   
                   {/* Tools / Ferramentas Online (Quick Access Row) */}
                   <div>
                     <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 px-2">
                         <Wrench className="w-6 h-6 text-slate-500" />
-                        Ferramentas do Hoteleiro
+                        Ferramentas Online
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         {toolsBenefits.slice(0, 5).map(tool => {
