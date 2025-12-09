@@ -1,4 +1,6 @@
 
+
+
 import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory, HotelSector } from '../types';
 import { 
@@ -244,7 +246,7 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button 
                     onClick={() => {
-                        const calendar = BENEFITS_DATA.find(b => b.id === 'calendar-2-0');
+                        const calendar = BENEFITS_DATA.find(b => b.id === 'calendar-2026');
                         if (calendar && onBenefitClick) {
                             onBenefitClick(calendar);
                         }
@@ -252,7 +254,7 @@ const Layout: React.FC<LayoutProps> = ({
                     className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-yellow-300 hover:bg-white/10 hover:text-white transition-all font-semibold group text-sm"
                 >
                     <Sparkles className="w-4 h-4 group-hover:animate-pulse" />
-                    Calendário de Eventos 2.0
+                    Calendário 2026
                 </button>
 
                 <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
@@ -430,7 +432,7 @@ const Layout: React.FC<LayoutProps> = ({
 
                  <button 
                     onClick={() => {
-                        const calendar = BENEFITS_DATA.find(b => b.id === 'calendar-2-0');
+                        const calendar = BENEFITS_DATA.find(b => b.id === 'calendar-2026');
                         if (calendar && onBenefitClick) {
                             onBenefitClick(calendar);
                             setIsMobileMenuOpen(false);
@@ -438,7 +440,7 @@ const Layout: React.FC<LayoutProps> = ({
                     }}
                     className="w-full text-left text-yellow-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3"
                  >
-                    <Sparkles className="w-5 h-5" /> Calendário 2.0
+                    <Sparkles className="w-5 h-5" /> Calendário 2026
                  </button>
                  
                  <button onClick={onLogout} className="w-full text-left text-red-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3 mt-4 border-t border-white/10 pt-4">

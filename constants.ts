@@ -590,7 +590,28 @@ export const CALCULATOR_TOOLS: Benefit[] = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
-  // --- CALENDÁRIO 2.0 (NOVO) ---
+  // --- CALENDÁRIO 2026 (NOVO BANNER) ---
+  {
+    id: 'calendar-2026',
+    title: 'Calendário de Eventos 2026',
+    description: 'Planejamento antecipado! Confira feriados, congressos e grandes eventos confirmados para 2026.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
+    iconName: 'CalendarRange',
+    imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    externalLink: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    customCta: 'Acessar Calendário 2026',
+    usageSteps: [
+      "Acesse a plataforma clicando em 'Acessar Calendário 2026'.",
+      "Navegue pelos meses para ver a previsão de demanda.",
+      "Utilize os filtros para encontrar eventos corporativos ou de lazer.",
+      "Planeje suas tarifas com máxima antecedência."
+    ]
+  },
+  // --- CALENDÁRIO 2.0 (ANTIGO/ATUAL) ---
   {
     id: 'calendar-2-0',
     title: 'Calendário de Eventos 2.0',

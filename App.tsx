@@ -3,6 +3,8 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -615,6 +617,7 @@ const Dashboard: React.FC = () => {
 
   // --- SLIDER LOGIC ---
   const highlightIds = [
+      'calendar-2026',
       'highlight-top-hotel-25',
       'natal-2025', 
       'highlight-drinks', 
@@ -644,6 +647,7 @@ const Dashboard: React.FC = () => {
 
   const getSlideGradient = (id: string) => {
       switch (id) {
+          case 'calendar-2026': return 'from-indigo-600 to-purple-800 border-indigo-500/50';
           case 'highlight-top-hotel-25': return 'from-yellow-500 to-amber-600 border-yellow-600/50';
           case 'natal-2025': return 'from-red-700 to-red-900 border-red-800/50';
           case 'highlight-drinks': return 'from-blue-700 to-slate-800 border-blue-800/50';
@@ -656,6 +660,7 @@ const Dashboard: React.FC = () => {
 
   const getSlideAccentColor = (id: string) => {
       switch (id) {
+          case 'calendar-2026': return 'text-indigo-200 bg-indigo-900 text-white';
           case 'highlight-top-hotel-25': return 'text-yellow-900 bg-white text-yellow-900';
           case 'natal-2025': return 'text-yellow-300 bg-yellow-400 text-red-900';
           case 'highlight-drinks': return 'text-cyan-300 bg-cyan-400 text-blue-900';
