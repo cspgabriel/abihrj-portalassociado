@@ -1,4 +1,5 @@
 
+
 import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge, HotelSector } from './types';
 
 export const MOCK_USER = {
@@ -601,8 +602,8 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
-    embedUrl: 'http://calendariodeeventos.sindhoteisrj.com.br/',
-    externalLink: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    embedUrl: 'https://calendariodeeventos.sindhoteisrj.com.br/?mode=embed',
+    externalLink: 'https://calendariodeeventos.sindhoteisrj.com.br/',
     customCta: 'Acessar Calendário 2026',
     usageSteps: [
       "Acesse a plataforma clicando em 'Acessar Calendário 2026'.",
@@ -622,8 +623,8 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
-    embedUrl: 'http://calendariodeeventos.sindhoteisrj.com.br/',
-    externalLink: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    embedUrl: 'https://calendariodeeventos.sindhoteisrj.com.br/?mode=embed',
+    externalLink: 'https://calendariodeeventos.sindhoteisrj.com.br/',
     usageSteps: [
       "Acesse a plataforma clicando em 'Utilizar'.",
       "Filtre por data, tipo de evento ou região.",
