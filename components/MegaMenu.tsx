@@ -3,7 +3,7 @@ import React from 'react';
 import { Benefit, BenefitCategory, Forum } from '../types';
 import { BENEFITS_DATA, FORUMS_DATA } from '../constants';
 import * as Icons from 'lucide-react';
-import { ChevronRight, Star, Users, Zap } from 'lucide-react';
+import { ChevronRight, Star, Users } from 'lucide-react';
 
 interface MegaMenuProps {
   isOpen: boolean;
@@ -161,22 +161,6 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, mode = 'BENEFITS', onClose,
           })}
         </div>
         )}
-        
-        {/* Footer Promocional do Menu */}
-        <div className="mt-8 pt-6 border-t border-gray-100 bg-gray-50 -mx-8 -mb-8 px-8 pb-8 flex justify-between items-center">
-           <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-rio-blue rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                 <Zap className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-800">Clube de Benefícios HoteisRio</h4>
-                <p className="text-sm text-gray-500">Mais de 20 serviços exclusivos para associados.</p>
-              </div>
-           </div>
-           <button onClick={onClose} className="text-sm text-rio-blue font-semibold hover:underline bg-white px-4 py-2 rounded-lg border border-blue-100 shadow-sm">
-             Fechar Menu
-           </button>
-        </div>
       </div>
       
       {/* Backdrop for outside click simulation if needed, though mouseleave handles desktop */}

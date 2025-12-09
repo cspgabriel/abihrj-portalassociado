@@ -2,7 +2,7 @@
 import React from 'react';
 import { ArrowLeft, Calculator, TrendingUp, PieChart, BarChart3 } from 'lucide-react';
 import { Benefit, BenefitCategory } from '../types';
-import { BENEFITS_DATA } from '../constants';
+import { CALCULATOR_TOOLS } from '../constants';
 import BenefitCard from './BenefitCard';
 
 interface CalculatorsPageProps {
@@ -11,8 +11,8 @@ interface CalculatorsPageProps {
 }
 
 const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onBack, onOpenCalculator }) => {
-  // Filter all calculator tools
-  const calculators = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && b.id.startsWith('calc-'));
+  // Use the separated constant list
+  const calculators = CALCULATOR_TOOLS;
 
   return (
     <div className="bg-gray-50 min-h-screen pb-12 animate-fade-in">

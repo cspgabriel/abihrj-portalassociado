@@ -1,6 +1,8 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -424,6 +426,11 @@ const Dashboard: React.FC = () => {
   const handleViewDetails = (benefit: Benefit) => {
     awardXP(XP_REWARDS.VIEW_DETAILS, `view-${benefit.id}`);
 
+    if (benefit.id === 'calculators-hub') {
+      setCurrentView('CALCULATORS_PAGE');
+      return;
+    }
+
     if (benefit.id === 'laws-regulations') {
       setCurrentView('LAWS_REGULATIONS');
       return;
@@ -467,6 +474,11 @@ const Dashboard: React.FC = () => {
   // Botão "Utilizar": Executa a ação direta (Modal de serviço, Calendário, etc.)
   const handleUseBenefit = (benefit: Benefit) => {
     awardXP(XP_REWARDS.USE_BENEFIT, `use-${benefit.id}`);
+
+    if (benefit.id === 'calculators-hub') {
+      setCurrentView('CALCULATORS_PAGE');
+      return;
+    }
 
     // CALCULATORS LOGIC
     if (benefit.category === BenefitCategory.TOOLS && benefit.id.startsWith('calc-')) {
@@ -579,7 +591,7 @@ const Dashboard: React.FC = () => {
 
   // 1. UNIFIED MAIN GRID (MERGED CATALOG & SERVICES)
   const allBenefits = BENEFITS_DATA
-    .filter(b => !b.id.startsWith('calc-')) // Exclude calculators as they have a banner
+    .filter(b => !b.id.startsWith('calc-') || b.id === 'calculators-hub') // Ensure individual calcs are hidden, hub is shown
     .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory)
     .filter(b => 
       quickAccessSearchTerm === '' ||

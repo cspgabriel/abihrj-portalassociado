@@ -1,6 +1,4 @@
 
-
-
 import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory, HotelSector } from '../types';
 import { 
@@ -133,7 +131,7 @@ const Layout: React.FC<LayoutProps> = ({
                 `}
                 >
                 <LayoutGrid className="w-5 h-5" />
-                Ver Todos os Benefícios
+                Todos os Benefícios
                 </button>
             </div>
 
@@ -414,6 +412,10 @@ const Layout: React.FC<LayoutProps> = ({
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
                  <button onClick={() => { onNavigate('DASHBOARD'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
                     <LayoutDashboard className="w-5 h-5" /> Início
+                 </button>
+
+                 <button onClick={() => { onNavigate('ALL_BENEFITS'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <LayoutGrid className="w-5 h-5" /> Todos os Benefícios
                  </button>
                  
                  <div className="pt-4 pb-2 text-xs text-blue-300 font-bold uppercase tracking-widest border-b border-white/10 mb-2">Departamentos</div>

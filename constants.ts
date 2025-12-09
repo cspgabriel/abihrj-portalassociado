@@ -1,7 +1,4 @@
 
-
-
-
 import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge, HotelSector } from './types';
 
 export const MOCK_USER = {
@@ -72,7 +69,7 @@ export const SUPER_CATEGORIES = [
     title: 'Jurídico & Legislativo',
     description: 'Suporte legal completo, leis atualizadas e defesa dos interesses da hotelaria.',
     iconName: 'Scale',
-    gradient: 'from-slate-700 to-slate-900',
+    gradient: 'from-blue-800 to-slate-900',
     categories: [BenefitCategory.LEGAL]
   },
   {
@@ -98,14 +95,6 @@ export const SUPER_CATEGORIES = [
     iconName: 'GraduationCap',
     gradient: 'from-emerald-600 to-teal-800',
     categories: [BenefitCategory.TRAINING]
-  },
-  {
-    id: 'clube',
-    title: 'Clube de Benefícios',
-    description: 'Parcerias exclusivas, descontos e convênios para associados.',
-    iconName: 'Gem',
-    gradient: 'from-orange-500 to-red-600',
-    categories: [BenefitCategory.PARTNERS, BenefitCategory.INSTITUTIONAL]
   }
 ];
 
@@ -512,29 +501,8 @@ export const OTHER_BENEFITS_LIST = [
   "Parcerias com empresas de energia renovável"
 ];
 
-export const BENEFITS_DATA: Benefit[] = [
-  // --- CALENDÁRIO 2.0 (NOVO) ---
-  {
-    id: 'calendar-2-0',
-    title: 'Calendário de Eventos 2.0',
-    description: 'Nova plataforma interativa com eventos, congressos e shows do Rio de Janeiro.',
-    category: BenefitCategory.EVENTS,
-    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
-    iconName: 'CalendarDays',
-    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    isNew: true,
-    embedUrl: 'http://calendariodeeventos.sindhoteisrj.com.br/',
-    externalLink: 'http://calendariodeeventos.sindhoteisrj.com.br/',
-    usageSteps: [
-      "Acesse a plataforma clicando em 'Utilizar'.",
-      "Filtre por data, tipo de evento ou região.",
-      "Planeje suas tarifas e pacotes com base na demanda.",
-      "O sistema abre diretamente no portal para sua conveniência."
-    ]
-  },
-
-  // --- CALCULADORAS ---
+// --- SEPARATED CALCULATOR TOOLS LIST ---
+export const CALCULATOR_TOOLS: Benefit[] = [
   {
     id: 'calc-all-in-one',
     title: 'Calculadora Hoteleira Completa',
@@ -618,6 +586,42 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: '',
     isService: true,
     customCta: 'Acesse',
+  }
+];
+
+export const BENEFITS_DATA: Benefit[] = [
+  // --- CALENDÁRIO 2.0 (NOVO) ---
+  {
+    id: 'calendar-2-0',
+    title: 'Calendário de Eventos 2.0',
+    description: 'Nova plataforma interativa com eventos, congressos e shows do Rio de Janeiro.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
+    iconName: 'CalendarDays',
+    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    externalLink: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse a plataforma clicando em 'Utilizar'.",
+      "Filtre por data, tipo de evento ou região.",
+      "Planeje suas tarifas e pacotes com base na demanda.",
+      "O sistema abre diretamente no portal para sua conveniência."
+    ]
+  },
+
+  // --- HUB DE CALCULADORAS (ITEM ÚNICO) ---
+  {
+    id: 'calculators-hub',
+    title: 'Calculadoras para Hotelaria',
+    description: 'Acesse ferramentas de ADR, RevPAR, GOPPAR e muito mais.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Calculator',
+    imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    customCta: 'Acessar Ferramentas'
   },
 
   // --- DESTAQUES EXISTENTES ---
@@ -833,7 +837,7 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'portal-fornecedores-new',
-    title: 'Portal de Fornecedores',
+    title: 'Fornecedores para Hotéis',
     description: 'Encontre parceiros homologados e negociações exclusivas.',
     category: BenefitCategory.PARTNERS,
     targetSectors: ['MANAGEMENT', 'MAINTENANCE', 'HOUSEKEEPING', 'FB'],
@@ -1203,21 +1207,6 @@ export const BENEFITS_DATA: Benefit[] = [
       "Inscreva seus colaboradores via portal.",
       "Os cursos podem ser presenciais ou EAD.",
       "Certificados são emitidos após a conclusão."
-    ]
-  },
-  {
-    id: 'suppliers',
-    title: 'Fornecedores Parceiros',
-    description: 'Clube de compras com condições exclusivas para associados.',
-    category: BenefitCategory.PARTNERS,
-    targetSectors: ['MANAGEMENT', 'MAINTENANCE', 'HOUSEKEEPING', 'FB'],
-    iconName: 'Handshake',
-    imageUrl: 'https://images.unsplash.com/photo-1472851294608-415522f96319?auto=format&fit=crop&q=80&w=400',
-    usageSteps: [
-      "Acesse o guia de fornecedores no portal.",
-      "Identifique as empresas com o selo 'Parceiro Oficial'.",
-      "Informe que é associado HoteisRio no momento da cotação.",
-      "Aproveite tabelas de preços e prazos diferenciados."
     ]
   },
   {
