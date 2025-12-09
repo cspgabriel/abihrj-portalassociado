@@ -1,19 +1,21 @@
 
 
 
+
+
 import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory, HotelSector } from '../types';
 import { 
   Home, Users, MessageCircle, LogOut, Menu, X, Search, 
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
-  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText
 } from 'lucide-react';
 import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -262,6 +264,11 @@ const Layout: React.FC<LayoutProps> = ({
                     Calculadoras
                 </button>
 
+                <button onClick={() => onNavigate('CATEGORIZER')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+                    <FileText className="w-4 h-4" />
+                    Gerador de Relatórios
+                </button>
+
                 <button onClick={() => onNavigate('WHATSAPP_GROUPS')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
                     <MessageCircle className="w-4 h-4" />
                     Grupos WhatsApp
@@ -441,6 +448,10 @@ const Layout: React.FC<LayoutProps> = ({
                     className="w-full text-left text-yellow-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3"
                  >
                     <Sparkles className="w-5 h-5" /> Calendário 2026
+                 </button>
+
+                 <button onClick={() => { onNavigate('CATEGORIZER'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <FileText className="w-5 h-5" /> Ferramenta de Relatórios
                  </button>
                  
                  <button onClick={onLogout} className="w-full text-left text-red-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3 mt-4 border-t border-white/10 pt-4">

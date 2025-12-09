@@ -5,6 +5,8 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -31,6 +33,7 @@ import CalculatorsPage from './components/CalculatorsPage'; // New Page
 import CategoryListingPage from './components/CategoryListingPage'; // New Page
 import AllBenefitsPage from './components/AllBenefitsPage'; // New Page
 import ServiceViewerPage from './components/ServiceViewerPage'; // New Iframe Viewer
+import BenefitCategorizerPage from './components/BenefitCategorizerPage'; // New Categorizer Tool
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile, HotelSector } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES, NEWS_ITEMS } from './constants';
 import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, Calculator, TrendingUp, Search } from 'lucide-react';
@@ -38,7 +41,7 @@ import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER';
 
 // --- Components ---
 
@@ -274,6 +277,15 @@ const Dashboard: React.FC = () => {
     month: 'long',
     day: 'numeric'
   });
+
+  // URL Parameter Check for Special Views (Categorizer)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get('view');
+    if (viewParam === 'categorizer') {
+       setCurrentView('CATEGORIZER');
+    }
+  }, []);
 
   // Check for existing session on load using Firebase Real Listener
   useEffect(() => {
@@ -558,6 +570,13 @@ const Dashboard: React.FC = () => {
     setSelectedBenefitForDetails(null);
     setSelectedForum(null);
     setSelectedSuperCategory('');
+    
+    // Clean URL if exiting special view
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('view')) {
+       url.searchParams.delete('view');
+       window.history.replaceState({}, '', url);
+    }
   };
 
   const handleOpenPublicOrderModal = () => {
@@ -678,6 +697,11 @@ const Dashboard: React.FC = () => {
         <p className="text-gray-500 text-sm">Carregando Central do Associado...</p>
       </div>
     );
+  }
+
+  // Handle CATEGORIZER View (Accessible without login if via direct link, or with login)
+  if (currentView === 'CATEGORIZER') {
+     return <BenefitCategorizerPage onBack={handleBackToDashboard} />;
   }
 
   if (!user) {
