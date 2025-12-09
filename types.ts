@@ -41,14 +41,17 @@ export enum BenefitCategory {
   TECHNOLOGY = 'Tecnologia',
   HR = 'Recursos Humanos',
   SUPPORT = 'Suporte',
-  TOOLS = 'Ferramentas Úteis'
+  TOOLS = 'Ferramentas & Calculadoras'
 }
+
+export type HotelSector = 'MANAGEMENT' | 'RECEPTION' | 'HOUSEKEEPING' | 'MAINTENANCE' | 'SALES' | 'HR' | 'LEGAL_DEPT' | 'FB';
 
 export interface Benefit {
   id: string;
   title: string;
   description: string;
   category: BenefitCategory;
+  targetSectors?: HotelSector[]; // New field for sector filtering
   iconName: string; // We map string to icon component in UI
   imageUrl: string;
   fullDetails?: string;
@@ -59,6 +62,7 @@ export interface Benefit {
   downloadUrl?: string; // URL direta para download de arquivos
   dashboardUrl?: string; // URL para dashboard externo (ex: Ordem Pública)
   customCta?: string; // Texto personalizado para o botão de ação
+  embedUrl?: string; // URL otimizada para iframe (se diferente do externalLink)
 }
 
 export interface Forum {

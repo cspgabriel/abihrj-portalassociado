@@ -12,7 +12,7 @@
         "headers": [
           {
             "key": "Strict-Transport-Security",
-            "value": "max-age=31536000; includeSubDomains; preload"
+            "value": "max-age=31536000; includeSubDomains"
           },
           {
             "key": "X-Frame-Options",
@@ -23,20 +23,12 @@
             "value": "nosniff"
           },
           {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          },
-          {
             "key": "Referrer-Policy",
             "value": "strict-origin-when-cross-origin"
           },
           {
             "key": "Permissions-Policy",
             "value": "accelerometer=(), camera=(self), geolocation=(self), gyroscope=(), magnetometer=(), microphone=(self), payment=(), usb=()"
-          },
-          {
-            "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://aistudiocdn.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://generativelanguage.googleapis.com https://api.open-meteo.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
           }
         ]
       }

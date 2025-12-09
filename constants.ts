@@ -1,5 +1,8 @@
 
-import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge } from './types';
+
+
+
+import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge, HotelSector } from './types';
 
 export const MOCK_USER = {
   name: "Carlos Silva",
@@ -48,6 +51,61 @@ export const NEWS_ITEMS = [
     category: "Eventos",
     image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400",
     link: "https://sindhoteisrj.com.br/category/acoes-realizadas"
+  }
+];
+
+// --- SECTORS DEFINITION ---
+export const HOTEL_SECTORS = [
+  { id: 'MANAGEMENT', label: 'Gerência Geral', iconName: 'Briefcase' },
+  { id: 'RECEPTION', label: 'Recepção & Reservas', iconName: 'ConciergeBell' },
+  { id: 'SALES', label: 'Comercial & Vendas', iconName: 'TrendingUp' },
+  { id: 'HR', label: 'Recursos Humanos', iconName: 'Users' },
+  { id: 'MAINTENANCE', label: 'Manutenção', iconName: 'Wrench' },
+  { id: 'HOUSEKEEPING', label: 'Governança', iconName: 'Bed' },
+  { id: 'FB', label: 'Alimentos & Bebidas', iconName: 'Utensils' },
+];
+
+// --- SUPER CATEGORIES DEFINITION ---
+export const SUPER_CATEGORIES = [
+  {
+    id: 'juridico',
+    title: 'Jurídico & Legislativo',
+    description: 'Suporte legal completo, leis atualizadas e defesa dos interesses da hotelaria.',
+    iconName: 'Scale',
+    gradient: 'from-slate-700 to-slate-900',
+    categories: [BenefitCategory.LEGAL]
+  },
+  {
+    id: 'gestao',
+    title: 'Gestão & Operação',
+    description: 'Ferramentas para RH, Tecnologia, Manutenção e eficiência operacional.',
+    iconName: 'Briefcase',
+    gradient: 'from-blue-600 to-indigo-800',
+    categories: [BenefitCategory.OPERATIONAL, BenefitCategory.HR, BenefitCategory.TECHNOLOGY, BenefitCategory.SUPPORT, BenefitCategory.TOOLS]
+  },
+  {
+    id: 'comercial',
+    title: 'Comercial & Marketing',
+    description: 'Estatísticas, eventos, calendário da cidade e promoção do destino.',
+    iconName: 'TrendingUp',
+    gradient: 'from-purple-600 to-pink-700',
+    categories: [BenefitCategory.COMMERCIAL, BenefitCategory.COMMUNICATION, BenefitCategory.EVENTS, BenefitCategory.STATISTICS]
+  },
+  {
+    id: 'educacao',
+    title: 'Educação & Treinamento',
+    description: 'Cursos, palestras e capacitação contínua para sua equipe.',
+    iconName: 'GraduationCap',
+    gradient: 'from-emerald-600 to-teal-800',
+    categories: [BenefitCategory.TRAINING]
+  },
+  {
+    id: 'clube',
+    title: 'Clube de Benefícios',
+    description: 'Parcerias exclusivas, descontos e convênios para associados.',
+    iconName: 'Gem',
+    gradient: 'from-orange-500 to-red-600',
+    categories: [BenefitCategory.PARTNERS, BenefitCategory.INSTITUTIONAL]
   }
 ];
 
@@ -455,12 +513,120 @@ export const OTHER_BENEFITS_LIST = [
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
-  // --- DESTAQUES ---
+  // --- CALENDÁRIO 2.0 (NOVO) ---
+  {
+    id: 'calendar-2-0',
+    title: 'Calendário de Eventos 2.0',
+    description: 'Nova plataforma interativa com eventos, congressos e shows do Rio de Janeiro.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
+    iconName: 'CalendarDays',
+    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    externalLink: 'http://calendariodeeventos.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Acesse a plataforma clicando em 'Utilizar'.",
+      "Filtre por data, tipo de evento ou região.",
+      "Planeje suas tarifas e pacotes com base na demanda.",
+      "O sistema abre diretamente no portal para sua conveniência."
+    ]
+  },
+
+  // --- CALCULADORAS ---
+  {
+    id: 'calc-all-in-one',
+    title: 'Calculadora Hoteleira Completa',
+    description: 'Calcule ADR, RevPAR, MPI, RGI e Net RevPAR em um só lugar.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Calculator',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    customCta: 'Calcular Agora',
+    usageSteps: [
+      "Insira o período e inventário do hotel.",
+      "Informe receitas e comissões.",
+      "Adicione dados de mercado (concorrência).",
+      "Receba relatório completo de performance."
+    ]
+  },
+  {
+    id: 'calc-adr',
+    title: 'ADR',
+    description: 'Calcule a Tarifa Diária Média da sua propriedade.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'DollarSign',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acesse',
+  },
+  {
+    id: 'calc-revpar',
+    title: 'RevPAR',
+    description: 'Calcule a Receita por Quarto Disponível.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'BarChart',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acesse',
+  },
+  {
+    id: 'calc-goppar',
+    title: 'GOPPAR',
+    description: 'Calcule o lucro operacional bruto por quarto.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT'],
+    iconName: 'PieChart',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acesse',
+  },
+  {
+    id: 'calc-trevpar',
+    title: 'TRevPAR',
+    description: 'Calcule a receita total por quarto disponível.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'TrendingUp',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acesse',
+  },
+  {
+    id: 'calc-trevpab',
+    title: 'TRevPAB',
+    description: 'Calcule a receita total por cama disponível.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Bed',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acesse',
+  },
+  {
+    id: 'calc-occ',
+    title: 'Ocupação (OCC)',
+    description: 'Calcule a Taxa de Ocupação da sua propriedade.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES', 'RECEPTION'],
+    iconName: 'Percent',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acesse',
+  },
+
+  // --- DESTAQUES EXISTENTES ---
   {
     id: 'highlight-top-hotel-25',
     title: 'Prêmio Top Hotel RJ 2025',
     description: 'Confira os vencedores e as melhores práticas do setor.',
     category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'SALES', 'HR'],
     iconName: 'Trophy',
     imageUrl: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -478,6 +644,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Curso: Identificação de Bebidas Falsas',
     description: 'Workshop técnico em parceria com ABBD e Procon RJ.',
     category: BenefitCategory.TRAINING,
+    targetSectors: ['FB', 'MAINTENANCE'],
     iconName: 'Wine',
     imageUrl: 'https://images.unsplash.com/photo-1569937756447-e1603f99e69c?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -494,6 +661,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Viva o Rio com o Rock in Rio 2026',
     description: 'Cadastre seu hotel no hub oficial de benefícios do festival. Adesão gratuita.',
     category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['MANAGEMENT', 'SALES'],
     iconName: 'Music',
     imageUrl: 'https://images.unsplash.com/photo-1459749411177-0473ef485078?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -510,6 +678,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Feira de Empregabilidade',
     description: 'Parceria com a Secretaria de Trabalho para captar talentos.',
     category: BenefitCategory.HR,
+    targetSectors: ['HR', 'MANAGEMENT'],
     iconName: 'Briefcase',
     imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -527,6 +696,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Cadastro de Grandes Eventos',
     description: 'Procedimento obrigatório via SETUR-RJ e órgãos de segurança.',
     category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MANAGEMENT', 'SALES', 'RECEPTION'],
     iconName: 'FileCheck',
     imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -543,11 +713,13 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Portal de Notícias HoteisRio',
     description: 'Fique por dentro das últimas novidades da hotelaria carioca e nacional.',
     category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'SALES', 'HR'],
     iconName: 'Newspaper',
     imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
     externalLink: 'https://sindhoteisrj.com.br/noticias',
+    embedUrl: 'https://sindhoteisrj.com.br/noticias',
     customCta: 'Ler Notícias',
     usageSteps: [
       "Acesse o portal para ler artigos, entrevistas e comunicados.",
@@ -560,6 +732,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Concurso de Decoração Natalina 2025',
     description: 'Inscrições abertas! Participe e destaque seu hotel na celebração mais mágica do Rio.',
     category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'SALES', 'MAINTENANCE'],
     iconName: 'Gift',
     imageUrl: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -572,338 +745,12 @@ export const BENEFITS_DATA: Benefit[] = [
       "Participe da cerimônia de premiação."
     ]
   },
-  
-  // --- CALCULADORAS HOTELEIRAS ---
-  {
-    id: 'calc-all-in-one',
-    title: 'Calculadora Hoteleira Completa',
-    description: 'Calcule RevPAR, ADR, Ocupação, MPI e RGI em um único lugar.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Calculator',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    customCta: 'Calcular Métricas'
-  },
-  {
-    id: 'calc-adr',
-    title: 'Calculadora de ADR',
-    description: 'Calcule a Tarifa Diária Média (Average Daily Rate).',
-    category: BenefitCategory.TOOLS,
-    iconName: 'DollarSign',
-    imageUrl: '',
-    isService: true,
-    customCta: 'Calcular ADR'
-  },
-  {
-    id: 'calc-revpar',
-    title: 'Calculadora de RevPAR',
-    description: 'Calcule a Receita por Quarto Disponível.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'TrendingUp',
-    imageUrl: '',
-    isService: true,
-    customCta: 'Calcular RevPAR'
-  },
-  {
-    id: 'calc-goppar',
-    title: 'Calculadora de GOPPAR',
-    description: 'Calcule o Lucro Operacional Bruto por Quarto.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Calculator',
-    imageUrl: '',
-    isService: true,
-    customCta: 'Calcular GOPPAR'
-  },
-  {
-    id: 'calc-trevpar',
-    title: 'Calculadora de TRevPAR',
-    description: 'Calcule a Receita Total por quarto disponível.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'TrendingUp',
-    imageUrl: '',
-    isService: true,
-    customCta: 'Calcular TRevPAR'
-  },
-  {
-    id: 'calc-trevpab',
-    title: 'Calculadora de TRevPAB',
-    description: 'Calcule a Receita Total por Cama ou Lugar.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'DollarSign',
-    imageUrl: '',
-    isService: true,
-    customCta: 'Calcular TRevPAB'
-  },
-  {
-    id: 'calc-occupancy',
-    title: 'Calculadora de Ocupação',
-    description: 'Calcule a Taxa de Ocupação da sua propriedade.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Percent',
-    imageUrl: '',
-    isService: true,
-    customCta: 'Calcular Ocupação'
-  },
-
-  // --- FERRAMENTAS ONLINE ---
-  {
-    id: 'tool-youtube-summary',
-    title: 'Resumir Vídeo YouTube',
-    description: 'Gere resumos e transcrições automáticas de vídeos.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Youtube',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://glasp.co/youtube-summary',
-    customCta: 'Acessar Ferramenta'
-  },
-  {
-    id: 'tool-pdf-to-word',
-    title: 'PDF para Word',
-    description: 'Converta documentos PDF para DOCX editável.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'FileText',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.ilovepdf.com/pt/pdf_para_word',
-    customCta: 'Converter'
-  },
-  {
-    id: 'tool-word-to-pdf',
-    title: 'Word para PDF',
-    description: 'Salve documentos do Word como PDF.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'FileText',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.ilovepdf.com/pt/word_para_pdf',
-    customCta: 'Converter'
-  },
-  {
-    id: 'tool-pdf-to-jpg',
-    title: 'PDF para Imagem',
-    description: 'Extraia páginas do PDF como JPG ou PNG.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Image',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.ilovepdf.com/pt/pdf_para_jpg',
-    customCta: 'Converter'
-  },
-  {
-    id: 'tool-jpg-to-pdf',
-    title: 'Imagem para PDF',
-    description: 'Transforme suas fotos e scans em um arquivo PDF.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Image',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.ilovepdf.com/pt/jpg_para_pdf',
-    customCta: 'Converter'
-  },
-  {
-    id: 'tool-remove-bg',
-    title: 'Removedor de Fundo',
-    description: 'Remova o fundo de fotos automaticamente com IA.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Scissors',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.remove.bg/pt-br',
-    customCta: 'Remover Fundo'
-  },
-  {
-    id: 'tool-image-compress',
-    title: 'Compressor de Imagem',
-    description: 'Reduza o peso das fotos sem perder qualidade.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Minimize2',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://tinypng.com/',
-    customCta: 'Comprimir'
-  },
-  {
-    id: 'tool-qr-code',
-    title: 'Gerador de QR Code',
-    description: 'Crie QR Codes gratuitos para links, Wi-Fi e mais.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'QrCode',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://br.qr-code-generator.com/',
-    customCta: 'Criar QR Code'
-  },
-  {
-    id: 'tool-speed-test',
-    title: 'Teste de Velocidade',
-    description: 'Verifique a velocidade da internet do seu hotel.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Wifi',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://fast.com/pt/',
-    customCta: 'Testar Agora'
-  },
-  {
-    id: 'tool-translator',
-    title: 'Tradutor de Documentos',
-    description: 'Traduza PDFs e arquivos mantendo a formatação.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Languages',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.onlinedoctranslator.com/pt/',
-    customCta: 'Traduzir'
-  },
-  {
-    id: 'tool-currency',
-    title: 'Conversor de Moedas',
-    description: 'Taxas de câmbio atualizadas em tempo real.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Coins',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.xe.com/pt/currencyconverter/',
-    customCta: 'Converter'
-  },
-  {
-    id: 'tool-merge-pdf',
-    title: 'Juntar PDFs',
-    description: 'Mescle vários arquivos PDF em um único documento.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'Files',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.ilovepdf.com/pt/juntar_pdf',
-    customCta: 'Juntar'
-  },
-  {
-    id: 'tool-sign-pdf',
-    title: 'Assinar PDF',
-    description: 'Assine documentos digitalmente de forma gratuita.',
-    category: BenefitCategory.TOOLS,
-    iconName: 'PenTool',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://www.ilovepdf.com/pt/assinar-pdf',
-    customCta: 'Assinar'
-  },
-  
-  // --- OUTROS SERVIÇOS (Acesso Rápido) ---
-  {
-    id: 'security',
-    title: 'Segurança',
-    description: 'Parceria com forças policiais para segurança turística.',
-    category: BenefitCategory.OPERATIONAL,
-    iconName: 'Shield',
-    imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    usageSteps: [
-      "Utilize o Demanda de Ordem Pública para reportes não emergenciais.",
-      "Em caso de emergência, utilize o botão de pânico (se disponível) ou ligue 190.",
-      "Participe das reuniões mensais com o BPTur e DEAT.",
-      "Receba orientações preventivas para hóspedes."
-    ]
-  },
-  {
-    id: 'juridico-01',
-    title: 'Assessoria Jurídica',
-    description: 'Abertura de chamados e suporte especializado em causas trabalhistas.',
-    category: BenefitCategory.LEGAL,
-    iconName: 'Scale',
-    imageUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    usageSteps: [
-      "Clique no botão 'Utilizar' para abrir o formulário oficial.",
-      "Preencha os dados do hotel e o tipo de demanda (Trabalhista, Cível ou Tributária).",
-      "Anexe documentos relevantes se houver.",
-      "Aguarde o retorno da equipe jurídica em até 48 horas úteis via e-mail."
-    ]
-  },
-  {
-    id: 'laws-regulations',
-    title: 'Decretos e Leis RJ',
-    description: 'Consulta completa à legislação hoteleira vigente no Rio.',
-    category: BenefitCategory.LEGAL,
-    iconName: 'Gavel',
-    imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    usageSteps: [
-      "Acesse a base atualizada de leis e decretos.",
-      "Filtre por categoria (Trabalhista, Operacional, Tributário).",
-      "Visualize o número da lei, data e resumo da obrigatoriedade.",
-      "Acesse o link oficial do diário oficial quando disponível."
-    ]
-  },
-  {
-    id: 'public-order-01',
-    title: 'Demanda de Ordem Pública',
-    description: 'Reporte irregularidades e solicite apoio de segurança no entorno.',
-    category: BenefitCategory.OPERATIONAL,
-    iconName: 'ShieldAlert',
-    imageUrl: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    dashboardUrl: 'https://ordempublica.sindhoteisrj.com.br/',
-    usageSteps: [
-      "Identifique uma irregularidade no entorno do hotel (ex: camelôs, lixo, insegurança).",
-      "Acesse o formulário clicando em 'Utilizar'.",
-      "Descreva o ocorrido e, se possível, envie fotos.",
-      "A HoteisRio encaminhará a demanda diretamente aos órgãos públicos responsáveis."
-    ]
-  },
-  {
-    id: 'calendar-01',
-    title: 'Calendário de Eventos do Rio',
-    description: 'Painel interativo de grandes eventos e inteligência de mercado.',
-    category: BenefitCategory.EVENTS,
-    iconName: 'CalendarDays',
-    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    usageSteps: [
-      "Acesse o painel para visualizar o calendário consolidado da cidade.",
-      "Utilize os filtros para selecionar por mês, tipo de evento ou região.",
-      "Analise os picos de demanda para ajustar sua tarifa (Revenue Management).",
-      "Exporte os dados em Excel se necessário."
-    ]
-  },
-  {
-    id: 'cv-bank',
-    title: 'Banco de Talentos',
-    description: 'Acesse currículos qualificados para vagas no seu hotel.',
-    category: BenefitCategory.HR,
-    iconName: 'FileText',
-    imageUrl: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    usageSteps: [
-      "Entre em contato com o setor de RH da HoteisRio.",
-      "Solicite o acesso à base de currículos filtrada por função.",
-      "Receba os perfis selecionados via e-mail.",
-      "Realize as entrevistas diretamente com os candidatos."
-    ]
-  },
-  {
-    id: 'app-hoteis',
-    title: 'App HotéisRIO',
-    description: 'Baixe o aplicativo exclusivo para gestão na palma da mão.',
-    category: BenefitCategory.TECHNOLOGY,
-    iconName: 'TabletSmartphone',
-    imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    externalLink: 'https://app.hoteisrio.com.br/',
-    usageSteps: [
-      "Acesse o link oficial do Web App.",
-      "Adicione à tela inicial do seu celular para acesso rápido.",
-      "Faça login com as mesmas credenciais deste portal.",
-      "Receba notificações push em tempo real sobre segurança e legislação."
-    ]
-  },
   {
     id: 'shuttle-service',
     title: 'Shuttle Service',
     description: 'Sistema de transporte compartilhado e logística para eventos.',
     category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['RECEPTION', 'SALES'],
     iconName: 'Bus',
     imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -920,6 +767,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Cursos Online',
     description: 'Plataforma oficial de ensino e capacitação para associados.',
     category: BenefitCategory.TRAINING,
+    targetSectors: ['HR', 'RECEPTION', 'HOUSEKEEPING'],
     iconName: 'MonitorPlay',
     imageUrl: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -937,6 +785,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Fóruns da Hotelaria',
     description: 'Acesse o calendário completo dos comitês e fóruns.',
     category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'HR', 'SALES', 'MAINTENANCE'],
     iconName: 'Users',
     imageUrl: 'https://images.unsplash.com/photo-1515168816902-8408aa648c5e?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -952,6 +801,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Central da IA',
     description: 'Ferramentas de Inteligência Artificial exclusivas para hoteleiros.',
     category: BenefitCategory.TECHNOLOGY,
+    targetSectors: ['MANAGEMENT', 'SALES'],
     iconName: 'Bot',
     imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -964,26 +814,11 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
   {
-    id: 'influencers',
-    title: 'Influenciadores Digitais (EM BREVE)',
-    description: 'Em breve: Catálogo de creators homologados para ações de marketing.',
-    category: BenefitCategory.COMMUNICATION, // Comunicação & Marketing
-    iconName: 'Camera',
-    imageUrl: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=400',
-    isService: true,
-    isNew: true,
-    customCta: 'Em Breve',
-    usageSteps: [
-      "Acesse o catálogo de influenciadores.",
-      "Filtre por nicho (gastronomia, lifestyle, viagens).",
-      "Veja o media kit e entre em contato direto para parcerias."
-    ]
-  },
-  {
     id: 'sustainability-raiox',
     title: 'Raio-X de Sustentabilidade',
     description: 'Avaliação gratuita e online da maturidade sustentável do seu hotel.',
     category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MAINTENANCE', 'MANAGEMENT'],
     iconName: 'Leaf',
     imageUrl: 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1001,6 +836,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Portal de Fornecedores',
     description: 'Encontre parceiros homologados e negociações exclusivas.',
     category: BenefitCategory.PARTNERS,
+    targetSectors: ['MANAGEMENT', 'MAINTENANCE', 'HOUSEKEEPING', 'FB'],
     iconName: 'Handshake',
     imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1019,6 +855,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Central do RH',
     description: 'Plataforma exclusiva para gestores de Recursos Humanos.',
     category: BenefitCategory.HR,
+    targetSectors: ['HR', 'MANAGEMENT'],
     iconName: 'Users2',
     imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1035,6 +872,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Calendário de Feriados 2026',
     description: 'Datas de feriados nacionais, estaduais e principais emissores.',
     category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'RECEPTION'],
     iconName: 'CalendarCheck',
     imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1051,6 +889,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Planejador Comercial 2026',
     description: 'Ferramenta para gerar ações comerciais baseadas em datas.',
     category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'TrendingUp',
     imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1067,6 +906,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Central da Manutenção',
     description: 'Hub de serviços técnicos e suporte para engenharia hoteleira.',
     category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MAINTENANCE', 'MANAGEMENT'],
     iconName: 'Wrench',
     imageUrl: 'https://images.unsplash.com/photo-1581092921461-eab62e97a782?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1083,6 +923,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Atualização Cadastral',
     description: 'Receba o Informativo Mensal, convites para eventos e alertas.',
     category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['HR', 'MANAGEMENT'],
     iconName: 'UserCog',
     imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400',
     isService: true,
@@ -1098,11 +939,12 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Placas Obrigatórias',
     description: 'Kit completo com todas as placas de sinalização exigidas por lei.',
     category: BenefitCategory.LEGAL,
+    targetSectors: ['MAINTENANCE', 'RECEPTION'],
     iconName: 'ClipboardList',
     imageUrl: 'https://images.unsplash.com/photo-1563215579-24da5a2df85e?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
-    downloadUrl: 'https://sindhoteisrj.com.br/placas-obrigatorias-download.zip',
+    downloadUrl: 'https://sindhoteisrj.com.br/placas-obrigatorias-download.zip', // Mock URL
     usageSteps: [
       "Clique no botão de download para baixar o pacote ZIP.",
       "Descompacte o arquivo em seu computador.",
@@ -1115,6 +957,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Convênio ECAD (Desconto de 60%)',
     description: 'Parceria exclusiva garante descontos em débitos e mensalidades.',
     category: BenefitCategory.INSTITUTIONAL,
+    targetSectors: ['MANAGEMENT', 'LEGAL_DEPT'],
     iconName: 'Music',
     imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=400',
     isNew: true,
@@ -1126,10 +969,125 @@ export const BENEFITS_DATA: Benefit[] = [
     ]
   },
   {
+    id: 'security',
+    title: 'Segurança',
+    description: 'Parceria com forças policiais para segurança turística.',
+    category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MANAGEMENT', 'RECEPTION'],
+    iconName: 'Shield',
+    imageUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Utilize o Demanda de Ordem Pública para reportes não emergenciais.",
+      "Em caso de emergência, utilize o botão de pânico (se disponível) ou ligue 190.",
+      "Participe das reuniões mensais com o BPTur e DEAT.",
+      "Receba orientações preventivas para hóspedes."
+    ]
+  },
+  {
+    id: 'juridico-01',
+    title: 'Assessoria Jurídica',
+    description: 'Abertura de chamados e suporte especializado em causas trabalhistas.',
+    category: BenefitCategory.LEGAL,
+    targetSectors: ['LEGAL_DEPT', 'HR', 'MANAGEMENT'],
+    iconName: 'Scale',
+    imageUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Clique no botão 'Utilizar' para abrir o formulário oficial.",
+      "Preencha os dados do hotel e o tipo de demanda (Trabalhista, Cível ou Tributária).",
+      "Anexe documentos relevantes se houver.",
+      "Aguarde o retorno da equipe jurídica em até 48 horas úteis via e-mail."
+    ]
+  },
+  {
+    id: 'laws-regulations',
+    title: 'Decretos e Leis RJ',
+    description: 'Consulta completa à legislação hoteleira vigente no Rio.',
+    category: BenefitCategory.LEGAL,
+    targetSectors: ['LEGAL_DEPT', 'HR', 'MANAGEMENT'],
+    iconName: 'Gavel',
+    imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Acesse a base atualizada de leis e decretos.",
+      "Filtre por categoria (Trabalhista, Operacional, Tributário).",
+      "Visualize o número da lei, data e resumo da obrigatoriedade.",
+      "Acesse o link oficial do diário oficial quando disponível."
+    ]
+  },
+  {
+    id: 'public-order-01',
+    title: 'Demanda de Ordem Pública',
+    description: 'Reporte irregularidades e solicite apoio de segurança no entorno.',
+    category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MANAGEMENT', 'RECEPTION'],
+    iconName: 'ShieldAlert',
+    imageUrl: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    dashboardUrl: 'https://ordempublica.sindhoteisrj.com.br/',
+    usageSteps: [
+      "Identifique uma irregularidade no entorno do hotel (ex: camelôs, lixo, insegurança).",
+      "Acesse o formulário clicando em 'Utilizar'.",
+      "Descreva o ocorrido e, se possível, envie fotos.",
+      "A HoteisRio encaminhará a demanda diretamente aos órgãos públicos responsáveis."
+    ]
+  },
+  {
+    id: 'calendar-01',
+    title: 'Calendário de Eventos do Rio',
+    description: 'Painel interativo de grandes eventos e inteligência de mercado.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
+    iconName: 'CalendarDays',
+    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Acesse o painel para visualizar o calendário consolidado da cidade.",
+      "Utilize os filtros para selecionar por mês, tipo de evento ou região.",
+      "Analise os picos de demanda para ajustar sua tarifa (Revenue Management).",
+      "Exporte os dados em Excel se necessário."
+    ]
+  },
+  {
+    id: 'cv-bank',
+    title: 'Banco de Talentos',
+    description: 'Acesse currículos qualificados para vagas no seu hotel.',
+    category: BenefitCategory.HR,
+    targetSectors: ['HR'],
+    iconName: 'FileText',
+    imageUrl: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    usageSteps: [
+      "Entre em contato com o setor de RH da HoteisRio.",
+      "Solicite o acesso à base de currículos filtrada por função.",
+      "Receba os perfis selecionados via e-mail.",
+      "Realize as entrevistas diretamente com os candidatos."
+    ]
+  },
+  {
+    id: 'app-hoteis',
+    title: 'App HotéisRIO',
+    description: 'Baixe o aplicativo exclusivo para gestão na palma da mão.',
+    category: BenefitCategory.TECHNOLOGY,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'TabletSmartphone',
+    imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    externalLink: 'https://app.hoteisrio.com.br/',
+    usageSteps: [
+      "Acesse o link oficial do Web App.",
+      "Adicione à tela inicial do seu celular para acesso rápido.",
+      "Faça login com as mesmas credenciais deste portal.",
+      "Receba notificações push em tempo real sobre segurança e legislação."
+    ]
+  },
+  {
     id: 'iptu-01',
     title: 'Desconto de 40% no IPTU',
     description: 'Benefício renovado até 2028 para todos os hotéis associados.',
     category: BenefitCategory.INSTITUTIONAL,
+    targetSectors: ['MANAGEMENT', 'LEGAL_DEPT'],
     iconName: 'Percent',
     imageUrl: '',
     isNew: true,
@@ -1145,6 +1103,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Prêmio Top Hotel',
     description: 'Reconhecimento aos melhores cases e práticas do setor hoteleiro.',
     category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'HR', 'SALES'],
     iconName: 'Trophy',
     imageUrl: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=400',
     isNew: true,
@@ -1160,6 +1119,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Comunicação e Imprensa',
     description: 'Assessoria de imprensa e visibilidade na mídia para o setor.',
     category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'SALES'],
     iconName: 'Megaphone',
     imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1174,6 +1134,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Grupos WhatsApp',
     description: 'Networking e informações rápidas entre gestores e a associação.',
     category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'HR', 'SALES', 'MAINTENANCE', 'HOUSEKEEPING', 'RECEPTION'],
     iconName: 'MessageCircle',
     imageUrl: 'https://images.unsplash.com/photo-1611746347311-3a9957777cfa?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1188,6 +1149,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Fóruns e Reuniões',
     description: 'Debates sobre o futuro da hotelaria e alinhamento estratégico.',
     category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT'],
     iconName: 'Users',
     imageUrl: 'https://images.unsplash.com/photo-1515168816902-8408aa648c5e?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1202,6 +1164,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Convênios Educacionais',
     description: 'Descontos em faculdades e cursos para colaboradores.',
     category: BenefitCategory.PARTNERS,
+    targetSectors: ['HR', 'MANAGEMENT'],
     iconName: 'GraduationCap',
     imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1216,6 +1179,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Sustentabilidade',
     description: 'Certificações ESG e Dashboard de Sustentabilidade.',
     category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MANAGEMENT', 'MAINTENANCE'],
     iconName: 'Leaf',
     imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=400',
     dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiMzM1NGQyMGYtZGU4NS00ZTQ1LTg3ZjAtMjYzZjhlZjU2YmY2IiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
@@ -1231,6 +1195,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Treinamentos',
     description: 'Capacitação contínua via Universidade HoteisRio.',
     category: BenefitCategory.TRAINING,
+    targetSectors: ['HR'],
     iconName: 'BookOpen',
     imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1245,6 +1210,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Fornecedores Parceiros',
     description: 'Clube de compras com condições exclusivas para associados.',
     category: BenefitCategory.PARTNERS,
+    targetSectors: ['MANAGEMENT', 'MAINTENANCE', 'HOUSEKEEPING', 'FB'],
     iconName: 'Handshake',
     imageUrl: 'https://images.unsplash.com/photo-1472851294608-415522f96319?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1259,6 +1225,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Informativo Mensal',
     description: 'Notícias, convites para eventos e atualizações do setor.',
     category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'HR'],
     iconName: 'Mail',
     imageUrl: 'https://images.unsplash.com/photo-1557568192-238a63f66318?auto=format&fit=crop&q=80&w=400',
     usageSteps: [
@@ -1273,6 +1240,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Pesquisas de Ocupação',
     description: 'Participe e acesse dados vitais de ocupação do Rio de Janeiro.',
     category: BenefitCategory.STATISTICS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
     iconName: 'PieChart',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400',
     dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiOGU2NTUyNjMtN2I3OS00N2E1LTg3ZjAtMjYzZjhlZjU2YmY2IiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9',
@@ -1289,6 +1257,7 @@ export const BENEFITS_DATA: Benefit[] = [
     title: 'Suporte',
     description: 'Atendimento direto da associação para suas demandas.',
     category: BenefitCategory.SUPPORT,
+    targetSectors: ['MANAGEMENT'],
     iconName: 'Headphones',
     imageUrl: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80&w=400',
     usageSteps: [

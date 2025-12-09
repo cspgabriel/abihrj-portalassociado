@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -8,7 +10,7 @@ import PlatformTutorial from './components/PlatformTutorial';
 import InteractiveTutorial from './components/InteractiveTutorial'; // Importar novo componente
 import CalendarModal from './components/CalendarModal';
 import ServiceRequestModal from './components/ServiceRequestModal';
-import CalculatorModal from './components/CalculatorModal'; // New Import
+import CalculatorModal from './components/CalculatorModal'; // New Component
 import AiAssistant from './components/AiAssistant';
 import ContactsPage from './components/ContactsPage';
 import WhatsAppGroupsPage from './components/WhatsAppGroupsPage';
@@ -21,14 +23,18 @@ import ForumsOverviewPage from './components/ForumsOverviewPage'; // New Compone
 import WeatherWidget from './components/WeatherWidget'; // New custom widget
 import ModernDashboard from './components/ModernDashboard'; // New Modern Layout
 import RockInRioPage from './components/RockInRioPage'; // New Rock in Rio Page
-import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile } from './types';
+import CalculatorsPage from './components/CalculatorsPage'; // New Page
+import CategoryListingPage from './components/CategoryListingPage'; // New Page
+import AllBenefitsPage from './components/AllBenefitsPage'; // New Page
+import ServiceViewerPage from './components/ServiceViewerPage'; // New Iframe Viewer
+import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile, HotelSector } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES, NEWS_ITEMS } from './constants';
-import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, PenTool, Wrench, Calculator } from 'lucide-react';
+import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, Calculator, TrendingUp, Search } from 'lucide-react';
 import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER';
 
 // --- Components ---
 
@@ -225,16 +231,16 @@ const Dashboard: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>('DASHBOARD');
   const [selectedBenefitForDetails, setSelectedBenefitForDetails] = useState<Benefit | null>(null);
   const [selectedForum, setSelectedForum] = useState<Forum | null>(null);
+  const [selectedSuperCategory, setSelectedSuperCategory] = useState<string>('');
   
-  // Catalog Filter State
-  const [selectedCategory, setSelectedCategory] = useState<BenefitCategory | 'Todos'>('Todos');
-  const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
-  // Quick Access Filter State
+  // Catalog Filter State (Unified)
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todos'); // Changed type to string to match Layout prop
+  
+  // Main Grid Filter State (Unified)
   const [quickAccessCategory, setQuickAccessCategory] = useState<BenefitCategory | 'Todos'>('Todos');
   const [quickAccessViewMode, setQuickAccessViewMode] = useState<'grid' | 'list'>('grid');
   const [quickAccessSortOrder, setQuickAccessSortOrder] = useState<'az' | 'za'>('az');
+  const [quickAccessSearchTerm, setQuickAccessSearchTerm] = useState(''); // New Search State
 
   // Community Filter State
   const [communityViewMode, setCommunityViewMode] = useState<'grid' | 'list'>('grid');
@@ -247,7 +253,7 @@ const Dashboard: React.FC = () => {
   // Functional Modals State
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [serviceRequestBenefit, setServiceRequestBenefit] = useState<Benefit | null>(null);
-  const [calculatorType, setCalculatorType] = useState<string | null>(null); // New state for calculator
+  const [calculatorBenefit, setCalculatorBenefit] = useState<Benefit | null>(null); // State for Calculator Modal
   
   // Tutorial State
   const [showInteractiveTutorial, setShowInteractiveTutorial] = useState(false);
@@ -398,10 +404,13 @@ const Dashboard: React.FC = () => {
 
   // --- ACTIONS ---
   
-  const handleNavigate = (view: AppView) => {
+  const handleNavigate = (view: AppView, params?: any) => {
     if (view === 'TUTORIAL') {
         // Agora o botão de tutorial abre o interativo se estiver no Dashboard, ou a página estática se não
         setShowInteractiveTutorial(true);
+    } else if (view === 'CATEGORY_LISTING') {
+        setSelectedSuperCategory(params);
+        setCurrentView(view);
     } else {
         setCurrentView(view);
         // Reset selection if moving away from details
@@ -440,6 +449,12 @@ const Dashboard: React.FC = () => {
       return;
     }
     
+    if (benefit.category === BenefitCategory.TOOLS && benefit.id.startsWith('calc-')) {
+       // Also allow opening modal from details view for calculators if clicked via card
+       setCalculatorBenefit(benefit);
+       return;
+    }
+    
     setSelectedBenefitForDetails(benefit);
     setCurrentView('BENEFIT_DETAILS');
   };
@@ -453,6 +468,12 @@ const Dashboard: React.FC = () => {
   const handleUseBenefit = (benefit: Benefit) => {
     awardXP(XP_REWARDS.USE_BENEFIT, `use-${benefit.id}`);
 
+    // CALCULATORS LOGIC
+    if (benefit.category === BenefitCategory.TOOLS && benefit.id.startsWith('calc-')) {
+        setCalculatorBenefit(benefit);
+        return;
+    }
+
     // 0. Download de Arquivos
     if (benefit.downloadUrl) {
       // Abre o link em nova aba, iniciando o download
@@ -460,15 +481,21 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    // 1. Links Externos
-    if (benefit.externalLink) {
-      window.open(benefit.externalLink, '_blank');
-      return;
+    // 1. IFRAME/EMBED LOGIC (New Strategy: Open inside app if possible)
+    // Se tiver embedUrl ou for dashboard, tentamos abrir no ServiceViewer
+    // Se for link externo genérico e quisermos forçar o visualizador, usamos também
+    if (benefit.embedUrl || benefit.dashboardUrl || (benefit.isService && benefit.externalLink && !benefit.externalLink.includes('forms.gle'))) { // Forms Google sometimes break in iframe if not embed link
+        setSelectedBenefitForDetails(benefit); // We abuse this state for viewer too or add new one
+        // IMPORTANT: We need to set the state for the viewer component
+        // Using existing state or creating new one? Let's use setSelectedBenefitForDetails for simplicity or create a new selectedBenefitForViewer
+        setSelectedBenefitForDetails(benefit);
+        setCurrentView('SERVICE_VIEWER');
+        return;
     }
 
-    // 1.5 Calculadoras (NEW)
-    if (benefit.id.startsWith('calc-')) {
-      setCalculatorType(benefit.id);
+    // 1b. Links Externos Fallback (Se não for embeddable ou se preferirmos abrir fora)
+    if (benefit.externalLink) {
+      window.open(benefit.externalLink, '_blank');
       return;
     }
 
@@ -516,6 +543,7 @@ const Dashboard: React.FC = () => {
     setCurrentView('DASHBOARD');
     setSelectedBenefitForDetails(null);
     setSelectedForum(null);
+    setSelectedSuperCategory('');
   };
 
   const handleOpenPublicOrderModal = () => {
@@ -526,11 +554,12 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleOpenCalculatorsPage = () => {
+      setCurrentView('CALCULATORS_PAGE');
+  };
+
   // --- FILTER & SORT LOGIC ---
   
-  const toggleSort = () => setSortOrder(prev => prev === 'az' ? 'za' : 'az');
-  const toggleViewMode = () => setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
-
   const toggleQuickAccessSort = () => setQuickAccessSortOrder(prev => prev === 'az' ? 'za' : 'az');
   const toggleQuickAccessView = () => setQuickAccessViewMode(prev => prev === 'grid' ? 'list' : 'grid');
 
@@ -548,33 +577,20 @@ const Dashboard: React.FC = () => {
     });
   };
 
-  // 1. Quick Access (Services only, exclude Tools and Calculators)
-  const serviceBenefits = BENEFITS_DATA
-    .filter(b => b.isService === true && b.category !== BenefitCategory.TOOLS)
-    .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory);
-  const sortedServiceBenefits = getSortedData(serviceBenefits, quickAccessSortOrder);
-
-  // 1.1 Calculators Only
+  // 1. UNIFIED MAIN GRID (MERGED CATALOG & SERVICES)
+  const allBenefits = BENEFITS_DATA
+    .filter(b => !b.id.startsWith('calc-')) // Exclude calculators as they have a banner
+    .filter(b => quickAccessCategory === 'Todos' || b.category === quickAccessCategory)
+    .filter(b => 
+      quickAccessSearchTerm === '' ||
+      b.title.toLowerCase().includes(quickAccessSearchTerm.toLowerCase()) || 
+      b.description.toLowerCase().includes(quickAccessSearchTerm.toLowerCase())
+    );
+  
+  const sortedAllBenefits = getSortedData(allBenefits, quickAccessSortOrder);
+  
+  // 1b. Calculators Section
   const calculatorBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && b.id.startsWith('calc-'));
-
-  // 1.2 Tools Only (General Tools)
-  const toolsBenefits = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS && !b.id.startsWith('calc-'));
-
-  // 2. Catalog (Non-services or All depending on design choice)
-  const filteredCatalogBenefits = BENEFITS_DATA
-    .filter(b => {
-       const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;
-       const isQuickAccess = b.isService === true;
-       const isTool = b.category === BenefitCategory.TOOLS;
-       
-       if (selectedCategory !== 'Todos') {
-         return matchesCategory;
-       } else {
-         // Show only non-quick-access and non-tool benefits in the main catalog to avoid duplication
-         return !isQuickAccess && !isTool && matchesCategory;
-       }
-    });
-  const sortedCatalogBenefits = getSortedData(filteredCatalogBenefits, sortOrder);
 
   // 3. Community Items
   const sortedCommunityItems = getSortedData(COMMUNITY_ITEMS_DATA, communitySortOrder);
@@ -590,9 +606,6 @@ const Dashboard: React.FC = () => {
       'highlight-top-hotel-25',
       'natal-2025', 
       'highlight-drinks', 
-      'highlight-rir', 
-      'highlight-job-fair', 
-      'highlight-events-reg',
       'portal-fornecedores-new'
   ];
   
@@ -661,15 +674,57 @@ const Dashboard: React.FC = () => {
     user,
     onLogout: handleLogout,
     onNavigate: handleNavigate,
-    onBenefitClick: handleViewDetails,
+    onBenefitClick: handleUseBenefit, // Updated to use UseBenefit which routes to viewer if applicable
     onForumClick: handleForumClick, // Pass down to MegaMenu
-    currentView
+    onCategorySelect: (cat: string) => setSelectedCategory(cat), // New handler
+    onSectorSelect: (sector: HotelSector) => {
+        // Implement logic to filter All Benefits by Sector and switch view
+        console.log("Sector selected", sector);
+    },
+    currentView,
+    selectedCategory,
+    isFullPage: currentView === 'SERVICE_VIEWER'
   };
 
   // Wrap all non-dashboard views with standard layout logic
   if (currentView !== 'DASHBOARD') {
     return (
         <Layout {...commonLayoutProps}>
+            {currentView === 'SERVICE_VIEWER' && selectedBenefitForDetails && (
+                <ServiceViewerPage 
+                    benefit={selectedBenefitForDetails}
+                    onBack={handleBackToDashboard}
+                />
+            )}
+            {currentView === 'ALL_BENEFITS' && (
+                <AllBenefitsPage 
+                    onBack={handleBackToDashboard}
+                    onUse={handleUseBenefit}
+                    onDetails={handleViewDetails}
+                />
+            )}
+            {currentView === 'CATEGORY_LISTING' && (
+                <CategoryListingPage 
+                    categoryId={selectedSuperCategory}
+                    onBack={handleBackToDashboard}
+                    onUse={handleUseBenefit}
+                    onDetails={handleViewDetails}
+                />
+            )}
+            {currentView === 'CALCULATORS_PAGE' && (
+                <>
+                <CalculatorsPage 
+                    onBack={handleBackToDashboard} 
+                    onOpenCalculator={(benefit) => setCalculatorBenefit(benefit)}
+                />
+                {calculatorBenefit && (
+                  <CalculatorModal 
+                    benefit={calculatorBenefit}
+                    onClose={() => setCalculatorBenefit(null)}
+                  />
+                )}
+                </>
+            )}
             {currentView === 'ROCK_IN_RIO' && (
                 <RockInRioPage onBack={handleBackToDashboard} />
             )}
@@ -729,9 +784,7 @@ const Dashboard: React.FC = () => {
                      onClose={() => setServiceRequestBenefit(null)}
                    />
                  )}
-                 {calculatorType && (
-                    <CalculatorModal type={calculatorType} onClose={() => setCalculatorType(null)} />
-                 )}
+                 {/* Calculator Modal not needed here as it's a direct service, but could be */}
                  </>
             )}
             <AiAssistant />
@@ -799,7 +852,7 @@ const Dashboard: React.FC = () => {
                 {/* Navigation Arrows */}
                 <button 
                   onClick={prevSlide}
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 shadow-md text-gray-700 p-2 rounded-full hover:bg-white hover:text-rio-blue transition-all border border-gray-100"
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 shadow-md text-gray-700 p-2 rounded-full hover:bg-white hover:text-rio-blue transition-all border border-gray-100 opacity-0 group-hover:opacity-100"
                   aria-label="Anterior"
                 >
                   <ChevronLeft className="w-6 h-6" />
@@ -850,7 +903,7 @@ const Dashboard: React.FC = () => {
 
                 <button 
                   onClick={nextSlide}
-                  className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 shadow-md text-gray-700 p-2 rounded-full hover:bg-white hover:text-rio-blue transition-all border border-gray-100"
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 shadow-md text-gray-700 p-2 rounded-full hover:bg-white hover:text-rio-blue transition-all border border-gray-100 opacity-0 group-hover:opacity-100"
                   aria-label="Próximo"
                 >
                   <ChevronRight className="w-6 h-6" />
@@ -870,19 +923,31 @@ const Dashboard: React.FC = () => {
           </div>
       )}
 
-      {/* SEÇÃO 1: SERVIÇOS ONLINE (Acesso Rápido) */}
+      {/* SEÇÃO 1: SERVIÇOS E BENEFÍCIOS (Merged Grid) */}
       <div id="quick-access-section" className="mb-12">
          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
                <div className="p-2 bg-blue-100 text-rio-blue rounded-lg">
                   <Laptop2 className="w-6 h-6" />
                </div>
-               <h2 className="text-xl font-bold text-gray-800">Acesso Rápido aos Serviços</h2>
+               <h2 className="text-xl font-bold text-gray-800">Serviços e Benefícios</h2>
             </div>
             
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-gray-500 hidden md:inline">Filtrar:</span>
               
+              {/* Pesquisa Rápida (New) */}
+              <div className="relative group">
+                  <input
+                    type="text"
+                    placeholder="Pesquisar..."
+                    value={quickAccessSearchTerm}
+                    onChange={(e) => setQuickAccessSearchTerm(e.target.value)}
+                    className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-rio-blue focus:border-transparent outline-none w-40 focus:w-64 transition-all"
+                  />
+                  <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              </div>
+
               {/* Category Dropdown */}
               <div className="relative">
                 <select 
@@ -921,8 +986,8 @@ const Dashboard: React.FC = () => {
              ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5' 
              : 'flex flex-col gap-3'}
          `}>
-            {sortedServiceBenefits.length > 0 ? (
-                sortedServiceBenefits.map(benefit => (
+            {sortedAllBenefits.length > 0 ? (
+                sortedAllBenefits.map(benefit => (
                    <BenefitCard 
                      key={benefit.id}
                      benefit={benefit}
@@ -933,76 +998,33 @@ const Dashboard: React.FC = () => {
                 ))
             ) : (
                 <div className="col-span-full py-8 text-center text-gray-500 bg-gray-100 rounded-xl border border-dashed border-gray-300">
-                    Nenhum serviço encontrado nesta categoria.
+                    Nenhum benefício encontrado com esse termo.
                 </div>
             )}
          </div>
       </div>
 
-      {/* SEÇÃO CALCULADORAS HOTELEIRAS (NOVO) */}
-      <div id="calculators-section" className="mb-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-           <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 text-green-600 rounded-lg">
-                 <Calculator className="w-6 h-6" />
+      {/* BANNER CALCULADORAS (Moved from Grid to Banner) */}
+      <div 
+        id="calculators-banner" 
+        className="mb-12 bg-gradient-to-r from-emerald-600 to-teal-800 rounded-2xl p-8 shadow-lg text-white flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer transform transition-transform hover:scale-[1.01]"
+        onClick={handleOpenCalculatorsPage}
+      >
+          <div className="flex items-center gap-6">
+              <div className="bg-white/20 p-4 rounded-xl backdrop-blur-sm shadow-inner">
+                  <Calculator className="w-10 h-10 text-yellow-300" />
               </div>
-              <h2 className="text-xl font-bold text-gray-800">Calculadoras Hoteleiras</h2>
-           </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-           {calculatorBenefits.map(calc => {
-              const IconComponent = (Icons as any)[calc.iconName] || Icons.Calculator;
-              const isHighlight = calc.id === 'calc-all-in-one';
-              return (
-                 <button 
-                    key={calc.id}
-                    onClick={() => handleUseBenefit(calc)}
-                    className={`flex flex-col items-center justify-center p-6 bg-white border rounded-xl shadow-sm hover:shadow-md transition-all group text-center
-                        ${isHighlight ? 'border-rio-gold/50 ring-1 ring-rio-gold/20' : 'border-gray-100 hover:border-rio-blue'}
-                    `}
-                 >
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-3 transition-colors
-                        ${isHighlight ? 'bg-rio-gold text-blue-900 shadow-md' : 'bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white'}
-                    `}>
-                       <IconComponent className="w-6 h-6" />
-                    </div>
-                    <span className="text-sm font-bold text-gray-700 leading-tight group-hover:text-green-600">{calc.title}</span>
-                    {isHighlight && <span className="text-[10px] bg-rio-gold/20 text-blue-900 px-2 py-0.5 rounded mt-2 font-bold">Completa</span>}
-                 </button>
-              )
-           })}
-        </div>
-      </div>
-
-      {/* SEÇÃO NOVO: FERRAMENTAS DO HOTELEIRO (TOOLS) */}
-      <div id="tools-section" className="mb-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-           <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-100 text-slate-600 rounded-lg">
-                 <Wrench className="w-6 h-6" />
+              <div>
+                  <h2 className="text-2xl font-bold mb-1">Calculadoras HoteisRio</h2>
+                  <p className="text-emerald-100 text-lg">
+                      RevPAR, ADR, GOPPAR e mais. Acesse todas as ferramentas financeiras em um só lugar.
+                  </p>
               </div>
-              <h2 className="text-xl font-bold text-gray-800">Ferramentas Online</h2>
-           </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-           {toolsBenefits.map(tool => {
-              const IconComponent = (Icons as any)[tool.iconName] || Icons.HelpCircle;
-              return (
-                 <button 
-                    key={tool.id}
-                    onClick={() => handleUseBenefit(tool)}
-                    className="flex flex-col items-center justify-center p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md hover:border-rio-blue transition-all group text-center"
-                 >
-                    <div className="w-10 h-10 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center mb-3 group-hover:bg-rio-blue group-hover:text-white transition-colors">
-                       <IconComponent className="w-5 h-5" />
-                    </div>
-                    <span className="text-sm font-bold text-gray-700 leading-tight group-hover:text-rio-blue">{tool.title}</span>
-                 </button>
-              )
-           })}
-        </div>
+          </div>
+          <button className="bg-white text-emerald-800 font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-emerald-50 transition-colors flex items-center gap-2 whitespace-nowrap">
+              Acessar Calculadoras
+              <ArrowRight className="w-5 h-5" />
+          </button>
       </div>
 
       {/* SEÇÃO EXTRA: COMUNIDADE & CONEXÃO */}
@@ -1154,83 +1176,6 @@ const Dashboard: React.FC = () => {
 
       <hr className="border-gray-200 mb-12" />
 
-      {/* SEÇÃO 2: CATÁLOGO DE BENEFÍCIOS */}
-      <div id="catalog-section">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-           <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 text-gray-600 rounded-lg">
-                 <LayoutGrid className="w-6 h-6" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-800">Catálogo de Benefícios & Conquistas</h2>
-           </div>
-
-           <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm text-gray-500 hidden md:inline">Filtrar:</span>
-              
-              {/* Category Dropdown (Replacing Tabs visually or complementing them) */}
-              <div className="relative">
-                <select 
-                   value={selectedCategory}
-                   onChange={(e) => setSelectedCategory(e.target.value as any)}
-                   className="appearance-none bg-white border border-gray-200 text-gray-700 py-1.5 pl-3 pr-8 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
-                >
-                   <option value="Todos">Todas as Categorias</option>
-                   {availableCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                </select>
-                <Filter className="w-4 h-4 text-gray-400 absolute right-2.5 top-2 pointer-events-none" />
-              </div>
-
-              <div className="w-px h-6 bg-gray-300 mx-1 hidden md:block"></div>
-
-              <button 
-                onClick={toggleSort}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
-              >
-                {sortOrder === 'az' ? <ArrowDownAZ className="w-4 h-4" /> : <ArrowUpAZ className="w-4 h-4" />}
-              </button>
-
-              <button 
-                onClick={toggleViewMode}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
-                title="Mudar Visualização"
-              >
-                {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
-              </button>
-            </div>
-        </div>
-
-        {/* Catalog Grid */}
-        <div className={`
-          ${viewMode === 'grid' 
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
-            : 'flex flex-col gap-4'}
-          mb-12
-        `}>
-          {sortedCatalogBenefits.map((benefit) => (
-            <BenefitCard 
-              key={benefit.id} 
-              benefit={benefit} 
-              onDetails={handleViewDetails}
-              onUse={handleUseBenefit}
-              layout={viewMode}
-            />
-          ))}
-        </div>
-        
-        {/* Empty State */}
-        {sortedCatalogBenefits.length === 0 && (
-          <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200 mb-12">
-            <p className="text-gray-500">Nenhum benefício encontrado nesta categoria.</p>
-            <button 
-               onClick={() => setSelectedCategory('Todos')}
-               className="mt-2 text-rio-blue hover:underline text-sm font-medium"
-            >
-               Ver todos os benefícios
-            </button>
-          </div>
-        )}
-      </div>
-
       {/* SEÇÃO 3: LISTA COMPLEMENTAR */}
       {selectedCategory === 'Todos' && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 animate-fade-in mt-8 mb-12">
@@ -1248,48 +1193,6 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* SEÇÃO 4: NOTÍCIAS (Ações Realizadas) - NOVO */}
-      <div id="news-section" className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-               <div className="p-2 bg-gray-100 text-gray-600 rounded-lg">
-                  <Newspaper className="w-6 h-6" />
-               </div>
-               <h2 className="text-xl font-bold text-gray-800">Ações Realizadas</h2>
-            </div>
-            <a href="https://sindhoteisrj.com.br/category/acoes-realizadas" target="_blank" rel="noreferrer" className="text-sm font-bold text-rio-blue hover:underline flex items-center gap-1">
-                Ver todas <ExternalLink className="w-4 h-4" />
-            </a>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {NEWS_ITEMS.map((news) => (
-                <div key={news.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
-                    <div className="h-40 overflow-hidden relative">
-                         <img src={news.image} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-gray-700">
-                             {news.category}
-                         </div>
-                    </div>
-                    <div className="p-5">
-                        <div className="text-xs text-gray-400 mb-2 font-medium">{news.date}</div>
-                        <h3 className="text-lg font-bold text-gray-800 mb-3 leading-tight group-hover:text-rio-blue transition-colors line-clamp-2">
-                            {news.title}
-                        </h3>
-                        <a 
-                           href={news.link} 
-                           target="_blank" 
-                           rel="noreferrer"
-                           className="text-sm font-bold text-rio-blue flex items-center gap-1 hover:gap-2 transition-all"
-                        >
-                            Ler Matéria <ArrowRight className="w-4 h-4" />
-                        </a>
-                    </div>
-                </div>
-            ))}
-        </div>
-      </div>
-
       </>
       )}
 
@@ -1305,9 +1208,13 @@ const Dashboard: React.FC = () => {
           onClose={() => setServiceRequestBenefit(null)}
         />
       )}
-
-      {calculatorType && (
-         <CalculatorModal type={calculatorType} onClose={() => setCalculatorType(null)} />
+      
+      {/* CALCULATOR MODAL */}
+      {calculatorBenefit && (
+        <CalculatorModal 
+          benefit={calculatorBenefit}
+          onClose={() => setCalculatorBenefit(null)}
+        />
       )}
 
       {showInteractiveTutorial && (

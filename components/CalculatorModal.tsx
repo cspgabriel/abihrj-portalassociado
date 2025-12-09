@@ -1,295 +1,138 @@
 
-import React, { useState, useEffect } from 'react';
-import { X, Calculator, RefreshCw, DollarSign, Percent, TrendingUp, Building2, BarChart3, PieChart } from 'lucide-react';
-
-type CalculatorType = 'calc-adr' | 'calc-revpar' | 'calc-goppar' | 'calc-trevpar' | 'calc-trevpab' | 'calc-occupancy' | 'calc-all-in-one';
+import React, { useState } from 'react';
+import { X, Calculator, ArrowRight, RefreshCw, TrendingUp, Info } from 'lucide-react';
+import { Benefit } from '../types';
 
 interface CalculatorModalProps {
-  type: string;
   onClose: () => void;
+  benefit?: Benefit;
 }
 
-const CALCULATOR_CONFIG: Record<string, {
-  title: string;
-  description: string;
-  inputs: { label: string; placeholder: string; prefix?: string }[];
-  formula: (v1: number, v2: number) => { result: number; unit: string; explanation: string };
-  icon: any;
-}> = {
-  'calc-adr': {
-    title: 'Calculadora de ADR',
-    description: 'Average Daily Rate (Diária Média)',
-    inputs: [
-      { label: 'Receita Total de Diárias', placeholder: '0.00', prefix: 'R$' },
-      { label: 'Número de Quartos Vendidos', placeholder: '0', prefix: '#' }
-    ],
-    formula: (revenue, roomsSold) => ({
-      result: roomsSold > 0 ? revenue / roomsSold : 0,
-      unit: 'R$',
-      explanation: 'Este valor representa o preço médio pago por quarto ocupado.'
-    }),
-    icon: DollarSign
-  },
-  'calc-revpar': {
-    title: 'Calculadora de RevPAR',
-    description: 'Revenue Per Available Room',
-    inputs: [
-      { label: 'Receita Total de Diárias', placeholder: '0.00', prefix: 'R$' },
-      { label: 'Total de Quartos Disponíveis (Inventário)', placeholder: '0', prefix: '#' }
-    ],
-    formula: (revenue, roomsAvailable) => ({
-      result: roomsAvailable > 0 ? revenue / roomsAvailable : 0,
-      unit: 'R$',
-      explanation: 'Indica a performance financeira considerando todo o inventário do hotel.'
-    }),
-    icon: TrendingUp
-  },
-  'calc-goppar': {
-    title: 'Calculadora de GOPPAR',
-    description: 'Gross Operating Profit Per Available Room',
-    inputs: [
-      { label: 'Lucro Operacional Bruto (GOP)', placeholder: '0.00', prefix: 'R$' },
-      { label: 'Total de Quartos Disponíveis', placeholder: '0', prefix: '#' }
-    ],
-    formula: (gop, roomsAvailable) => ({
-      result: roomsAvailable > 0 ? gop / roomsAvailable : 0,
-      unit: 'R$',
-      explanation: 'Mede o lucro operacional por quarto, uma das métricas mais completas de eficiência.'
-    }),
-    icon: Calculator
-  },
-  'calc-trevpar': {
-    title: 'Calculadora de TRevPAR',
-    description: 'Total Revenue Per Available Room',
-    inputs: [
-      { label: 'Receita Total (Diárias + A&B + Outros)', placeholder: '0.00', prefix: 'R$' },
-      { label: 'Total de Quartos Disponíveis', placeholder: '0', prefix: '#' }
-    ],
-    formula: (totalRevenue, roomsAvailable) => ({
-      result: roomsAvailable > 0 ? totalRevenue / roomsAvailable : 0,
-      unit: 'R$',
-      explanation: 'Considera todas as fontes de receita do hotel divididas pelo inventário.'
-    }),
-    icon: TrendingUp
-  },
-  'calc-trevpab': {
-    title: 'Calculadora de TRevPAB',
-    description: 'Total Revenue Per Available Bed (Hostels) ou Business (Eventos)',
-    inputs: [
-      { label: 'Receita Total do Setor', placeholder: '0.00', prefix: 'R$' },
-      { label: 'Lugares/Camas Disponíveis', placeholder: '0', prefix: '#' }
-    ],
-    formula: (totalRevenue, availableUnits) => ({
-      result: availableUnits > 0 ? totalRevenue / availableUnits : 0,
-      unit: 'R$',
-      explanation: 'Métrica de rentabilidade por unidade disponível (cama ou lugar).'
-    }),
-    icon: DollarSign
-  },
-  'calc-occupancy': {
-    title: 'Taxa de Ocupação',
-    description: 'Percentual de quartos ocupados em relação ao total.',
-    inputs: [
-      { label: 'Quartos Vendidos/Ocupados', placeholder: '0', prefix: '#' },
-      { label: 'Total de Quartos Disponíveis', placeholder: '0', prefix: '#' }
-    ],
-    formula: (sold, available) => ({
-      result: available > 0 ? (sold / available) * 100 : 0,
-      unit: '%',
-      explanation: 'Indica a utilização física do seu hotel no período.'
-    }),
-    icon: Percent
-  }
-};
+const CalculatorModal: React.FC<CalculatorModalProps> = ({ onClose, benefit }) => {
+  // Common inputs
+  const [revenue, setRevenue] = useState('');
+  const [roomsSold, setRoomsSold] = useState('');
+  const [roomsAvailable, setRoomsAvailable] = useState('');
+  const [bedsAvailable, setBedsAvailable] = useState('');
+  const [grossProfit, setGrossProfit] = useState('');
 
-const ComplexCalculator: React.FC = () => {
-    // Inputs
-    const [periodDays, setPeriodDays] = useState('30');
-    const [totalRooms, setTotalRooms] = useState('');
-    const [roomsSold, setRoomsSold] = useState('');
-    const [revenue, setRevenue] = useState('');
-    const [commissions, setCommissions] = useState('');
-    const [compRevPar, setCompRevPar] = useState('');
-    const [compOcc, setCompOcc] = useState('');
+  // All-in-one calculator inputs
+  const [period, setPeriod] = useState('30'); // Default 30 days
+  const [inventory, setInventory] = useState('100'); // Default 100 rooms
+  const [commissions, setCommissions] = useState('');
+  const [marketRevPar, setMarketRevPar] = useState('');
+  const [marketOcc, setMarketOcc] = useState('');
 
-    // Results
-    const [results, setResults] = useState<any>(null);
+  const [result, setResult] = useState<string | null>(null);
+  const [detailedResult, setDetailedResult] = useState<any | null>(null);
 
-    const handleCalculate = () => {
-        const days = parseFloat(periodDays) || 0;
-        const rooms = parseFloat(totalRooms) || 0;
-        const sold = parseFloat(roomsSold) || 0;
-        const rev = parseFloat(revenue.replace(',', '.')) || 0;
-        const comm = parseFloat(commissions.replace(',', '.')) || 0;
-        const cRevPar = parseFloat(compRevPar.replace(',', '.')) || 0;
-        const cOcc = parseFloat(compOcc.replace(',', '.')) || 0;
+  const isAllInOne = benefit?.id === 'calc-all-in-one';
+  const type = benefit?.id || 'calc-adr'; // Default fallback
 
-        if (days <= 0 || rooms <= 0) return;
-
-        const availableRoomNights = rooms * days;
-        const occupancy = availableRoomNights > 0 ? (sold / availableRoomNights) * 100 : 0;
-        const adr = sold > 0 ? rev / sold : 0;
-        const revPar = availableRoomNights > 0 ? rev / availableRoomNights : 0;
-        const netRev = rev - comm;
-        const netRevPar = availableRoomNights > 0 ? netRev / availableRoomNights : 0;
-        
-        // Market Indexes
-        const mpi = cOcc > 0 ? (occupancy / cOcc) * 100 : 0;
-        const rgi = cRevPar > 0 ? (revPar / cRevPar) * 100 : 0; // Revenue Generation Index (similar to ARI but revenue based)
-
-        setResults({
-            revPar,
-            netRevPar,
-            adr,
-            occupancy,
-            mpi,
-            rgi
-        });
-    };
-
-    const formatCurrency = (val: number) => val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    const formatPercent = (val: number) => val.toFixed(1) + '%';
-
-    return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Métricas do Hotel */}
-                <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2 mb-2">
-                        <Building2 className="w-4 h-4 text-rio-blue" />
-                        Estrutura & Vendas
-                    </h3>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className="block text-xs font-semibold text-gray-500 mb-1">Período (dias)</label>
-                            <input type="number" value={periodDays} onChange={e => setPeriodDays(e.target.value)} className="w-full p-2 rounded border border-gray-200 text-sm" placeholder="Ex: 30" />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-semibold text-gray-500 mb-1">Total Apartamentos</label>
-                            <input type="number" value={totalRooms} onChange={e => setTotalRooms(e.target.value)} className="w-full p-2 rounded border border-gray-200 text-sm" placeholder="Ex: 100" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">Diárias Vendidas (Room Nights)</label>
-                        <input type="number" value={roomsSold} onChange={e => setRoomsSold(e.target.value)} className="w-full p-2 rounded border border-gray-200 text-sm" placeholder="Ex: 2100" />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">Receita Total do Período</label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">R$</span>
-                            <input type="number" value={revenue} onChange={e => setRevenue(e.target.value)} className="w-full p-2 pl-8 rounded border border-gray-200 text-sm" placeholder="0.00" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">Comissões Totais</label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">R$</span>
-                            <input type="number" value={commissions} onChange={e => setCommissions(e.target.value)} className="w-full p-2 pl-8 rounded border border-gray-200 text-sm" placeholder="0.00" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Métricas de Mercado */}
-                <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100 h-fit">
-                    <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2 mb-2">
-                        <BarChart3 className="w-4 h-4 text-green-600" />
-                        Dados de Mercado (Concorrência)
-                    </h3>
-                    <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">RevPAR Médio Concorrentes</label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">R$</span>
-                            <input type="number" value={compRevPar} onChange={e => setCompRevPar(e.target.value)} className="w-full p-2 pl-8 rounded border border-gray-200 text-sm" placeholder="Ex: 145.00" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">Ocupação Média Concorrentes (%)</label>
-                        <input type="number" value={compOcc} onChange={e => setCompOcc(e.target.value)} className="w-full p-2 rounded border border-gray-200 text-sm" placeholder="Ex: 80" />
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                        <button 
-                            onClick={handleCalculate}
-                            className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow transition-colors flex items-center justify-center gap-2"
-                        >
-                            <Calculator className="w-4 h-4" />
-                            Calcular Tudo
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Resultados */}
-            {results && (
-                <div className="bg-white rounded-xl border-2 border-rio-blue/10 shadow-sm overflow-hidden animate-fade-in">
-                    <div className="bg-rio-blue/5 p-3 border-b border-rio-blue/10 text-center">
-                        <span className="text-xs font-bold text-rio-blue uppercase tracking-widest">Resultados Consolidados</span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-gray-100">
-                        <div className="bg-white p-4 text-center">
-                            <p className="text-xs text-gray-500 font-medium uppercase mb-1">RevPAR</p>
-                            <p className="text-lg font-black text-gray-800">{formatCurrency(results.revPar)}</p>
-                        </div>
-                        <div className="bg-white p-4 text-center">
-                            <p className="text-xs text-gray-500 font-medium uppercase mb-1">Net RevPAR</p>
-                            <p className="text-lg font-black text-green-600">{formatCurrency(results.netRevPar)}</p>
-                        </div>
-                        <div className="bg-white p-4 text-center">
-                            <p className="text-xs text-gray-500 font-medium uppercase mb-1">Diária Média (ADR)</p>
-                            <p className="text-lg font-black text-blue-600">{formatCurrency(results.adr)}</p>
-                        </div>
-                        <div className="bg-white p-4 text-center">
-                            <p className="text-xs text-gray-500 font-medium uppercase mb-1">Taxa de Ocupação</p>
-                            <p className="text-lg font-black text-purple-600">{formatPercent(results.occupancy)}</p>
-                        </div>
-                        <div className="bg-white p-4 text-center">
-                            <p className="text-xs text-gray-500 font-medium uppercase mb-1">MPI (Penetração)</p>
-                            <p className={`text-lg font-black ${results.mpi >= 100 ? 'text-green-600' : 'text-red-500'}`}>
-                                {formatPercent(results.mpi)}
-                            </p>
-                        </div>
-                        <div className="bg-white p-4 text-center">
-                            <p className="text-xs text-gray-500 font-medium uppercase mb-1">RGI (Receita)</p>
-                            <p className={`text-lg font-black ${results.rgi >= 100 ? 'text-green-600' : 'text-red-500'}`}>
-                                {formatPercent(results.rgi)}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
-const CalculatorModal: React.FC<CalculatorModalProps> = ({ type, onClose }) => {
-  const isAllInOne = type === 'calc-all-in-one';
-  const config = CALCULATOR_CONFIG[type];
-  
-  const [val1, setVal1] = useState('');
-  const [val2, setVal2] = useState('');
-  const [result, setResult] = useState<number | null>(null);
-  const [explanation, setExplanation] = useState('');
-  const [unit, setUnit] = useState('');
-
-  useEffect(() => {
-    setVal1('');
-    setVal2('');
-    setResult(null);
-  }, [type]);
-
-  const handleCalculate = () => {
-    if (!config) return;
-    const v1 = parseFloat(val1.replace(',', '.'));
-    const v2 = parseFloat(val2.replace(',', '.'));
-
-    if (isNaN(v1) || isNaN(v2)) return;
-
-    const res = config.formula(v1, v2);
-    setResult(res.result);
-    setUnit(res.unit);
-    setExplanation(res.explanation);
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
   };
 
-  if (!config && !isAllInOne) return null;
+  const formatPercent = (val: number) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(val / 100);
+  };
+
+  const handleCalculate = () => {
+    if (isAllInOne) {
+       // All-in-one logic
+       const p = parseFloat(period);
+       const inv = parseFloat(inventory);
+       const sold = parseFloat(roomsSold);
+       const rev = parseFloat(revenue.replace(/\./g, '').replace(',', '.')); // Simple handling for copy paste, ideally better input masking
+       const comm = parseFloat(commissions.replace(/\./g, '').replace(',', '.') || '0');
+       const mRevPar = parseFloat(marketRevPar.replace(/\./g, '').replace(',', '.') || '0');
+       const mOcc = parseFloat(marketOcc.replace(',', '.') || '0');
+
+       if (!p || !inv || !sold || !rev) {
+           setResult("Preencha os campos principais.");
+           return;
+       }
+
+       const totalAvailable = p * inv;
+       const occ = (sold / totalAvailable) * 100;
+       const adr = rev / sold;
+       const revPar = rev / totalAvailable;
+       const netRev = rev - comm;
+       const netRevPar = netRev / totalAvailable;
+
+       // Indexes
+       const mpi = mOcc > 0 ? (occ / mOcc) * 100 : 0; // Market Penetration Index
+       const rgi = mRevPar > 0 ? (revPar / mRevPar) * 100 : 0; // Revenue Generation Index
+
+       setDetailedResult({
+           adr: formatCurrency(adr),
+           revPar: formatCurrency(revPar),
+           netRevPar: formatCurrency(netRevPar),
+           occ: formatPercent(occ),
+           mpi: mpi.toFixed(1) + '%',
+           rgi: rgi.toFixed(1) + '%'
+       });
+       return;
+    }
+
+    // Individual calculators
+    const rev = parseFloat(revenue.replace(',', '.'));
+    const sold = parseFloat(roomsSold);
+    const avail = parseFloat(roomsAvailable);
+    const profit = parseFloat(grossProfit.replace(',', '.'));
+    const beds = parseFloat(bedsAvailable);
+
+    let res = 0;
+    let unit = '';
+
+    switch (type) {
+      case 'calc-adr':
+        if (rev && sold) { res = rev / sold; unit = 'BRL'; }
+        break;
+      case 'calc-revpar':
+        if (rev && avail) { res = rev / avail; unit = 'BRL'; }
+        break;
+      case 'calc-occ':
+        if (sold && avail) { res = (sold / avail) * 100; unit = '%'; }
+        break;
+      case 'calc-goppar':
+        if (profit && avail) { res = profit / avail; unit = 'BRL'; }
+        break;
+      case 'calc-trevpar':
+        if (rev && avail) { res = rev / avail; unit = 'BRL'; } // Same logic as revpar but explicitly Total Revenue
+        break;
+      case 'calc-trevpab':
+        if (rev && beds) { res = rev / beds; unit = 'BRL'; }
+        break;
+      default:
+        setResult("Calculadora não encontrada.");
+        return;
+    }
+
+    if (unit === 'BRL') {
+        setResult(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(res));
+    } else {
+        setResult(res.toFixed(1) + '%');
+    }
+  };
+
+  const clear = () => {
+    setRevenue('');
+    setRoomsSold('');
+    setRoomsAvailable('');
+    setBedsAvailable('');
+    setGrossProfit('');
+    setCommissions('');
+    setMarketRevPar('');
+    setMarketOcc('');
+    setResult(null);
+    setDetailedResult(null);
+  };
+
+  const getTitle = () => {
+     if(isAllInOne) return "Calculadora Hoteleira Completa";
+     return benefit?.title || "Calculadora";
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -297,104 +140,211 @@ const CalculatorModal: React.FC<CalculatorModalProps> = ({ type, onClose }) => {
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
         onClick={onClose}
       />
-      
-      <div className={`relative bg-white rounded-2xl shadow-2xl w-full ${isAllInOne ? 'max-w-2xl' : 'max-w-md'} animate-scale-in overflow-hidden flex flex-col max-h-[90vh]`}>
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl animate-scale-in overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="bg-gradient-to-r from-rio-blue to-blue-900 p-6 text-white relative shrink-0">
-          <button 
-            onClick={onClose}
-            className="absolute top-4 right-4 text-blue-200 hover:text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          
-          <div className="flex items-center gap-3 mb-2">
-            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-              {isAllInOne ? <Calculator className="w-6 h-6 text-rio-gold" /> : (config && <config.icon className="w-6 h-6 text-rio-gold" />)}
-            </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-200">Ferramenta Financeira</span>
+        <div className="bg-gradient-to-r from-rio-blue to-blue-900 p-6 text-white shrink-0">
+          <div className="flex justify-between items-start">
+             <div className="flex items-center gap-3">
+               <div className="bg-white/20 p-2 rounded-lg">
+                 <Calculator className="w-6 h-6 text-white" />
+               </div>
+               <div>
+                 <h2 className="text-xl font-bold">{getTitle()}</h2>
+                 <p className="text-blue-100 text-sm">{benefit?.description}</p>
+               </div>
+             </div>
+             <button onClick={onClose} className="text-white/80 hover:text-white">
+               <X className="w-6 h-6" />
+             </button>
           </div>
-          <h2 className="text-2xl font-bold">{isAllInOne ? 'Calculadora Hoteleira Completa' : config?.title}</h2>
-          <p className="text-blue-100 text-sm opacity-90">{isAllInOne ? 'Análise completa de métricas de venda e concorrência.' : config?.description}</p>
         </div>
 
-        {/* Body */}
-        <div className="p-6 overflow-y-auto">
+        {/* Scrollable Content */}
+        <div className="p-6 md:p-8 overflow-y-auto flex-1">
+          
           {isAllInOne ? (
-            <ComplexCalculator />
+             <div className="space-y-6">
+                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                   <h3 className="font-bold text-rio-blue mb-3 text-sm uppercase flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4" /> Métricas do seu Hotel
+                   </h3>
+                   <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Período (Dias)</label>
+                        <input type="number" value={period} onChange={e => setPeriod(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="Ex: 30" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Nº Apartamentos</label>
+                        <input type="number" value={inventory} onChange={e => setInventory(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="Ex: 100" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Diárias Vendidas</label>
+                        <input type="number" value={roomsSold} onChange={e => setRoomsSold(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="Ex: 2100" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Receita Total (R$)</label>
+                        <input type="number" value={revenue} onChange={e => setRevenue(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="370000" />
+                      </div>
+                      <div className="col-span-2">
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Comissões Totais (R$)</label>
+                        <input type="number" value={commissions} onChange={e => setCommissions(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="70000" />
+                      </div>
+                   </div>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                   <h3 className="font-bold text-gray-600 mb-3 text-sm uppercase flex items-center gap-2">
+                      <Info className="w-4 h-4" /> Métricas de Mercado
+                   </h3>
+                   <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">RevPAR Médio Concorrentes</label>
+                        <input type="number" value={marketRevPar} onChange={e => setMarketRevPar(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="Ex: 145.00" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">Ocupação Média (%)</label>
+                        <input type="number" value={marketOcc} onChange={e => setMarketOcc(e.target.value)} className="w-full border rounded p-2 text-sm" placeholder="Ex: 80" />
+                      </div>
+                   </div>
+                </div>
+
+                <button 
+                  onClick={handleCalculate}
+                  className="w-full bg-rio-gold text-blue-900 font-bold py-3 rounded-lg hover:bg-yellow-500 transition shadow-md"
+                >
+                  Calcular Relatório Completo
+                </button>
+
+                {detailedResult && (
+                  <div className="bg-white border-2 border-rio-blue rounded-xl p-4 shadow-lg animate-fade-in">
+                      <h3 className="font-bold text-gray-800 border-b pb-2 mb-3">Resultados</h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-2">
+                          <div>
+                             <p className="text-xs text-gray-500">RevPAR</p>
+                             <p className="font-bold text-lg text-rio-blue">{detailedResult.revPar}</p>
+                          </div>
+                          <div>
+                             <p className="text-xs text-gray-500">Net RevPAR</p>
+                             <p className="font-bold text-lg text-green-600">{detailedResult.netRevPar}</p>
+                          </div>
+                          <div>
+                             <p className="text-xs text-gray-500">ADR (Diária Média)</p>
+                             <p className="font-bold text-lg text-gray-800">{detailedResult.adr}</p>
+                          </div>
+                          <div>
+                             <p className="text-xs text-gray-500">Ocupação (OCC)</p>
+                             <p className="font-bold text-lg text-gray-800">{detailedResult.occ}</p>
+                          </div>
+                          <div>
+                             <p className="text-xs text-gray-500">MPI (Penetração)</p>
+                             <p className="font-bold text-lg text-purple-600">{detailedResult.mpi}</p>
+                          </div>
+                          <div>
+                             <p className="text-xs text-gray-500">RGI (Receita)</p>
+                             <p className="font-bold text-lg text-purple-600">{detailedResult.rgi}</p>
+                          </div>
+                      </div>
+                  </div>
+                )}
+             </div>
           ) : (
-            config && (
+            // Individual Calculators Logic
             <div className="space-y-6">
-              <div className="space-y-4">
+              {['calc-adr', 'calc-revpar', 'calc-trevpar'].includes(type) && (
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1.5">{config.inputs[0].label}</label>
-                  <div className="relative">
-                    {config.inputs[0].prefix && (
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">
-                        {config.inputs[0].prefix}
-                      </span>
-                    )}
-                    <input 
-                      type="number" 
-                      value={val1}
-                      onChange={(e) => setVal1(e.target.value)}
-                      placeholder={config.inputs[0].placeholder}
-                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pr-4 ${config.inputs[0].prefix ? 'pl-10' : 'pl-4'} focus:ring-2 focus:ring-rio-blue focus:border-rio-blue outline-none transition-all font-mono text-lg`}
-                    />
-                  </div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Receita Total do Período (R$)</label>
+                  <input 
+                    type="number" 
+                    value={revenue} 
+                    onChange={(e) => setRevenue(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                    placeholder="Ex: 50000"
+                  />
                 </div>
+              )}
 
-                <div className="flex justify-center -my-2 relative z-10">
-                  <div className="bg-gray-100 rounded-full p-1.5 border border-white shadow-sm">
-                      <span className="text-gray-400 font-bold text-xs">÷ DIVIDIDO POR</span>
-                  </div>
-                </div>
-
+              {['calc-adr', 'calc-occ'].includes(type) && (
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1.5">{config.inputs[1].label}</label>
-                  <div className="relative">
-                    {config.inputs[1].prefix && (
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">
-                        {config.inputs[1].prefix}
-                      </span>
-                    )}
-                    <input 
-                      type="number" 
-                      value={val2}
-                      onChange={(e) => setVal2(e.target.value)}
-                      placeholder={config.inputs[1].placeholder}
-                      className={`w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pr-4 ${config.inputs[1].prefix ? 'pl-10' : 'pl-4'} focus:ring-2 focus:ring-rio-blue focus:border-rio-blue outline-none transition-all font-mono text-lg`}
-                    />
-                  </div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Número de Diárias Vendidas</label>
+                  <input 
+                    type="number" 
+                    value={roomsSold} 
+                    onChange={(e) => setRoomsSold(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                    placeholder="Ex: 150"
+                  />
                 </div>
-              </div>
+              )}
+
+              {['calc-revpar', 'calc-occ', 'calc-goppar', 'calc-trevpar'].includes(type) && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Número de Quartos Disponíveis (Inventário x Dias)</label>
+                  <input 
+                    type="number" 
+                    value={roomsAvailable} 
+                    onChange={(e) => setRoomsAvailable(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                    placeholder="Ex: 300"
+                  />
+                </div>
+              )}
+              
+              {type === 'calc-goppar' && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Lucro Operacional Bruto (GOP)</label>
+                  <input 
+                    type="number" 
+                    value={grossProfit} 
+                    onChange={(e) => setGrossProfit(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                    placeholder="Ex: 20000"
+                  />
+                </div>
+              )}
+
+              {type === 'calc-trevpab' && (
+                <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Receita Total</label>
+                  <input type="number" value={revenue} onChange={e => setRevenue(e.target.value)} className="w-full p-3 border rounded-lg" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Número de Camas Disponíveis</label>
+                  <input type="number" value={bedsAvailable} onChange={e => setBedsAvailable(e.target.value)} className="w-full p-3 border rounded-lg" placeholder="Ex: 50" />
+                </div>
+                </>
+              )}
 
               <button 
                 onClick={handleCalculate}
-                disabled={!val1 || !val2}
-                className="w-full bg-rio-blue hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200/50 transition-all active:scale-95 flex items-center justify-center gap-2"
+                className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
               >
-                <Calculator className="w-5 h-5" />
                 Calcular Agora
+                <ArrowRight className="w-5 h-5" />
               </button>
 
-              {result !== null && (
-                <div className="bg-green-50 rounded-xl p-5 border border-green-100 animate-fade-in text-center">
-                  <span className="text-xs font-bold text-green-600 uppercase tracking-wide">Resultado Calculado</span>
-                  <div className="text-3xl font-black text-gray-800 my-1">
-                    {unit === 'R$' 
-                      ? result.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
-                      : `${result.toFixed(2)}%`
-                    }
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">{explanation}</p>
+              {result && (
+                <div className="bg-green-50 border border-green-200 p-6 rounded-xl text-center animate-fade-in">
+                  <p className="text-gray-500 text-sm uppercase font-bold mb-1">Resultado</p>
+                  <p className="text-4xl font-black text-green-600 tracking-tight">{result}</p>
                 </div>
               )}
             </div>
-            )
           )}
         </div>
+
+        {/* Footer */}
+        <div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-between shrink-0">
+          <button 
+            onClick={clear}
+            className="flex items-center gap-2 text-gray-500 hover:text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Limpar
+          </button>
+        </div>
+
       </div>
     </div>
   );

@@ -1,40 +1,71 @@
 
 
-import React, { useState, useEffect } from 'react';
-import { User, Benefit } from '../types';
-import { Menu, X, LogOut, Bell, Search, User as UserIcon, HelpCircle, Users, Calendar, MessageCircle, Home, ChevronDown, Star } from 'lucide-react';
-import MegaMenu from './MegaMenu';
-import Footer from './Footer';
-import { BENEFITS_DATA } from '../constants';
 
-// Import AppView type locally or accept string to avoid circular dependency issues if strict
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS';
+import React, { useState } from 'react';
+import { User, Benefit, BenefitCategory, HotelSector } from '../types';
+import { 
+  Home, Users, MessageCircle, LogOut, Menu, X, Search, 
+  LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
+  GraduationCap, Calendar, PieChart, Headphones, Settings,
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2
+} from 'lucide-react';
+import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
+import * as Icons from 'lucide-react';
+
+// Import AppView type locally
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER';
 
 interface LayoutProps {
   children: React.ReactNode;
   user: User;
   onLogout: () => void;
-  onNavigate: (view: AppView) => void;
+  onNavigate: (view: AppView, params?: any) => void;
   onBenefitClick?: (benefit: Benefit) => void;
-  onForumClick?: (forum: any) => void;
+  onCategorySelect?: (category: string) => void; 
   currentView?: string;
+  selectedCategory?: string; 
+  onSectorSelect?: (sector: HotelSector) => void;
+  isFullPage?: boolean; // New prop to control padding
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, onBenefitClick, onForumClick, currentView }) => {
+const Layout: React.FC<LayoutProps> = ({ 
+  children, 
+  user, 
+  onLogout, 
+  onNavigate, 
+  onBenefitClick,
+  onSectorSelect,
+  currentView,
+  isFullPage = false
+}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
-  const [megaMenuMode, setMegaMenuMode] = useState<'BENEFITS' | 'HIGHLIGHTS'>('BENEFITS');
-  
-  // Search State
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<Benefit[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  
+  // Accordion States
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const [expandedSectors, setExpandedSectors] = useState<string[]>([]); // Default collapsed
 
-  useEffect(() => {
-    if (searchTerm.length >= 2) {
+  const toggleCategory = (id: string) => {
+    setExpandedCategories(prev => 
+      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSector = (id: string) => {
+    setExpandedSectors(prev => 
+      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
+    );
+  };
+
+  // Search Logic
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    if (term.length >= 2) {
       const results = BENEFITS_DATA.filter(b => 
-        b.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        b.description.toLowerCase().includes(searchTerm.toLowerCase())
+        b.title.toLowerCase().includes(term.toLowerCase()) || 
+        b.description.toLowerCase().includes(term.toLowerCase())
       );
       setSearchResults(results);
       setIsSearchOpen(true);
@@ -42,251 +73,380 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, o
       setSearchResults([]);
       setIsSearchOpen(false);
     }
-  }, [searchTerm]);
-
-  const handleNavClick = (view: AppView) => {
-    onNavigate(view);
-    setIsMobileMenuOpen(false);
-    setIsMegaMenuOpen(false);
   };
 
   const handleSearchResultClick = (benefit: Benefit) => {
     if (onBenefitClick) onBenefitClick(benefit);
     setSearchTerm('');
     setIsSearchOpen(false);
+    setIsMobileMenuOpen(false);
   };
 
-  const navItems = [
-    { label: 'Início', view: 'DASHBOARD' as AppView, icon: Home },
-    { label: 'Equipe', view: 'CONTACTS' as AppView, icon: Users },
-    { label: 'Grupos', view: 'WHATSAPP_GROUPS' as AppView, icon: MessageCircle },
-  ];
+  const handleSuperCategoryClick = (categoryId: string) => {
+    onNavigate('CATEGORY_LISTING', categoryId);
+    setIsMobileMenuOpen(false);
+  };
 
-  const handleMegaMenuOpen = (mode: 'BENEFITS' | 'HIGHLIGHTS') => {
-    setMegaMenuMode(mode);
-    setIsMegaMenuOpen(true);
+  const renderIcon = (name: string, className: string) => {
+      const IconComponent = (Icons as any)[name] || Icons.Circle;
+      return <IconComponent className={className} />;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      {/* Navbar */}
-      <nav className="bg-rio-blue text-white shadow-lg sticky top-0 z-50 h-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex justify-between h-full">
+    <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
+      
+      {/* --- SIDEBAR (Desktop) --- */}
+      <aside className="hidden md:flex w-72 flex-col bg-gradient-to-b from-rio-blue to-blue-900 text-white shadow-2xl z-30 shrink-0 h-full border-r border-white/5">
+        {/* Logo Area */}
+        <div className="p-6 flex items-center justify-center border-b border-white/10 h-20 shrink-0 bg-rio-blue">
+           <img 
+             src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+             alt="HoteisRio" 
+             className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+             onClick={() => onNavigate('DASHBOARD')}
+           />
+        </div>
+
+        {/* Scrollable Navigation */}
+        <div className="flex-1 overflow-y-auto py-6 px-3 space-y-1 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
             
-            {/* Logo & Desktop Nav */}
-            <div className="flex items-center h-full">
-              <div 
-                className="flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity" 
-                onClick={() => handleNavClick('DASHBOARD')}
-              >
-                <img 
-                  src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-                  alt="HoteisRio" 
-                  className="h-10 w-auto"
-                />
-              </div>
-              
-              {/* Desktop Menu Links - h-full ensures no gap for mouse leave */}
-              <div className="hidden md:ml-8 md:flex md:items-center md:space-x-1 h-full">
-                {navItems.map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={() => handleNavClick(item.view)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2
-                      ${currentView === item.view 
-                        ? 'bg-blue-800 text-white border-b-2 border-rio-gold' 
-                        : 'text-blue-100 hover:bg-blue-700 hover:text-white'
-                      }`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                  </button>
-                ))}
-
-                {/* Highlights Menu Trigger */}
-                <div 
-                  className="relative h-full flex items-center"
-                  onMouseEnter={() => handleMegaMenuOpen('HIGHLIGHTS')}
-                  onMouseLeave={() => setIsMegaMenuOpen(false)}
+            {/* PRINCIPAL SECTION */}
+            <div className="mb-6 px-1">
+                <button 
+                onClick={() => onNavigate('DASHBOARD')}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mb-1
+                    ${currentView === 'DASHBOARD'
+                    ? 'bg-white text-rio-blue font-bold shadow-lg' 
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'}
+                `}
                 >
-                  <button
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1
-                      ${isMegaMenuOpen && megaMenuMode === 'HIGHLIGHTS' ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'}
-                    `}
-                    onClick={() => {
-                        setMegaMenuMode('HIGHLIGHTS');
-                        setIsMegaMenuOpen(!isMegaMenuOpen);
-                    }}
-                  >
-                    <Star className="w-4 h-4" />
-                    Destaques
-                  </button>
-                </div>
+                <LayoutDashboard className="w-5 h-5" />
+                Visão Geral
+                </button>
 
-                {/* Benefits Mega Menu Trigger */}
-                <div 
-                  className="relative h-full flex items-center"
-                  onMouseEnter={() => handleMegaMenuOpen('BENEFITS')}
-                  onMouseLeave={() => setIsMegaMenuOpen(false)}
+                <button 
+                onClick={() => onNavigate('ALL_BENEFITS')}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
+                    ${currentView === 'ALL_BENEFITS' 
+                    ? 'bg-white text-rio-blue font-bold shadow-lg' 
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'}
+                `}
                 >
-                  <button
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1
-                      ${isMegaMenuOpen && megaMenuMode === 'BENEFITS' ? 'bg-blue-800 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'}
-                    `}
-                    onClick={() => {
-                        setMegaMenuMode('BENEFITS');
-                        setIsMegaMenuOpen(!isMegaMenuOpen);
-                    }}
-                  >
-                    Benefícios
-                    <ChevronDown className={`w-4 h-4 transition-transform ${isMegaMenuOpen && megaMenuMode === 'BENEFITS' ? 'rotate-180' : ''}`} />
-                  </button>
-                  
-                  {/* Mega Menu Component - Shared Position */}
-                  <MegaMenu 
-                    isOpen={isMegaMenuOpen}
-                    mode={megaMenuMode} 
-                    onClose={() => setIsMegaMenuOpen(false)} 
-                    onBenefitClick={(benefit) => {
-                      if (onBenefitClick) onBenefitClick(benefit);
-                      setIsMegaMenuOpen(false);
-                    }}
-                    onForumClick={(forum) => {
-                      if (onForumClick) onForumClick(forum);
-                      setIsMegaMenuOpen(false);
-                    }}
-                  />
-                </div>
-              </div>
+                <LayoutGrid className="w-5 h-5" />
+                Ver Todos os Benefícios
+                </button>
             </div>
+
+            <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
+
+            {/* SECTORS ACCORDION (MAIN NAV) */}
+            <div className="mb-6">
+                <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-4 mb-3">
+                    Por Departamento
+                </div>
+                
+                {HOTEL_SECTORS.map(sector => {
+                    const isExpanded = expandedSectors.includes(sector.id);
+                    // Find benefits for this sector
+                    const sectorBenefits = BENEFITS_DATA.filter(b => b.targetSectors?.includes(sector.id as HotelSector));
+                    
+                    if (sectorBenefits.length === 0) return null;
+
+                    return (
+                        <div key={sector.id} className="mb-1">
+                            <button 
+                                onClick={() => toggleSector(sector.id)}
+                                className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg text-sm transition-all group hover:bg-white/5
+                                    ${isExpanded ? 'text-white bg-white/5' : 'text-white/70'}
+                                `}
+                            >
+                                <div className="flex items-center gap-3 font-medium">
+                                    {renderIcon(sector.iconName, `w-4 h-4 ${isExpanded ? 'text-rio-gold' : 'text-white/60'}`)}
+                                    {sector.label}
+                                </div>
+                                <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${isExpanded ? 'rotate-90 text-white' : 'text-white/30'}`} />
+                            </button>
+
+                            {/* Submenu Items */}
+                            {isExpanded && (
+                                <div className="mt-1 ml-4 border-l border-white/10 pl-2 space-y-0.5 animate-slide-down origin-top">
+                                    {sectorBenefits.slice(0, 6).map(b => (
+                                        <button
+                                            key={b.id}
+                                            onClick={() => onBenefitClick && onBenefitClick(b)}
+                                            className="w-full text-left px-3 py-2 text-xs text-blue-100/70 hover:text-white hover:bg-white/5 rounded-md transition-colors flex items-center gap-2 group/item"
+                                            title={b.title}
+                                        >
+                                            <span className="w-1 h-1 rounded-full bg-white/30 group-hover/item:bg-rio-gold transition-colors"></span>
+                                            <span className="truncate">{b.title}</span>
+                                        </button>
+                                    ))}
+                                    {sectorBenefits.length > 6 && (
+                                        <button 
+                                            onClick={() => { if(onSectorSelect) onSectorSelect(sector.id as HotelSector); onNavigate('ALL_BENEFITS'); }}
+                                            className="w-full text-left px-3 py-2 text-[10px] uppercase font-bold text-rio-gold hover:underline pl-6"
+                                        >
+                                            Ver todos de {sector.label}
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )
+                })}
+            </div>
+
+            <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
+
+            {/* SUPER CATEGORIES (SECONDARY NAV) */}
+            <div className="mb-4">
+                <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-4 mb-3">
+                    Categorias
+                </div>
+                
+                {SUPER_CATEGORIES.map(cat => {
+                    const isExpanded = expandedCategories.includes(cat.id);
+                    return (
+                        <div key={cat.id} className="mb-1">
+                            <button 
+                                onClick={() => toggleCategory(cat.id)}
+                                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-sm transition-all group hover:bg-white/5
+                                    ${isExpanded ? 'text-white' : 'text-white/60'}
+                                `}
+                            >
+                                <div className="flex items-center gap-3">
+                                    {renderIcon(cat.iconName, "w-4 h-4 opacity-70")}
+                                    {cat.title}
+                                </div>
+                                <ChevronRight className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                            </button>
+
+                            {isExpanded && (
+                                <div className="pl-9 mt-1 mb-2 animate-fade-in">
+                                    <button 
+                                        onClick={() => handleSuperCategoryClick(cat.id)}
+                                        className="text-xs text-blue-300 hover:text-white hover:underline flex items-center gap-1"
+                                    >
+                                        Abrir página da categoria <ArrowRight className="w-3 h-3" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )
+                })}
+            </div>
+
+            <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
+
+            {/* COMUNIDADE */}
+            <div className="px-1">
+                <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-3">
+                    Links Úteis
+                </div>
+
+                <button 
+                    onClick={() => {
+                        const calendar = BENEFITS_DATA.find(b => b.id === 'calendar-2-0');
+                        if (calendar && onBenefitClick) {
+                            onBenefitClick(calendar);
+                        }
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-yellow-300 hover:bg-white/10 hover:text-white transition-all font-semibold group text-sm"
+                >
+                    <Sparkles className="w-4 h-4 group-hover:animate-pulse" />
+                    Calendário de Eventos 2.0
+                </button>
+
+                <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+                    <Calculator className="w-4 h-4" />
+                    Calculadoras
+                </button>
+
+                <button onClick={() => onNavigate('WHATSAPP_GROUPS')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+                    <MessageCircle className="w-4 h-4" />
+                    Grupos WhatsApp
+                </button>
+                <button onClick={() => onNavigate('CONTACTS')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+                    <Users className="w-4 h-4" />
+                    Equipe & Contatos
+                </button>
+            </div>
+
+        </div>
+
+        {/* User Footer */}
+        <div className="p-4 bg-black/20 shrink-0 border-t border-white/10">
+            <div className="flex items-center gap-3 mb-3">
+                <div className="bg-white/20 p-2 rounded-full">
+                    <UserCircle className="w-6 h-6 text-white" />
+                </div>
+                <div className="overflow-hidden">
+                    <p className="text-sm font-bold text-white truncate">{user.name}</p>
+                    <p className="text-[10px] text-blue-200 truncate uppercase">{user.hotel}</p>
+                </div>
+            </div>
+            <button 
+              onClick={onLogout}
+              className="w-full flex items-center justify-center gap-2 bg-red-500/20 hover:bg-red-600 text-red-100 hover:text-white py-2 rounded-lg text-xs font-bold transition-colors uppercase tracking-wide"
+            >
+               <LogOut className="w-3 h-3" /> Encerrar Sessão
+            </button>
+        </div>
+      </aside>
+
+      {/* --- MAIN CONTENT AREA --- */}
+      <div className="flex-1 flex flex-col h-screen overflow-hidden relative bg-slate-50">
+        
+        {/* Top Header (Desktop & Mobile) - HIDDEN IN FULL PAGE MODE */}
+        {!isFullPage && (
+        <header className="h-16 bg-white border-b border-gray-200 shadow-sm shrink-0 flex items-center justify-between px-4 lg:px-8 z-20">
             
-            {/* Right Side Icons */}
-            <div className="hidden md:flex items-center gap-4">
-               
-               {/* Search Bar - Instant AJAX Style */}
-               <div className="relative">
-                <input 
-                  type="text" 
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Buscar benefício..." 
-                  className="bg-blue-800 text-white placeholder-blue-300 rounded-full px-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-rio-gold w-64 transition-all"
-                />
-                <Search className="absolute right-3 top-1.5 h-4 w-4 text-blue-300 pointer-events-none" />
+            {/* Mobile Menu Toggle */}
+            <div className="flex items-center gap-4 md:hidden">
+               <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-600 hover:text-rio-blue">
+                  <Menu className="w-6 h-6" />
+               </button>
+               <img 
+                 src="https://sindhoteisrj.com.br/wp-content/uploads/2023/08/logo-hoteisrio-color.png" 
+                 alt="HoteisRio" 
+                 className="h-8 w-auto"
+               />
+            </div>
+
+            {/* Search Bar */}
+            <div className="hidden md:flex flex-1 max-w-xl mx-4 relative">
+                <div className="relative w-full">
+                    <input 
+                      type="text" 
+                      value={searchTerm}
+                      onChange={(e) => handleSearch(e.target.value)}
+                      placeholder="Buscar benefício, serviço ou ferramenta..." 
+                      className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent hover:bg-white hover:border-gray-200 focus:bg-white focus:border-rio-blue rounded-full text-sm focus:ring-2 focus:ring-rio-blue/20 focus:outline-none transition-all"
+                    />
+                    <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                </div>
                 
                 {/* Search Results Dropdown */}
                 {isSearchOpen && (
-                  <div className="absolute top-full mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden animate-fade-in z-50 right-0 text-gray-800">
+                  <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in z-50 max-h-80 overflow-y-auto">
                     {searchResults.length > 0 ? (
-                      <ul className="max-h-64 overflow-y-auto">
+                      <ul>
                         {searchResults.map(result => (
                           <li key={result.id}>
                             <button 
                               onClick={() => handleSearchResultClick(result)}
-                              className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0 flex flex-col"
+                              className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0 flex items-center gap-3"
                             >
-                              <span className="font-bold text-sm text-rio-blue">{result.title}</span>
-                              <span className="text-xs text-gray-500 truncate w-full">{result.description}</span>
+                              <div className="bg-blue-50 p-2 rounded-lg text-rio-blue shrink-0">
+                                  <LayoutDashboard className="w-4 h-4" /> 
+                              </div>
+                              <div>
+                                  <span className="font-bold text-sm text-gray-800 block">{result.title}</span>
+                                  <span className="text-xs text-gray-500 truncate block">{result.description}</span>
+                              </div>
+                              <ChevronRight className="w-4 h-4 text-gray-300 ml-auto" />
                             </button>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <div className="p-4 text-center text-sm text-gray-500">
+                      <div className="p-8 text-center text-sm text-gray-500">
                         Nenhum resultado encontrado.
                       </div>
                     )}
                   </div>
                 )}
-               </div>
-               
+            </div>
+
+            {/* Right Actions */}
+            <div className="flex items-center gap-4">
                <button 
-                 onClick={() => handleNavClick('TUTORIAL')}
-                 className="flex items-center gap-1.5 text-blue-200 hover:text-white px-3 py-1.5 rounded-full hover:bg-blue-700 transition text-sm font-medium"
-                 title="Como usar a plataforma"
+                 onClick={() => onNavigate('TUTORIAL')}
+                 className="hidden md:flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-rio-blue bg-gray-50 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
                >
-                 <HelpCircle className="w-4 h-4" />
-                 Ajuda
+                  <Settings className="w-4 h-4" />
+                  Ajuda
                </button>
-
-               <button className="p-1 rounded-full text-gray-200 hover:text-white hover:bg-blue-700 transition">
-                 <Bell className="h-6 w-6" />
+               <button className="relative p-2 text-gray-400 hover:text-rio-blue transition-colors">
+                  <Bell className="w-5 h-5" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
                </button>
-               
-               <div className="flex items-center gap-3 pl-4 border-l border-blue-700">
+               <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">
                   <div className="text-right">
-                    <p className="text-sm font-medium leading-none">{user.name}</p>
-                    <p className="text-xs text-blue-200 mt-0.5">{user.hotel}</p>
+                    <p className="text-sm font-bold text-gray-800 leading-none">{user.name}</p>
+                    <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wide">{user.hotel}</p>
                   </div>
-                  <button onClick={onLogout} className="text-blue-200 hover:text-white" title="Sair">
-                    <LogOut className="h-5 w-5" />
-                  </button>
+                  <div className="w-9 h-9 bg-rio-blue text-white rounded-full flex items-center justify-center font-bold shadow-sm ring-2 ring-blue-50">
+                     {user.name.charAt(0)}
+                  </div>
                </div>
             </div>
-
-            {/* Mobile Menu Button */}
-            <div className="flex items-center md:hidden">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-700 focus:outline-none"
-              >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-blue-800 animate-fade-in">
-            <div className="pt-2 pb-3 space-y-1 px-4">
-              {/* User Info Mobile */}
-              <div className="flex items-center gap-3 pb-3 border-b border-blue-700 mb-3">
-                 <div className="bg-blue-600 p-2 rounded-full">
-                    <UserIcon className="h-5 w-5" />
-                 </div>
-                 <div>
-                    <p className="text-white font-medium">{user.name}</p>
-                    <p className="text-blue-300 text-xs">{user.hotel}</p>
-                 </div>
-              </div>
-
-              {/* Mobile Navigation Links */}
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => handleNavClick(item.view)}
-                  className="w-full text-left flex items-center gap-3 px-3 py-3 rounded-md text-base font-medium text-blue-100 hover:text-white hover:bg-blue-700"
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.label}
-                </button>
-              ))}
-
-              <button 
-                onClick={() => handleNavClick('TUTORIAL')} 
-                className="w-full text-left flex items-center gap-3 px-3 py-3 rounded-md text-base font-medium text-blue-100 hover:text-white hover:bg-blue-700"
-              >
-                 <HelpCircle className="w-5 h-5" />
-                 Tutorial / Ajuda
-              </button>
-              
-              <button onClick={onLogout} className="w-full text-left flex items-center gap-3 px-3 py-3 rounded-md text-base font-medium text-red-300 hover:text-red-100 hover:bg-blue-700 mt-2 border-t border-blue-700">
-                <LogOut className="w-5 h-5" />
-                Sair
-              </button>
-            </div>
-          </div>
+        </header>
         )}
-      </nav>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+        {/* Main Scrollable Content */}
+        <main className={`flex-1 overflow-y-auto scroll-smooth relative ${isFullPage ? 'p-0' : 'p-4 md:p-8'}`} id="main-content">
+           <div className={`${isFullPage ? 'h-full w-full' : 'max-w-7xl mx-auto pb-10'}`}>
+             {children}
+           </div>
+        </main>
+      </div>
 
-      {/* New Elegant Footer */}
-      <Footer />
+      {/* --- MOBILE SIDEBAR (Drawer) --- */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+           {/* Backdrop */}
+           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+           
+           {/* Drawer */}
+           <div className="relative w-[85%] max-w-xs bg-gradient-to-b from-rio-blue to-blue-900 h-full shadow-2xl flex flex-col animate-slide-in-left">
+              <div className="p-5 flex justify-between items-center border-b border-white/10 shrink-0">
+                 <img 
+                   src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+                   alt="HoteisRio" 
+                   className="h-8 w-auto"
+                 />
+                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-white/80 hover:text-white">
+                    <X className="w-6 h-6" />
+                 </button>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                 <button onClick={() => { onNavigate('DASHBOARD'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <LayoutDashboard className="w-5 h-5" /> Início
+                 </button>
+                 
+                 <div className="pt-4 pb-2 text-xs text-blue-300 font-bold uppercase tracking-widest border-b border-white/10 mb-2">Departamentos</div>
+                 
+                 {HOTEL_SECTORS.map(s => (
+                    <button key={s.id} onClick={() => { if(onSectorSelect) onSectorSelect(s.id as HotelSector); onNavigate('ALL_BENEFITS'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 text-sm py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                        {renderIcon(s.iconName, "w-4 h-4 opacity-70")} {s.label}
+                    </button>
+                 ))}
+
+                 <div className="pt-6 pb-2 text-xs text-blue-300 font-bold uppercase tracking-widest border-b border-white/10 mb-2">Links Rápidos</div>
+
+                 <button 
+                    onClick={() => {
+                        const calendar = BENEFITS_DATA.find(b => b.id === 'calendar-2-0');
+                        if (calendar && onBenefitClick) {
+                            onBenefitClick(calendar);
+                            setIsMobileMenuOpen(false);
+                        }
+                    }}
+                    className="w-full text-left text-yellow-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3"
+                 >
+                    <Sparkles className="w-5 h-5" /> Calendário 2.0
+                 </button>
+                 
+                 <button onClick={onLogout} className="w-full text-left text-red-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3 mt-4 border-t border-white/10 pt-4">
+                    <LogOut className="w-5 h-5" /> Sair
+                 </button>
+              </div>
+           </div>
+        </div>
+      )}
+
     </div>
   );
 };
