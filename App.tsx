@@ -1,16 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -283,13 +271,18 @@ const Dashboard: React.FC = () => {
     day: 'numeric'
   });
 
-  // URL Parameter Check for Special Views (Categorizer)
+  // URL Parameter Check for Special Views (Categorizer & Courses)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
+    
     // Support both "categorizer" and "categorize"
     if (viewParam === 'categorizer' || viewParam === 'categorize') {
        setCurrentView('CATEGORIZER');
+    }
+    // Support deep link to courses
+    else if (viewParam === 'courses-v2' || viewParam === 'courses') {
+       setCurrentView('COURSES_V2');
     }
   }, []);
 
@@ -591,6 +584,7 @@ const Dashboard: React.FC = () => {
     const url = new URL(window.location.href);
     if (url.searchParams.has('view')) {
        url.searchParams.delete('view');
+       url.searchParams.delete('courseId'); // Clean specific params too
        window.history.replaceState({}, '', url);
     }
   };
