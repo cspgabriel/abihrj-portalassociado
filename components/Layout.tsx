@@ -3,19 +3,21 @@
 
 
 
+
+
 import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory, HotelSector } from '../types';
 import { 
   Home, Users, MessageCircle, LogOut, Menu, X, Search, 
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
-  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay
 } from 'lucide-react';
 import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -259,6 +261,14 @@ const Layout: React.FC<LayoutProps> = ({
                     Calendário 2026
                 </button>
 
+                <button 
+                    onClick={() => onNavigate('COURSES_V2')} 
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm group"
+                >
+                    <MonitorPlay className="w-4 h-4 group-hover:text-rio-gold" />
+                    Cursos 2.0 (Beta)
+                </button>
+
                 <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
                     <Calculator className="w-4 h-4" />
                     Calculadoras
@@ -448,6 +458,10 @@ const Layout: React.FC<LayoutProps> = ({
                     className="w-full text-left text-yellow-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3"
                  >
                     <Sparkles className="w-5 h-5" /> Calendário 2026
+                 </button>
+
+                 <button onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <MonitorPlay className="w-5 h-5" /> Cursos 2.0 (Beta)
                  </button>
 
                  <button onClick={() => { onNavigate('CATEGORIZER'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">

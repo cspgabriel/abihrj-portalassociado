@@ -1,6 +1,7 @@
 
 
-import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge, HotelSector } from './types';
+
+import { Benefit, BenefitCategory, RioEvent, Forum, GamificationBadge, HotelSector, Course } from './types';
 
 export const MOCK_USER = {
   name: "Carlos Silva",
@@ -590,7 +591,66 @@ export const CALCULATOR_TOOLS: Benefit[] = [
   }
 ];
 
+// --- COURSES DATA (NETFLIX STYLE) ---
+export const COURSES_DATA: Course[] = [
+  {
+    id: 'course-001',
+    youtubeId: 'KNtlsV3ad2I',
+    title: 'Identificação de Bebidas Falsificadas',
+    description: 'Workshop completo da SEDCON ensinando técnicas para identificar bebidas falsas na rede hoteleira e evitar prejuízos.',
+    category: 'Operacional & Segurança',
+    duration: '2h 15m',
+    thumbnailUrl: 'https://img.youtube.com/vi/KNtlsV3ad2I/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-002',
+    youtubeId: '0GcOpWXiQDI',
+    title: 'Treinamento Shuttle e Recepção',
+    description: 'Apresentação detalhada sobre procedimentos de Shuttle, Concierge e excelência no atendimento na recepção.',
+    category: 'Recepção',
+    duration: '45m',
+    thumbnailUrl: 'https://img.youtube.com/vi/0GcOpWXiQDI/maxresdefault.jpg'
+  },
+  {
+    id: 'course-003',
+    youtubeId: 'YeSKeFOy52Y',
+    title: 'Treinamento FNHR Digital',
+    description: 'Capacitação sobre o uso das ferramentas digitais da FNHR para gestão e conformidade hoteleira.',
+    category: 'Gestão & Tecnologia',
+    duration: '1h 10m',
+    thumbnailUrl: 'https://img.youtube.com/vi/YeSKeFOy52Y/maxresdefault.jpg'
+  },
+  {
+    id: 'course-004',
+    youtubeId: '_q2a96-cgFE',
+    title: 'O Futuro dos Meios de Hospedagem',
+    description: 'Simpósio completo (HD) discutindo tendências, inovação e o futuro da hotelaria no cenário global e local.',
+    category: 'Estratégia',
+    duration: '3h 30m',
+    thumbnailUrl: 'https://img.youtube.com/vi/_q2a96-cgFE/maxresdefault.jpg'
+  }
+];
+
 export const BENEFITS_DATA: Benefit[] = [
+  // --- CURSOS 2.0 (NOVO MÓDULO) ---
+  {
+    id: 'courses-v2',
+    title: 'Cursos & Treinamentos 2.0',
+    description: 'Nova plataforma de vídeos estilo streaming. Assista workshops e palestras gravadas quando quiser.',
+    category: BenefitCategory.TRAINING,
+    targetSectors: ['HR', 'MANAGEMENT', 'RECEPTION', 'FB'],
+    iconName: 'PlayCircle',
+    imageUrl: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    customCta: 'Acessar Cursos',
+    usageSteps: [
+      "Clique em 'Acessar Cursos' para abrir a plataforma de vídeos.",
+      "Navegue pelo catálogo estilo Netflix.",
+      "Clique em um card para assistir ao treinamento na própria plataforma.",
+    ]
+  },
   // --- CALENDÁRIO 2026 (NOVO BANNER) ---
   {
     id: 'calendar-2026',

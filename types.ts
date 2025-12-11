@@ -65,6 +65,17 @@ export interface Benefit {
   embedUrl?: string; // URL otimizada para iframe (se diferente do externalLink)
 }
 
+export interface Course {
+  id: string;
+  youtubeId: string;
+  title: string;
+  description: string;
+  category: string;
+  duration: string;
+  thumbnailUrl: string;
+  isNew?: boolean;
+}
+
 export interface Forum {
   id: string;
   title: string;
