@@ -75,12 +75,14 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
     <div className="bg-[#141414] min-h-screen text-white font-sans animate-fade-in relative overflow-x-hidden">
       
       {/* Navbar Overlay - High Z-Index to stay on top */}
-      <div className="absolute top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-gradient-to-b from-black/80 via-black/40 to-transparent">
-         <button onClick={onBack} className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors bg-black/40 hover:bg-black/60 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
-            <ArrowLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">Voltar ao Dashboard</span>
-         </button>
-         <div className="flex items-center gap-3">
+      <div className="absolute top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-gradient-to-b from-black/90 via-black/60 to-transparent pointer-events-none">
+         <div className="pointer-events-auto">
+            <button onClick={onBack} className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors bg-black/40 hover:bg-black/60 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+                <ArrowLeft className="w-5 h-5" />
+                <span className="hidden sm:inline">Voltar ao Dashboard</span>
+            </button>
+         </div>
+         <div className="flex items-center gap-3 pointer-events-auto">
             <span className="text-rio-blue font-bold tracking-wider uppercase text-[10px] border border-rio-blue px-2 py-0.5 rounded bg-rio-blue/10 backdrop-blur-sm">BETA</span>
             <div className="flex flex-col items-end leading-none">
                 <span className="font-bold text-lg tracking-tight">HoteisRio</span>
@@ -90,7 +92,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
       </div>
 
       {/* Dynamic Hero Section */}
-      <div className="relative h-[70vh] md:h-[85vh] w-full overflow-hidden">
+      <div className="relative h-[80vh] md:h-[90vh] w-full overflow-hidden">
          {/* Background Image with Transition */}
          <div 
             className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out transform scale-105" 
@@ -99,60 +101,62 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
             }}
          >
             {/* Dark Overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/30"></div>
+            <div className="absolute inset-0 bg-black/40"></div>
          </div>
          
          {/* Gradients for smooth blending */}
-         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/60 to-transparent z-10"></div>
-         <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/80 to-transparent z-10 sm:w-2/3"></div>
+         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent z-10"></div>
+         <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/80 to-transparent z-10 sm:w-3/4"></div>
 
-         {/* Content - Padding Bottom adjusted to avoid overlap with negative margin list */}
-         <div className="absolute bottom-0 left-0 p-6 md:p-16 max-w-2xl z-30 flex flex-col justify-end h-full pb-32 md:pb-48">
-             <div className="flex items-center gap-3 mb-4 animate-fade-in-up">
-                {heroCourse.isNew && (
-                    <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm tracking-wider">NOVO LANÇAMENTO</span>
-                )}
-                <span className="text-white/80 text-xs font-bold uppercase tracking-widest flex items-center gap-2 border-l-2 border-rio-gold pl-3">
-                    {heroCourse.category}
-                </span>
-             </div>
-             
-             <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight text-white drop-shadow-lg animate-fade-in-up delay-100">
-                {heroCourse.title}
-             </h1>
-             
-             <div className="flex items-center gap-4 mb-6 text-sm font-medium text-gray-300 animate-fade-in-up delay-200">
-                <span className="flex items-center gap-1 text-green-400 font-bold">98% Relevante</span>
-                <span className="text-gray-400">2025</span>
-                <span className="border border-gray-500 px-1.5 py-0.5 rounded text-[10px] text-gray-400">HD</span>
-                <span className="flex items-center gap-1 text-white"><Clock className="w-3 h-3" /> {heroCourse.duration}</span>
-             </div>
+         {/* Content - Adjusted padding to push text higher up */}
+         <div className="absolute bottom-0 left-0 w-full p-6 md:p-16 z-30 flex flex-col justify-end h-full pb-48 md:pb-60 pointer-events-none">
+             <div className="max-w-3xl pointer-events-auto">
+                 <div className="flex items-center gap-3 mb-4 animate-fade-in-up">
+                    {heroCourse.isNew && (
+                        <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm tracking-wider">NOVO LANÇAMENTO</span>
+                    )}
+                    <span className="text-white/90 text-xs font-bold uppercase tracking-widest flex items-center gap-2 border-l-2 border-rio-gold pl-3">
+                        {heroCourse.category}
+                    </span>
+                 </div>
+                 
+                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight text-white drop-shadow-2xl animate-fade-in-up delay-100">
+                    {heroCourse.title}
+                 </h1>
+                 
+                 <div className="flex items-center gap-4 mb-6 text-sm font-medium text-gray-300 animate-fade-in-up delay-200">
+                    <span className="flex items-center gap-1 text-green-400 font-bold">98% Relevante</span>
+                    <span className="text-gray-400">2025</span>
+                    <span className="border border-gray-500 px-1.5 py-0.5 rounded text-[10px] text-gray-400">HD</span>
+                    <span className="flex items-center gap-1 text-white"><Clock className="w-3 h-3" /> {heroCourse.duration}</span>
+                 </div>
 
-             <p className="text-gray-300 text-sm md:text-base lg:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-md animate-fade-in-up delay-300 hidden md:block">
-                {heroCourse.description}
-             </p>
-             
-             <div className="flex flex-wrap gap-4 animate-fade-in-up delay-500">
-                <button 
-                  onClick={() => handlePlay(heroCourse)}
-                  className="bg-white text-black px-8 py-3 rounded-md font-bold flex items-center gap-3 hover:bg-white/90 transition-all transform hover:scale-105"
-                >
-                   <Play className="w-6 h-6 fill-black" />
-                   Assistir Agora
-                </button>
-                <button 
-                    onClick={(e) => copyLink(e, heroCourse)}
-                    className="bg-gray-500/40 text-white px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-gray-500/60 transition-colors backdrop-blur-sm border border-white/20"
-                >
-                   {copiedId === heroCourse.id ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
-                   {copiedId === heroCourse.id ? 'Copiado' : 'Compartilhar'}
-                </button>
+                 <p className="text-gray-300 text-sm md:text-base lg:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-lg animate-fade-in-up delay-300 hidden md:block max-w-2xl">
+                    {heroCourse.description}
+                 </p>
+                 
+                 <div className="flex flex-wrap gap-4 animate-fade-in-up delay-500">
+                    <button 
+                      onClick={() => handlePlay(heroCourse)}
+                      className="bg-white text-black px-8 py-3 rounded-md font-bold flex items-center gap-3 hover:bg-white/90 transition-all transform hover:scale-105 shadow-xl shadow-black/20"
+                    >
+                       <Play className="w-6 h-6 fill-black" />
+                       Assistir Agora
+                    </button>
+                    <button 
+                        onClick={(e) => copyLink(e, heroCourse)}
+                        className="bg-gray-500/30 text-white px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-gray-500/50 transition-colors backdrop-blur-sm border border-white/20"
+                    >
+                       {copiedId === heroCourse.id ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
+                       {copiedId === heroCourse.id ? 'Copiado' : 'Compartilhar'}
+                    </button>
+                 </div>
              </div>
          </div>
       </div>
 
-      {/* Content Rows - Negative margin pulls it up over the hero bottom gradient */}
-      <div className="px-6 md:px-16 pb-20 -mt-24 md:-mt-40 relative z-40 space-y-12">
+      {/* Content Rows - Adjusted negative margin */}
+      <div className="px-6 md:px-16 pb-20 -mt-32 md:-mt-48 relative z-40 space-y-12">
          
          {/* Row 1: Catalog */}
          <div>
@@ -228,6 +232,10 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
       {/* Video Player Modal */}
       {isPlaying && selectedCourse && (
          <div className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4 animate-fade-in backdrop-blur-sm">
+             <div 
+               className="absolute inset-0"
+               onClick={closeModal}
+             ></div>
              <button 
                onClick={closeModal}
                className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 z-50 bg-black/50 rounded-full transition-colors"
@@ -235,7 +243,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                 <X className="w-8 h-8" />
              </button>
 
-             <div className="w-full max-w-6xl flex flex-col max-h-[95vh] shadow-2xl rounded-xl overflow-hidden bg-[#181818]">
+             <div className="w-full max-w-6xl flex flex-col max-h-[95vh] shadow-2xl rounded-xl overflow-hidden bg-[#181818] relative z-10">
                  <div className="aspect-video bg-black relative w-full border-b border-gray-800">
                     <iframe 
                     width="100%" 
