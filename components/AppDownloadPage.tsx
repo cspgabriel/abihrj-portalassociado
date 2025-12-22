@@ -1,12 +1,50 @@
 
-import React from 'react';
-import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home, CheckCircle2 } from 'lucide-react';
 
 interface AppDownloadPageProps {
   onBack: () => void;
 }
 
 const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    // Check if already in standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        setIsInstalled(true);
+    }
+
+    const handler = (e: any) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+      setDeferredPrompt(null);
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen pb-24 md:pb-12 animate-fade-in">
       <div className="bg-gradient-to-r from-rio-blue to-blue-900 text-white pt-8 pb-20 px-6 relative overflow-hidden">
@@ -32,6 +70,31 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 -mt-10 relative z-20 space-y-6">
+         
+         {/* Install Button (Android/Desktop PWA) */}
+         {!isInstalled && deferredPrompt && (
+             <div className="bg-white rounded-2xl p-6 shadow-lg border border-rio-blue/20 text-center animate-pulse-soft">
+                 <h3 className="text-lg font-bold text-gray-800 mb-2">Instalação Rápida</h3>
+                 <p className="text-sm text-gray-600 mb-4">
+                     Detectamos que seu dispositivo é compatível. Clique abaixo para instalar.
+                 </p>
+                 <button 
+                    onClick={handleInstallClick}
+                    className="bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition-transform hover:scale-105 flex items-center justify-center gap-2 mx-auto w-full md:w-auto"
+                 >
+                    <Download className="w-5 h-5" />
+                    Instalar Aplicativo Agora
+                 </button>
+             </div>
+         )}
+
+         {isInstalled && (
+             <div className="bg-green-50 rounded-2xl p-6 shadow-sm border border-green-200 text-center">
+                 <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-2" />
+                 <h3 className="text-lg font-bold text-green-800">Aplicativo Instalado</h3>
+                 <p className="text-sm text-green-700">Você já está utilizando a versão App do HoteisRio.</p>
+             </div>
+         )}
          
          {/* iOS Instructions */}
          <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
@@ -74,13 +137,14 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
             </div>
          </div>
 
-         {/* Android Instructions */}
+         {/* Android Instructions (Manual) */}
          <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
             <div className="bg-gray-50 p-4 border-b border-gray-100 flex items-center gap-2">
                 <Smartphone className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-bold text-gray-500">Android (Chrome)</span>
+                <span className="text-sm font-bold text-gray-500">Android (Manual)</span>
             </div>
             <div className="p-6">
+                <p className="text-sm text-gray-500 mb-4">Caso o botão de instalação automática não apareça:</p>
                 <ol className="space-y-6">
                     <li className="flex gap-4">
                         <div className="flex-shrink-0 w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center font-bold">1</div>
