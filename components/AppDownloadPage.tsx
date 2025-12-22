@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home, CheckCircle2, Monitor } from 'lucide-react';
 
 interface AppDownloadPageProps {
   onBack: () => void;
@@ -9,18 +9,22 @@ interface AppDownloadPageProps {
 const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
+    // Detect iOS
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    setIsIOS(/iphone|ipad|ipod/.test(userAgent));
+
     // Check if already in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches) {
         setIsInstalled(true);
     }
 
     const handler = (e: any) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
+      console.log("PWA Install Prompt Captured");
     };
 
     window.addEventListener('beforeinstallprompt', handler);
@@ -29,19 +33,18 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+        alert("A instalação automática não está disponível neste navegador. Siga as instruções manuais abaixo.");
+        return;
+    }
 
-    // Show the install prompt
     deferredPrompt.prompt();
 
-    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
       setDeferredPrompt(null);
-    } else {
-      console.log('User dismissed the install prompt');
     }
   };
 
@@ -63,7 +66,7 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
              </div>
              <h1 className="text-2xl md:text-3xl font-bold mb-2">Instale o App HoteisRio</h1>
              <p className="text-blue-100 max-w-lg">
-                Tenha acesso rápido aos benefícios, carteirinha digital e notificações direto na tela do seu celular.
+                Acesse benefícios, notícias e segurança com um toque.
              </p>
           </div>
         </div>
@@ -71,113 +74,87 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
 
       <div className="max-w-3xl mx-auto px-4 -mt-10 relative z-20 space-y-6">
          
-         {/* Install Button (Android/Desktop PWA) */}
-         {!isInstalled && deferredPrompt && (
-             <div className="bg-white rounded-2xl p-6 shadow-lg border border-rio-blue/20 text-center animate-pulse-soft">
-                 <h3 className="text-lg font-bold text-gray-800 mb-2">Instalação Rápida</h3>
-                 <p className="text-sm text-gray-600 mb-4">
-                     Detectamos que seu dispositivo é compatível. Clique abaixo para instalar.
-                 </p>
-                 <button 
-                    onClick={handleInstallClick}
-                    className="bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition-transform hover:scale-105 flex items-center justify-center gap-2 mx-auto w-full md:w-auto"
-                 >
-                    <Download className="w-5 h-5" />
-                    Instalar Aplicativo Agora
-                 </button>
-             </div>
-         )}
-
-         {isInstalled && (
+         {/* STATUS CARD */}
+         {isInstalled ? (
              <div className="bg-green-50 rounded-2xl p-6 shadow-sm border border-green-200 text-center">
                  <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-2" />
                  <h3 className="text-lg font-bold text-green-800">Aplicativo Instalado</h3>
-                 <p className="text-sm text-green-700">Você já está utilizando a versão App do HoteisRio.</p>
+                 <p className="text-sm text-green-700">Você já está utilizando a versão App.</p>
+             </div>
+         ) : deferredPrompt ? (
+             // AUTOMATIC INSTALL (Chrome/Edge/Android)
+             <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-rio-blue/20 text-center relative overflow-hidden">
+                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rio-blue to-rio-gold"></div>
+                 <h3 className="text-xl font-bold text-gray-800 mb-2">Instalação Disponível</h3>
+                 <p className="text-gray-600 mb-6">
+                     Instale o aplicativo oficial para melhor performance e acesso offline.
+                 </p>
+                 <button 
+                    onClick={handleInstallClick}
+                    className="bg-rio-blue hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-3 mx-auto w-full md:w-auto animate-pulse-soft"
+                 >
+                    <Download className="w-6 h-6" />
+                    Instalar Agora
+                 </button>
+             </div>
+         ) : (
+             // MANUAL INSTRUCTIONS
+             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                 <p className="text-center text-gray-500 mb-4 font-medium">Selecione seu dispositivo para ver como instalar:</p>
+                 
+                 {/* IOS Instructions */}
+                 <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 mb-4">
+                    <div className="bg-gray-100 p-3 font-bold text-gray-700 flex items-center gap-2">
+                        <div className="flex gap-1">
+                            <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                            <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                        </div>
+                        iOS (iPhone/iPad)
+                    </div>
+                    <div className="p-4 space-y-4">
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">1</span>
+                            <p className="text-sm text-gray-600">Abra esta página no <strong>Safari</strong>.</p>
+                        </div>
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">2</span>
+                            <p className="text-sm text-gray-600">Toque no botão <strong>Compartilhar</strong> <Share className="w-3 h-3 inline text-blue-500" /> na barra inferior.</p>
+                        </div>
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">3</span>
+                            <p className="text-sm text-gray-600">Role e selecione <strong>Adicionar à Tela de Início</strong> <PlusSquare className="w-3 h-3 inline text-gray-500" />.</p>
+                        </div>
+                    </div>
+                 </div>
+
+                 {/* Android Instructions */}
+                 <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
+                    <div className="bg-gray-100 p-3 font-bold text-gray-700 flex items-center gap-2">
+                        <Smartphone className="w-4 h-4 text-green-600" />
+                        Android (Chrome)
+                    </div>
+                    <div className="p-4 space-y-4">
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">1</span>
+                            <p className="text-sm text-gray-600">Abra no <strong>Google Chrome</strong>.</p>
+                        </div>
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">2</span>
+                            <p className="text-sm text-gray-600">Toque no menu (3 pontinhos) <MoreVertical className="w-3 h-3 inline text-gray-500" /> no topo.</p>
+                        </div>
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">3</span>
+                            <p className="text-sm text-gray-600">Selecione <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</p>
+                        </div>
+                    </div>
+                 </div>
              </div>
          )}
-         
-         {/* iOS Instructions */}
-         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-            <div className="bg-gray-50 p-4 border-b border-gray-100 flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                <span className="ml-2 text-sm font-bold text-gray-500">iPhone / iPad (iOS)</span>
-            </div>
-            <div className="p-6">
-                <ol className="space-y-6">
-                    <li className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-rio-blue rounded-full flex items-center justify-center font-bold">1</div>
-                        <div>
-                            <p className="text-gray-700 font-medium">Abra no Safari</p>
-                            <p className="text-sm text-gray-500">Este recurso funciona apenas no navegador Safari.</p>
-                        </div>
-                    </li>
-                    <li className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-rio-blue rounded-full flex items-center justify-center font-bold">2</div>
-                        <div>
-                            <p className="text-gray-700 font-medium flex items-center gap-2">
-                                Toque no botão Compartilhar 
-                                <Share className="w-4 h-4 text-blue-500" />
-                            </p>
-                            <p className="text-sm text-gray-500">Geralmente localizado na barra inferior da tela.</p>
-                        </div>
-                    </li>
-                    <li className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-rio-blue rounded-full flex items-center justify-center font-bold">3</div>
-                        <div>
-                            <p className="text-gray-700 font-medium flex items-center gap-2">
-                                Selecione "Adicionar à Tela de Início"
-                                <PlusSquare className="w-4 h-4 text-gray-600" />
-                            </p>
-                            <p className="text-sm text-gray-500">Role para baixo no menu de opções até encontrar.</p>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-         </div>
-
-         {/* Android Instructions (Manual) */}
-         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-            <div className="bg-gray-50 p-4 border-b border-gray-100 flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-bold text-gray-500">Android (Manual)</span>
-            </div>
-            <div className="p-6">
-                <p className="text-sm text-gray-500 mb-4">Caso o botão de instalação automática não apareça:</p>
-                <ol className="space-y-6">
-                    <li className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center font-bold">1</div>
-                        <div>
-                            <p className="text-gray-700 font-medium">Abra no Google Chrome</p>
-                        </div>
-                    </li>
-                    <li className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center font-bold">2</div>
-                        <div>
-                            <p className="text-gray-700 font-medium flex items-center gap-2">
-                                Toque no Menu de Opções
-                                <MoreVertical className="w-4 h-4 text-gray-600" />
-                            </p>
-                            <p className="text-sm text-gray-500">Os três pontinhos no canto superior direito.</p>
-                        </div>
-                    </li>
-                    <li className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center font-bold">3</div>
-                        <div>
-                            <p className="text-gray-700 font-medium flex items-center gap-2">
-                                Toque em "Instalar aplicativo" ou "Adicionar à tela inicial"
-                                <Download className="w-4 h-4 text-gray-600" />
-                            </p>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-         </div>
 
          <div className="text-center pt-4 pb-8">
              <p className="text-xs text-gray-400">
-                 O App HoteisRio é um PWA (Progressive Web App), garantindo leveza e atualizações automáticas sem ocupar muito espaço no seu dispositivo.
+                 HoteisRio PWA v2.0 • Compatível com iOS e Android
              </p>
          </div>
 
