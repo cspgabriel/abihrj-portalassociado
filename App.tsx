@@ -33,7 +33,7 @@ import AiAssistant from './components/AiAssistant';
 import { User, Benefit, Forum, HotelSector } from './types';
 import { BENEFITS_DATA, SUPER_CATEGORIES } from './constants';
 import { authService } from './services/authService';
-import { Loader2, Lock, Mail, ArrowRight, UserPlus, Building2, UserCircle } from 'lucide-react';
+import { Loader2, Lock, Mail, ArrowRight, UserPlus, Building2, UserCircle, CheckSquare, Square } from 'lucide-react';
 
 type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD' | 'APP_DOWNLOAD';
 
@@ -44,6 +44,7 @@ const App: React.FC = () => {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false); // New State for Remember Me
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -131,7 +132,8 @@ const App: React.FC = () => {
                 setLoginError(result.error || 'Erro ao criar conta.');
             }
         } else {
-            const result = await authService.login(email, password);
+            // Updated to pass rememberMe
+            const result = await authService.login(email, password, rememberMe);
             if (result.success && result.user) {
                 setUser(result.user);
             } else {
@@ -347,15 +349,21 @@ const App: React.FC = () => {
                             </div>
                         </div>
 
-                        {loginError && (
-                            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2 border border-red-100">
-                                <span className="block w-1.5 h-1.5 bg-red-600 rounded-full"></span>
-                                {loginError}
-                            </div>
-                        )}
-
                         {!isRegistering && (
-                            <div className="flex justify-end">
+                            <div className="flex items-center justify-between mt-2">
+                                <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 hover:text-gray-800">
+                                    <input 
+                                        type="checkbox" 
+                                        className="hidden"
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                    />
+                                    <div className={`w-4 h-4 border rounded flex items-center justify-center transition-colors ${rememberMe ? 'bg-rio-blue border-rio-blue' : 'border-gray-300 bg-white'}`}>
+                                        {rememberMe && <CheckSquare className="w-3 h-3 text-white" />}
+                                    </div>
+                                    <span>Manter-se conectado</span>
+                                </label>
+
                                 <button 
                                     type="button" 
                                     onClick={() => setShowForgotPassword(true)}
@@ -363,6 +371,13 @@ const App: React.FC = () => {
                                 >
                                     Esqueceu a senha?
                                 </button>
+                            </div>
+                        )}
+
+                        {loginError && (
+                            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2 border border-red-100">
+                                <span className="block w-1.5 h-1.5 bg-red-600 rounded-full"></span>
+                                {loginError}
                             </div>
                         )}
 

@@ -10,6 +10,9 @@ import {
   signOut, 
   sendPasswordResetEmail,
   updateProfile,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   User as FirebaseUser
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
@@ -21,9 +24,12 @@ const isFirebaseConfigured = auth.app.options.apiKey && auth.app.options.apiKey.
 
 export const authService = {
   // --- LOGIN ---
-  login: async (email: string, password: string): Promise<{ success: boolean; user?: User; error?: string }> => {
+  login: async (email: string, password: string, rememberMe: boolean = false): Promise<{ success: boolean; user?: User; error?: string }> => {
     if (isFirebaseConfigured) {
       try {
+        // Define a persistência antes de fazer o login
+        await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
+
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const fbUser = userCredential.user;
         
