@@ -43,7 +43,7 @@ export const adminService = {
 
   // Register a single user without logging out the admin
   // Uses a secondary Firebase App instance
-  registerUserWithoutLogout: async (userData: { name: string, email: string, hotel: string, role: string }) => {
+  registerUserWithoutLogout: async (userData: { name: string, email: string, hotel: string, role: string, password?: string }) => {
     let secondaryApp;
     try {
         // Check if secondary app already exists, if not initialize it
@@ -55,10 +55,11 @@ export const adminService = {
         }
 
         const secondaryAuth = getAuth(secondaryApp);
-        const defaultPassword = "hoteisrio2025"; // Senha padrão para importação
+        // Use provided password or fallback to default for bulk import
+        const passwordToUse = userData.password || "hoteisrio2025";
 
         // 1. Create User in Auth
-        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, userData.email, defaultPassword);
+        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, userData.email, passwordToUse);
         const user = userCredential.user;
 
         // 2. Update Profile Name

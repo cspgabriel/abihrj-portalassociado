@@ -44,7 +44,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
     name: '',
     email: '',
     hotel: '',
-    role: 'Associado'
+    role: 'Associado',
+    password: ''
   });
 
   // Hardcoded check for security visualization
@@ -95,7 +96,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    if(!newUserForm.name || !newUserForm.email || !newUserForm.hotel) return;
+    if(!newUserForm.name || !newUserForm.email || !newUserForm.hotel || !newUserForm.password) {
+        alert("Por favor, preencha todos os campos, incluindo a senha.");
+        return;
+    }
+
+    if(newUserForm.password.length < 6) {
+        alert("A senha deve ter no mínimo 6 caracteres.");
+        return;
+    }
 
     setIsCreatingUser(true);
     
@@ -105,10 +114,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
         if (result.success) {
             setNotification({ type: 'success', msg: `Usuário ${newUserForm.name} criado com sucesso!` });
             setIsAddUserModalOpen(false);
-            setNewUserForm({ name: '', email: '', hotel: '', role: 'Associado' });
+            setNewUserForm({ name: '', email: '', hotel: '', role: 'Associado', password: '' });
             
-            // Envia email de redefinição para ele criar a senha dele
-            await adminService.sendUserPasswordReset(newUserForm.email);
+            // NÃO envia email de redefinição aqui, pois a senha foi definida manualmente.
             
             refreshUsers();
         } else {
@@ -493,6 +501,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                         />
                     </div>
                     <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Senha Inicial</label>
+                        <input 
+                            type="text" 
+                            required
+                            minLength={6}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none font-mono"
+                            placeholder="Mínimo 6 caracteres"
+                            value={newUserForm.password}
+                            onChange={e => setNewUserForm({...newUserForm, password: e.target.value})}
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1">Defina uma senha provisória para o usuário.</p>
+                    </div>
+                    <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Hotel / Empresa</label>
                         <input 
                             type="text" 
@@ -545,10 +566,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                             )}
                         </button>
                     </div>
-                    
-                    <p className="text-xs text-gray-400 text-center mt-2">
-                        * O usuário receberá um e-mail para redefinir a senha automaticamente.
-                    </p>
                 </form>
             </div>
         </div>
