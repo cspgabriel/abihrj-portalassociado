@@ -5,7 +5,7 @@ import { adminService } from '../services/adminService';
 import { 
   Users, Search, Download, Key, Edit, Trash2, 
   ShieldCheck, Mail, Building2, ArrowLeft, Loader2, CheckCircle2,
-  Upload, FileSpreadsheet, AlertTriangle, X
+  Upload, FileSpreadsheet, AlertTriangle, X, UserPlus, Save
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
@@ -36,6 +36,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
   const [isProcessingImport, setIsProcessingImport] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Single User Registration State
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [newUserForm, setNewUserForm] = useState({
+    name: '',
+    email: '',
+    hotel: '',
+    role: 'Associado'
+  });
 
   // Hardcoded check for security visualization
   const isAdmin = currentUserEmail === 'marketing@hoteisrio.com.br';
@@ -79,6 +89,39 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
 
   const handleExport = () => {
     adminService.exportUsersToCSV(filteredUsers);
+  };
+
+  // --- MANUAL REGISTRATION LOGIC ---
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if(!newUserForm.name || !newUserForm.email || !newUserForm.hotel) return;
+
+    setIsCreatingUser(true);
+    
+    try {
+        const result = await adminService.registerUserWithoutLogout(newUserForm);
+        
+        if (result.success) {
+            setNotification({ type: 'success', msg: `Usuário ${newUserForm.name} criado com sucesso!` });
+            setIsAddUserModalOpen(false);
+            setNewUserForm({ name: '', email: '', hotel: '', role: 'Associado' });
+            
+            // Envia email de redefinição para ele criar a senha dele
+            await adminService.sendUserPasswordReset(newUserForm.email);
+            
+            refreshUsers();
+        } else {
+            setNotification({ 
+                type: 'error', 
+                msg: result.error?.includes('email-already-in-use') ? 'Este e-mail já está cadastrado.' : (result.error || 'Erro ao criar usuário.')
+            });
+        }
+    } catch (error: any) {
+        setNotification({ type: 'error', msg: error.message });
+    } finally {
+        setIsCreatingUser(false);
+    }
   };
 
   // --- IMPORT LOGIC ---
@@ -286,7 +329,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                  </select>
               </div>
 
-              <div className="flex gap-2 w-full lg:w-auto">
+              <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+                <button 
+                    onClick={() => setIsAddUserModalOpen(true)}
+                    className="flex items-center gap-2 bg-rio-blue hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors shadow-sm flex-1 lg:flex-none justify-center"
+                >
+                    <UserPlus className="w-4 h-4" />
+                    Novo Usuário
+                </button>
                 <button 
                     onClick={() => {
                         setImportData([]);
@@ -400,6 +450,109 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
            </div>
         </div>
       </div>
+
+      {/* SINGLE USER MODAL */}
+      {isAddUserModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isCreatingUser && setIsAddUserModalOpen(false)}></div>
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg relative z-10 animate-fade-in-up">
+                
+                <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <UserPlus className="w-5 h-5 text-rio-blue" />
+                        Cadastrar Novo Usuário
+                    </h2>
+                    {!isCreatingUser && (
+                        <button onClick={() => setIsAddUserModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                            <X className="w-6 h-6" />
+                        </button>
+                    )}
+                </div>
+
+                <form onSubmit={handleCreateUser} className="p-6 space-y-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Nome Completo</label>
+                        <input 
+                            type="text" 
+                            required
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                            placeholder="Ex: João da Silva"
+                            value={newUserForm.name}
+                            onChange={e => setNewUserForm({...newUserForm, name: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">E-mail Corporativo</label>
+                        <input 
+                            type="email" 
+                            required
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                            placeholder="Ex: joao@hotel.com.br"
+                            value={newUserForm.email}
+                            onChange={e => setNewUserForm({...newUserForm, email: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Hotel / Empresa</label>
+                        <input 
+                            type="text" 
+                            required
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                            placeholder="Ex: Hotel Atlântico"
+                            value={newUserForm.hotel}
+                            onChange={e => setNewUserForm({...newUserForm, hotel: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Cargo / Função</label>
+                        <select 
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none bg-white"
+                            value={newUserForm.role}
+                            onChange={e => setNewUserForm({...newUserForm, role: e.target.value})}
+                        >
+                            <option value="Associado">Associado (Padrão)</option>
+                            <option value="Gerente Geral">Gerente Geral</option>
+                            <option value="RH">Recursos Humanos</option>
+                            <option value="Comercial">Comercial</option>
+                            <option value="Diretoria">Diretoria</option>
+                        </select>
+                    </div>
+
+                    <div className="pt-4 flex gap-3 justify-end">
+                        <button 
+                            type="button"
+                            onClick={() => setIsAddUserModalOpen(false)}
+                            className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg font-medium"
+                            disabled={isCreatingUser}
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit"
+                            disabled={isCreatingUser}
+                            className="bg-rio-blue hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-md flex items-center gap-2 disabled:opacity-70"
+                        >
+                            {isCreatingUser ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    Salvando...
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="w-4 h-4" />
+                                    Salvar Usuário
+                                </>
+                            )}
+                        </button>
+                    </div>
+                    
+                    <p className="text-xs text-gray-400 text-center mt-2">
+                        * O usuário receberá um e-mail para redefinir a senha automaticamente.
+                    </p>
+                </form>
+            </div>
+        </div>
+      )}
 
       {/* IMPORT MODAL */}
       {isImportModalOpen && (
