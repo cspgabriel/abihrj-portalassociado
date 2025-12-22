@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
-import ModernDashboard from './components/ModernDashboard';
+import Dashboard from './components/Dashboard';
 import BenefitPage from './components/BenefitPage';
 import ServiceRequestModal from './components/ServiceRequestModal';
 import CalendarModal from './components/CalendarModal';
@@ -30,11 +30,10 @@ import AdminDashboard from './components/AdminDashboard';
 import AiAssistant from './components/AiAssistant';
 
 import { User, Benefit, Forum } from './types';
-import { BENEFITS_DATA } from './constants';
+import { BENEFITS_DATA, SUPER_CATEGORIES } from './constants';
 import { authService } from './services/authService';
 import { Loader2, Lock, Mail, ArrowRight, UserPlus, Building2, UserCircle } from 'lucide-react';
 
-// App View Types
 type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
 
 const App: React.FC = () => {
@@ -42,41 +41,54 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<AppView>('DASHBOARD');
   
-  // Login/Register State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false); // Toggle between Login/Register
+  const [isRegistering, setIsRegistering] = useState(false);
   
-  // Registration Fields
   const [regName, setRegName] = useState('');
   const [regHotel, setRegHotel] = useState('');
 
-  // Forgot Password State
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [isSendingReset, setIsSendingReset] = useState(false);
   const [forgotPasswordStatus, setForgotPasswordStatus] = useState<{ type: 'success' | 'error', msg: string } | null>(null);
 
-  // Navigation State
   const [selectedBenefit, setSelectedBenefit] = useState<Benefit | null>(null);
   const [selectedForum, setSelectedForum] = useState<Forum | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   
-  // Modals
-  const [modalBenefit, setModalBenefit] = useState<Benefit | null>(null); // For Quick View Modal
-  const [showServiceModal, setShowServiceModal] = useState(false); // For ServiceRequestModal
+  const [modalBenefit, setModalBenefit] = useState<Benefit | null>(null);
+  const [showServiceModal, setShowServiceModal] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
   const [calculatorBenefit, setCalculatorBenefit] = useState<Benefit | undefined>(undefined);
 
   useEffect(() => {
-    // Check for existing session (mock or real)
     const checkSession = async () => {
-      // For now, start with login screen unless persisted
-      // In a real app with Firebase onAuthStateChanged, we would handle it there.
-      // Here we just simulate a quick load.
+      // Deep Linking Logic
+      const params = new URLSearchParams(window.location.search);
+      const benefitId = params.get('benefitId');
+      
+      if (benefitId) {
+          const benefit = BENEFITS_DATA.find(b => b.id === benefitId);
+          if (benefit) {
+              // Pre-select benefit to show after login/load
+              setSelectedBenefit(benefit);
+              
+              // Determine correct view based on benefit type
+              if (benefit.embedUrl) {
+                  setView('SERVICE_VIEWER');
+              } else if (benefit.category === 'Ferramentas & Calculadoras' && !benefit.id.includes('hub')) {
+                  setCalculatorBenefit(benefit);
+                  setShowCalculatorModal(true);
+              } else {
+                  setView('BENEFIT_DETAILS');
+              }
+          }
+      }
+
       setTimeout(() => setLoading(false), 800);
     };
     checkSession();
@@ -89,7 +101,6 @@ const App: React.FC = () => {
 
     try {
         if (isRegistering) {
-            // Register Logic
             if (!regName || !regHotel) {
                 setLoginError('Preencha todos os campos.');
                 setIsLoggingIn(false);
@@ -102,7 +113,6 @@ const App: React.FC = () => {
                 setLoginError(result.error || 'Erro ao criar conta.');
             }
         } else {
-            // Login Logic
             const result = await authService.login(email, password);
             if (result.success && result.user) {
                 setUser(result.user);
@@ -123,6 +133,8 @@ const App: React.FC = () => {
     setView('DASHBOARD');
     setEmail('');
     setPassword('');
+    // Clean URL params on logout
+    window.history.pushState({}, '', window.location.pathname);
   };
 
   const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
@@ -147,22 +159,29 @@ const App: React.FC = () => {
     setIsSendingReset(false);
   };
 
-  // --- NAVIGATION HANDLERS ---
-
   const handleNavigate = (newView: AppView, params?: any) => {
      if (params && typeof params === 'string') {
-         // Could be category ID
          setSelectedCategory(params);
      }
+     // Clear deep link params when navigating manually
+     window.history.pushState({}, '', window.location.pathname);
+     
      setView(newView);
      window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleUseBenefit = (benefit: Benefit) => {
-     // Special cases for modals vs pages
      if (benefit.id === 'juridico-01' || benefit.id === 'public-order-01') {
          setModalBenefit(benefit);
          setShowServiceModal(true);
+         return;
+     }
+     if (benefit.id === 'cat-nav') {
+         const cat = SUPER_CATEGORIES.find(c => c.title === benefit.title);
+         if (cat) {
+             setSelectedCategory(cat.id);
+             setView('CATEGORY_LISTING');
+         }
          return;
      }
      if (benefit.id === 'calendar-01' || benefit.id === 'calendar-2-0') {
@@ -183,20 +202,17 @@ const App: React.FC = () => {
          return;
      }
 
-     // If it has embedUrl, go to Viewer
      if (benefit.embedUrl) {
          setSelectedBenefit(benefit);
          setView('SERVICE_VIEWER');
          return;
      }
 
-     // If it has external link, open it
      if (benefit.externalLink) {
          window.open(benefit.externalLink, '_blank');
          return;
      }
 
-     // Default to details page
      setSelectedBenefit(benefit);
      setView('BENEFIT_DETAILS');
   };
@@ -211,8 +227,6 @@ const App: React.FC = () => {
      setView('FORUM_PAGE');
   };
 
-  // --- RENDER ---
-
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white">
@@ -226,7 +240,6 @@ const App: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-rio-blue to-blue-900 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col animate-fade-in-up">
-            {/* Header */}
             <div className="bg-gray-50 p-8 text-center relative overflow-hidden border-b border-gray-100">
                 <img 
                    src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
@@ -241,12 +254,10 @@ const App: React.FC = () => {
                 </p>
             </div>
 
-            {/* Login/Register Form */}
             {!showForgotPassword ? (
                 <div className="p-8">
                     <form onSubmit={handleAuthSubmit} className="space-y-4">
                         
-                        {/* Extra fields for Registration */}
                         {isRegistering && (
                             <>
                                 <div>
@@ -398,13 +409,11 @@ const App: React.FC = () => {
     );
   }
 
-  // --- LOGGED IN RENDER ---
-
   const renderContent = () => {
      switch(view) {
         case 'DASHBOARD':
             return (
-                <ModernDashboard 
+                <Dashboard 
                     user={user} 
                     onUseBenefit={handleUseBenefit} 
                     onViewDetails={handleDetailsClick}
@@ -425,7 +434,7 @@ const App: React.FC = () => {
                     onBack={() => setView('DASHBOARD')} 
                     onUse={handleUseBenefit}
                 />
-            ) : <ModernDashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
+            ) : <Dashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
         case 'TUTORIAL':
             return <PlatformTutorial onBack={() => setView('DASHBOARD')} />;
         case 'CONTACTS':
@@ -477,7 +486,7 @@ const App: React.FC = () => {
         case 'SERVICE_VIEWER':
             return selectedBenefit ? (
                 <ServiceViewerPage benefit={selectedBenefit} onBack={() => setView('DASHBOARD')} />
-            ) : <ModernDashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
+            ) : <Dashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
         case 'CATEGORIZER':
             return <BenefitCategorizerPage onBack={() => setView('DASHBOARD')} />;
         case 'COURSES_V2':
@@ -485,7 +494,7 @@ const App: React.FC = () => {
         case 'ADMIN_DASHBOARD':
             return <AdminDashboard onBack={() => setView('DASHBOARD')} currentUserEmail={user.email} />;
         default:
-            return <ModernDashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
+            return <Dashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
      }
   };
 
@@ -498,12 +507,11 @@ const App: React.FC = () => {
         onNavigate={handleNavigate}
         onBenefitClick={handleDetailsClick}
         currentView={view}
-        onSectorSelect={(sector) => { /* Optional filter logic */ }}
+        onSectorSelect={(sector) => { }}
         isFullPage={isFullPageLayout}
     >
         {renderContent()}
 
-        {/* MODALS */}
         {showServiceModal && modalBenefit && (
             <ServiceRequestModal 
                 benefit={modalBenefit} 
@@ -522,7 +530,6 @@ const App: React.FC = () => {
             />
         )}
 
-        {/* AI Assistant - Always available unless full screen video maybe? Keeping it for now. */}
         {!isFullPageLayout && <AiAssistant />}
         
     </Layout>
@@ -530,5 +537,4 @@ const App: React.FC = () => {
 };
 
 export default App;
-
 // --- Fim de App.tsx ---
