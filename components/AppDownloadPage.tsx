@@ -4,14 +4,13 @@ import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home,
 
 interface AppDownloadPageProps {
   onBack: () => void;
+  installPrompt?: any; // Received from App.tsx
 }
 
-const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack, installPrompt }) => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
-
+  
   useEffect(() => {
     // Detect iOS
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -20,33 +19,22 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
     // Check if already in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches) {
         setIsInstalled(true);
-        setIsStandalone(true);
     }
-
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      console.log("PWA Install Prompt Captured");
-    };
-
-    window.addEventListener('beforeinstallprompt', handler);
-
-    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-        alert("A instalação automática não está disponível neste navegador. Siga as instruções manuais abaixo.");
+    if (!installPrompt) {
+        alert("A instalação automática não está disponível ou o navegador bloqueou a solicitação. Tente pelo menu do navegador ou siga as instruções manuais.");
         return;
     }
 
-    deferredPrompt.prompt();
+    // Trigger prompt
+    installPrompt.prompt();
 
-    const { outcome } = await deferredPrompt.userChoice;
-    
+    // Handle choice
+    const { outcome } = await installPrompt.userChoice;
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
-      setDeferredPrompt(null);
     }
   };
 
@@ -83,8 +71,8 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
                  <h3 className="text-lg font-bold text-green-800">Aplicativo Instalado</h3>
                  <p className="text-sm text-green-700">Você já está utilizando a versão App.</p>
              </div>
-         ) : deferredPrompt ? (
-             // AUTOMATIC INSTALL (Chrome/Edge/Android)
+         ) : installPrompt ? (
+             // AUTOMATIC INSTALL (When prompt is captured)
              <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-rio-blue/20 text-center relative overflow-hidden">
                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rio-blue to-rio-gold"></div>
                  <h3 className="text-xl font-bold text-gray-800 mb-2">Instalação Disponível</h3>
@@ -100,9 +88,9 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
                  </button>
              </div>
          ) : (
-             // MANUAL INSTRUCTIONS
+             // MANUAL INSTRUCTIONS (If prompt was missed or not supported)
              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                 <p className="text-center text-gray-500 mb-4 font-medium">Selecione seu dispositivo para ver como instalar:</p>
+                 <p className="text-center text-gray-500 mb-4 font-medium">Instalação Manual (Selecione seu dispositivo):</p>
                  
                  {/* Desktop Chrome Instructions */}
                  <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 mb-4">

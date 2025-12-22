@@ -67,6 +67,9 @@ const App: React.FC = () => {
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
   const [calculatorBenefit, setCalculatorBenefit] = useState<Benefit | undefined>(undefined);
 
+  // Global Install Prompt State
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
   useEffect(() => {
     const checkSession = async () => {
       // Deep Linking Logic
@@ -94,6 +97,19 @@ const App: React.FC = () => {
       setTimeout(() => setLoading(false), 800);
     };
     checkSession();
+
+    // Capture PWA Install Prompt Globally
+    const handleBeforeInstallPrompt = (e: any) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+        console.log("PWA Install Prompt Captured in App Root");
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
   }, []);
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
@@ -506,7 +522,7 @@ const App: React.FC = () => {
         case 'ADMIN_DASHBOARD':
             return <AdminDashboard onBack={() => setView('DASHBOARD')} currentUserEmail={user.email} />;
         case 'APP_DOWNLOAD':
-            return <AppDownloadPage onBack={() => setView('DASHBOARD')} />;
+            return <AppDownloadPage onBack={() => setView('DASHBOARD')} installPrompt={deferredPrompt} />;
         default:
             return <Dashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
      }
