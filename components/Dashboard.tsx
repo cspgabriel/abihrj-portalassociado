@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Benefit, BenefitCategory } from '../types';
-import { BENEFITS_DATA, SUPER_CATEGORIES } from '../constants';
+import { BENEFITS_DATA, SUPER_CATEGORIES, CALCULATOR_TOOLS } from '../constants';
 import BenefitCard from './BenefitCard';
 import { 
   Search, LayoutGrid, Zap, ArrowRight, Star, 
-  List, Grid, ArrowDownAZ, ArrowUpAZ, ChevronLeft, ChevronRight, Filter
+  List, Grid, ArrowDownAZ, ArrowUpAZ, ChevronLeft, ChevronRight, Filter,
+  Building2, Calculator, CheckCircle2
 } from 'lucide-react';
 import * as Icons from 'lucide-react';
 
@@ -27,7 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
 
   // --- DATA PREPARATION ---
 
-  // 1. Specific Highlight IDs (Banners) - Manually selected for visual impact
+  // 1. Specific Highlight IDs (Banners)
   const highlightIds = [
       'calendar-2026',
       'highlight-top-hotel-25',
@@ -40,6 +41,23 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
   ];
   
   const highlights = highlightIds
+    .map(id => BENEFITS_DATA.find(b => b.id === id))
+    .filter(Boolean) as Benefit[];
+
+  // 1.5 Main Benefits (Principais Benefícios)
+  const mainBenefitIds = [
+      'comercial-planner-2026',
+      'highlight-rir',
+      'calendar-2-0',
+      'courses-v2',
+      'public-order-01',
+      'portal-fornecedores-new',
+      'whatsapp-groups',
+      'planejador-feriados-2026',
+      'shuttle-service'
+  ];
+
+  const mainBenefits = mainBenefitIds
     .map(id => BENEFITS_DATA.find(b => b.id === id))
     .filter(Boolean) as Benefit[];
   
@@ -62,18 +80,31 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
   });
 
   // --- SLIDER LOGIC ---
-  const itemsPerSlide = 3;
+  const itemsPerSlide = 1; 
   const maxIndex = Math.max(0, highlights.length - itemsPerSlide);
 
   const nextSlide = () => {
-    setHighlightIndex(prev => Math.min(prev + 1, maxIndex));
+    setHighlightIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    setHighlightIndex(prev => Math.max(prev - 1, 0));
+    setHighlightIndex(prev => (prev === 0 ? maxIndex : prev - 1));
   };
 
+  // Auto-slide effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+        nextSlide();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [highlightIndex, maxIndex]); 
+
   const visibleHighlights = highlights.slice(highlightIndex, highlightIndex + itemsPerSlide);
+  
+  const displayHighlights = visibleHighlights.length < itemsPerSlide 
+    ? [...visibleHighlights, ...highlights.slice(0, itemsPerSlide - visibleHighlights.length)]
+    : visibleHighlights;
+
 
   // --- BANNER STYLING HELPERS ---
   const getBannerStyle = (id: string) => {
@@ -92,21 +123,28 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
   return (
     <div className="animate-fade-in pb-12">
       
-      {/* Header Clássico */}
+      {/* Header Atualizado (Mais elegante) */}
       <div className="bg-white rounded-2xl p-8 mb-8 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Olá, {user.name}</h1>
           <p className="text-gray-500">Bem-vindo à sua Central do Associado. O que você precisa hoje?</p>
         </div>
-        <div className="hidden md:block text-right">
-            <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Status</p>
-            <p className="text-rio-blue font-bold">{user.hotel}</p>
+        <div className="hidden md:block">
+            <div className="bg-blue-50/50 border border-blue-100 p-2 pr-4 rounded-xl flex items-center gap-3">
+                <div className="bg-white p-2 rounded-lg shadow-sm text-rio-blue">
+                    <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-tight">Hotel Associado</p>
+                    <p className="text-gray-800 font-bold text-sm leading-tight">{user.hotel}</p>
+                </div>
+            </div>
         </div>
       </div>
 
       <div className="space-y-10">
           
-          {/* 1. Destaques (Banners Coloridos em Slider de 3 Colunas) - MOVIDO PARA O TOPO */}
+          {/* 1. Destaques (Slider Automático de 1 Coluna) */}
           <section>
              <div className="flex justify-between items-end mb-4">
                 <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2 uppercase tracking-wide text-xs">
@@ -118,58 +156,56 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
                 <div className="flex gap-2">
                     <button 
                         onClick={prevSlide}
-                        disabled={highlightIndex === 0}
-                        className="p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-600 shadow-sm"
+                        className="p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-gray-600 shadow-sm"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button 
                         onClick={nextSlide}
-                        disabled={highlightIndex >= maxIndex}
-                        className="p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-600 shadow-sm"
+                        className="p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-gray-600 shadow-sm"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>
                 </div>
              </div>
              
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {visibleHighlights.map(benefit => {
+             <div className="grid grid-cols-1 gap-6">
+                {displayHighlights.map((benefit, idx) => {
                    const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
                    const gradient = getBannerStyle(benefit.id);
                    
                    return (
                      <div 
-                       key={benefit.id}
+                       key={`${benefit.id}-${idx}`}
                        onClick={() => onUseBenefit(benefit)}
                        className={`
-                         relative overflow-hidden rounded-2xl p-6 h-64 flex flex-col justify-between
+                         relative overflow-hidden rounded-2xl p-8 h-80 flex flex-col justify-between
                          bg-gradient-to-br ${gradient} text-white shadow-lg cursor-pointer
-                         transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group
+                         transform transition-all duration-300 hover:scale-[1.01] hover:shadow-xl group
                        `}
                      >
                         {/* Background Decoration */}
-                        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-16 -mt-16 pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-32 -mt-32 pointer-events-none group-hover:scale-125 transition-transform duration-500" />
                         
-                        <div className="relative z-10">
+                        <div className="relative z-10 flex flex-col h-full justify-center">
                            <div className="bg-white/20 p-3 rounded-xl w-fit backdrop-blur-sm mb-4 shadow-sm">
-                              <IconComponent className="w-8 h-8 text-white" />
+                              <IconComponent className="w-12 h-12 text-white" />
                            </div>
                            
-                           <div className="inline-block bg-white/20 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded mb-2 uppercase tracking-wide">
+                           <div className="inline-block bg-white/20 backdrop-blur-md text-xs font-bold px-3 py-1 rounded mb-3 uppercase tracking-wide w-fit">
                               Destaque
                            </div>
                            
-                           <h3 className="text-xl font-bold leading-tight mb-2 line-clamp-2">
+                           <h3 className="text-3xl font-bold leading-tight mb-4 max-w-3xl">
                              {benefit.title}
                            </h3>
-                           <p className="text-sm text-white/80 line-clamp-2 leading-relaxed">
+                           <p className="text-lg text-white/90 leading-relaxed max-w-2xl line-clamp-2">
                              {benefit.description}
                            </p>
                         </div>
 
-                        <div className="relative z-10 mt-4 flex items-center text-sm font-bold opacity-90 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                           {benefit.customCta || "Acessar Agora"} <ArrowRight className="w-4 h-4 ml-1" />
+                        <div className="absolute bottom-8 right-8 z-10 hidden md:flex items-center text-sm font-bold opacity-90 group-hover:opacity-100 group-hover:translate-x-1 transition-all bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl backdrop-blur-sm">
+                           {benefit.customCta || "Acessar Agora"} <ArrowRight className="w-5 h-5 ml-2" />
                         </div>
                      </div>
                    );
@@ -177,17 +213,36 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
              </div>
           </section>
 
-          {/* 2. Catálogo Completo (Com Filtros e Ordenação) - MEIO DA PÁGINA */}
+          {/* 1.5 Principais Benefícios (New Section) */}
+          <section>
+             <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 uppercase tracking-wide text-xs">
+                <Zap className="w-4 h-4 text-rio-blue" />
+                Principais Benefícios
+             </h2>
+             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {mainBenefits.map(benefit => (
+                    <BenefitCard 
+                        key={benefit.id} 
+                        benefit={benefit} 
+                        onUse={onUseBenefit} 
+                        onDetails={onViewDetails}
+                        layout="grid"
+                    />
+                ))}
+             </div>
+          </section>
+
+          {/* 2. Catálogo Completo (Com Filtros e Ordenação) */}
           <section id="catalog-section" className="bg-gray-50/50 rounded-3xl border border-gray-100 p-6">
             
             <div className="flex flex-col gap-6 mb-8">
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        <Zap className="w-5 h-5 text-rio-blue" />
-                        Todos os Benefícios
+                        <List className="w-5 h-5 text-rio-blue" />
+                        Catálogo Completo
                     </h2>
                     <span className="text-xs font-medium text-gray-500 bg-white px-3 py-1 rounded-full border border-gray-200">
-                        {sortedBenefits.length} encontrados
+                        {sortedBenefits.length} itens
                     </span>
                 </div>
 
@@ -265,7 +320,34 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
             </div>
           </section>
 
-          {/* 3. Blocos de Categorias (Acesso Rápido) - MOVIDO PARA O FINAL */}
+          {/* 3. Calculadoras Hoteleiras (Restauradas) */}
+          <section className="bg-white rounded-3xl border border-gray-200 p-8 shadow-sm">
+             <div className="flex flex-col md:flex-row justify-between items-end mb-6 gap-4">
+                <div>
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 mb-2">
+                        <Calculator className="w-6 h-6 text-green-600" />
+                        Calculadoras Hoteleiras
+                    </h2>
+                    <p className="text-gray-500 text-sm max-w-xl">
+                        Ferramentas essenciais para Revenue Management. Calcule ADR, RevPAR, GOPPAR e muito mais instantaneamente.
+                    </p>
+                </div>
+             </div>
+             
+             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {CALCULATOR_TOOLS.map(calc => (
+                    <BenefitCard 
+                        key={calc.id}
+                        benefit={calc}
+                        onUse={onUseBenefit}
+                        onDetails={onUseBenefit} // Calculators open directly on click usually
+                        layout="grid"
+                    />
+                ))}
+             </div>
+          </section>
+
+          {/* 4. Blocos de Categorias (Acesso Rápido) */}
           <section>
             <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 uppercase tracking-wide text-xs">
               <LayoutGrid className="w-4 h-4 text-rio-blue" />

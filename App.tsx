@@ -29,7 +29,7 @@ import CoursesPage from './components/CoursesPage';
 import AdminDashboard from './components/AdminDashboard';
 import AiAssistant from './components/AiAssistant';
 
-import { User, Benefit, Forum } from './types';
+import { User, Benefit, Forum, HotelSector } from './types';
 import { BENEFITS_DATA, SUPER_CATEGORIES } from './constants';
 import { authService } from './services/authService';
 import { Loader2, Lock, Mail, ArrowRight, UserPlus, Building2, UserCircle } from 'lucide-react';
@@ -58,6 +58,7 @@ const App: React.FC = () => {
   const [selectedBenefit, setSelectedBenefit] = useState<Benefit | null>(null);
   const [selectedForum, setSelectedForum] = useState<Forum | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedSector, setSelectedSector] = useState<HotelSector | null>(null);
   
   const [modalBenefit, setModalBenefit] = useState<Benefit | null>(null);
   const [showServiceModal, setShowServiceModal] = useState(false);
@@ -162,7 +163,15 @@ const App: React.FC = () => {
   const handleNavigate = (newView: AppView, params?: any) => {
      if (params && typeof params === 'string') {
          setSelectedCategory(params);
+     } else {
+         // Reset category if not navigating to a specific one
+         setSelectedCategory('');
      }
+     
+     // If we are navigating to something other than ALL_BENEFITS via menu, we might want to clear sector
+     // But if we come from onSectorSelect, we want to keep it.
+     // Layout handles the sequence: onSectorSelect -> onNavigate.
+     
      // Clear deep link params when navigating manually
      window.history.pushState({}, '', window.location.pathname);
      
@@ -425,6 +434,8 @@ const App: React.FC = () => {
                     onBack={() => setView('DASHBOARD')}
                     onUse={handleUseBenefit}
                     onDetails={handleDetailsClick}
+                    initialSector={selectedSector}
+                    onClearSector={() => setSelectedSector(null)}
                 />
             );
         case 'BENEFIT_DETAILS':
@@ -507,7 +518,7 @@ const App: React.FC = () => {
         onNavigate={handleNavigate}
         onBenefitClick={handleDetailsClick}
         currentView={view}
-        onSectorSelect={(sector) => { }}
+        onSectorSelect={(sector) => setSelectedSector(sector)}
         isFullPage={isFullPageLayout}
     >
         {renderContent()}

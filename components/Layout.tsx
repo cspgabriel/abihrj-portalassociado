@@ -195,12 +195,12 @@ const Layout: React.FC<LayoutProps> = ({
                                             <span className="truncate">{b.title}</span>
                                         </button>
                                     ))}
-                                    {sectorBenefits.length > 6 && (
+                                    {sectorBenefits.length > 0 && (
                                         <button 
                                             onClick={() => { if(onSectorSelect) onSectorSelect(sector.id as HotelSector); onNavigate('ALL_BENEFITS'); }}
                                             className="w-full text-left px-3 py-2 text-[10px] uppercase font-bold text-rio-gold hover:underline pl-6"
                                         >
-                                            Ver todos de {sector.label}
+                                            Ver todos os benefícios
                                         </button>
                                     )}
                                 </div>
@@ -279,9 +279,9 @@ const Layout: React.FC<LayoutProps> = ({
                     Cursos 2.0 (Beta)
                 </button>
 
-                <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
-                    <Calculator className="w-4 h-4" />
-                    Calculadoras
+                <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm group">
+                    <Calculator className="w-4 h-4 group-hover:text-green-400" />
+                    Calculadoras Hoteleiras
                 </button>
 
                 <button onClick={() => onNavigate('CATEGORIZER')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
@@ -401,7 +401,7 @@ const Layout: React.FC<LayoutProps> = ({
                <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-800 leading-none">{user.name}</p>
-                    <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wide">{user.hotel}</p>
+                    <p className="text-xs text-gray-500 mt-1 uppercase tracking-wide">{user.hotel}</p>
                   </div>
                   <div className="w-9 h-9 bg-rio-blue text-white rounded-full flex items-center justify-center font-bold shadow-sm ring-2 ring-blue-50">
                      {user.name.charAt(0)}
@@ -472,6 +472,10 @@ const Layout: React.FC<LayoutProps> = ({
 
                  <button onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
                     <MonitorPlay className="w-5 h-5" /> Cursos 2.0 (Beta)
+                 </button>
+
+                 <button onClick={() => { onNavigate('CALCULATORS_PAGE'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <Calculator className="w-5 h-5" /> Calculadoras Hoteleiras
                  </button>
 
                  <button onClick={() => { onNavigate('CATEGORIZER'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">

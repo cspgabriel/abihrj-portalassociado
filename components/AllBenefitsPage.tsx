@@ -1,31 +1,42 @@
 
-import React, { useState } from 'react';
-import { ArrowLeft, Search, Filter, LayoutGrid, List, Sparkles } from 'lucide-react';
-import { BENEFITS_DATA } from '../constants';
-import { Benefit, BenefitCategory } from '../types';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Search, Filter, LayoutGrid, List, Sparkles, Building2, X } from 'lucide-react';
+import { BENEFITS_DATA, HOTEL_SECTORS } from '../constants';
+import { Benefit, BenefitCategory, HotelSector } from '../types';
 import BenefitCard from './BenefitCard';
 
 interface AllBenefitsPageProps {
   onBack: () => void;
   onUse: (benefit: Benefit) => void;
   onDetails: (benefit: Benefit) => void;
+  initialSector?: HotelSector | null;
+  onClearSector?: () => void;
 }
 
-const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDetails }) => {
+const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDetails, initialSector, onClearSector }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const categories = ['Todas', ...Object.values(BenefitCategory)];
 
+  // Get sector label for display
+  const currentSectorLabel = initialSector 
+    ? HOTEL_SECTORS.find(s => s.id === initialSector)?.label 
+    : null;
+
   const filteredBenefits = BENEFITS_DATA.filter(benefit => {
     const matchesSearch = 
       benefit.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
       benefit.description.toLowerCase().includes(searchTerm.toLowerCase());
     
+    // Category Filter Logic
     const matchesCategory = selectedCategory === 'Todas' || benefit.category === selectedCategory;
 
-    return matchesSearch && matchesCategory;
+    // Sector Filter Logic (from props)
+    const matchesSector = !initialSector || (benefit.targetSectors && benefit.targetSectors.includes(initialSector));
+
+    return matchesSearch && matchesCategory && matchesSector;
   });
 
   // Sort alphabetically by default
@@ -103,6 +114,24 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
                  </button>
               </div>
            </div>
+           
+           {/* Active Sector Filter Badge */}
+           {initialSector && (
+             <div className="mt-4 flex items-center gap-2 animate-fade-in">
+               <span className="text-xs text-gray-500 font-bold uppercase tracking-wide">Filtro Ativo:</span>
+               <div className="inline-flex items-center gap-2 bg-blue-50 text-rio-blue px-3 py-1 rounded-full text-sm font-bold border border-blue-100">
+                  <Building2 className="w-4 h-4" />
+                  {currentSectorLabel}
+                  <button 
+                    onClick={onClearSector}
+                    className="ml-1 hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                    title="Remover filtro"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+               </div>
+             </div>
+           )}
         </div>
 
         {/* Results */}
@@ -111,12 +140,12 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
                 <p className="text-sm text-gray-500 font-medium">
                     Mostrando {filteredBenefits.length} resultado(s)
                 </p>
-                {searchTerm && (
+                {(searchTerm || selectedCategory !== 'Todas') && (
                     <button 
                         onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); }}
                         className="text-sm text-rio-blue hover:underline"
                     >
-                        Limpar filtros
+                        Limpar busca e categorias
                     </button>
                 )}
             </div>
@@ -138,7 +167,14 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
                             <Search className="w-8 h-8 text-gray-400" />
                         </div>
                         <h3 className="text-lg font-bold text-gray-800 mb-1">Nenhum benefício encontrado</h3>
-                        <p className="text-gray-500">Tente ajustar sua busca ou filtros.</p>
+                        <p className="text-gray-500">
+                           {initialSector ? `Não há benefícios exclusivos listados para ${currentSectorLabel} com os filtros atuais.` : "Tente ajustar sua busca ou filtros."}
+                        </p>
+                        {initialSector && (
+                           <button onClick={onClearSector} className="mt-4 text-rio-blue font-bold hover:underline">
+                              Ver todos os departamentos
+                           </button>
+                        )}
                     </div>
                 )}
             </div>
