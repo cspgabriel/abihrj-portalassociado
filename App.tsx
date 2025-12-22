@@ -27,6 +27,7 @@ import ServiceViewerPage from './components/ServiceViewerPage';
 import BenefitCategorizerPage from './components/BenefitCategorizerPage';
 import CoursesPage from './components/CoursesPage';
 import AdminDashboard from './components/AdminDashboard';
+import AppDownloadPage from './components/AppDownloadPage';
 import AiAssistant from './components/AiAssistant';
 
 import { User, Benefit, Forum, HotelSector } from './types';
@@ -34,7 +35,7 @@ import { BENEFITS_DATA, SUPER_CATEGORIES } from './constants';
 import { authService } from './services/authService';
 import { Loader2, Lock, Mail, ArrowRight, UserPlus, Building2, UserCircle } from 'lucide-react';
 
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD' | 'APP_DOWNLOAD';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -504,6 +505,8 @@ const App: React.FC = () => {
             return <CoursesPage onBack={() => setView('DASHBOARD')} />;
         case 'ADMIN_DASHBOARD':
             return <AdminDashboard onBack={() => setView('DASHBOARD')} currentUserEmail={user.email} />;
+        case 'APP_DOWNLOAD':
+            return <AppDownloadPage onBack={() => setView('DASHBOARD')} />;
         default:
             return <Dashboard user={user} onUseBenefit={handleUseBenefit} onViewDetails={handleDetailsClick} />;
      }
@@ -548,4 +551,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-// --- Fim de App.tsx ---

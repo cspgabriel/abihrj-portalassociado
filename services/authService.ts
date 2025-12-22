@@ -12,7 +12,7 @@ import {
   updateProfile,
   User as FirebaseUser
 } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { User } from '../types';
 import { MOCK_USER } from '../constants';
@@ -41,8 +41,19 @@ export const authService = {
                 userHotel = data.hotel || userHotel;
                 userName = data.name || userName;
             }
+
+            // --- NOVO: REGISTRAR LOG DE ACESSO ---
+            await addDoc(collection(db, "access_logs"), {
+                userId: fbUser.uid,
+                userName: userName,
+                hotel: userHotel,
+                email: email,
+                timestamp: serverTimestamp(),
+                action: 'LOGIN'
+            });
+
         } catch (e) {
-            console.warn("Firestore fetch error:", e);
+            console.warn("Firestore log error:", e);
         }
 
         const appUser: User = {

@@ -1,6 +1,6 @@
 
 import { db, auth, firebaseConfig } from '../firebaseConfig';
-import { collection, getDocs, query, orderBy, setDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, setDoc, doc, updateDoc, where, limit } from 'firebase/firestore';
 import { sendPasswordResetEmail, createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
 import { initializeApp, getApp, getApps } from 'firebase/app';
 import { User } from '../types';
@@ -38,6 +38,32 @@ export const adminService = {
       console.warn("Erro ao buscar usuários (pode ser falta de permissão ou index):", error);
       // Fallback para mock se não tiver permissão/dados
       return []; 
+    }
+  },
+
+  // Fetch access logs for a specific user
+  getUserAccessLogs: async (userId: string) => {
+    try {
+        const logsRef = collection(db, 'access_logs');
+        // Pega os últimos 20 acessos
+        const q = query(logsRef, where('userId', '==', userId), orderBy('timestamp', 'desc'), limit(20));
+        
+        const snapshot = await getDocs(q);
+        const logs = snapshot.docs.map(doc => ({
+            id: doc.id,
+            timestamp: doc.data().timestamp?.toDate() || new Date(),
+            ...doc.data()
+        }));
+        
+        return logs;
+    } catch (error) {
+        console.error("Erro ao buscar logs:", error);
+        // Fallback Mock para demonstração se não tiver backend configurado
+        return [
+            { id: '1', timestamp: new Date() },
+            { id: '2', timestamp: new Date(Date.now() - 86400000) },
+            { id: '3', timestamp: new Date(Date.now() - 172800000) }
+        ];
     }
   },
 

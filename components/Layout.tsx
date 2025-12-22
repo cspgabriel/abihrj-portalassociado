@@ -5,13 +5,13 @@ import {
   Home, Users, MessageCircle, LogOut, Menu, X, Search, 
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
-  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay, ShieldCheck
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay, ShieldCheck, Download
 } from 'lucide-react';
 import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD' | 'APP_DOWNLOAD';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -91,6 +91,20 @@ const Layout: React.FC<LayoutProps> = ({
   };
 
   const isAdmin = user.email === 'marketing@hoteisrio.com.br';
+
+  // Helper for Bottom Nav
+  const NavButton = ({ icon: Icon, label, view, onClick }: { icon: any, label: string, view?: AppView, onClick?: () => void }) => {
+      const isActive = currentView === view;
+      return (
+          <button 
+            onClick={onClick ? onClick : () => view && onNavigate(view)}
+            className={`flex flex-col items-center justify-center w-full py-1 ${isActive ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
+          >
+              <Icon className={`w-6 h-6 ${isActive ? 'fill-current' : ''}`} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[10px] font-medium mt-1">{label}</span>
+          </button>
+      )
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
@@ -297,6 +311,10 @@ const Layout: React.FC<LayoutProps> = ({
                     <Users className="w-4 h-4" />
                     Equipe & Contatos
                 </button>
+                <button onClick={() => onNavigate('APP_DOWNLOAD')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+                    <Download className="w-4 h-4" />
+                    Baixar App
+                </button>
             </div>
 
         </div>
@@ -330,9 +348,7 @@ const Layout: React.FC<LayoutProps> = ({
             
             {/* Mobile Menu Toggle */}
             <div className="flex items-center gap-4 md:hidden">
-               <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-600 hover:text-rio-blue">
-                  <Menu className="w-6 h-6" />
-               </button>
+               {/* Menu button now opens drawer, handled below */}
                <img 
                  src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
                  alt="HoteisRio" 
@@ -412,11 +428,21 @@ const Layout: React.FC<LayoutProps> = ({
         )}
 
         {/* Main Scrollable Content */}
-        <main className={`flex-1 overflow-y-auto scroll-smooth relative ${isFullPage ? 'p-0' : 'p-4 md:p-8'}`} id="main-content">
-           <div className={`${isFullPage ? 'h-full w-full' : 'max-w-7xl mx-auto pb-10'}`}>
+        <main className={`flex-1 overflow-y-auto scroll-smooth relative ${isFullPage ? 'p-0' : 'p-4 md:p-8 pb-20 md:pb-10'}`} id="main-content">
+           <div className={`${isFullPage ? 'h-full w-full' : 'max-w-7xl mx-auto'}`}>
              {children}
            </div>
         </main>
+
+        {/* --- BOTTOM NAVIGATION (MOBILE) --- */}
+        {!isFullPage && (
+            <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-around items-center p-2 z-40 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <NavButton icon={Home} label="Início" view="DASHBOARD" />
+                <NavButton icon={LayoutGrid} label="Benefícios" view="ALL_BENEFITS" />
+                <NavButton icon={Download} label="App" view="APP_DOWNLOAD" />
+                <NavButton icon={Menu} label="Menu" onClick={() => setIsMobileMenuOpen(true)} />
+            </div>
+        )}
       </div>
 
       {/* --- MOBILE SIDEBAR (Drawer) --- */}
@@ -427,13 +453,13 @@ const Layout: React.FC<LayoutProps> = ({
            
            {/* Drawer */}
            <div className="relative w-[85%] max-w-xs bg-gradient-to-b from-rio-blue to-blue-900 h-full shadow-2xl flex flex-col animate-slide-in-left">
-              <div className="p-5 flex justify-between items-center border-b border-white/10 shrink-0">
+              <div className="p-6 flex justify-center items-center border-b border-white/10 shrink-0 bg-rio-blue">
                  <img 
                    src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
                    alt="HoteisRio" 
-                   className="h-10 w-auto brightness-0 invert"
+                   className="h-12 w-auto brightness-0 invert"
                  />
-                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-white/80 hover:text-white">
+                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 right-4 text-white/80 hover:text-white">
                     <X className="w-6 h-6" />
                  </button>
               </div>
@@ -478,8 +504,8 @@ const Layout: React.FC<LayoutProps> = ({
                     <Calculator className="w-5 h-5" /> Calculadoras Hoteleiras
                  </button>
 
-                 <button onClick={() => { onNavigate('CATEGORIZER'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
-                    <FileText className="w-5 h-5" /> Ferramenta de Relatórios
+                 <button onClick={() => { onNavigate('APP_DOWNLOAD'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <Download className="w-5 h-5" /> Baixar App
                  </button>
 
                  {isAdmin && (

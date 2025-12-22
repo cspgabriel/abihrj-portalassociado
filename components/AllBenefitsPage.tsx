@@ -43,15 +43,15 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
   filteredBenefits.sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-12 animate-fade-in">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-slate-800 to-slate-900 text-white pt-8 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -mr-20 -mt-20 blur-2xl" />
+    <div className="bg-gray-50 min-h-screen pb-24 md:pb-12 animate-fade-in">
+      {/* Header Updated to Rio Blue Gradient */}
+      <div className="bg-gradient-to-r from-rio-blue to-blue-900 text-white pt-8 pb-20 px-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-20 -mt-20 blur-2xl" />
         
         <div className="max-w-7xl mx-auto relative z-10">
           <button 
             onClick={onBack}
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-8"
+            className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
             Voltar para Dashboard
@@ -63,7 +63,7 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Todos os Benefícios</h1>
-              <p className="text-white/80 text-lg md:text-xl max-w-2xl leading-relaxed">
+              <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">
                 Explore o catálogo completo de vantagens, serviços e ferramentas exclusivas para associados HoteisRio.
               </p>
             </div>

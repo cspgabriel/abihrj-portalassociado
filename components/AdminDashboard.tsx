@@ -5,7 +5,7 @@ import { adminService } from '../services/adminService';
 import { 
   Users, Search, Download, Key, Edit, Trash2, 
   ShieldCheck, Mail, Building2, ArrowLeft, Loader2, CheckCircle2,
-  Upload, FileSpreadsheet, AlertTriangle, X, UserPlus, Save, UserCog
+  Upload, FileSpreadsheet, AlertTriangle, X, UserPlus, Save, UserCog, History, Clock
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
@@ -56,6 +56,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
     hotel: '',
     role: ''
   });
+
+  // Access Logs State
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [viewingHistoryUser, setViewingHistoryUser] = useState<User | null>(null);
+  const [accessLogs, setAccessLogs] = useState<any[]>([]);
+  const [loadingLogs, setLoadingLogs] = useState(false);
 
   // Hardcoded check for security visualization
   const isAdmin = currentUserEmail === 'marketing@hoteisrio.com.br';
@@ -175,6 +181,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
     } finally {
       setIsCreatingUser(false);
     }
+  };
+
+  // --- HISTORY LOGS LOGIC ---
+  const handleViewHistory = async (user: User) => {
+      setViewingHistoryUser(user);
+      setIsHistoryModalOpen(true);
+      setLoadingLogs(true);
+      
+      const logs = await adminService.getUserAccessLogs(user.id);
+      setAccessLogs(logs);
+      setLoadingLogs(false);
   };
 
   // --- IMPORT LOGIC ---
@@ -475,6 +492,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                              <td className="px-6 py-4 text-right">
                                 <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                    <button 
+                                      onClick={() => handleViewHistory(user)}
+                                      className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 text-gray-400 transition-all"
+                                      title="Ver Histórico de Acessos"
+                                   >
+                                      <History className="w-4 h-4" />
+                                   </button>
+                                   <button 
                                       onClick={() => handleResetPassword(user.email)}
                                       className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 text-gray-400 transition-all"
                                       title="Enviar E-mail de Redefinição de Senha"
@@ -708,6 +732,67 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+      )}
+
+      {/* HISTORY LOGS MODAL */}
+      {isHistoryModalOpen && viewingHistoryUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsHistoryModalOpen(false)}></div>
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg relative z-10 animate-fade-in-up flex flex-col max-h-[80vh]">
+                
+                <div className="p-6 border-b border-gray-100 flex justify-between items-center shrink-0">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <History className="w-5 h-5 text-purple-600" />
+                        Histórico de Acessos
+                    </h2>
+                    <button onClick={() => setIsHistoryModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                        <X className="w-6 h-6" />
+                    </button>
+                </div>
+
+                <div className="p-4 bg-purple-50 border-b border-purple-100 shrink-0">
+                    <p className="font-bold text-gray-800">{viewingHistoryUser.name}</p>
+                    <p className="text-xs text-gray-500">{viewingHistoryUser.hotel}</p>
+                </div>
+
+                <div className="p-0 overflow-y-auto flex-1">
+                    {loadingLogs ? (
+                        <div className="flex flex-col items-center justify-center py-12 text-gray-500 gap-2">
+                            <Loader2 className="w-6 h-6 animate-spin text-purple-600" />
+                            <span>Carregando logs...</span>
+                        </div>
+                    ) : accessLogs.length === 0 ? (
+                        <div className="text-center py-12 text-gray-500 px-6">
+                            Nenhum registro de acesso encontrado recentemente.
+                        </div>
+                    ) : (
+                        <ul className="divide-y divide-gray-100">
+                            {accessLogs.map((log) => (
+                                <li key={log.id} className="p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-white p-2 rounded-full border border-gray-100 shadow-sm">
+                                            <Clock className="w-4 h-4 text-purple-500" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-700">Login realizado</p>
+                                            <p className="text-xs text-gray-400">Via Portal Web</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-mono font-medium text-gray-600">
+                                            {log.timestamp.toLocaleDateString()}
+                                        </p>
+                                        <p className="text-xs text-gray-400">
+                                            {log.timestamp.toLocaleTimeString()}
+                                        </p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </div>
         </div>
       )}

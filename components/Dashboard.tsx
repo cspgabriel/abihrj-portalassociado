@@ -121,7 +121,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
   };
 
   return (
-    <div className="animate-fade-in pb-12">
+    <div className="animate-fade-in pb-20 md:pb-12">
       
       {/* Header Atualizado (Mais elegante) */}
       <div className="bg-white rounded-2xl p-8 mb-8 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -179,7 +179,9 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
                        key={`${benefit.id}-${idx}`}
                        onClick={() => onUseBenefit(benefit)}
                        className={`
-                         relative overflow-hidden rounded-2xl p-8 h-80 flex flex-col justify-between
+                         relative overflow-hidden rounded-2xl p-6 md:p-8 
+                         min-h-[220px] h-auto aspect-[16/9] md:h-80 md:aspect-auto
+                         flex flex-col justify-between
                          bg-gradient-to-br ${gradient} text-white shadow-lg cursor-pointer
                          transform transition-all duration-300 hover:scale-[1.01] hover:shadow-xl group
                        `}
@@ -188,24 +190,24 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onUseBenefit, onViewDetails
                         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-32 -mt-32 pointer-events-none group-hover:scale-125 transition-transform duration-500" />
                         
                         <div className="relative z-10 flex flex-col h-full justify-center">
-                           <div className="bg-white/20 p-3 rounded-xl w-fit backdrop-blur-sm mb-4 shadow-sm">
-                              <IconComponent className="w-12 h-12 text-white" />
+                           <div className="bg-white/20 p-2 md:p-3 rounded-xl w-fit backdrop-blur-sm mb-3 md:mb-4 shadow-sm">
+                              <IconComponent className="w-8 h-8 md:w-12 md:h-12 text-white" />
                            </div>
                            
-                           <div className="inline-block bg-white/20 backdrop-blur-md text-xs font-bold px-3 py-1 rounded mb-3 uppercase tracking-wide w-fit">
+                           <div className="inline-block bg-white/20 backdrop-blur-md text-[10px] md:text-xs font-bold px-2 md:px-3 py-1 rounded mb-2 md:mb-3 uppercase tracking-wide w-fit">
                               Destaque
                            </div>
                            
-                           <h3 className="text-3xl font-bold leading-tight mb-4 max-w-3xl">
+                           <h3 className="text-xl md:text-3xl font-bold leading-tight mb-2 md:mb-4 max-w-3xl">
                              {benefit.title}
                            </h3>
-                           <p className="text-lg text-white/90 leading-relaxed max-w-2xl line-clamp-2">
+                           <p className="text-sm md:text-lg text-white/90 leading-relaxed max-w-2xl line-clamp-2">
                              {benefit.description}
                            </p>
                         </div>
 
-                        <div className="absolute bottom-8 right-8 z-10 hidden md:flex items-center text-sm font-bold opacity-90 group-hover:opacity-100 group-hover:translate-x-1 transition-all bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl backdrop-blur-sm">
-                           {benefit.customCta || "Acessar Agora"} <ArrowRight className="w-5 h-5 ml-2" />
+                        <div className="absolute bottom-6 md:bottom-8 right-6 md:right-8 z-10 hidden sm:flex items-center text-xs md:text-sm font-bold opacity-90 group-hover:opacity-100 group-hover:translate-x-1 transition-all bg-white/20 hover:bg-white/30 px-4 py-2 md:px-6 md:py-3 rounded-xl backdrop-blur-sm">
+                           {benefit.customCta || "Acessar Agora"} <ArrowRight className="w-4 h-4 md:w-5 md:h-5 ml-2" />
                         </div>
                      </div>
                    );
