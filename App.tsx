@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -31,7 +32,7 @@ import AiAssistant from './components/AiAssistant';
 import { User, Benefit, Forum } from './types';
 import { BENEFITS_DATA } from './constants';
 import { authService } from './services/authService';
-import { Loader2, Lock, Mail, ArrowRight } from 'lucide-react';
+import { Loader2, Lock, Mail, ArrowRight, UserPlus, Building2, UserCircle } from 'lucide-react';
 
 // App View Types
 type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
@@ -41,11 +42,16 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<AppView>('DASHBOARD');
   
-  // Login State
+  // Login/Register State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false); // Toggle between Login/Register
+  
+  // Registration Fields
+  const [regName, setRegName] = useState('');
+  const [regHotel, setRegHotel] = useState('');
 
   // Forgot Password State
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -76,19 +82,39 @@ const App: React.FC = () => {
     checkSession();
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoggingIn(true);
     setLoginError('');
 
-    const result = await authService.login(email, password);
-    
-    if (result.success && result.user) {
-        setUser(result.user);
-    } else {
-        setLoginError(result.error || 'Erro ao fazer login');
+    try {
+        if (isRegistering) {
+            // Register Logic
+            if (!regName || !regHotel) {
+                setLoginError('Preencha todos os campos.');
+                setIsLoggingIn(false);
+                return;
+            }
+            const result = await authService.register(email, password, regName, regHotel);
+            if (result.success && result.user) {
+                setUser(result.user);
+            } else {
+                setLoginError(result.error || 'Erro ao criar conta.');
+            }
+        } else {
+            // Login Logic
+            const result = await authService.login(email, password);
+            if (result.success && result.user) {
+                setUser(result.user);
+            } else {
+                setLoginError(result.error || 'Erro ao fazer login');
+            }
+        }
+    } catch (error: any) {
+        setLoginError('Ocorreu um erro inesperado.');
+    } finally {
+        setIsLoggingIn(false);
     }
-    setIsLoggingIn(false);
   };
 
   const handleLogout = () => {
@@ -198,24 +224,62 @@ const App: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col">
+      <div className="min-h-screen bg-gradient-to-br from-rio-blue to-blue-900 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col animate-fade-in-up">
             {/* Header */}
-            <div className="bg-rio-blue p-8 text-center relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-xl"></div>
+            <div className="bg-gray-50 p-8 text-center relative overflow-hidden border-b border-gray-100">
                 <img 
                    src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
                    alt="HoteisRio" 
-                   className="h-16 mx-auto mb-4 brightness-0 invert relative z-10"
+                   className="h-16 mx-auto mb-4 object-contain"
                 />
-                <h2 className="text-white text-xl font-bold relative z-10">Central do Associado</h2>
-                <p className="text-blue-200 text-sm relative z-10">Faça login para acessar seus benefícios</p>
+                <h2 className="text-gray-800 text-xl font-bold relative z-10">
+                    {isRegistering ? 'Criar Nova Conta' : 'Central do Associado'}
+                </h2>
+                <p className="text-gray-500 text-sm relative z-10">
+                    {isRegistering ? 'Preencha os dados abaixo' : 'Faça login para acessar os benefícios'}
+                </p>
             </div>
 
-            {/* Login Form */}
+            {/* Login/Register Form */}
             {!showForgotPassword ? (
                 <div className="p-8">
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleAuthSubmit} className="space-y-4">
+                        
+                        {/* Extra fields for Registration */}
+                        {isRegistering && (
+                            <>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nome Completo</label>
+                                    <div className="relative">
+                                        <UserCircle className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                                        <input 
+                                            type="text" 
+                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none transition-all"
+                                            placeholder="Seu nome"
+                                            value={regName}
+                                            onChange={e => setRegName(e.target.value)}
+                                            required={isRegistering}
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Hotel / Empresa</label>
+                                    <div className="relative">
+                                        <Building2 className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                                        <input 
+                                            type="text" 
+                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none transition-all"
+                                            placeholder="Nome do Hotel"
+                                            value={regHotel}
+                                            onChange={e => setRegHotel(e.target.value)}
+                                            required={isRegistering}
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">E-mail Corporativo</label>
                             <div className="relative">
@@ -241,36 +305,52 @@ const App: React.FC = () => {
                                     value={password}
                                     onChange={e => setPassword(e.target.value)}
                                     required
+                                    minLength={6}
                                 />
                             </div>
                         </div>
 
                         {loginError && (
-                            <div className="text-red-500 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2">
-                                <span className="block w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2 border border-red-100">
+                                <span className="block w-1.5 h-1.5 bg-red-600 rounded-full"></span>
                                 {loginError}
                             </div>
                         )}
 
-                        <div className="flex justify-end">
-                            <button 
-                                type="button" 
-                                onClick={() => setShowForgotPassword(true)}
-                                className="text-sm text-rio-blue hover:underline font-medium"
-                            >
-                                Esqueceu a senha?
-                            </button>
-                        </div>
+                        {!isRegistering && (
+                            <div className="flex justify-end">
+                                <button 
+                                    type="button" 
+                                    onClick={() => setShowForgotPassword(true)}
+                                    className="text-sm text-rio-blue hover:underline font-medium"
+                                >
+                                    Esqueceu a senha?
+                                </button>
+                            </div>
+                        )}
 
                         <button 
                             type="submit" 
                             disabled={isLoggingIn}
-                            className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                            className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70 mt-2"
                         >
-                            {isLoggingIn ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Entrar'}
-                            {!isLoggingIn && <ArrowRight className="w-5 h-5" />}
+                            {isLoggingIn ? <Loader2 className="w-5 h-5 animate-spin" /> : (isRegistering ? 'Criar Conta' : 'Entrar')}
+                            {!isLoggingIn && !isRegistering && <ArrowRight className="w-5 h-5" />}
+                            {!isLoggingIn && isRegistering && <UserPlus className="w-5 h-5" />}
                         </button>
                     </form>
+
+                    <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+                        <button 
+                            onClick={() => {
+                                setIsRegistering(!isRegistering);
+                                setLoginError('');
+                            }}
+                            className="text-sm font-bold text-gray-600 hover:text-rio-blue transition-colors"
+                        >
+                            {isRegistering ? 'Já tem uma conta? Fazer Login' : 'Não tem conta? Cadastre-se'}
+                        </button>
+                    </div>
                 </div>
             ) : (
                 <div className="p-8">
@@ -281,7 +361,7 @@ const App: React.FC = () => {
                         ← Voltar para Login
                     </button>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Redefinir Senha</h3>
-                    <p className="text-sm text-gray-500 mb-6">Digite seu e-mail para receber um link de redefinição.</p>
+                    <p className="text-sm text-gray-500 mb-6">Digite seu e-mail cadastrado para receber um link de redefinição.</p>
 
                     <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                         <div>
@@ -297,7 +377,8 @@ const App: React.FC = () => {
                         </div>
 
                         {forgotPasswordStatus && (
-                            <div className={`text-sm p-3 rounded-lg ${forgotPasswordStatus.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                            <div className={`text-sm p-3 rounded-lg flex items-start gap-2 ${forgotPasswordStatus.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                <span className="mt-0.5">•</span>
                                 {forgotPasswordStatus.msg}
                             </div>
                         )}

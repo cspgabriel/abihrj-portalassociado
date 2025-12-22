@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Serviço de autenticação
@@ -5,11 +6,13 @@
 import { auth } from '../firebaseConfig';
 import { 
   signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
   signOut, 
   sendPasswordResetEmail,
+  updateProfile,
   User as FirebaseUser
 } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { User } from '../types';
 import { MOCK_USER } from '../constants';
@@ -17,6 +20,7 @@ import { MOCK_USER } from '../constants';
 const isFirebaseConfigured = auth.app.options.apiKey && auth.app.options.apiKey.length > 20;
 
 export const authService = {
+  // --- LOGIN ---
   login: async (email: string, password: string): Promise<{ success: boolean; user?: User; error?: string }> => {
     if (isFirebaseConfigured) {
       try {
@@ -59,11 +63,13 @@ export const authService = {
         return { success: true, user: appUser };
       } catch (error: any) {
         console.error("Firebase Login Error:", error);
-        return { success: false, error: "Credenciais inválidas." };
+        let errorMsg = "Credenciais inválidas.";
+        if (error.code === 'auth/too-many-requests') errorMsg = "Muitas tentativas. Tente mais tarde.";
+        return { success: false, error: errorMsg };
       }
     }
 
-    // Mock Login
+    // Mock Login Logic
     if (email === 'marketing@hoteisrio.com.br' && password === 'admin') {
          return { 
             success: true, 
@@ -90,12 +96,68 @@ export const authService = {
     };
   },
 
+  // --- REGISTER (NEW) ---
+  register: async (email: string, password: string, name: string, hotel: string): Promise<{ success: boolean; user?: User; error?: string }> => {
+    if (isFirebaseConfigured) {
+        try {
+            // 1. Create Auth User
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const fbUser = userCredential.user;
+
+            // 2. Update Display Name
+            await updateProfile(fbUser, { displayName: name });
+
+            // 3. Save details to Firestore
+            await setDoc(doc(db, "users", fbUser.uid), {
+                name,
+                email,
+                hotel,
+                role: 'Associado',
+                createdAt: new Date()
+            });
+
+            const appUser: User = {
+                id: fbUser.uid,
+                name: name,
+                email: email,
+                hotel: hotel,
+                role: 'Associado',
+                gamification: { xp: 0, level: 'BRONZE', streak: 1, lastLoginDate: new Date().toISOString(), badges: [], completedActions: [] }
+            };
+
+            return { success: true, user: appUser };
+
+        } catch (error: any) {
+            console.error("Firebase Register Error:", error);
+            let msg = "Erro ao criar conta.";
+            if (error.code === 'auth/email-already-in-use') msg = "Este e-mail já está em uso.";
+            if (error.code === 'auth/weak-password') msg = "A senha deve ter pelo menos 6 caracteres.";
+            return { success: false, error: msg };
+        }
+    }
+
+    // Mock Register
+    return {
+        success: true,
+        user: {
+            id: 'mock-new-' + Date.now(),
+            name,
+            email,
+            hotel,
+            role: 'Associado',
+            gamification: { xp: 0, level: 'BRONZE', streak: 1, lastLoginDate: new Date().toISOString(), badges: [], completedActions: [] }
+        }
+    };
+  },
+
+  // --- LOGOUT ---
   logout: async () => {
     if (isFirebaseConfigured) {
       await signOut(auth);
     }
   },
 
+  // --- RESET PASSWORD ---
   sendPasswordReset: async (email: string) => {
     if (isFirebaseConfigured) {
         try {
