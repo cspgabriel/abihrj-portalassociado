@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home, CheckCircle2, Monitor } from 'lucide-react';
+import { ArrowLeft, Smartphone, Download, Share, MoreVertical, PlusSquare, Home, CheckCircle2, Monitor, Laptop } from 'lucide-react';
 
 interface AppDownloadPageProps {
   onBack: () => void;
@@ -10,6 +10,7 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     // Detect iOS
@@ -19,6 +20,7 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
     // Check if already in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches) {
         setIsInstalled(true);
+        setIsStandalone(true);
     }
 
     const handler = (e: any) => {
@@ -66,7 +68,7 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
              </div>
              <h1 className="text-2xl md:text-3xl font-bold mb-2">Instale o App HoteisRio</h1>
              <p className="text-blue-100 max-w-lg">
-                Acesse benefícios, notícias e segurança com um toque.
+                Acesse benefícios, notícias e segurança com um toque. Disponível para Android, iOS e Windows (Chrome).
              </p>
           </div>
         </div>
@@ -87,7 +89,7 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rio-blue to-rio-gold"></div>
                  <h3 className="text-xl font-bold text-gray-800 mb-2">Instalação Disponível</h3>
                  <p className="text-gray-600 mb-6">
-                     Instale o aplicativo oficial para melhor performance e acesso offline.
+                     Instale o aplicativo oficial para melhor performance e acesso offline no seu dispositivo.
                  </p>
                  <button 
                     onClick={handleInstallClick}
@@ -102,6 +104,24 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                  <p className="text-center text-gray-500 mb-4 font-medium">Selecione seu dispositivo para ver como instalar:</p>
                  
+                 {/* Desktop Chrome Instructions */}
+                 <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 mb-4">
+                    <div className="bg-gray-100 p-3 font-bold text-gray-700 flex items-center gap-2">
+                        <Laptop className="w-4 h-4 text-blue-600" />
+                        Computador (Chrome/Edge)
+                    </div>
+                    <div className="p-4 space-y-4">
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">1</span>
+                            <p className="text-sm text-gray-600">Olhe para a barra de endereço do navegador.</p>
+                        </div>
+                        <div className="flex gap-3 items-start">
+                            <span className="bg-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-gray-200 shrink-0">2</span>
+                            <p className="text-sm text-gray-600">Clique no ícone de <strong>Instalar</strong> <Download className="w-3 h-3 inline text-gray-500" /> ou <strong>Computador</strong> no canto direito.</p>
+                        </div>
+                    </div>
+                 </div>
+
                  {/* IOS Instructions */}
                  <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 mb-4">
                     <div className="bg-gray-100 p-3 font-bold text-gray-700 flex items-center gap-2">
@@ -154,7 +174,7 @@ const AppDownloadPage: React.FC<AppDownloadPageProps> = ({ onBack }) => {
 
          <div className="text-center pt-4 pb-8">
              <p className="text-xs text-gray-400">
-                 HoteisRio PWA v2.0 • Compatível com iOS e Android
+                 HoteisRio PWA v2.0 • Compatível com iOS, Android e Windows
              </p>
          </div>
 
