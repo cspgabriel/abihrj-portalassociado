@@ -5,7 +5,7 @@ import {
   Home, Users, MessageCircle, LogOut, Menu, X, Search, 
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
-  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay, ShieldCheck, Download
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay, ShieldCheck, Download, Smartphone
 } from 'lucide-react';
 import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
@@ -410,10 +410,16 @@ const Layout: React.FC<LayoutProps> = ({
                   <Settings className="w-4 h-4" />
                   Ajuda
                </button>
-               <button className="relative p-2 text-gray-400 hover:text-rio-blue transition-colors">
-                  <Bell className="w-5 h-5" />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+               
+               {/* APP DOWNLOAD BUTTON (REPLACED NOTIFICATION BELL) */}
+               <button 
+                 onClick={() => onNavigate('APP_DOWNLOAD')}
+                 className="flex items-center gap-2 bg-rio-blue/10 text-rio-blue px-3 py-2 rounded-lg font-bold text-xs hover:bg-rio-blue hover:text-white transition-all animate-pulse-soft"
+               >
+                  <Smartphone className="w-4 h-4" />
+                  <span className="hidden sm:inline">Baixar App</span>
                </button>
+
                <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-800 leading-none">{user.name}</p>
