@@ -5,7 +5,7 @@ import { adminService } from '../services/adminService';
 import { 
   Users, Search, Download, Key, Edit, Trash2, 
   ShieldCheck, Mail, Building2, ArrowLeft, Loader2, CheckCircle2,
-  Upload, FileSpreadsheet, AlertTriangle, X, UserPlus, Save
+  Upload, FileSpreadsheet, AlertTriangle, X, UserPlus, Save, UserCog
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
@@ -46,6 +46,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
     hotel: '',
     role: 'Associado',
     password: ''
+  });
+
+  // Edit User State
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    hotel: '',
+    role: ''
   });
 
   // Hardcoded check for security visualization
@@ -115,9 +124,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
             setNotification({ type: 'success', msg: `Usuário ${newUserForm.name} criado com sucesso!` });
             setIsAddUserModalOpen(false);
             setNewUserForm({ name: '', email: '', hotel: '', role: 'Associado', password: '' });
-            
-            // NÃO envia email de redefinição aqui, pois a senha foi definida manualmente.
-            
             refreshUsers();
         } else {
             setNotification({ 
@@ -129,6 +135,45 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
         setNotification({ type: 'error', msg: error.message });
     } finally {
         setIsCreatingUser(false);
+    }
+  };
+
+  // --- EDIT USER LOGIC ---
+
+  const openEditModal = (user: User) => {
+    setEditingUser(user);
+    setEditForm({
+      name: user.name,
+      hotel: user.hotel,
+      role: user.role
+    });
+    setIsEditUserModalOpen(true);
+  };
+
+  const handleUpdateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    if (!editForm.name || !editForm.hotel) {
+      alert("Por favor, preencha os campos obrigatórios.");
+      return;
+    }
+
+    setIsCreatingUser(true); // Reusing the loading state
+    
+    try {
+      const result = await adminService.updateUser(editingUser.id, editForm);
+      if (result.success) {
+        setNotification({ type: 'success', msg: 'Usuário atualizado com sucesso!' });
+        setIsEditUserModalOpen(false);
+        setEditingUser(null);
+        refreshUsers();
+      } else {
+        setNotification({ type: 'error', msg: result.error || 'Erro ao atualizar usuário.' });
+      }
+    } catch (error: any) {
+      setNotification({ type: 'error', msg: error.message });
+    } finally {
+      setIsCreatingUser(false);
     }
   };
 
@@ -437,9 +482,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                                       <Key className="w-4 h-4" />
                                    </button>
                                    <button 
+                                      onClick={() => openEditModal(user)}
                                       className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 text-gray-400 transition-all"
-                                      title="Editar Dados (Mock)"
-                                      onClick={() => alert("Funcionalidade de edição completa requer backend dedicado.")}
+                                      title="Editar Dados"
                                    >
                                       <Edit className="w-4 h-4" />
                                    </button>
@@ -562,6 +607,102 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack, currentUserEmai
                                 <>
                                     <Save className="w-4 h-4" />
                                     Salvar Usuário
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      )}
+
+      {/* EDIT USER MODAL */}
+      {isEditUserModalOpen && editingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !isCreatingUser && setIsEditUserModalOpen(false)}></div>
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg relative z-10 animate-fade-in-up">
+                
+                <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <UserCog className="w-5 h-5 text-indigo-600" />
+                        Editar Usuário
+                    </h2>
+                    {!isCreatingUser && (
+                        <button onClick={() => setIsEditUserModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                            <X className="w-6 h-6" />
+                        </button>
+                    )}
+                </div>
+
+                <form onSubmit={handleUpdateUser} className="p-6 space-y-4">
+                    <div className="opacity-70">
+                        <label className="block text-sm font-semibold text-gray-500 mb-1">E-mail (Não editável)</label>
+                        <input 
+                            type="email" 
+                            disabled
+                            className="w-full px-4 py-2 border border-gray-200 bg-gray-50 rounded-lg text-gray-500 outline-none"
+                            value={editingUser.email}
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1">Para alterar o e-mail, crie um novo usuário e remova este.</p>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Nome Completo</label>
+                        <input 
+                            type="text" 
+                            required
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                            value={editForm.name}
+                            onChange={e => setEditForm({...editForm, name: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Hotel / Empresa</label>
+                        <input 
+                            type="text" 
+                            required
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                            value={editForm.hotel}
+                            onChange={e => setEditForm({...editForm, hotel: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Cargo / Função</label>
+                        <select 
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+                            value={editForm.role}
+                            onChange={e => setEditForm({...editForm, role: e.target.value})}
+                        >
+                            <option value="Associado">Associado (Padrão)</option>
+                            <option value="Gerente Geral">Gerente Geral</option>
+                            <option value="RH">Recursos Humanos</option>
+                            <option value="Comercial">Comercial</option>
+                            <option value="Diretoria">Diretoria</option>
+                        </select>
+                    </div>
+
+                    <div className="pt-4 flex gap-3 justify-end">
+                        <button 
+                            type="button"
+                            onClick={() => setIsEditUserModalOpen(false)}
+                            className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg font-medium"
+                            disabled={isCreatingUser}
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit"
+                            disabled={isCreatingUser}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-bold shadow-md flex items-center gap-2 disabled:opacity-70"
+                        >
+                            {isCreatingUser ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    Salvando...
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="w-4 h-4" />
+                                    Salvar Alterações
                                 </>
                             )}
                         </button>

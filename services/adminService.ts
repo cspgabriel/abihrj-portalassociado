@@ -1,6 +1,6 @@
 
 import { db, auth, firebaseConfig } from '../firebaseConfig';
-import { collection, getDocs, query, orderBy, setDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, setDoc, doc, updateDoc } from 'firebase/firestore';
 import { sendPasswordResetEmail, createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
 import { initializeApp, getApp, getApps } from 'firebase/app';
 import { User } from '../types';
@@ -83,6 +83,22 @@ export const adminService = {
     } catch (error: any) {
         console.error("Erro ao criar usuário via secundário:", error);
         return { success: false, error: error.message };
+    }
+  },
+
+  // Update existing user data in Firestore
+  updateUser: async (userId: string, data: { name: string, hotel: string, role: string }) => {
+    try {
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        name: data.name,
+        hotel: data.hotel,
+        role: data.role
+      });
+      return { success: true };
+    } catch (error: any) {
+      console.error("Erro ao atualizar usuário:", error);
+      return { success: false, error: error.message };
     }
   },
 
