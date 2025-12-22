@@ -24,6 +24,7 @@ interface LayoutProps {
   selectedCategory?: string; 
   onSectorSelect?: (sector: HotelSector) => void;
   isFullPage?: boolean; // New prop to control padding
+  installPrompt?: any; // New prop for PWA installation
 }
 
 const Layout: React.FC<LayoutProps> = ({ 
@@ -34,7 +35,8 @@ const Layout: React.FC<LayoutProps> = ({
   onBenefitClick,
   onSectorSelect,
   currentView,
-  isFullPage = false
+  isFullPage = false,
+  installPrompt
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -83,6 +85,19 @@ const Layout: React.FC<LayoutProps> = ({
   const handleSuperCategoryClick = (categoryId: string) => {
     onNavigate('CATEGORY_LISTING', categoryId);
     setIsMobileMenuOpen(false);
+  };
+
+  // PWA Install Logic
+  const handleAppAction = async () => {
+      if (installPrompt) {
+          installPrompt.prompt();
+          const { outcome } = await installPrompt.userChoice;
+          if (outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+          }
+      } else {
+          onNavigate('APP_DOWNLOAD');
+      }
   };
 
   const renderIcon = (name: string, className: string) => {
@@ -411,13 +426,13 @@ const Layout: React.FC<LayoutProps> = ({
                   Ajuda
                </button>
                
-               {/* APP DOWNLOAD BUTTON (REPLACED NOTIFICATION BELL) */}
+               {/* APP DOWNLOAD BUTTON (UPDATED LOGIC) */}
                <button 
-                 onClick={() => onNavigate('APP_DOWNLOAD')}
+                 onClick={handleAppAction}
                  className="flex items-center gap-2 bg-rio-blue/10 text-rio-blue px-3 py-2 rounded-lg font-bold text-xs hover:bg-rio-blue hover:text-white transition-all animate-pulse-soft"
                >
-                  <Smartphone className="w-4 h-4" />
-                  <span className="hidden sm:inline">Baixar App</span>
+                  {installPrompt ? <Download className="w-4 h-4" /> : <Smartphone className="w-4 h-4" />}
+                  <span className="hidden sm:inline">{installPrompt ? 'Instalar App' : 'Baixar App'}</span>
                </button>
 
                <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">

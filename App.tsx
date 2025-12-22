@@ -554,6 +554,7 @@ const App: React.FC = () => {
         currentView={view}
         onSectorSelect={(sector) => setSelectedSector(sector)}
         isFullPage={isFullPageLayout}
+        installPrompt={deferredPrompt} // Passed to Layout to enable header install button
     >
         {renderContent()}
 

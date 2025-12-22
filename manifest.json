@@ -1,6 +1,9 @@
+
 {
+  "id": "hoteisrio-portal-associado",
   "short_name": "HoteisRio",
   "name": "HoteisRio - Portal do Associado",
+  "description": "Acesse benefícios, notícias e segurança com um toque. Portal exclusivo para associados HoteisRio.",
   "icons": [
     {
       "src": "https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png",
@@ -20,5 +23,6 @@
   "theme_color": "#004aad",
   "background_color": "#f3f6f9",
   "orientation": "portrait",
-  "scope": "./"
+  "scope": "./",
+  "categories": ["business", "productivity", "utilities"]
 }
