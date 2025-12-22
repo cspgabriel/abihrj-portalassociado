@@ -100,9 +100,9 @@ const Layout: React.FC<LayoutProps> = ({
         {/* Logo Area */}
         <div className="p-6 flex items-center justify-center border-b border-white/10 h-20 shrink-0 bg-rio-blue">
            <img 
-             src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+             src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
              alt="HoteisRio" 
-             className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+             className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity brightness-0 invert"
              onClick={() => onNavigate('DASHBOARD')}
            />
         </div>
@@ -334,9 +334,9 @@ const Layout: React.FC<LayoutProps> = ({
                   <Menu className="w-6 h-6" />
                </button>
                <img 
-                 src="https://sindhoteisrj.com.br/wp-content/uploads/2023/08/logo-hoteisrio-color.png" 
+                 src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
                  alt="HoteisRio" 
-                 className="h-8 w-auto"
+                 className="h-10 w-auto"
                />
             </div>
 
@@ -429,9 +429,9 @@ const Layout: React.FC<LayoutProps> = ({
            <div className="relative w-[85%] max-w-xs bg-gradient-to-b from-rio-blue to-blue-900 h-full shadow-2xl flex flex-col animate-slide-in-left">
               <div className="p-5 flex justify-between items-center border-b border-white/10 shrink-0">
                  <img 
-                   src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+                   src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
                    alt="HoteisRio" 
-                   className="h-8 w-auto"
+                   className="h-10 w-auto brightness-0 invert"
                  />
                  <button onClick={() => setIsMobileMenuOpen(false)} className="text-white/80 hover:text-white">
                     <X className="w-6 h-6" />

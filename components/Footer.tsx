@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { FOOTER_DATA, WHATSAPP_GROUPS } from '../constants';
 import { MapPin, Phone, Mail, Instagram, Linkedin, Youtube, Facebook, ArrowUpRight } from 'lucide-react';
@@ -16,7 +15,7 @@ const Footer: React.FC = () => {
           {/* Coluna 1: Sobre */}
           <div className="space-y-6">
             <img 
-              src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+              src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
               alt="HoteisRio" 
               className="h-12 brightness-0 invert opacity-90"
             />

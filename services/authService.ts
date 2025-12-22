@@ -1,4 +1,8 @@
 
+// Autor: Gabriel Salles
+// Suporte do SO: Windows11
+// Descrição: Configuração de inicialização do Firebase
+
 import { User } from '../types';
 import { auth, db } from '../firebaseConfig';
 import { 
@@ -6,7 +10,8 @@ import {
   createUserWithEmailAndPassword, 
   updateProfile, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
@@ -169,6 +174,24 @@ export const authService = {
     localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
     if (mockObserver) mockObserver(mockUser);
     return mockUser;
+  },
+
+  // --- REDEFINIÇÃO DE SENHA ---
+  sendPasswordReset: async (email: string) => {
+    if (isFirebaseConfigured) {
+        try {
+            await sendPasswordResetEmail(auth, email);
+            return { success: true };
+        } catch (error: any) {
+            let msg = 'Erro ao enviar e-mail.';
+            if (error.code === 'auth/user-not-found') msg = 'E-mail não encontrado na base de dados.';
+            if (error.code === 'auth/invalid-email') msg = 'Formato de e-mail inválido.';
+            return { success: false, error: msg };
+        }
+    }
+    // Mock success
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return { success: true };
   },
 
   // --- LISTENER DE SESSÃO ---

@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Benefit } from '../types';
-import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown, Link as LinkIcon, Copy } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { generateBenefitDetails } from '../services/geminiService';
 
@@ -15,6 +15,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
   const [aiAnalysis, setAiAnalysis] = useState('');
   const [loadingAi, setLoadingAi] = useState(false);
   const [showAi, setShowAi] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
     // Reset state on benefit change
     setAiAnalysis('');
     setShowAi(false);
+    setLinkCopied(false);
   }, [benefit]);
 
   const handleGenerateAi = async () => {
@@ -43,6 +45,14 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
     }
   };
 
+  const handleCopyDeepLink = () => {
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set('benefitId', benefit.id);
+    navigator.clipboard.writeText(url.toString());
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
+
   return (
     <div className="bg-white min-h-screen pb-12 animate-fade-in">
       {/* Hero Header */}
@@ -51,15 +61,26 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-10 -mb-10 blur-2xl" />
         
         <div className="max-w-5xl mx-auto relative z-10">
-          <button 
-            onClick={onBack}
-            className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors mb-8 group"
-          >
-            <div className="p-1 rounded-full bg-blue-800/50 group-hover:bg-blue-700 transition">
-               <ArrowLeft className="w-5 h-5" />
-            </div>
-            <span className="font-medium">Voltar para o Dashboard</span>
-          </button>
+          <div className="flex justify-between items-start mb-8">
+              <button 
+                onClick={onBack}
+                className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors group"
+              >
+                <div className="p-1 rounded-full bg-blue-800/50 group-hover:bg-blue-700 transition">
+                   <ArrowLeft className="w-5 h-5" />
+                </div>
+                <span className="font-medium">Voltar para o Dashboard</span>
+              </button>
+
+              <button 
+                onClick={handleCopyDeepLink}
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors backdrop-blur-md border border-white/10"
+                title="Copiar link direto para este benefício"
+              >
+                {linkCopied ? <CheckCircle2 className="w-4 h-4 text-green-400" /> : <LinkIcon className="w-4 h-4" />}
+                {linkCopied ? 'Link Copiado!' : 'Copiar Link'}
+              </button>
+          </div>
 
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl">
