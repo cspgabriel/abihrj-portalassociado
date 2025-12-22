@@ -27,6 +27,7 @@ import AllBenefitsPage from './components/AllBenefitsPage'; // New Page
 import ServiceViewerPage from './components/ServiceViewerPage'; // New Iframe Viewer
 import BenefitCategorizerPage from './components/BenefitCategorizerPage'; // New Categorizer Tool
 import CoursesPage from './components/CoursesPage'; // New Courses 2.0 Page
+import AdminDashboard from './components/AdminDashboard'; // New Admin Dashboard
 import { User, Benefit, BenefitCategory, Forum, UserGamificationProfile, HotelSector } from './types';
 import { BENEFITS_DATA, OTHER_BENEFITS_LIST, FORUMS_DATA, COMMUNITY_ITEMS_DATA, LEVEL_THRESHOLDS, XP_REWARDS, GAMIFICATION_BADGES, NEWS_ITEMS } from './constants';
 import { Building2, CheckCircle2, Lock, Loader2, AlertCircle, ArrowLeft, Laptop2, LayoutGrid, Users, Calendar, MessageCircle, Phone, UserCog, CloudSun, Sun, CloudRain, Filter, ArrowDownAZ, ArrowUpAZ, Star, ChevronDown, ChevronRight, List, Grid, LayoutTemplate, Gift, ArrowRight, ChevronLeft, Newspaper, ExternalLink, Calculator, TrendingUp, Search } from 'lucide-react';
@@ -34,7 +35,7 @@ import { authService } from './services/authService';
 import * as Icons from 'lucide-react';
 
 // --- Types for View Management ---
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
 
 // --- Components ---
 
@@ -741,6 +742,12 @@ const Dashboard: React.FC = () => {
   if (currentView !== 'DASHBOARD') {
     return (
         <Layout {...commonLayoutProps}>
+            {currentView === 'ADMIN_DASHBOARD' && (
+                <AdminDashboard 
+                    onBack={handleBackToDashboard}
+                    currentUserEmail={user.email}
+                />
+            )}
             {currentView === 'COURSES_V2' && (
                 <CoursesPage onBack={handleBackToDashboard} />
             )}

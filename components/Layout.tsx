@@ -1,23 +1,17 @@
 
-
-
-
-
-
-
 import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory, HotelSector } from '../types';
 import { 
   Home, Users, MessageCircle, LogOut, Menu, X, Search, 
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
-  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay, ShieldCheck
 } from 'lucide-react';
 import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -96,6 +90,8 @@ const Layout: React.FC<LayoutProps> = ({
       return <IconComponent className={className} />;
   };
 
+  const isAdmin = user.email === 'marketing@hoteisrio.com.br';
+
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
       
@@ -139,6 +135,20 @@ const Layout: React.FC<LayoutProps> = ({
                 <LayoutGrid className="w-5 h-5" />
                 Todos os Benefícios
                 </button>
+
+                {isAdmin && (
+                    <button 
+                    onClick={() => onNavigate('ADMIN_DASHBOARD')}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mt-2 border border-yellow-500/30 bg-yellow-500/10
+                        ${currentView === 'ADMIN_DASHBOARD' 
+                        ? 'bg-yellow-500 text-black font-bold shadow-lg' 
+                        : 'text-yellow-400 hover:bg-yellow-500/20 hover:text-white'}
+                    `}
+                    >
+                    <ShieldCheck className="w-5 h-5" />
+                    Painel Admin
+                    </button>
+                )}
             </div>
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
@@ -467,6 +477,12 @@ const Layout: React.FC<LayoutProps> = ({
                  <button onClick={() => { onNavigate('CATEGORIZER'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
                     <FileText className="w-5 h-5" /> Ferramenta de Relatórios
                  </button>
+
+                 {isAdmin && (
+                    <button onClick={() => { onNavigate('ADMIN_DASHBOARD'); setIsMobileMenuOpen(false); }} className="w-full text-left text-yellow-400 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                        <ShieldCheck className="w-5 h-5" /> Painel Admin
+                    </button>
+                 )}
                  
                  <button onClick={onLogout} className="w-full text-left text-red-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3 mt-4 border-t border-white/10 pt-4">
                     <LogOut className="w-5 h-5" /> Sair

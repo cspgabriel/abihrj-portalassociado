@@ -72,12 +72,12 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="bg-[#141414] min-h-screen text-white font-sans animate-fade-in relative overflow-x-hidden">
+    <div className="bg-[#020617] min-h-screen text-white font-sans animate-fade-in relative overflow-x-hidden">
       
       {/* Navbar Overlay - High Z-Index to stay on top */}
-      <div className="absolute top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-gradient-to-b from-black/90 via-black/60 to-transparent pointer-events-none">
+      <div className="absolute top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-gradient-to-b from-[#020617]/90 via-[#020617]/60 to-transparent pointer-events-none">
          <div className="pointer-events-auto">
-            <button onClick={onBack} className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors bg-black/40 hover:bg-black/60 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+            <button onClick={onBack} className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors bg-slate-900/40 hover:bg-slate-900/60 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
                 <ArrowLeft className="w-5 h-5" />
                 <span className="hidden sm:inline">Voltar ao Dashboard</span>
             </button>
@@ -100,13 +100,14 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                 backgroundImage: `url(${heroCourse.thumbnailUrl.replace('maxresdefault', 'maxresdefault')})`,
             }}
          >
-            {/* Dark Overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/40"></div>
+            {/* Blue-tinted Overlay for Brand Consistency */}
+            <div className="absolute inset-0 bg-blue-950/30 mix-blend-multiply"></div>
+            <div className="absolute inset-0 bg-black/20"></div>
          </div>
          
-         {/* Gradients for smooth blending */}
-         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent z-10"></div>
-         <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/80 to-transparent z-10 sm:w-3/4"></div>
+         {/* Gradients for smooth blending to the blue background */}
+         <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/40 to-transparent z-10"></div>
+         <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/80 to-transparent z-10 sm:w-3/4"></div>
 
          {/* Content - Adjusted padding to push text higher up */}
          <div className="absolute bottom-0 left-0 w-full p-6 md:p-16 z-30 flex flex-col justify-end h-full pb-48 md:pb-60 pointer-events-none">
@@ -115,7 +116,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                     {heroCourse.isNew && (
                         <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm tracking-wider">NOVO LANÇAMENTO</span>
                     )}
-                    <span className="text-white/90 text-xs font-bold uppercase tracking-widest flex items-center gap-2 border-l-2 border-rio-gold pl-3">
+                    <span className="text-blue-200 text-xs font-bold uppercase tracking-widest flex items-center gap-2 border-l-2 border-rio-gold pl-3">
                         {heroCourse.category}
                     </span>
                  </div>
@@ -131,21 +132,21 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                     <span className="flex items-center gap-1 text-white"><Clock className="w-3 h-3" /> {heroCourse.duration}</span>
                  </div>
 
-                 <p className="text-gray-300 text-sm md:text-base lg:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-lg animate-fade-in-up delay-300 hidden md:block max-w-2xl">
+                 <p className="text-blue-100/80 text-sm md:text-base lg:text-lg mb-8 line-clamp-3 leading-relaxed drop-shadow-lg animate-fade-in-up delay-300 hidden md:block max-w-2xl">
                     {heroCourse.description}
                  </p>
                  
                  <div className="flex flex-wrap gap-4 animate-fade-in-up delay-500">
                     <button 
                       onClick={() => handlePlay(heroCourse)}
-                      className="bg-white text-black px-8 py-3 rounded-md font-bold flex items-center gap-3 hover:bg-white/90 transition-all transform hover:scale-105 shadow-xl shadow-black/20"
+                      className="bg-white text-rio-blue px-8 py-3 rounded-md font-bold flex items-center gap-3 hover:bg-white/90 transition-all transform hover:scale-105 shadow-xl shadow-blue-900/20"
                     >
-                       <Play className="w-6 h-6 fill-black" />
+                       <Play className="w-6 h-6 fill-rio-blue" />
                        Assistir Agora
                     </button>
                     <button 
                         onClick={(e) => copyLink(e, heroCourse)}
-                        className="bg-gray-500/30 text-white px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-gray-500/50 transition-colors backdrop-blur-sm border border-white/20"
+                        className="bg-slate-800/50 text-white px-6 py-3 rounded-md font-bold flex items-center gap-2 hover:bg-slate-800/70 transition-colors backdrop-blur-sm border border-white/10"
                     >
                        {copiedId === heroCourse.id ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
                        {copiedId === heroCourse.id ? 'Copiado' : 'Compartilhar'}
@@ -168,8 +169,8 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                {COURSES_DATA.map(course => (
                   <div 
                      key={course.id} 
-                     className={`group relative bg-[#1f1f1f] rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl hover:ring-2 hover:ring-white/80
-                        ${heroCourse.id === course.id ? 'ring-2 ring-rio-gold/70' : ''}
+                     className={`group relative bg-slate-900 rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl hover:ring-2 hover:ring-rio-blue/50
+                        ${heroCourse.id === course.id ? 'ring-2 ring-rio-gold/70 bg-slate-800' : ''}
                      `}
                      onMouseEnter={() => handleMouseEnter(course)}
                      onClick={() => handlePlay(course)}
@@ -183,7 +184,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                         />
                         
                         {/* Play Icon Overlay */}
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute inset-0 bg-blue-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/50 pl-1 shadow-lg">
                                 <Play className="w-5 h-5 text-white fill-white" />
                             </div>
@@ -204,7 +205,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
 
                      {/* Meta Info */}
                      <div className="p-4">
-                        <h3 className={`font-bold text-sm mb-1 transition-colors line-clamp-1 ${heroCourse.id === course.id ? 'text-rio-gold' : 'text-white group-hover:text-white'}`}>
+                        <h3 className={`font-bold text-sm mb-1 transition-colors line-clamp-1 ${heroCourse.id === course.id ? 'text-rio-gold' : 'text-white group-hover:text-rio-blue'}`}>
                             {course.title}
                         </h3>
                         
@@ -243,7 +244,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                 <X className="w-8 h-8" />
              </button>
 
-             <div className="w-full max-w-6xl flex flex-col max-h-[95vh] shadow-2xl rounded-xl overflow-hidden bg-[#181818] relative z-10">
+             <div className="w-full max-w-6xl flex flex-col max-h-[95vh] shadow-2xl rounded-xl overflow-hidden bg-slate-900 relative z-10 border border-slate-800">
                  <div className="aspect-video bg-black relative w-full border-b border-gray-800">
                     <iframe 
                     width="100%" 
@@ -260,14 +261,14 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                             <h2 className="text-2xl font-bold text-white">{selectedCourse.title}</h2>
-                            <span className="bg-gray-700 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">{selectedCourse.category}</span>
+                            <span className="bg-blue-800 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase border border-blue-700">{selectedCourse.category}</span>
                         </div>
                         <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
                             <span className="text-green-500 font-bold">98% Relevante</span>
                             <span>2025</span>
                             <span>{selectedCourse.duration}</span>
                         </div>
-                        <p className="text-gray-300 text-sm leading-relaxed max-w-3xl">{selectedCourse.description}</p>
+                        <p className="text-blue-100/80 text-sm leading-relaxed max-w-3xl">{selectedCourse.description}</p>
                     </div>
                     
                     <button 
