@@ -11,7 +11,7 @@ import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD' | 'APP_DOWNLOAD';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,7 +24,6 @@ interface LayoutProps {
   selectedCategory?: string; 
   onSectorSelect?: (sector: HotelSector) => void;
   isFullPage?: boolean; // New prop to control padding
-  installPrompt?: any; // New prop for PWA installation
 }
 
 const Layout: React.FC<LayoutProps> = ({ 
@@ -35,8 +34,7 @@ const Layout: React.FC<LayoutProps> = ({
   onBenefitClick,
   onSectorSelect,
   currentView,
-  isFullPage = false,
-  installPrompt
+  isFullPage = false
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -85,19 +83,6 @@ const Layout: React.FC<LayoutProps> = ({
   const handleSuperCategoryClick = (categoryId: string) => {
     onNavigate('CATEGORY_LISTING', categoryId);
     setIsMobileMenuOpen(false);
-  };
-
-  // PWA Install Logic
-  const handleAppAction = async () => {
-      if (installPrompt) {
-          installPrompt.prompt();
-          const { outcome } = await installPrompt.userChoice;
-          if (outcome === 'accepted') {
-              console.log('User accepted the install prompt');
-          }
-      } else {
-          onNavigate('APP_DOWNLOAD');
-      }
   };
 
   const renderIcon = (name: string, className: string) => {
@@ -326,10 +311,6 @@ const Layout: React.FC<LayoutProps> = ({
                     <Users className="w-4 h-4" />
                     Equipe & Contatos
                 </button>
-                <button onClick={() => onNavigate('APP_DOWNLOAD')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
-                    <Download className="w-4 h-4" />
-                    Baixar App
-                </button>
             </div>
 
         </div>
@@ -426,15 +407,6 @@ const Layout: React.FC<LayoutProps> = ({
                   Ajuda
                </button>
                
-               {/* APP DOWNLOAD BUTTON (UPDATED LOGIC) */}
-               <button 
-                 onClick={handleAppAction}
-                 className="flex items-center gap-2 bg-rio-blue/10 text-rio-blue px-3 py-2 rounded-lg font-bold text-xs hover:bg-rio-blue hover:text-white transition-all animate-pulse-soft"
-               >
-                  {installPrompt ? <Download className="w-4 h-4" /> : <Smartphone className="w-4 h-4" />}
-                  <span className="hidden sm:inline">{installPrompt ? 'Instalar App' : 'Baixar App'}</span>
-               </button>
-
                <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-800 leading-none">{user.name}</p>
@@ -460,7 +432,6 @@ const Layout: React.FC<LayoutProps> = ({
             <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-around items-center p-2 z-40 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
                 <NavButton icon={Home} label="Início" view="DASHBOARD" />
                 <NavButton icon={LayoutGrid} label="Benefícios" view="ALL_BENEFITS" />
-                <NavButton icon={Download} label="App" view="APP_DOWNLOAD" />
                 <NavButton icon={Menu} label="Menu" onClick={() => setIsMobileMenuOpen(true)} />
             </div>
         )}
@@ -523,10 +494,6 @@ const Layout: React.FC<LayoutProps> = ({
 
                  <button onClick={() => { onNavigate('CALCULATORS_PAGE'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
                     <Calculator className="w-5 h-5" /> Calculadoras Hoteleiras
-                 </button>
-
-                 <button onClick={() => { onNavigate('APP_DOWNLOAD'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
-                    <Download className="w-5 h-5" /> Baixar App
                  </button>
 
                  {isAdmin && (
