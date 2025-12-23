@@ -1,4 +1,8 @@
 
+// Autor: Gabriel Salles
+// Suporte do SO: Windows11
+// Descrição: Definições de tipos da aplicação
+
 import { LucideIcon } from 'lucide-react';
 
 export interface User {
@@ -41,7 +45,8 @@ export enum BenefitCategory {
   TECHNOLOGY = 'Tecnologia',
   HR = 'Recursos Humanos',
   SUPPORT = 'Suporte',
-  TOOLS = 'Ferramentas & Calculadoras'
+  TOOLS = 'Ferramentas & Calculadoras',
+  MAINTENANCE = 'Manutenção'
 }
 
 export type HotelSector = 'MANAGEMENT' | 'RECEPTION' | 'HOUSEKEEPING' | 'MAINTENANCE' | 'SALES' | 'HR' | 'LEGAL_DEPT' | 'FB';
@@ -108,3 +113,4 @@ export interface RioEvent {
   type: string;
   imageUrl: string;
 }
+// --- Fim de types.ts ---
