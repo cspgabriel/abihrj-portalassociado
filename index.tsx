@@ -1,6 +1,12 @@
+
+// Autor: Gabriel Salles
+// Suporte do SO: Windows11
+// Descrição: Ponto de entrada da aplicação com registro de PWA
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -13,3 +19,7 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// Registrar o Service Worker para transformar em PWA
+serviceWorkerRegistration.register();
+// --- Fim de index.tsx ---
