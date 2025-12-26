@@ -1,17 +1,23 @@
 
+
+
+
+
+
+
 import React, { useState } from 'react';
 import { User, Benefit, BenefitCategory, HotelSector } from '../types';
 import { 
   Home, Users, MessageCircle, LogOut, Menu, X, Search, 
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
-  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay, ShieldCheck, Download, Smartphone
+  ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay
 } from 'lucide-react';
 import { BENEFITS_DATA, SUPER_CATEGORIES, HOTEL_SECTORS } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_DASHBOARD';
+type AppView = 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -90,22 +96,6 @@ const Layout: React.FC<LayoutProps> = ({
       return <IconComponent className={className} />;
   };
 
-  const isAdmin = user.email === 'marketing@hoteisrio.com.br';
-
-  // Helper for Bottom Nav
-  const NavButton = ({ icon: Icon, label, view, onClick }: { icon: any, label: string, view?: AppView, onClick?: () => void }) => {
-      const isActive = currentView === view;
-      return (
-          <button 
-            onClick={onClick ? onClick : () => view && onNavigate(view)}
-            className={`flex flex-col items-center justify-center w-full py-1 ${isActive ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
-          >
-              <Icon className={`w-6 h-6 ${isActive ? 'fill-current' : ''}`} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[10px] font-medium mt-1">{label}</span>
-          </button>
-      )
-  };
-
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
       
@@ -114,9 +104,9 @@ const Layout: React.FC<LayoutProps> = ({
         {/* Logo Area */}
         <div className="p-6 flex items-center justify-center border-b border-white/10 h-20 shrink-0 bg-rio-blue">
            <img 
-             src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
+             src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
              alt="HoteisRio" 
-             className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity brightness-0 invert"
+             className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
              onClick={() => onNavigate('DASHBOARD')}
            />
         </div>
@@ -149,20 +139,6 @@ const Layout: React.FC<LayoutProps> = ({
                 <LayoutGrid className="w-5 h-5" />
                 Todos os Benefícios
                 </button>
-
-                {isAdmin && (
-                    <button 
-                    onClick={() => onNavigate('ADMIN_DASHBOARD')}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mt-2 border border-yellow-500/30 bg-yellow-500/10
-                        ${currentView === 'ADMIN_DASHBOARD' 
-                        ? 'bg-yellow-500 text-black font-bold shadow-lg' 
-                        : 'text-yellow-400 hover:bg-yellow-500/20 hover:text-white'}
-                    `}
-                    >
-                    <ShieldCheck className="w-5 h-5" />
-                    Painel Admin
-                    </button>
-                )}
             </div>
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
@@ -209,12 +185,12 @@ const Layout: React.FC<LayoutProps> = ({
                                             <span className="truncate">{b.title}</span>
                                         </button>
                                     ))}
-                                    {sectorBenefits.length > 0 && (
+                                    {sectorBenefits.length > 6 && (
                                         <button 
                                             onClick={() => { if(onSectorSelect) onSectorSelect(sector.id as HotelSector); onNavigate('ALL_BENEFITS'); }}
                                             className="w-full text-left px-3 py-2 text-[10px] uppercase font-bold text-rio-gold hover:underline pl-6"
                                         >
-                                            Ver todos os benefícios
+                                            Ver todos de {sector.label}
                                         </button>
                                     )}
                                 </div>
@@ -293,9 +269,9 @@ const Layout: React.FC<LayoutProps> = ({
                     Cursos 2.0 (Beta)
                 </button>
 
-                <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm group">
-                    <Calculator className="w-4 h-4 group-hover:text-green-400" />
-                    Calculadoras Hoteleiras
+                <button onClick={() => onNavigate('CALCULATORS_PAGE')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+                    <Calculator className="w-4 h-4" />
+                    Calculadoras
                 </button>
 
                 <button onClick={() => onNavigate('CATEGORIZER')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
@@ -344,11 +320,13 @@ const Layout: React.FC<LayoutProps> = ({
             
             {/* Mobile Menu Toggle */}
             <div className="flex items-center gap-4 md:hidden">
-               {/* Menu button now opens drawer, handled below */}
+               <button onClick={() => setIsMobileMenuOpen(true)} className="text-gray-600 hover:text-rio-blue">
+                  <Menu className="w-6 h-6" />
+               </button>
                <img 
-                 src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
+                 src="https://sindhoteisrj.com.br/wp-content/uploads/2023/08/logo-hoteisrio-color.png" 
                  alt="HoteisRio" 
-                 className="h-10 w-auto"
+                 className="h-8 w-auto"
                />
             </div>
 
@@ -406,11 +384,14 @@ const Layout: React.FC<LayoutProps> = ({
                   <Settings className="w-4 h-4" />
                   Ajuda
                </button>
-               
+               <button className="relative p-2 text-gray-400 hover:text-rio-blue transition-colors">
+                  <Bell className="w-5 h-5" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+               </button>
                <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-800 leading-none">{user.name}</p>
-                    <p className="text-xs text-gray-500 mt-1 uppercase tracking-wide">{user.hotel}</p>
+                    <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wide">{user.hotel}</p>
                   </div>
                   <div className="w-9 h-9 bg-rio-blue text-white rounded-full flex items-center justify-center font-bold shadow-sm ring-2 ring-blue-50">
                      {user.name.charAt(0)}
@@ -421,20 +402,11 @@ const Layout: React.FC<LayoutProps> = ({
         )}
 
         {/* Main Scrollable Content */}
-        <main className={`flex-1 overflow-y-auto scroll-smooth relative ${isFullPage ? 'p-0' : 'p-4 md:p-8 pb-20 md:pb-10'}`} id="main-content">
-           <div className={`${isFullPage ? 'h-full w-full' : 'max-w-7xl mx-auto'}`}>
+        <main className={`flex-1 overflow-y-auto scroll-smooth relative ${isFullPage ? 'p-0' : 'p-4 md:p-8'}`} id="main-content">
+           <div className={`${isFullPage ? 'h-full w-full' : 'max-w-7xl mx-auto pb-10'}`}>
              {children}
            </div>
         </main>
-
-        {/* --- BOTTOM NAVIGATION (MOBILE) --- */}
-        {!isFullPage && (
-            <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-around items-center p-2 z-40 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-                <NavButton icon={Home} label="Início" view="DASHBOARD" />
-                <NavButton icon={LayoutGrid} label="Benefícios" view="ALL_BENEFITS" />
-                <NavButton icon={Menu} label="Menu" onClick={() => setIsMobileMenuOpen(true)} />
-            </div>
-        )}
       </div>
 
       {/* --- MOBILE SIDEBAR (Drawer) --- */}
@@ -445,13 +417,13 @@ const Layout: React.FC<LayoutProps> = ({
            
            {/* Drawer */}
            <div className="relative w-[85%] max-w-xs bg-gradient-to-b from-rio-blue to-blue-900 h-full shadow-2xl flex flex-col animate-slide-in-left">
-              <div className="p-6 flex justify-center items-center border-b border-white/10 shrink-0 bg-rio-blue">
+              <div className="p-5 flex justify-between items-center border-b border-white/10 shrink-0">
                  <img 
-                   src="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png" 
+                   src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
                    alt="HoteisRio" 
-                   className="h-12 w-auto brightness-0 invert"
+                   className="h-8 w-auto"
                  />
-                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 right-4 text-white/80 hover:text-white">
+                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-white/80 hover:text-white">
                     <X className="w-6 h-6" />
                  </button>
               </div>
@@ -492,15 +464,9 @@ const Layout: React.FC<LayoutProps> = ({
                     <MonitorPlay className="w-5 h-5" /> Cursos 2.0 (Beta)
                  </button>
 
-                 <button onClick={() => { onNavigate('CALCULATORS_PAGE'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
-                    <Calculator className="w-5 h-5" /> Calculadoras Hoteleiras
+                 <button onClick={() => { onNavigate('CATEGORIZER'); setIsMobileMenuOpen(false); }} className="w-full text-left text-white/90 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
+                    <FileText className="w-5 h-5" /> Ferramenta de Relatórios
                  </button>
-
-                 {isAdmin && (
-                    <button onClick={() => { onNavigate('ADMIN_DASHBOARD'); setIsMobileMenuOpen(false); }} className="w-full text-left text-yellow-400 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3">
-                        <ShieldCheck className="w-5 h-5" /> Painel Admin
-                    </button>
-                 )}
                  
                  <button onClick={onLogout} className="w-full text-left text-red-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3 mt-4 border-t border-white/10 pt-4">
                     <LogOut className="w-5 h-5" /> Sair

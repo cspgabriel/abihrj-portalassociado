@@ -1,7 +1,3 @@
-// Autor: Gabriel Salles
-// Suporte do SO: Windows11
-// Descrição: Ponto de entrada da aplicação React
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -17,5 +13,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-// --- Fim de index.tsx ---

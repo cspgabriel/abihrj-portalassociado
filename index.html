@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="theme-color" content="#004aad" />
-    <link rel="manifest" href="./manifest.json" />
-    <link rel="apple-touch-icon" href="https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png">
     <title>HoteisRio - Portal do Associado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -51,8 +48,7 @@
     "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
     "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
     "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/package/xlsx.mjs"
+    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
   }
 }
 </script>
@@ -71,18 +67,5 @@
     </div>
     <!-- Script essencial para iniciar a aplicação -->
     <script type="module" src="./index.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(registration => {
-              console.log('SW registered: ', registration);
-            })
-            .catch(registrationError => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-      }
-    </script>
   </body>
 </html>

@@ -1,200 +1,240 @@
 
-// Autor: Gabriel Salles
-// Suporte do SO: Windows11
-// Descrição: Serviço de autenticação
-
-import { auth } from '../firebaseConfig';
+import { User } from '../types';
+import { auth, db } from '../firebaseConfig';
 import { 
   signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword,
+  createUserWithEmailAndPassword, 
+  updateProfile, 
   signOut, 
-  sendPasswordResetEmail,
-  updateProfile,
-  setPersistence,
-  browserLocalPersistence,
-  browserSessionPersistence,
-  User as FirebaseUser
+  onAuthStateChanged 
 } from 'firebase/auth';
-import { doc, getDoc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
-import { User } from '../types';
-import { MOCK_USER } from '../constants';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
+// Verifica se a chave de API parece válida
 const isFirebaseConfigured = auth.app.options.apiKey && auth.app.options.apiKey.length > 20;
+
+const LOCAL_STORAGE_SESSION_KEY = 'rio_session_user';
+
+let mockObserver: ((user: User | null) => void) | null = null;
 
 export const authService = {
   // --- LOGIN ---
-  login: async (email: string, password: string, rememberMe: boolean = false): Promise<{ success: boolean; user?: User; error?: string }> => {
+  login: async (email: string, password: string): Promise<User> => {
+    // Tenta Firebase primeiro
     if (isFirebaseConfigured) {
       try {
-        // Define a persistência antes de fazer o login
-        await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
-
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const fbUser = userCredential.user;
+        const firebaseUser = userCredential.user;
         
-        // Fetch extra data from Firestore
-        let userRole = 'Associado';
-        let userHotel = 'Hotel Rio';
-        let userName = fbUser.displayName || email.split('@')[0];
+        // Tenta buscar dados extras do Firestore (Hotel, Cargo)
+        let hotel = 'Hotel Associado';
+        let role = 'Associado';
         
         try {
-            const docRef = doc(db, "users", fbUser.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                userRole = data.role || userRole;
-                userHotel = data.hotel || userHotel;
-                userName = data.name || userName;
-            }
-
-            // --- NOVO: REGISTRAR LOG DE ACESSO ---
-            await addDoc(collection(db, "access_logs"), {
-                userId: fbUser.uid,
-                userName: userName,
-                hotel: userHotel,
-                email: email,
-                timestamp: serverTimestamp(),
-                action: 'LOGIN'
-            });
-
+          const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            hotel = data.hotel || hotel;
+            role = data.role || role;
+          }
         } catch (e) {
-            console.warn("Firestore log error:", e);
+          console.warn("Não foi possível buscar detalhes do usuário no Firestore", e);
         }
 
-        const appUser: User = {
-          id: fbUser.uid,
-          name: userName,
-          email: fbUser.email || '',
-          hotel: userHotel,
-          role: userRole,
-          gamification: {
-             xp: 450,
-             level: 'GOLD',
-             streak: 12,
-             lastLoginDate: new Date().toISOString(),
-             badges: ['badge-first-login', 'badge-explorer'],
-             completedActions: []
-          }
+        const user: User = {
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || email.split('@')[0],
+          email: firebaseUser.email || '',
+          hotel: hotel,
+          role: role,
+          avatarUrl: firebaseUser.photoURL || undefined
         };
-        return { success: true, user: appUser };
+        
+        // Persistir sessão localmente para evitar flash de logout
+        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(user));
+        return user;
+        
       } catch (error: any) {
-        console.error("Firebase Login Error:", error);
-        let errorMsg = "Credenciais inválidas.";
-        if (error.code === 'auth/too-many-requests') errorMsg = "Muitas tentativas. Tente mais tarde.";
-        return { success: false, error: errorMsg };
+        console.warn("Firebase Login Failed.", error.code);
+        
+        // CORREÇÃO: Tratamento explícito de senha incorreta para não cair no Mock
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+           throw new Error('Email ou senha incorretos.');
+        }
+        
+        if (error.code === 'auth/too-many-requests') {
+           throw new Error('Muitas tentativas falhas. Tente novamente mais tarde.');
+        }
+
+        // Se for outro erro (ex: network), tentamos o fallback apenas se não for erro de credencial
+        console.log("Falling back to demo mode due to network/config error.");
       }
     }
 
-    // Mock Login Logic
-    if (email === 'marketing@hoteisrio.com.br' && password === 'admin') {
-         return { 
-            success: true, 
-            user: { ...MOCK_USER, id: 'admin-01', email, role: 'Admin', gamification: { xp: 9999, level: 'MASTER', streak: 100, lastLoginDate: '', badges: [], completedActions: [] } as any } 
-         };
-    }
+    // Fallback Mock (Modo Demo) - Apenas se não for erro de senha
+    // Permite login "fake" se o Firebase falhar ou não estiver configurado
+    console.log("Usando login simulado (Demo Mode)");
     
-    // Default Mock
-    return {
-        success: true,
-        user: {
-            ...MOCK_USER,
-            id: 'mock-user-01',
-            email,
-            gamification: {
-                xp: 340,
-                level: 'GOLD',
-                streak: 5,
-                lastLoginDate: new Date().toISOString(),
-                badges: ['badge-first-login'],
-                completedActions: []
-            }
-        }
+    // Simula um delay de rede
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    const mockUser: User = {
+      id: 'mock-user-id-' + Date.now(),
+      name: email.split('@')[0] || "Carlos Silva",
+      email: email,
+      hotel: "Copacabana Palace View (Demo)",
+      role: "Gerente Geral",
+      avatarUrl: undefined
     };
+    
+    localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+    if (mockObserver) mockObserver(mockUser);
+    return mockUser;
   },
 
-  // --- REGISTER (NEW) ---
-  register: async (email: string, password: string, name: string, hotel: string): Promise<{ success: boolean; user?: User; error?: string }> => {
+  // --- REGISTRO (CRIAR CONTA) ---
+  register: async (email: string, password: string, name: string, hotel: string, role: string): Promise<User> => {
+    // Tenta registrar no Firebase
     if (isFirebaseConfigured) {
+      try {
+        // 1. Criar usuário na Auth
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const firebaseUser = userCredential.user;
+
+        // 2. Atualizar Nome no Perfil Auth
+        await updateProfile(firebaseUser, { displayName: name });
+
+        // 3. Salvar dados extras (Hotel, Cargo) no Firestore
         try {
-            // 1. Create Auth User
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const fbUser = userCredential.user;
-
-            // 2. Update Display Name
-            await updateProfile(fbUser, { displayName: name });
-
-            // 3. Save details to Firestore
-            await setDoc(doc(db, "users", fbUser.uid), {
+            await setDoc(doc(db, "users", firebaseUser.uid), {
                 name,
                 email,
                 hotel,
-                role: 'Associado',
+                role,
                 createdAt: new Date()
             });
+        } catch (e) {
+            console.warn("Erro ao salvar no Firestore (pode ser permissão), seguindo com Auth apenas.");
+        }
 
-            const appUser: User = {
-                id: fbUser.uid,
-                name: name,
-                email: email,
-                hotel: hotel,
-                role: 'Associado',
-                gamification: { xp: 0, level: 'BRONZE', streak: 1, lastLoginDate: new Date().toISOString(), badges: [], completedActions: [] }
+        const newUser: User = {
+          id: firebaseUser.uid,
+          name: name,
+          email: firebaseUser.email || email,
+          hotel: hotel,
+          role: role
+        };
+        
+        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(newUser));
+        return newUser;
+
+      } catch (error: any) {
+        if (error.code === 'auth/email-already-in-use') {
+          throw new Error('Este email já está cadastrado.');
+        }
+        if (error.code === 'auth/weak-password') {
+          throw new Error('A senha deve ter pelo menos 6 caracteres.');
+        }
+        // Se o erro for de configuração/network no registro, jogamos erro (não fazemos mock de registro persistente complexo)
+        console.error("Erro no registro Firebase:", error);
+        
+        // Fallback simples para demo em caso de erro de API Key
+        if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/admin-restricted-operation' || error.code === 'auth/api-key-not-valid.-please-pass-a-valid-api-key.') {
+            // Permitir "registrar" localmente para a sessão
+            const mockUser: User = {
+                id: 'mock-new-' + Date.now(),
+                name,
+                email,
+                hotel,
+                role
             };
-
-            return { success: true, user: appUser };
-
-        } catch (error: any) {
-            console.error("Firebase Register Error:", error);
-            let msg = "Erro ao criar conta.";
-            if (error.code === 'auth/email-already-in-use') msg = "Este e-mail já está em uso.";
-            if (error.code === 'auth/weak-password') msg = "A senha deve ter pelo menos 6 caracteres.";
-            return { success: false, error: msg };
+            localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+            if (mockObserver) mockObserver(mockUser);
+            return mockUser;
         }
+
+        // Para outros erros reais, lançamos a exceção
+        throw new Error("Erro ao criar conta: " + error.message);
+      }
     }
-
-    // Mock Register
-    return {
-        success: true,
-        user: {
-            id: 'mock-new-' + Date.now(),
-            name,
-            email,
-            hotel,
-            role: 'Associado',
-            gamification: { xp: 0, level: 'BRONZE', streak: 1, lastLoginDate: new Date().toISOString(), badges: [], completedActions: [] }
-        }
+    
+    // Fallback Local Register (sem firebase configurado)
+    const mockUser: User = {
+        id: 'mock-new-' + Date.now(),
+        name,
+        email,
+        hotel,
+        role
     };
+    localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+    if (mockObserver) mockObserver(mockUser);
+    return mockUser;
   },
 
-  // --- LOGOUT ---
+  // --- LISTENER DE SESSÃO ---
+  subscribeToAuthChanges: (callback: (user: User | null) => void) => {
+    if (isFirebaseConfigured) {
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+          // Busca dados complementares
+          let hotel = 'Hotel Associado';
+          let role = 'Associado';
+          
+          try {
+             const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+             if (userDoc.exists()) {
+               const data = userDoc.data();
+               hotel = data.hotel || hotel;
+               role = data.role || role;
+             }
+          } catch (e) { console.log("Erro ao carregar perfil extendido"); }
+
+          const userObj: User = {
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuario',
+            email: firebaseUser.email || '',
+            hotel: hotel,
+            role: role,
+            avatarUrl: firebaseUser.photoURL || undefined
+          };
+          
+          // Atualiza cache local
+          localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(userObj));
+          callback(userObj);
+        } else {
+          // Checa fallback local apenas se não houver auth real do firebase
+          // Isso mantém a sessão "demo" ativa mesmo se o Firebase falhar
+          const local = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
+          if (local) {
+             try {
+                const parsed = JSON.parse(local);
+                callback(parsed);
+                return;
+             } catch (e) { localStorage.removeItem(LOCAL_STORAGE_SESSION_KEY); }
+          }
+          callback(null);
+        }
+      });
+      return unsubscribe;
+    }
+
+    // Modo totalmente offline/mock
+    const localUser = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
+    callback(localUser ? JSON.parse(localUser) : null);
+    mockObserver = callback;
+    return () => { mockObserver = null; };
+  },
+
   logout: async () => {
     if (isFirebaseConfigured) {
-      await signOut(auth);
+      try {
+        await signOut(auth);
+      } catch (e) { console.warn("Erro ao deslogar Firebase", e); }
     }
-  },
-
-  // --- RESET PASSWORD ---
-  sendPasswordReset: async (email: string) => {
-    if (isFirebaseConfigured) {
-        try {
-            console.log(`[Auth] Tentando enviar reset de senha para: ${email}`);
-            await sendPasswordResetEmail(auth, email);
-            console.log('[Auth] Firebase reportou sucesso no envio.');
-            return { success: true };
-        } catch (error: any) {
-            console.error("[Auth] Erro no sendPasswordReset:", error);
-            let msg = 'Erro ao enviar e-mail.';
-            if (error.code === 'auth/user-not-found') msg = 'E-mail não encontrado na base de dados.';
-            if (error.code === 'auth/invalid-email') msg = 'Formato de e-mail inválido.';
-            return { success: false, error: msg };
-        }
-    }
-    // Mock success
-    console.warn("[Auth] Modo Demo: Simulando envio de reset para", email);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return { success: true };
+    localStorage.removeItem(LOCAL_STORAGE_SESSION_KEY);
+    if (mockObserver) mockObserver(null);
+    
+    // Force reload to clear any lingering React state or context
+    window.location.reload();
   }
 };
-
-// --- Fim de services/authService.ts ---
