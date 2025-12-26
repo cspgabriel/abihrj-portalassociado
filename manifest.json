@@ -3,6 +3,14 @@
   "short_name": "HoteisRio",
   "name": "HoteisRio - Portal do Associado",
   "description": "Portal exclusivo para associados HoteisRio acessarem benefícios, notícias, suporte jurídico e ferramentas de gestão.",
+  "id": "/",
+  "lang": "pt-BR",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#004aad",
+  "background_color": "#f3f6f9",
+  "orientation": "portrait",
+  "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
       "src": "https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png",
@@ -15,9 +23,43 @@
       "type": "image/png"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#004aad",
-  "background_color": "#f3f6f9",
-  "orientation": "portrait"
+  "screenshots": [
+    {
+      "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=1280",
+      "sizes": "1280x720",
+      "type": "image/jpg",
+      "form_factor": "wide",
+      "label": "Painel de Gestão e Benefícios"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=720",
+      "sizes": "720x1280",
+      "type": "image/jpg",
+      "form_factor": "narrow",
+      "label": "Acesso Mobile Rápido"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Todos os Benefícios",
+      "short_name": "Benefícios",
+      "description": "Acesse o catálogo completo de benefícios",
+      "url": "/?view=ALL_BENEFITS",
+      "icons": [{ "src": "https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Agenda de Eventos",
+      "short_name": "Eventos",
+      "description": "Veja os próximos fóruns e reuniões",
+      "url": "/?view=ASSOCIATION_EVENTS",
+      "icons": [{ "src": "https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Calculadoras",
+      "short_name": "Calculadoras",
+      "description": "Ferramentas de Revenue Management",
+      "url": "/?view=CALCULATORS_PAGE",
+      "icons": [{ "src": "https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png", "sizes": "192x192" }]
+    }
+  ]
 }

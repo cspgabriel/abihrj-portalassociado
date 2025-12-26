@@ -1,4 +1,8 @@
 
+// Autor: Gabriel Salles
+// Suporte do SO: Windows11
+// Descrição: Componente principal da aplicação com roteamento de URL aprimorado
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import BenefitCard from './components/BenefitCard';
@@ -271,18 +275,50 @@ const Dashboard: React.FC = () => {
     day: 'numeric'
   });
 
-  // URL Parameter Check for Special Views (Categorizer & Courses)
+  // URL Parameter Check for Special Views (Categorizer, Courses & PWA Shortcuts)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
     
-    // Support both "categorizer" and "categorize"
-    if (viewParam === 'categorizer' || viewParam === 'categorize') {
-       setCurrentView('CATEGORIZER');
-    }
-    // Support deep link to courses
-    else if (viewParam === 'courses-v2' || viewParam === 'courses') {
-       setCurrentView('COURSES_V2');
+    // Expanded routing logic for PWA Shortcuts and Deep Links
+    if (viewParam) {
+        // Direct View Mapping
+        switch (viewParam) {
+            case 'categorizer':
+            case 'categorize':
+                setCurrentView('CATEGORIZER');
+                break;
+            case 'courses-v2':
+            case 'courses':
+                setCurrentView('COURSES_V2');
+                break;
+            case 'ALL_BENEFITS':
+                setCurrentView('ALL_BENEFITS');
+                break;
+            case 'ASSOCIATION_EVENTS':
+                setCurrentView('ASSOCIATION_EVENTS');
+                break;
+            case 'CALCULATORS_PAGE':
+                setCurrentView('CALCULATORS_PAGE');
+                break;
+            case 'CONTACTS':
+                setCurrentView('CONTACTS');
+                break;
+            case 'WHATSAPP_GROUPS':
+                setCurrentView('WHATSAPP_GROUPS');
+                break;
+            case 'FORUMS_OVERVIEW':
+                setCurrentView('FORUMS_OVERVIEW');
+                break;
+            case 'SECURITY_PAGE':
+                setCurrentView('SECURITY_PAGE');
+                break;
+            default:
+                // If view param exists but doesn't match above, default to dashboard or handle as needed
+                // Optionally log unknown view
+                console.warn(`Unknown view param: ${viewParam}`);
+                break;
+        }
     }
   }, []);
 
@@ -1281,3 +1317,4 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+// --- Fim de App.tsx ---
