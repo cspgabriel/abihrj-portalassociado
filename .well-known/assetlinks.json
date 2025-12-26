@@ -1,0 +1,11 @@
+
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "br.com.sindhoteisrj.portaldoassociado.twa",
+      "sha256_cert_fingerprints": ["44:9B:D3:22:E3:AB:E3:F3:79:42:48:74:53:CC:83:A9:4D:A8:FD:A4:04:F0:BE:44:F1:16:7E:C4:0D:23:8C:94"]
+    }
+  }
+]
