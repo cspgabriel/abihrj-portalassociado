@@ -2,6 +2,7 @@
 {
   "short_name": "HoteisRio",
   "name": "HoteisRio - Portal do Associado",
+  "description": "Portal exclusivo para associados HoteisRio acessarem benefícios, notícias, suporte jurídico e ferramentas de gestão.",
   "icons": [
     {
       "src": "https://sindhoteisrj.com.br/wp-content/uploads/2020/04/logo-hoteisrio-azul-fundo-transparente-178x171-1.png",
