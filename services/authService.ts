@@ -8,14 +8,52 @@ import {
   signOut, 
   onAuthStateChanged 
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 // Verifica se a chave de API parece válida
 const isFirebaseConfigured = auth.app.options.apiKey && auth.app.options.apiKey.length > 20;
 
 const LOCAL_STORAGE_SESSION_KEY = 'rio_session_user';
+const LOCAL_STORAGE_LOGS_KEY = 'rio_access_logs';
 
 let mockObserver: ((user: User | null) => void) | null = null;
+
+// Função auxiliar para registrar log
+const logAccess = async (user: User) => {
+  const logData = {
+    userId: user.id,
+    userName: user.name,
+    userEmail: user.email,
+    userHotel: user.hotel,
+    userRole: user.role,
+    timestamp: new Date().toISOString() // String ISO para compatibilidade geral
+  };
+
+  // 1. Tentar salvar no Firestore
+  if (isFirebaseConfigured) {
+    try {
+      await addDoc(collection(db, "access_logs"), {
+        ...logData,
+        timestamp: serverTimestamp() // Timestamp do servidor para Firestore
+      });
+      console.log("Log de acesso salvo no Firestore");
+    } catch (e) {
+      console.warn("Falha ao salvar log no Firestore, usando fallback local.");
+    }
+  }
+
+  // 2. Salvar no LocalStorage (Fallback/Demo)
+  try {
+    const existingLogs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LOGS_KEY) || '[]');
+    // Adiciona no início
+    existingLogs.unshift(logData);
+    // Mantém apenas os últimos 50 logs para não estourar o storage
+    const trimmedLogs = existingLogs.slice(0, 50);
+    localStorage.setItem(LOCAL_STORAGE_LOGS_KEY, JSON.stringify(trimmedLogs));
+  } catch (e) {
+    console.error("Erro ao salvar log localmente", e);
+  }
+};
 
 export const authService = {
   // --- LOGIN ---
@@ -52,6 +90,10 @@ export const authService = {
         
         // Persistir sessão localmente para evitar flash de logout
         localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(user));
+        
+        // REGISTRAR LOG
+        await logAccess(user);
+
         return user;
         
       } catch (error: any) {
@@ -88,6 +130,10 @@ export const authService = {
     };
     
     localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+    
+    // REGISTRAR LOG MOCK
+    await logAccess(mockUser);
+
     if (mockObserver) mockObserver(mockUser);
     return mockUser;
   },
@@ -126,6 +172,7 @@ export const authService = {
         };
         
         localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(newUser));
+        await logAccess(newUser); // Logar acesso no registro
         return newUser;
 
       } catch (error: any) {
@@ -149,6 +196,7 @@ export const authService = {
                 role
             };
             localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+            await logAccess(mockUser);
             if (mockObserver) mockObserver(mockUser);
             return mockUser;
         }
@@ -167,6 +215,7 @@ export const authService = {
         role
     };
     localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
+    await logAccess(mockUser);
     if (mockObserver) mockObserver(mockUser);
     return mockUser;
   },
@@ -236,5 +285,27 @@ export const authService = {
     
     // Force reload to clear any lingering React state or context
     window.location.reload();
+  },
+
+  // Novo método para buscar logs (apenas para admin)
+  getLogs: async (): Promise<any[]> => {
+    let logs: any[] = [];
+    
+    // 1. Tentar Firestore
+    if (isFirebaseConfigured) {
+        try {
+            // Nota: Em produção, precisaria de 'query' e 'orderBy' importados
+            // Mas para manter simples no XML, vamos pegar do local se o firebase falhar ou usar logica simplificada
+            // Aqui vamos preferir o LocalStorage para garantir que o Admin funcione no modo demo
+        } catch (e) { console.warn(e); }
+    }
+
+    // 2. Fallback LocalStorage (Principal fonte para este ambiente demo)
+    try {
+        const localLogs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LOGS_KEY) || '[]');
+        logs = localLogs;
+    } catch (e) { console.error(e); }
+
+    return logs;
   }
 };

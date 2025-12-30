@@ -6,13 +6,13 @@ import {
   LayoutDashboard, Calculator, Shield, Briefcase, Wrench, 
   GraduationCap, Calendar, PieChart, Headphones, Settings,
   ChevronRight, ChevronDown, Bell, UserCircle, ExternalLink, Sparkles, LayoutGrid, Building2, Bed, Utensils, ConciergeBell, ArrowRight, MousePointer2, FileText, MonitorPlay,
-  Gavel, Music, Ticket, UserCog, Megaphone
+  Gavel, Music, Ticket, UserCog, Megaphone, ShieldAlert
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import * as Icons from 'lucide-react';
 
 // Import AppView type locally
-type AppView = 'LANDING_PAGE' | 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2';
+type AppView = 'LANDING_PAGE' | 'DASHBOARD' | 'BENEFIT_DETAILS' | 'TUTORIAL' | 'CONTACTS' | 'WHATSAPP_GROUPS' | 'ASSOCIATION_EVENTS' | 'LAWS_REGULATIONS' | 'SECURITY_PAGE' | 'REGISTRATION_UPDATE' | 'FORUM_PAGE' | 'FORUMS_OVERVIEW' | 'ROCK_IN_RIO' | 'CALCULATORS_PAGE' | 'CATEGORY_LISTING' | 'ALL_BENEFITS' | 'SERVICE_VIEWER' | 'CATEGORIZER' | 'COURSES_V2' | 'ADMIN_PANEL';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -42,6 +42,9 @@ const Layout: React.FC<LayoutProps> = ({
   const [searchResults, setSearchResults] = useState<Benefit[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   
+  // Check Admin Access
+  const isAdmin = user.email.toLowerCase() === 'marketing@hoteisrio.com.br';
+
   // Search Logic
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -203,6 +206,22 @@ const Layout: React.FC<LayoutProps> = ({
                     <FileText className="w-4 h-4 shrink-0" /> <span className="truncate">Relatórios</span>
                 </button>
             </div>
+
+            {/* ADMIN SECTION */}
+            {isAdmin && (
+                <>
+                <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
+                <div className="px-1 space-y-1">
+                    <button 
+                        onClick={() => onNavigate('ADMIN_PANEL')} 
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden bg-red-900/30 border border-red-500/20 hover:bg-red-900/50 hover:border-red-500/40 text-red-100 ${currentView === 'ADMIN_PANEL' ? 'ring-1 ring-red-400' : ''}`}
+                    >
+                        <ShieldAlert className="w-4 h-4 shrink-0 text-red-400" /> 
+                        <span className="truncate font-bold">Painel Admin</span>
+                    </button>
+                </div>
+                </>
+            )}
 
         </div>
 
@@ -408,6 +427,12 @@ const Layout: React.FC<LayoutProps> = ({
                     <Users className="w-5 h-5" /> Contatos
                  </button>
                  
+                 {isAdmin && (
+                    <button onClick={() => { onNavigate('ADMIN_PANEL'); setIsMobileMenuOpen(false); }} className="w-full text-left text-red-100 bg-red-900/50 border border-red-500/20 font-bold py-3 px-2 rounded hover:bg-red-900/70 flex items-center gap-3 mt-2">
+                        <ShieldAlert className="w-5 h-5" /> Painel Admin
+                    </button>
+                 )}
+
                  <button onClick={onLogout} className="w-full text-left text-red-300 font-bold py-3 px-2 rounded hover:bg-white/10 flex items-center gap-3 mt-4 border-t border-white/10 pt-4">
                     <LogOut className="w-5 h-5" /> Sair
                  </button>
