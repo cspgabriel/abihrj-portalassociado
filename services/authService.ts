@@ -26,7 +26,7 @@ const logAccess = async (user: User) => {
     userEmail: user.email,
     userHotel: user.hotel,
     userRole: user.role,
-    timestamp: new Date().toISOString() // String ISO para compatibilidade geral e fallback
+    timestamp: new Date().toISOString() // Fallback string para local storage
   };
 
   // 1. Tentar salvar no Firestore
@@ -38,7 +38,7 @@ const logAccess = async (user: User) => {
       });
       console.log("Log de acesso salvo no Firestore");
     } catch (e) {
-      console.warn("Falha ao salvar log no Firestore, usando fallback local.");
+      console.warn("Falha ao salvar log no Firestore, usando fallback local.", e);
     }
   }
 
@@ -295,30 +295,50 @@ export const authService = {
     if (isFirebaseConfigured) {
         try {
             const logsRef = collection(db, "access_logs");
-            const q = query(logsRef, orderBy("timestamp", "desc"), limit(50));
-            const querySnapshot = await getDocs(q);
             
-            logs = querySnapshot.docs.map(doc => {
-                const data = doc.data();
-                // Converte Timestamp do Firestore para string ISO
-                let time = data.timestamp;
+            try {
+                // Tenta query ordenada (Requer índice no Firestore)
+                const q = query(logsRef, orderBy("timestamp", "desc"), limit(50));
+                const querySnapshot = await getDocs(q);
+                logs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (queryError) {
+                // Fallback: Query sem ordenação (se índice faltar) + Ordenação no Client
+                console.warn("Ordenação Firestore falhou (índice pendente?), buscando sem ordem...", queryError);
+                const q = query(logsRef, limit(50));
+                const querySnapshot = await getDocs(q);
+                logs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // Ordenar localmente
+                logs.sort((a, b) => {
+                    const tA = a.timestamp?.seconds || 0;
+                    const tB = b.timestamp?.seconds || 0;
+                    return tB - tA;
+                });
+            }
+            
+            // Normalizar datas
+            return logs.map(log => {
+                let time = log.timestamp;
                 if (time && typeof time.toDate === 'function') {
                     time = time.toDate().toISOString();
+                } else if (time && time.seconds) {
+                    time = new Date(time.seconds * 1000).toISOString();
                 }
-                return { ...data, timestamp: time };
+                return { ...log, timestamp: time };
             });
-            
-            return logs; // Retorna se sucesso
+
         } catch (e) { 
-            console.warn("Erro ao buscar logs no Firestore, usando local storage.", e); 
+            console.warn("Erro crítico ao buscar logs no Firestore.", e); 
         }
     }
 
-    // 2. Fallback LocalStorage
-    try {
-        const localLogs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LOGS_KEY) || '[]');
-        logs = localLogs;
-    } catch (e) { console.error(e); }
+    // 2. Fallback LocalStorage (Se Firestore falhar ou retornar vazio)
+    if (logs.length === 0) {
+        try {
+            const localLogs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LOGS_KEY) || '[]');
+            logs = localLogs;
+        } catch (e) { console.error(e); }
+    }
 
     return logs;
   },
@@ -331,29 +351,48 @@ export const authService = {
     if (isFirebaseConfigured) {
         try {
             const usersRef = collection(db, "users");
-            const q = query(usersRef, orderBy("createdAt", "desc"), limit(100)); // Limite de segurança
-            const querySnapshot = await getDocs(q);
+            
+            try {
+                const q = query(usersRef, orderBy("createdAt", "desc"), limit(100));
+                const querySnapshot = await getDocs(q);
+                usersList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (queryError) {
+                console.warn("Ordenação Users falhou, buscando raw...");
+                const q = query(usersRef, limit(100));
+                const querySnapshot = await getDocs(q);
+                usersList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                usersList.sort((a, b) => {
+                    const tA = a.createdAt?.seconds || 0;
+                    const tB = b.createdAt?.seconds || 0;
+                    return tB - tA;
+                });
+            }
 
-            usersList = querySnapshot.docs.map(doc => {
-                const data = doc.data();
-                let created = data.createdAt;
+            // Normalizar datas
+            return usersList.map(u => {
+                let created = u.createdAt;
                 if (created && typeof created.toDate === 'function') {
                     created = created.toDate().toISOString();
+                } else if (created && created.seconds) {
+                    created = new Date(created.seconds * 1000).toISOString();
                 }
-                return { id: doc.id, ...data, createdAt: created };
+                return { ...u, createdAt: created };
             });
-            return usersList;
+
         } catch (e) {
             console.warn("Erro ao buscar usuários no Firestore.", e);
         }
     }
 
-    // 2. Fallback Mock (para não mostrar tela vazia se offline)
-    usersList = [
-        { id: '1', name: 'Carlos Silva', email: 'gerencia@copapalaceview.com', hotel: 'Copacabana Palace View', role: 'Gerente Geral', createdAt: new Date().toISOString() },
-        { id: '2', name: 'Mariana Costa', email: 'rh@hotelatlantico.com.br', hotel: 'Hotel Atlântico Rio', role: 'Diretora de RH', createdAt: new Date(Date.now() - 86400000).toISOString() },
-        { id: '3', name: 'Roberto Almeida', email: 'financeiro@riodesign.com', hotel: 'Rio Design Hotel', role: 'Controller', createdAt: new Date(Date.now() - 172800000).toISOString() }
-    ];
+    // 2. Fallback Mock (apenas se a lista estiver vazia para evitar tela em branco em testes)
+    if (usersList.length === 0) {
+        usersList = [
+            { id: '1', name: 'Carlos Silva', email: 'gerencia@copapalaceview.com', hotel: 'Copacabana Palace View', role: 'Gerente Geral', createdAt: new Date().toISOString() },
+            { id: '2', name: 'Mariana Costa', email: 'rh@hotelatlantico.com.br', hotel: 'Hotel Atlântico Rio', role: 'Diretora de RH', createdAt: new Date(Date.now() - 86400000).toISOString() },
+            { id: '3', name: 'Roberto Almeida', email: 'financeiro@riodesign.com', hotel: 'Rio Design Hotel', role: 'Controller', createdAt: new Date(Date.now() - 172800000).toISOString() }
+        ];
+    }
 
     return usersList;
   }
