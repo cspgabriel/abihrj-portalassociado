@@ -7,6 +7,7 @@ export interface User {
   email: string;
   hotel: string;
   role: string;
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED'; // Novo campo de status
   avatarUrl?: string;
   gamification?: UserGamificationProfile;
 }

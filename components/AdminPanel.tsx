@@ -1,11 +1,11 @@
 
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
-// Descrição: Painel Administrativo para visualização de logs e usuários com exportação
+// Descrição: Painel Administrativo para visualização de logs e usuários com exportação e ordenação
 
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
-import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText } from 'lucide-react';
+import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, Filter, ArrowDownAZ, ArrowUpAZ, Calendar, Check, X, Loader2 } from 'lucide-react';
 import { authService } from '../services/authService';
 
 interface AdminPanelProps {
@@ -13,11 +13,15 @@ interface AdminPanelProps {
   onBack: () => void;
 }
 
+type SortOption = 'NEWEST' | 'OLDEST' | 'AZ' | 'ZA';
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
   const [activeTab, setActiveTab] = useState<'LOGS' | 'USERS'>('LOGS');
   const [logs, setLogs] = useState<any[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOption>('NEWEST');
 
   // Verificação de segurança (Case Insensitive)
   const isAdmin = user.email.toLowerCase() === 'marketing@hoteisrio.com.br';
@@ -27,6 +31,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
       fetchData();
     }
   }, [isAdmin, activeTab]);
+
+  // Reset sort when tab changes
+  useEffect(() => {
+    setSortOrder('NEWEST');
+  }, [activeTab]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -40,17 +49,58 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
     setLoading(false);
   };
 
+  const handleStatusUpdate = async (userId: string, newStatus: 'APPROVED' | 'REJECTED') => {
+    setActionLoading(userId);
+    try {
+        await authService.updateUserStatus(userId, newStatus);
+        // Atualiza a lista localmente
+        setUsersList(prev => prev.map(u => u.id === userId ? { ...u, status: newStatus } : u));
+    } catch (e) {
+        alert("Erro ao atualizar status");
+    } finally {
+        setActionLoading(null);
+    }
+  };
+
+  const getSortedData = () => {
+    const data = activeTab === 'LOGS' ? logs : usersList;
+    
+    return [...data].sort((a, b) => {
+        // Logica para Data (Logs usa 'timestamp', Users usa 'createdAt')
+        const dateA = new Date(activeTab === 'LOGS' ? (a.timestamp || 0) : (a.createdAt || 0)).getTime();
+        const dateB = new Date(activeTab === 'LOGS' ? (b.timestamp || 0) : (b.createdAt || 0)).getTime();
+
+        // Logica para Nome (Logs usa 'userName', Users usa 'name')
+        const nameA = (activeTab === 'LOGS' ? a.userName : a.name) || '';
+        const nameB = (activeTab === 'LOGS' ? b.userName : b.name) || '';
+
+        switch (sortOrder) {
+            case 'NEWEST':
+                return dateB - dateA;
+            case 'OLDEST':
+                return dateA - dateB;
+            case 'AZ':
+                return nameA.localeCompare(nameB);
+            case 'ZA':
+                return nameB.localeCompare(nameA);
+            default:
+                return 0;
+        }
+    });
+  };
+
+  const sortedData = getSortedData();
+
   const handleExportCSV = () => {
-    const dataToExport = activeTab === 'LOGS' ? logs : usersList;
-    if (dataToExport.length === 0) return;
+    if (sortedData.length === 0) return;
 
     // Obter headers dinamicamente
-    const headers = Object.keys(dataToExport[0]);
+    const headers = Object.keys(sortedData[0]);
     
     // Criar conteúdo CSV
     const csvContent = [
       headers.join(','), // Header row
-      ...dataToExport.map(row => 
+      ...sortedData.map(row => 
         headers.map(fieldName => {
           let value = row[fieldName] || '';
           // Escapar aspas e vírgulas para CSV válido
@@ -144,22 +194,50 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-20">
         
-        {/* Tabs */}
-        <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-            <button 
-               onClick={() => setActiveTab('LOGS')}
-               className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'LOGS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
-            >
-                <Clock className="w-4 h-4" />
-                Logs de Acesso
-            </button>
-            <button 
-               onClick={() => setActiveTab('USERS')}
-               className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'USERS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
-            >
-                <Users className="w-4 h-4" />
-                Usuários Cadastrados
-            </button>
+        {/* Tabs & Filters */}
+        <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-4 gap-4">
+            <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto">
+                <button 
+                onClick={() => setActiveTab('LOGS')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'LOGS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                >
+                    <Clock className="w-4 h-4" />
+                    Logs de Acesso
+                </button>
+                <button 
+                onClick={() => setActiveTab('USERS')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'USERS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                >
+                    <Users className="w-4 h-4" />
+                    Usuários Cadastrados
+                </button>
+            </div>
+
+            {/* Sort Controls */}
+            <div className="bg-white p-1.5 rounded-lg shadow-sm flex items-center gap-1 border border-gray-200">
+                <span className="text-xs font-bold text-gray-400 px-2 uppercase tracking-wide hidden sm:inline">Ordenar:</span>
+                <button 
+                    onClick={() => setSortOrder('NEWEST')}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${sortOrder === 'NEWEST' ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`}
+                    title="Mais Recentes"
+                >
+                    <Calendar className="w-4 h-4" />
+                </button>
+                <button 
+                    onClick={() => setSortOrder('AZ')}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${sortOrder === 'AZ' ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`}
+                    title="A-Z"
+                >
+                    <ArrowDownAZ className="w-4 h-4" />
+                </button>
+                <button 
+                    onClick={() => setSortOrder('ZA')}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${sortOrder === 'ZA' ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`}
+                    title="Z-A"
+                >
+                    <ArrowUpAZ className="w-4 h-4" />
+                </button>
+            </div>
         </div>
 
         <div className="bg-white rounded-b-xl rounded-tr-xl shadow-lg border border-gray-200 overflow-hidden">
@@ -169,7 +247,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
               {activeTab === 'LOGS' ? 'Registros Recentes' : 'Base de Usuários'}
             </h3>
             <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">
-              Total: {activeTab === 'LOGS' ? logs.length : usersList.length}
+              Total: {sortedData.length}
             </span>
           </div>
 
@@ -190,14 +268,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         <th className="px-6 py-4">Email</th>
                         <th className="px-6 py-4">Hotel</th>
                         <th className="px-6 py-4">Cargo</th>
-                        <th className="px-6 py-4">Data Cadastro</th>
+                        <th className="px-6 py-4 text-center">Status</th>
+                        <th className="px-6 py-4 text-center">Ações</th>
                     </tr>
                 )}
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {activeTab === 'LOGS' ? (
-                    logs.length > 0 ? (
-                    logs.map((log, idx) => (
+                    sortedData.length > 0 ? (
+                    sortedData.map((log, idx) => (
                         <tr key={idx} className="hover:bg-blue-50/50 transition-colors">
                         <td className="px-6 py-4 font-bold text-gray-800">{log.userName}</td>
                         <td className="px-6 py-4 text-gray-600 font-mono text-xs">{log.userEmail}</td>
@@ -224,21 +303,58 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                     </tr>
                     )
                 ) : (
-                    usersList.length > 0 ? (
-                        usersList.map((usr, idx) => (
+                    sortedData.length > 0 ? (
+                        sortedData.map((usr, idx) => (
                             <tr key={idx} className="hover:bg-green-50/50 transition-colors">
                             <td className="px-6 py-4 font-bold text-gray-800">{usr.name}</td>
                             <td className="px-6 py-4 text-gray-600 font-mono text-xs">{usr.email}</td>
                             <td className="px-6 py-4 text-gray-600">{usr.hotel}</td>
                             <td className="px-6 py-4 text-gray-600">{usr.role}</td>
-                            <td className="px-6 py-4 text-gray-500 text-xs">
-                                {usr.createdAt ? new Date(usr.createdAt).toLocaleDateString('pt-BR') : 'N/A'}
+                            <td className="px-6 py-4 text-center">
+                                <span className={`px-2 py-1 rounded text-xs border font-bold uppercase
+                                    ${(usr.status === 'APPROVED' || !usr.status) ? 'bg-green-100 text-green-700 border-green-200' : ''}
+                                    ${usr.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : ''}
+                                    ${usr.status === 'REJECTED' ? 'bg-red-100 text-red-700 border-red-200' : ''}
+                                `}>
+                                    {usr.status === 'APPROVED' || !usr.status ? 'Aprovado' : 
+                                     usr.status === 'PENDING' ? 'Pendente' : 'Recusado'}
+                                </span>
+                            </td>
+                            <td className="px-6 py-4 flex justify-center gap-2">
+                                {usr.status === 'PENDING' && (
+                                    <>
+                                        <button 
+                                            onClick={() => handleStatusUpdate(usr.id, 'APPROVED')}
+                                            disabled={actionLoading === usr.id}
+                                            className="p-1.5 bg-green-100 text-green-700 rounded hover:bg-green-200 transition disabled:opacity-50"
+                                            title="Aprovar"
+                                        >
+                                            {actionLoading === usr.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                                        </button>
+                                        <button 
+                                            onClick={() => handleStatusUpdate(usr.id, 'REJECTED')}
+                                            disabled={actionLoading === usr.id}
+                                            className="p-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200 transition disabled:opacity-50"
+                                            title="Recusar"
+                                        >
+                                            {actionLoading === usr.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+                                        </button>
+                                    </>
+                                )}
+                                {usr.status === 'REJECTED' && (
+                                    <button 
+                                        onClick={() => handleStatusUpdate(usr.id, 'APPROVED')}
+                                        className="text-xs text-blue-600 hover:underline"
+                                    >
+                                        Reativar
+                                    </button>
+                                )}
                             </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                            <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
                             Nenhum usuário encontrado na base.
                             </td>
                         </tr>
