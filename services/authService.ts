@@ -8,7 +8,7 @@ import {
   signOut, 
   onAuthStateChanged 
 } from 'firebase/auth';
-import { doc, setDoc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, addDoc, collection, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 // Verifica se a chave de API parece válida
 const isFirebaseConfigured = auth.app.options.apiKey && auth.app.options.apiKey.length > 20;
@@ -26,7 +26,7 @@ const logAccess = async (user: User) => {
     userEmail: user.email,
     userHotel: user.hotel,
     userRole: user.role,
-    timestamp: new Date().toISOString() // String ISO para compatibilidade geral
+    timestamp: new Date().toISOString() // String ISO para compatibilidade geral e fallback
   };
 
   // 1. Tentar salvar no Firestore
@@ -157,7 +157,7 @@ export const authService = {
                 email,
                 hotel,
                 role,
-                createdAt: new Date()
+                createdAt: serverTimestamp()
             });
         } catch (e) {
             console.warn("Erro ao salvar no Firestore (pode ser permissão), seguindo com Auth apenas.");
@@ -287,25 +287,74 @@ export const authService = {
     window.location.reload();
   },
 
-  // Novo método para buscar logs (apenas para admin)
+  // --- ADMIN: BUSCAR LOGS ---
   getLogs: async (): Promise<any[]> => {
     let logs: any[] = [];
     
     // 1. Tentar Firestore
     if (isFirebaseConfigured) {
         try {
-            // Nota: Em produção, precisaria de 'query' e 'orderBy' importados
-            // Mas para manter simples no XML, vamos pegar do local se o firebase falhar ou usar logica simplificada
-            // Aqui vamos preferir o LocalStorage para garantir que o Admin funcione no modo demo
-        } catch (e) { console.warn(e); }
+            const logsRef = collection(db, "access_logs");
+            const q = query(logsRef, orderBy("timestamp", "desc"), limit(50));
+            const querySnapshot = await getDocs(q);
+            
+            logs = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                // Converte Timestamp do Firestore para string ISO
+                let time = data.timestamp;
+                if (time && typeof time.toDate === 'function') {
+                    time = time.toDate().toISOString();
+                }
+                return { ...data, timestamp: time };
+            });
+            
+            return logs; // Retorna se sucesso
+        } catch (e) { 
+            console.warn("Erro ao buscar logs no Firestore, usando local storage.", e); 
+        }
     }
 
-    // 2. Fallback LocalStorage (Principal fonte para este ambiente demo)
+    // 2. Fallback LocalStorage
     try {
         const localLogs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LOGS_KEY) || '[]');
         logs = localLogs;
     } catch (e) { console.error(e); }
 
     return logs;
+  },
+
+  // --- ADMIN: BUSCAR USUÁRIOS ---
+  getUsers: async (): Promise<any[]> => {
+    let usersList: any[] = [];
+
+    // 1. Tentar Firestore
+    if (isFirebaseConfigured) {
+        try {
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, orderBy("createdAt", "desc"), limit(100)); // Limite de segurança
+            const querySnapshot = await getDocs(q);
+
+            usersList = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                let created = data.createdAt;
+                if (created && typeof created.toDate === 'function') {
+                    created = created.toDate().toISOString();
+                }
+                return { id: doc.id, ...data, createdAt: created };
+            });
+            return usersList;
+        } catch (e) {
+            console.warn("Erro ao buscar usuários no Firestore.", e);
+        }
+    }
+
+    // 2. Fallback Mock (para não mostrar tela vazia se offline)
+    usersList = [
+        { id: '1', name: 'Carlos Silva', email: 'gerencia@copapalaceview.com', hotel: 'Copacabana Palace View', role: 'Gerente Geral', createdAt: new Date().toISOString() },
+        { id: '2', name: 'Mariana Costa', email: 'rh@hotelatlantico.com.br', hotel: 'Hotel Atlântico Rio', role: 'Diretora de RH', createdAt: new Date(Date.now() - 86400000).toISOString() },
+        { id: '3', name: 'Roberto Almeida', email: 'financeiro@riodesign.com', hotel: 'Rio Design Hotel', role: 'Controller', createdAt: new Date(Date.now() - 172800000).toISOString() }
+    ];
+
+    return usersList;
   }
 };

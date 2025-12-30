@@ -1,11 +1,11 @@
 
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
-// Descrição: Painel Administrativo para visualização de logs de acesso
+// Descrição: Painel Administrativo para visualização de logs e usuários com exportação
 
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
-import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building } from 'lucide-react';
+import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText } from 'lucide-react';
 import { authService } from '../services/authService';
 
 interface AdminPanelProps {
@@ -14,7 +14,9 @@ interface AdminPanelProps {
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
+  const [activeTab, setActiveTab] = useState<'LOGS' | 'USERS'>('LOGS');
   const [logs, setLogs] = useState<any[]>([]);
+  const [usersList, setUsersList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Verificação de segurança (Case Insensitive)
@@ -22,15 +24,53 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
 
   useEffect(() => {
     if (isAdmin) {
-      fetchLogs();
+      fetchData();
     }
-  }, [isAdmin]);
+  }, [isAdmin, activeTab]);
 
-  const fetchLogs = async () => {
+  const fetchData = async () => {
     setLoading(true);
-    const data = await authService.getLogs();
-    setLogs(data);
+    if (activeTab === 'LOGS') {
+        const data = await authService.getLogs();
+        setLogs(data);
+    } else {
+        const data = await authService.getUsers();
+        setUsersList(data);
+    }
     setLoading(false);
+  };
+
+  const handleExportCSV = () => {
+    const dataToExport = activeTab === 'LOGS' ? logs : usersList;
+    if (dataToExport.length === 0) return;
+
+    // Obter headers dinamicamente
+    const headers = Object.keys(dataToExport[0]);
+    
+    // Criar conteúdo CSV
+    const csvContent = [
+      headers.join(','), // Header row
+      ...dataToExport.map(row => 
+        headers.map(fieldName => {
+          let value = row[fieldName] || '';
+          // Escapar aspas e vírgulas para CSV válido
+          if (typeof value === 'string') {
+             value = `"${value.replace(/"/g, '""')}"`;
+          }
+          return value;
+        }).join(',')
+      )
+    ].join('\n');
+
+    // Trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `hoteisrio_${activeTab.toLowerCase()}_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   if (!isAdmin) {
@@ -68,78 +108,139 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
             Voltar para Dashboard
           </button>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
                <div className="bg-white/10 p-3 rounded-xl border border-white/20">
                  <ShieldAlert className="w-8 h-8 text-red-400" />
                </div>
                <div>
                   <h1 className="text-3xl font-bold">Painel Administrativo</h1>
-                  <p className="text-slate-400">Log de Acessos e Auditoria do Sistema</p>
+                  <p className="text-slate-400">Auditoria e gestão de usuários</p>
                </div>
             </div>
-            <button 
-              onClick={fetchLogs}
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Atualizar
-            </button>
+            
+            <div className="flex items-center gap-3">
+                <button 
+                  onClick={fetchData}
+                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+                >
+                  <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                  Atualizar
+                </button>
+                <button 
+                  onClick={handleExportCSV}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors text-sm font-bold shadow-lg"
+                >
+                  <Download className="w-4 h-4" />
+                  Exportar CSV
+                </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-20">
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        
+        {/* Tabs */}
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+            <button 
+               onClick={() => setActiveTab('LOGS')}
+               className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'LOGS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+            >
+                <Clock className="w-4 h-4" />
+                Logs de Acesso
+            </button>
+            <button 
+               onClick={() => setActiveTab('USERS')}
+               className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'USERS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+            >
+                <Users className="w-4 h-4" />
+                Usuários Cadastrados
+            </button>
+        </div>
+
+        <div className="bg-white rounded-b-xl rounded-tr-xl shadow-lg border border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
             <h3 className="font-bold text-gray-700 flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-gray-500" />
-              Últimos Acessos
+              {activeTab === 'LOGS' ? <FileText className="w-5 h-5 text-gray-500" /> : <UserCheck className="w-5 h-5 text-gray-500" />}
+              {activeTab === 'LOGS' ? 'Registros Recentes' : 'Base de Usuários'}
             </h3>
             <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">
-              Total: {logs.length}
+              Total: {activeTab === 'LOGS' ? logs.length : usersList.length}
             </span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200 uppercase text-xs">
-                <tr>
-                  <th className="px-6 py-4">Usuário</th>
-                  <th className="px-6 py-4">Email</th>
-                  <th className="px-6 py-4">Hotel / Empresa</th>
-                  <th className="px-6 py-4">Cargo</th>
-                  <th className="px-6 py-4">Data/Hora</th>
-                </tr>
+                {activeTab === 'LOGS' ? (
+                    <tr>
+                        <th className="px-6 py-4">Usuário</th>
+                        <th className="px-6 py-4">Email</th>
+                        <th className="px-6 py-4">Hotel / Empresa</th>
+                        <th className="px-6 py-4">Cargo</th>
+                        <th className="px-6 py-4">Acesso em</th>
+                    </tr>
+                ) : (
+                    <tr>
+                        <th className="px-6 py-4">Nome</th>
+                        <th className="px-6 py-4">Email</th>
+                        <th className="px-6 py-4">Hotel</th>
+                        <th className="px-6 py-4">Cargo</th>
+                        <th className="px-6 py-4">Data Cadastro</th>
+                    </tr>
+                )}
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {logs.length > 0 ? (
-                  logs.map((log, idx) => (
-                    <tr key={idx} className="hover:bg-blue-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-gray-800">{log.userName}</td>
-                      <td className="px-6 py-4 text-gray-600 font-mono text-xs">{log.userEmail}</td>
-                      <td className="px-6 py-4 text-gray-600 flex items-center gap-2">
-                        <Building className="w-3 h-3 text-gray-400" />
-                        {log.userHotel}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">
-                          {log.userRole}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-gray-500 flex items-center gap-2">
-                        <Clock className="w-3 h-3" />
-                        {new Date(log.timestamp).toLocaleString('pt-BR')}
-                      </td>
+                {activeTab === 'LOGS' ? (
+                    logs.length > 0 ? (
+                    logs.map((log, idx) => (
+                        <tr key={idx} className="hover:bg-blue-50/50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-gray-800">{log.userName}</td>
+                        <td className="px-6 py-4 text-gray-600 font-mono text-xs">{log.userEmail}</td>
+                        <td className="px-6 py-4 text-gray-600 flex items-center gap-2">
+                            <Building className="w-3 h-3 text-gray-400" />
+                            {log.userHotel}
+                        </td>
+                        <td className="px-6 py-4">
+                            <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">
+                            {log.userRole}
+                            </span>
+                        </td>
+                        <td className="px-6 py-4 text-gray-500 flex items-center gap-2">
+                            <Clock className="w-3 h-3" />
+                            {log.timestamp ? new Date(log.timestamp).toLocaleString('pt-BR') : '-'}
+                        </td>
+                        </tr>
+                    ))
+                    ) : (
+                    <tr>
+                        <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                        Nenhum registro de acesso encontrado.
+                        </td>
                     </tr>
-                  ))
+                    )
                 ) : (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
-                      Nenhum registro de acesso encontrado.
-                    </td>
-                  </tr>
+                    usersList.length > 0 ? (
+                        usersList.map((usr, idx) => (
+                            <tr key={idx} className="hover:bg-green-50/50 transition-colors">
+                            <td className="px-6 py-4 font-bold text-gray-800">{usr.name}</td>
+                            <td className="px-6 py-4 text-gray-600 font-mono text-xs">{usr.email}</td>
+                            <td className="px-6 py-4 text-gray-600">{usr.hotel}</td>
+                            <td className="px-6 py-4 text-gray-600">{usr.role}</td>
+                            <td className="px-6 py-4 text-gray-500 text-xs">
+                                {usr.createdAt ? new Date(usr.createdAt).toLocaleDateString('pt-BR') : 'N/A'}
+                            </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                            Nenhum usuário encontrado na base.
+                            </td>
+                        </tr>
+                    )
                 )}
               </tbody>
             </table>
