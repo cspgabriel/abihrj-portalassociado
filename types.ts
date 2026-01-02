@@ -1,3 +1,6 @@
+// Autor: Gabriel Salles
+// Suporte do SO: Windows11
+// Descrição: Definições de tipos e interfaces globais
 
 import { LucideIcon } from 'lucide-react';
 
@@ -7,7 +10,6 @@ export interface User {
   email: string;
   hotel: string;
   role: string;
-  status?: 'PENDING' | 'APPROVED' | 'REJECTED'; // Novo campo de status
   avatarUrl?: string;
   gamification?: UserGamificationProfile;
 }
@@ -42,10 +44,11 @@ export enum BenefitCategory {
   TECHNOLOGY = 'Tecnologia',
   HR = 'Recursos Humanos',
   SUPPORT = 'Suporte',
-  TOOLS = 'Ferramentas & Calculadoras'
+  TOOLS = 'Ferramentas & Calculadoras',
+  MANAGEMENT = 'Gestão'
 }
 
-export type HotelSector = 'MANAGEMENT' | 'RECEPTION' | 'HOUSEKEEPING' | 'MAINTENANCE' | 'SALES' | 'HR' | 'LEGAL_DEPT' | 'FB';
+export type HotelSector = 'MANAGEMENT' | 'RECEPTION' | 'HOUSEKEEPING' | 'MAINTENANCE' | 'SALES' | 'HR' | 'LEGAL_DEPT' | 'FB' | 'SECURITY';
 
 export interface Benefit {
   id: string;
@@ -109,3 +112,4 @@ export interface RioEvent {
   type: string;
   imageUrl: string;
 }
+// --- Fim de types.ts ---

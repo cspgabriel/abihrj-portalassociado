@@ -1,13 +1,16 @@
 
 import React from 'react';
 import { LayoutDashboard, LayoutGrid, ArrowRight, Star, Shield, Calendar } from 'lucide-react';
+import HighlightsSlider from './HighlightsSlider';
+import { Benefit } from '../types';
 
 interface LandingPageProps {
   onNavigate: (view: any) => void;
   userName: string;
+  onBenefitClick?: (benefit: Benefit) => void;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenefitClick }) => {
   return (
     <div className="min-h-full bg-white animate-fade-in">
       {/* Hero Section */}
@@ -31,13 +34,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName }) => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
-              onClick={() => onNavigate('DASHBOARD')}
-              className="px-8 py-4 bg-white text-rio-blue rounded-xl font-bold text-lg shadow-lg hover:bg-gray-50 transition-transform transform hover:scale-105 flex items-center justify-center gap-2"
-            >
-              <LayoutDashboard className="w-5 h-5" />
-              Acessar Dashboard
-            </button>
-            <button 
               onClick={() => onNavigate('ALL_BENEFITS')}
               className="px-8 py-4 bg-rio-gold text-blue-900 rounded-xl font-bold text-lg shadow-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 flex items-center justify-center gap-2"
             >
@@ -48,8 +44,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName }) => {
         </div>
       </div>
 
+      {/* Highlights Slider */}
+      <div className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-10">
+         {onBenefitClick && <HighlightsSlider onUseBenefit={onBenefitClick} />}
+      </div>
+
       {/* Quick Access Cards */}
-      <div className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-20">
+      <div className="max-w-6xl mx-auto px-6 relative z-20 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <div 

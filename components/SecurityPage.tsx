@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowLeft, Shield, Phone, AlertTriangle, FileText, ExternalLink, Siren, Radio, Users, CheckCircle2, Clock, MapPin } from 'lucide-react';
 
@@ -44,7 +45,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
                  </div>
                  <span className="text-rio-gold font-bold tracking-wider text-sm uppercase">Segurança HoteisRio</span>
                </div>
-               <h1 className="text-3xl md:text-4xl font-bold mb-2">Relacionamento com Órgãos de Segurança</h1>
+               <h1 className="text-3xl md:text-4xl font-bold mb-2">Órgãos de Segurança</h1>
                <p className="text-blue-100 max-w-2xl text-lg">
                  Monitoramento em tempo real e canal direto com as autoridades para garantir a proteção das áreas turísticas.
                </p>

@@ -8,7 +8,7 @@ import {
   signOut, 
   onAuthStateChanged 
 } from 'firebase/auth';
-import { doc, setDoc, getDoc, updateDoc, addDoc, collection, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { doc, setDoc, getDoc, addDoc, collection, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 // Verifica se a chave de API parece válida
 const isFirebaseConfigured = auth.app.options.apiKey && auth.app.options.apiKey.length > 20;
@@ -64,10 +64,9 @@ export const authService = {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const firebaseUser = userCredential.user;
         
-        // Tenta buscar dados extras do Firestore (Hotel, Cargo e STATUS)
+        // Tenta buscar dados extras do Firestore (Hotel, Cargo)
         let hotel = 'Hotel Associado';
         let role = 'Associado';
-        let status = 'APPROVED'; // Default para usuários antigos sem status
         
         try {
           const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
@@ -75,20 +74,9 @@ export const authService = {
             const data = userDoc.data();
             hotel = data.hotel || hotel;
             role = data.role || role;
-            status = data.status || status;
           }
         } catch (e) {
           console.warn("Não foi possível buscar detalhes do usuário no Firestore", e);
-        }
-
-        // VERIFICAÇÃO DE STATUS
-        if (status === 'PENDING') {
-            await signOut(auth); // Desloga imediatamente
-            throw new Error('Seu cadastro está em análise. Aguarde a aprovação do administrador.');
-        }
-        if (status === 'REJECTED') {
-            await signOut(auth);
-            throw new Error('Seu cadastro foi recusado. Entre em contato com o suporte.');
         }
 
         const user: User = {
@@ -97,7 +85,6 @@ export const authService = {
           email: firebaseUser.email || '',
           hotel: hotel,
           role: role,
-          status: status as any,
           avatarUrl: firebaseUser.photoURL || undefined
         };
         
@@ -111,10 +98,6 @@ export const authService = {
         
       } catch (error: any) {
         console.warn("Firebase Login Failed.", error.code);
-        
-        if (error.message.includes('análise') || error.message.includes('recusado')) {
-            throw error; // Repassa erro de status
-        }
         
         // CORREÇÃO: Tratamento explícito de senha incorreta para não cair no Mock
         if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
@@ -143,7 +126,6 @@ export const authService = {
       email: email,
       hotel: "Copacabana Palace View (Demo)",
       role: "Gerente Geral",
-      status: 'APPROVED',
       avatarUrl: undefined
     };
     
@@ -168,33 +150,32 @@ export const authService = {
         // 2. Atualizar Nome no Perfil Auth
         await updateProfile(firebaseUser, { displayName: name });
 
-        // 3. Salvar dados extras (Hotel, Cargo, STATUS) no Firestore
-        // ATENÇÃO: Novos registros agora são PENDING por padrão
-        const initialStatus = 'PENDING';
-        
+        // 3. Salvar dados extras (Hotel, Cargo) no Firestore
         try {
             await setDoc(doc(db, "users", firebaseUser.uid), {
                 name,
                 email,
                 hotel,
                 role,
-                status: initialStatus,
                 createdAt: serverTimestamp()
             });
         } catch (e) {
             console.warn("Erro ao salvar no Firestore (pode ser permissão), seguindo com Auth apenas.");
         }
 
-        // Não retorna o usuário logado, lança aviso de pendência
-        await signOut(auth); // Garante que não loga automático
-        throw new Error('Cadastro realizado com sucesso! Aguarde a aprovação do administrador para acessar.');
+        const newUser: User = {
+          id: firebaseUser.uid,
+          name: name,
+          email: firebaseUser.email || email,
+          hotel: hotel,
+          role: role
+        };
+        
+        localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(newUser));
+        await logAccess(newUser); // Logar acesso no registro
+        return newUser;
 
       } catch (error: any) {
-        // Se foi o nosso erro de sucesso/pendência, repassa
-        if (error.message.includes('Aguarde a aprovação')) {
-            throw error;
-        }
-
         if (error.code === 'auth/email-already-in-use') {
           throw new Error('Este email já está cadastrado.');
         }
@@ -212,8 +193,7 @@ export const authService = {
                 name,
                 email,
                 hotel,
-                role,
-                status: 'APPROVED' // No modo demo offline, aprovamos direto
+                role
             };
             localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
             await logAccess(mockUser);
@@ -232,31 +212,12 @@ export const authService = {
         name,
         email,
         hotel,
-        role,
-        status: 'APPROVED'
+        role
     };
     localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
     await logAccess(mockUser);
     if (mockObserver) mockObserver(mockUser);
     return mockUser;
-  },
-
-  // --- ADMIN: ATUALIZAR STATUS ---
-  updateUserStatus: async (userId: string, newStatus: 'APPROVED' | 'REJECTED' | 'PENDING') => {
-    if (isFirebaseConfigured) {
-        try {
-            await updateDoc(doc(db, "users", userId), {
-                status: newStatus
-            });
-            return true;
-        } catch (e) {
-            console.error("Erro ao atualizar status", e);
-            throw e;
-        }
-    } else {
-        // Mock update (não persiste de verdade além da sessão, mas simula UI)
-        return true;
-    }
   },
 
   // --- LISTENER DE SESSÃO ---
@@ -267,7 +228,6 @@ export const authService = {
           // Busca dados complementares
           let hotel = 'Hotel Associado';
           let role = 'Associado';
-          let status = 'APPROVED';
           
           try {
              const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
@@ -275,17 +235,8 @@ export const authService = {
                const data = userDoc.data();
                hotel = data.hotel || hotel;
                role = data.role || role;
-               status = data.status || status;
              }
           } catch (e) { console.log("Erro ao carregar perfil extendido"); }
-
-          // Se status mudou para REJECTED/PENDING durante a sessão, desloga
-          if (status !== 'APPROVED') {
-              await signOut(auth);
-              localStorage.removeItem(LOCAL_STORAGE_SESSION_KEY);
-              callback(null);
-              return;
-          }
 
           const userObj: User = {
             id: firebaseUser.uid,
@@ -293,7 +244,6 @@ export const authService = {
             email: firebaseUser.email || '',
             hotel: hotel,
             role: role,
-            status: status as any,
             avatarUrl: firebaseUser.photoURL || undefined
           };
           
@@ -419,7 +369,7 @@ export const authService = {
                 });
             }
 
-            // Normalizar datas e garantir status default
+            // Normalizar datas
             return usersList.map(u => {
                 let created = u.createdAt;
                 if (created && typeof created.toDate === 'function') {
@@ -427,11 +377,7 @@ export const authService = {
                 } else if (created && created.seconds) {
                     created = new Date(created.seconds * 1000).toISOString();
                 }
-                return { 
-                    ...u, 
-                    createdAt: created,
-                    status: u.status || 'APPROVED' // Assumir aprovado se não tiver campo (legado)
-                };
+                return { ...u, createdAt: created };
             });
 
         } catch (e) {
@@ -442,9 +388,9 @@ export const authService = {
     // 2. Fallback Mock (apenas se a lista estiver vazia para evitar tela em branco em testes)
     if (usersList.length === 0) {
         usersList = [
-            { id: '1', name: 'Carlos Silva', email: 'gerencia@copapalaceview.com', hotel: 'Copacabana Palace View', role: 'Gerente Geral', status: 'APPROVED', createdAt: new Date().toISOString() },
-            { id: '2', name: 'Mariana Costa', email: 'rh@hotelatlantico.com.br', hotel: 'Hotel Atlântico Rio', role: 'Diretora de RH', status: 'APPROVED', createdAt: new Date(Date.now() - 86400000).toISOString() },
-            { id: '3', name: 'Novo Usuário', email: 'contato@novohotel.com', hotel: 'Hotel Novo Rio', role: 'Gerente', status: 'PENDING', createdAt: new Date(Date.now() - 172800000).toISOString() }
+            { id: '1', name: 'Carlos Silva', email: 'gerencia@copapalaceview.com', hotel: 'Copacabana Palace View', role: 'Gerente Geral', createdAt: new Date().toISOString() },
+            { id: '2', name: 'Mariana Costa', email: 'rh@hotelatlantico.com.br', hotel: 'Hotel Atlântico Rio', role: 'Diretora de RH', createdAt: new Date(Date.now() - 86400000).toISOString() },
+            { id: '3', name: 'Roberto Almeida', email: 'financeiro@riodesign.com', hotel: 'Rio Design Hotel', role: 'Controller', createdAt: new Date(Date.now() - 172800000).toISOString() }
         ];
     }
 

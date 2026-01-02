@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
-import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, Filter, ArrowDownAZ, ArrowUpAZ, Calendar, Check, X, Loader2 } from 'lucide-react';
+import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, Filter, ArrowDownAZ, ArrowUpAZ, Calendar } from 'lucide-react';
 import { authService } from '../services/authService';
 
 interface AdminPanelProps {
@@ -20,7 +20,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
   const [logs, setLogs] = useState<any[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOption>('NEWEST');
 
   // Verificação de segurança (Case Insensitive)
@@ -47,19 +46,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
         setUsersList(data);
     }
     setLoading(false);
-  };
-
-  const handleStatusUpdate = async (userId: string, newStatus: 'APPROVED' | 'REJECTED') => {
-    setActionLoading(userId);
-    try {
-        await authService.updateUserStatus(userId, newStatus);
-        // Atualiza a lista localmente
-        setUsersList(prev => prev.map(u => u.id === userId ? { ...u, status: newStatus } : u));
-    } catch (e) {
-        alert("Erro ao atualizar status");
-    } finally {
-        setActionLoading(null);
-    }
   };
 
   const getSortedData = () => {
@@ -268,8 +254,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         <th className="px-6 py-4">Email</th>
                         <th className="px-6 py-4">Hotel</th>
                         <th className="px-6 py-4">Cargo</th>
-                        <th className="px-6 py-4 text-center">Status</th>
-                        <th className="px-6 py-4 text-center">Ações</th>
+                        <th className="px-6 py-4">Data Cadastro</th>
                     </tr>
                 )}
               </thead>
@@ -310,51 +295,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                             <td className="px-6 py-4 text-gray-600 font-mono text-xs">{usr.email}</td>
                             <td className="px-6 py-4 text-gray-600">{usr.hotel}</td>
                             <td className="px-6 py-4 text-gray-600">{usr.role}</td>
-                            <td className="px-6 py-4 text-center">
-                                <span className={`px-2 py-1 rounded text-xs border font-bold uppercase
-                                    ${(usr.status === 'APPROVED' || !usr.status) ? 'bg-green-100 text-green-700 border-green-200' : ''}
-                                    ${usr.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : ''}
-                                    ${usr.status === 'REJECTED' ? 'bg-red-100 text-red-700 border-red-200' : ''}
-                                `}>
-                                    {usr.status === 'APPROVED' || !usr.status ? 'Aprovado' : 
-                                     usr.status === 'PENDING' ? 'Pendente' : 'Recusado'}
-                                </span>
-                            </td>
-                            <td className="px-6 py-4 flex justify-center gap-2">
-                                {usr.status === 'PENDING' && (
-                                    <>
-                                        <button 
-                                            onClick={() => handleStatusUpdate(usr.id, 'APPROVED')}
-                                            disabled={actionLoading === usr.id}
-                                            className="p-1.5 bg-green-100 text-green-700 rounded hover:bg-green-200 transition disabled:opacity-50"
-                                            title="Aprovar"
-                                        >
-                                            {actionLoading === usr.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-                                        </button>
-                                        <button 
-                                            onClick={() => handleStatusUpdate(usr.id, 'REJECTED')}
-                                            disabled={actionLoading === usr.id}
-                                            className="p-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200 transition disabled:opacity-50"
-                                            title="Recusar"
-                                        >
-                                            {actionLoading === usr.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
-                                        </button>
-                                    </>
-                                )}
-                                {usr.status === 'REJECTED' && (
-                                    <button 
-                                        onClick={() => handleStatusUpdate(usr.id, 'APPROVED')}
-                                        className="text-xs text-blue-600 hover:underline"
-                                    >
-                                        Reativar
-                                    </button>
-                                )}
+                            <td className="px-6 py-4 text-gray-500 text-xs">
+                                {usr.createdAt ? new Date(usr.createdAt).toLocaleDateString('pt-BR') : 'N/A'}
                             </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
+                            <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
                             Nenhum usuário encontrado na base.
                             </td>
                         </tr>

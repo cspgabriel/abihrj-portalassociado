@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { ArrowLeft, MessageCircle, ExternalLink, ShieldCheck, Users, Briefcase } from 'lucide-react';
+import { ArrowLeft, MessageCircle, ExternalLink, ShieldCheck, Users, Briefcase, Wrench, Bed, TrendingUp, Bell, Utensils } from 'lucide-react';
 import { WHATSAPP_GROUPS } from '../constants';
 
 interface WhatsAppGroupsPageProps {
@@ -7,6 +8,18 @@ interface WhatsAppGroupsPageProps {
 }
 
 const WhatsAppGroupsPage: React.FC<WhatsAppGroupsPageProps> = ({ onBack }) => {
+  const getIcon = (id: string) => {
+      if (id.includes('seg')) return <ShieldCheck className="w-6 h-6" />;
+      if (id.includes('comercial')) return <TrendingUp className="w-6 h-6" />;
+      if (id.includes('rh')) return <Users className="w-6 h-6" />;
+      if (id.includes('manutencao')) return <Wrench className="w-6 h-6" />;
+      if (id.includes('gov')) return <Bed className="w-6 h-6" />;
+      if (id.includes('gms')) return <Briefcase className="w-6 h-6" />;
+      if (id.includes('recepcao')) return <Bell className="w-6 h-6" />;
+      if (id.includes('ab')) return <Utensils className="w-6 h-6" />;
+      return <Users className="w-6 h-6" />;
+  };
+
   return (
     <div className="animate-fade-in">
       <button 
@@ -33,9 +46,7 @@ const WhatsAppGroupsPage: React.FC<WhatsAppGroupsPageProps> = ({ onBack }) => {
             <div className="p-6 flex-1">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2 bg-green-50 text-green-600 rounded-lg">
-                  {group.id.includes('seg') ? <ShieldCheck className="w-6 h-6" /> : 
-                   group.id.includes('com') ? <Briefcase className="w-6 h-6" /> : 
-                   <Users className="w-6 h-6" />}
+                  {getIcon(group.id)}
                 </div>
                 <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">Oficial</span>
               </div>

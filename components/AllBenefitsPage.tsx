@@ -1,12 +1,10 @@
-// Autor: Gabriel Salles
-// Suporte do SO: Windows11
-// Descrição: Página de listagem completa de benefícios com filtros e busca
 
 import React, { useState } from 'react';
 import { ArrowLeft, Search, LayoutGrid, Filter, ArrowDownAZ, ArrowUpAZ, List, Grid } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import { Benefit, BenefitCategory } from '../types';
 import BenefitCard from './BenefitCard';
+import HighlightsSlider from './HighlightsSlider';
 
 interface AllBenefitsPageProps {
   onBack: () => void;
@@ -66,6 +64,11 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
         
+        {/* Slider */}
+        <div className="mb-10">
+            <HighlightsSlider onUseBenefit={onUse} />
+        </div>
+
         {/* Filters Bar */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 mb-8">
            <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
@@ -137,4 +140,3 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
 };
 
 export default AllBenefitsPage;
-// --- Fim de components/AllBenefitsPage.tsx ---
