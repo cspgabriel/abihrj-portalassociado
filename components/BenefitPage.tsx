@@ -96,18 +96,24 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
           <div className="bg-white border border-gray-100 rounded-xl p-6 md:p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
               <Info className="w-5 h-5 text-rio-blue" />
-              Como Funciona
+              {benefit.id === 'highlight-events-reg' ? 'Carta Compromisso' : 'Como Funciona'}
             </h2>
             <div className="prose prose-blue text-gray-600 leading-relaxed">
-              <p>
-                O benefício <strong>{benefit.title}</strong> é uma das iniciativas da HoteisRio para fortalecer 
-                a hotelaria carioca. Este serviço foi desenhado para atender às necessidades específicas 
-                da categoria {benefit.category.toLowerCase()}, oferecendo suporte prático e estratégico.
-              </p>
-              <p className="mt-4">
-                Ao utilizar este recurso, seu hotel ganha agilidade nos processos e acesso a informações 
-                privilegiadas do setor, garantindo maior competitividade no mercado do Rio de Janeiro.
-              </p>
+              {benefit.fullDetails ? (
+                <div className="whitespace-pre-line text-justify">{benefit.fullDetails}</div>
+              ) : (
+                <>
+                  <p>
+                    O benefício <strong>{benefit.title}</strong> é uma das iniciativas da HoteisRio para fortalecer 
+                    a hotelaria carioca. Este serviço foi desenhado para atender às necessidades específicas 
+                    da categoria {benefit.category.toLowerCase()}, oferecendo suporte prático e estratégico.
+                  </p>
+                  <p className="mt-4">
+                    Ao utilizar este recurso, seu hotel ganha agilidade nos processos e acesso a informações 
+                    privilegiadas do setor, garantindo maior competitividade no mercado do Rio de Janeiro.
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -145,7 +151,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
               onClick={() => onUse(benefit)}
               className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-200 transition-all transform active:scale-95 flex items-center justify-center gap-2 mb-4"
             >
-              {benefit.isService ? 'Acessar Serviço Agora' : 'Solicitar Benefício'}
+              {benefit.isService ? (benefit.customCta || 'Acessar Serviço Agora') : 'Solicitar Benefício'}
               <ExternalLink className="w-4 h-4" />
             </button>
 

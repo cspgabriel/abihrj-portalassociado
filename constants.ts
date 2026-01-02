@@ -231,14 +231,36 @@ export const BENEFITS_DATA: Benefit[] = [
   {
     id: 'highlight-events-reg',
     title: 'Cadastro de Grandes Eventos',
-    description: 'Procedimento obrigatório via SETUR-RJ e órgãos de segurança.',
+    description: 'Parceria SETUR/TurisRio e Segurança Pública para apoio a eventos.',
     category: BenefitCategory.OPERATIONAL,
     targetSectors: ['MANAGEMENT', 'SALES', 'RECEPTION'],
     iconName: 'FileCheck',
     imageUrl: '',
     isService: true,
     isNew: true,
-    customCta: 'Mais informações'
+    externalLink: 'https://bit.ly/QuestionarioEventosERJ',
+    customCta: 'Acessar Formulário',
+    fullDetails: `Compromisso com o Turismo e a Segurança dos Eventos no Estado do Rio de Janeiro
+
+Caro hoteleiro,
+
+A SETUR/TurisRio, como órgão estratégico do Governo do Estado do Rio de Janeiro, reafirma seu compromisso com o desenvolvimento do turismo e com a valorização dos meios de hospedagem como peças fundamentais na cadeia produtiva do setor.
+
+Reconhecendo a importância da captação de eventos para a dinamização da economia local, esta iniciativa — em parceria com os órgãos de segurança pública — visa proporcionar mais tranquilidade, planejamento e suporte aos eventos realizados em hotéis, pousadas e centros de convenções em nosso território.
+
+Mais do que um procedimento, esta ação representa uma oportunidade: mostrar que seu estabelecimento está comprometido com a segurança, a organização e o bem-estar dos participantes, agregando valor à experiência do cliente e fortalecendo a imagem da sua marca no mercado.
+
+A SETUR / TurisRio seguem empenhadas em apoiar o setor, oferecendo mecanismos concretos que contribuam para atrair mais eventos, movimentar o turismo e gerar emprego e renda em todas as regiões do estado.
+
+Contamos com a adesão e o engajamento de todos os meios de hospedagem nessa jornada de crescimento com responsabilidade e parceria.
+
+Juntos, seguimos promovendo um turismo mais forte, seguro e sustentável no Rio de Janeiro.`,
+    usageSteps: [
+        'Acesse o formulário pelo link abaixo ("Acessar Formulário").',
+        'Preencha todas as informações solicitadas sobre o evento no seu hotel.',
+        'Após o preenchimento, envie um e-mail para turismo@setur.rj.gov.br informando que o cadastro foi realizado.',
+        'A SETUR/TurisRio encaminhará as informações para o setor da Polícia Militar responsável pela região, para que providenciem o apoio caso julguem necessário.'
+    ]
   },
   {
     id: 'news-portal',
