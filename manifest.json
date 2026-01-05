@@ -13,14 +13,14 @@
   "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
-      "src": "https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png",
+      "src": "https://scontent.fsdu40-1.fna.fbcdn.net/v/t39.30808-1/301827526_468985631906679_1227383539645719607_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=107&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=CUxc0Wspr2wQ7kNvwHKbj1V&_nc_oc=Adl5i21S57Vq3W68EiH_Gb6X-MebvZsnLVY4U6hx0JFfodj61ze_KCysVet3692unSTZGvr1U3N02qCV08hyHci2&_nc_zt=24&_nc_ht=scontent.fsdu40-1.fna&_nc_gid=2pNAtG5yBf4IFp8Apvr38w&oh=00_AfoZP1H21qBRjEwXg_cThTMtt-LpHGU-q6MTQ5qbnLeAIw&oe=69618D8D",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpg"
     },
     {
-      "src": "https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png",
+      "src": "https://scontent.fsdu40-1.fna.fbcdn.net/v/t39.30808-1/301827526_468985631906679_1227383539645719607_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=107&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=CUxc0Wspr2wQ7kNvwHKbj1V&_nc_oc=Adl5i21S57Vq3W68EiH_Gb6X-MebvZsnLVY4U6hx0JFfodj61ze_KCysVet3692unSTZGvr1U3N02qCV08hyHci2&_nc_zt=24&_nc_ht=scontent.fsdu40-1.fna&_nc_gid=2pNAtG5yBf4IFp8Apvr38w&oh=00_AfoZP1H21qBRjEwXg_cThTMtt-LpHGU-q6MTQ5qbnLeAIw&oe=69618D8D",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpg"
     }
   ],
   "screenshots": [
@@ -45,21 +45,21 @@
       "short_name": "Benefícios",
       "description": "Acesse o catálogo completo de benefícios",
       "url": "/?view=ALL_BENEFITS",
-      "icons": [{ "src": "https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png", "sizes": "192x192" }]
+      "icons": [{ "src": "https://scontent.fsdu40-1.fna.fbcdn.net/v/t39.30808-1/301827526_468985631906679_1227383539645719607_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=107&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=CUxc0Wspr2wQ7kNvwHKbj1V&_nc_oc=Adl5i21S57Vq3W68EiH_Gb6X-MebvZsnLVY4U6hx0JFfodj61ze_KCysVet3692unSTZGvr1U3N02qCV08hyHci2&_nc_zt=24&_nc_ht=scontent.fsdu40-1.fna&_nc_gid=2pNAtG5yBf4IFp8Apvr38w&oh=00_AfoZP1H21qBRjEwXg_cThTMtt-LpHGU-q6MTQ5qbnLeAIw&oe=69618D8D", "sizes": "192x192" }]
     },
     {
       "name": "Agenda de Eventos",
       "short_name": "Eventos",
       "description": "Veja os próximos fóruns e reuniões",
       "url": "/?view=ASSOCIATION_EVENTS",
-      "icons": [{ "src": "https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png", "sizes": "192x192" }]
+      "icons": [{ "src": "https://scontent.fsdu40-1.fna.fbcdn.net/v/t39.30808-1/301827526_468985631906679_1227383539645719607_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=107&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=CUxc0Wspr2wQ7kNvwHKbj1V&_nc_oc=Adl5i21S57Vq3W68EiH_Gb6X-MebvZsnLVY4U6hx0JFfodj61ze_KCysVet3692unSTZGvr1U3N02qCV08hyHci2&_nc_zt=24&_nc_ht=scontent.fsdu40-1.fna&_nc_gid=2pNAtG5yBf4IFp8Apvr38w&oh=00_AfoZP1H21qBRjEwXg_cThTMtt-LpHGU-q6MTQ5qbnLeAIw&oe=69618D8D", "sizes": "192x192" }]
     },
     {
       "name": "Calculadoras",
       "short_name": "Calculadoras",
       "description": "Ferramentas de Revenue Management",
       "url": "/?view=CALCULATORS_PAGE",
-      "icons": [{ "src": "https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png", "sizes": "192x192" }]
+      "icons": [{ "src": "https://scontent.fsdu40-1.fna.fbcdn.net/v/t39.30808-1/301827526_468985631906679_1227383539645719607_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=107&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=CUxc0Wspr2wQ7kNvwHKbj1V&_nc_oc=Adl5i21S57Vq3W68EiH_Gb6X-MebvZsnLVY4U6hx0JFfodj61ze_KCysVet3692unSTZGvr1U3N02qCV08hyHci2&_nc_zt=24&_nc_ht=scontent.fsdu40-1.fna&_nc_gid=2pNAtG5yBf4IFp8Apvr38w&oh=00_AfoZP1H21qBRjEwXg_cThTMtt-LpHGU-q6MTQ5qbnLeAIw&oe=69618D8D", "sizes": "192x192" }]
     }
   ]
 }

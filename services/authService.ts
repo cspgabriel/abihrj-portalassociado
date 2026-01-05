@@ -98,8 +98,13 @@ export const authService = {
            throw new Error('Muitas tentativas falhas. Tente novamente mais tarde.');
         }
 
-        // Se for erro de rede (China/Firewall) ou erro de configuração, ativa Modo Demo
-        if (error.code === 'auth/network-request-failed' || !navigator.onLine) {
+        // Verificação robusta de erro de rede (inclui mensagem para casos onde code falha)
+        const isNetworkError = 
+            error.code === 'auth/network-request-failed' || 
+            (error.message && error.message.includes('network-request-failed')) ||
+            !navigator.onLine;
+
+        if (isNetworkError) {
             console.log("Detectada falha de rede/bloqueio. Ativando modo de acesso alternativo.");
         } else {
             throw new Error("Erro de conexão: " + error.message);
@@ -158,8 +163,13 @@ export const authService = {
           throw new Error('Este email já está cadastrado.');
         }
         
-        // Se a rede estiver bloqueada (comum na China), permite o cadastro local para não frustrar o usuário
-        if (error.code === 'auth/network-request-failed' || !navigator.onLine) {
+        // Verificação robusta de erro de rede para fallback de registro
+        const isNetworkError = 
+            error.code === 'auth/network-request-failed' || 
+            (error.message && error.message.includes('network-request-failed')) ||
+            !navigator.onLine;
+
+        if (isNetworkError) {
             console.warn("Rede bloqueada durante registro. Criando acesso local resiliente.");
             const mockUser: User = {
                 id: 'local-reg-' + Date.now(),
