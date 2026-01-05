@@ -62,6 +62,19 @@ export const BENEFITS_DATA: Benefit[] = [
     customCta: 'Acessar Sistema Legal'
   },
   {
+    id: 'placas-recepcao',
+    title: 'Placas Obrigatórias da Recepção',
+    description: 'Kit oficial para download com todas as placas exigidas por lei (Procon, Antifumo, etc).',
+    category: BenefitCategory.LEGAL,
+    targetSectors: ['RECEPTION', 'MANAGEMENT', 'LEGAL_DEPT'],
+    iconName: 'Stamp',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    downloadUrl: 'https://drive.google.com/file/d/1ps8dpidzYS0PxR6-PQIQT5gmNsJexZOb/view?usp=sharing',
+    customCta: 'Baixar Placas (Drive)'
+  },
+  {
     id: 'juridico-01',
     title: 'Assessoria Jurídica',
     description: 'Suporte legal especializado para associados.',
