@@ -178,11 +178,15 @@ export default function App() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in-up">
            <div className="text-center mb-8">
-              <img 
-                src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-                alt="HoteisRio" 
-                className="h-12 mx-auto mb-4 invert brightness-0" 
-              />
+              <div className="flex justify-center mb-6">
+                <div className="bg-rio-blue p-4 rounded-xl shadow-lg shadow-blue-100">
+                    <img 
+                      src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+                      alt="HoteisRio" 
+                      className="h-12 w-auto" 
+                    />
+                </div>
+              </div>
               <h1 className="text-2xl font-bold text-gray-800">Portal do Associado</h1>
               <p className="text-gray-500 text-sm">Acesse sua central de benefícios exclusiva.</p>
            </div>
