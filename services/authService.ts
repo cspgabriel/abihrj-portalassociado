@@ -51,6 +51,19 @@ const logAccess = async (user: User) => {
   }
 };
 
+const checkIsNetworkError = (error: any) => {
+    const code = error.code || '';
+    const msg = (error.message || '').toLowerCase();
+    return (
+        code === 'auth/network-request-failed' ||
+        msg.includes('network-request-failed') ||
+        msg.includes('network') ||
+        msg.includes('fetch') ||
+        msg.includes('offline') ||
+        !navigator.onLine
+    );
+};
+
 export const authService = {
   // --- LOGIN ---
   login: async (email: string, password: string): Promise<User> => {
@@ -98,13 +111,7 @@ export const authService = {
            throw new Error('Muitas tentativas falhas. Tente novamente mais tarde.');
         }
 
-        // Verificação robusta de erro de rede (inclui mensagem para casos onde code falha)
-        const isNetworkError = 
-            error.code === 'auth/network-request-failed' || 
-            (error.message && error.message.includes('network-request-failed')) ||
-            !navigator.onLine;
-
-        if (isNetworkError) {
+        if (checkIsNetworkError(error)) {
             console.log("Detectada falha de rede/bloqueio. Ativando modo de acesso alternativo.");
         } else {
             throw new Error("Erro de conexão: " + error.message);
@@ -164,12 +171,7 @@ export const authService = {
         }
         
         // Verificação robusta de erro de rede para fallback de registro
-        const isNetworkError = 
-            error.code === 'auth/network-request-failed' || 
-            (error.message && error.message.includes('network-request-failed')) ||
-            !navigator.onLine;
-
-        if (isNetworkError) {
+        if (checkIsNetworkError(error)) {
             console.warn("Rede bloqueada durante registro. Criando acesso local resiliente.");
             const mockUser: User = {
                 id: 'local-reg-' + Date.now(),
