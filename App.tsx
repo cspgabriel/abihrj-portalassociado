@@ -1,4 +1,3 @@
-
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -424,3 +423,4 @@ export default function App() {
     </Layout>
   );
 }
+// --- Fim de App.tsx ---

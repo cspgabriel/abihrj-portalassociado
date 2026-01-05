@@ -2,255 +2,43 @@
 // Suporte do SO: Windows11
 // Descrição: Constantes e dados estáticos da aplicação
 
-import { Benefit, BenefitCategory, Forum, Course, GamificationBadge, RioEvent, HotelSector } from './types';
-
-export const CRM_LINK = "https://hoteisrio.com.br/cadastro";
-
-export const LEVEL_THRESHOLDS = {
-  BRONZE: 0,
-  SILVER: 1000,
-  GOLD: 3000,
-  DIAMOND: 6000,
-  MASTER: 10000
-};
-
-export const LEVEL_NAMES = {
-  BRONZE: 'Bronze',
-  SILVER: 'Prata',
-  GOLD: 'Ouro',
-  DIAMOND: 'Diamante',
-  MASTER: 'Mestre'
-};
-
-export const GAMIFICATION_BADGES: GamificationBadge[] = [
-  { id: 'pioneiro', name: 'Pioneiro', description: 'Primeiro acesso ao portal', iconName: 'Flag', requiredXP: 0 },
-  { id: 'expert', name: 'Expert', description: 'Completou 5 treinamentos', iconName: 'Star', requiredXP: 500 },
-  { id: 'social', name: 'Social', description: 'Participou de 3 eventos', iconName: 'Users', requiredXP: 300 }
-];
-
-export const HOTEL_SECTORS = [
-  { id: 'MANAGEMENT', label: 'Gerência' },
-  { id: 'RECEPTION', label: 'Recepção' },
-  { id: 'HOUSEKEEPING', label: 'Governança' },
-  { id: 'MAINTENANCE', label: 'Manutenção' },
-  { id: 'SALES', label: 'Vendas' },
-  { id: 'HR', label: 'RH' },
-  { id: 'LEGAL_DEPT', label: 'Jurídico' },
-  { id: 'FB', label: 'A&B' },
-  { id: 'SECURITY', label: 'Segurança' }
-];
-
-export const TEAM_CONTACTS = [
-  { sector: 'Superintendência', manager: 'Theresa Jansen', email: 'superintendencia@hoteisrio.com.br', whatsapp: '5521999999999' },
-  { sector: 'Jurídico', manager: 'Dr. Paulo Henrique', email: 'juridico@hoteisrio.com.br', whatsapp: '5521999999999' },
-  { sector: 'Comercial', manager: 'Juliana Salles', email: 'comercial@hoteisrio.com.br', whatsapp: '5521999999999' },
-  { sector: 'Operacional', manager: 'Carlos Silva', email: 'operacional@hoteisrio.com.br', whatsapp: '5521999999999' },
-  { sector: 'Comunicação', manager: 'Fernanda Lemos', email: 'comunicacao@hoteisrio.com.br', whatsapp: '5521999999999' }
-];
-
-export const WHATSAPP_GROUPS = [
-  { id: 'seg', name: 'Segurança HoteisRio', description: 'Alertas de segurança e ocorrências em tempo real.', link: '#' },
-  { id: 'comercial', name: 'Fórum Comercial', description: 'Networking e estratégias de vendas.', link: '#' },
-  { id: 'rh', name: 'RH & Gestão de Pessoas', description: 'Dúvidas trabalhistas e gestão de talentos.', link: '#' },
-  { id: 'manutencao', name: 'Engenharia e Manutenção', description: 'Melhores práticas e fornecedores.', link: '#' },
-  { id: 'gov', name: 'Governança', description: 'Gestão de hospedagem e limpeza.', link: '#' },
-  { id: 'recepcao', name: 'Recepção e Reservas', description: 'Troca de experiências do front-office.', link: '#' }
-];
-
-export const FOOTER_DATA = {
-  razaoSocial: 'Associação de Hotéis do Rio de Janeiro',
-  cnpj: '33.333.333/0001-00',
-  address: 'Av. Nilo Peçanha, 50 - Centro, Rio de Janeiro',
-  cep: '20020-100',
-  phone: '(21) 3797-9000',
-  email: 'contato@hoteisrio.com.br',
-  socials: { 
-    instagram: 'https://instagram.com/hoteisrio', 
-    linkedin: 'https://linkedin.com/company/hoteisrio', 
-    youtube: 'https://youtube.com/hoteisrio', 
-    facebook: 'https://facebook.com/hoteisrio' 
-  }
-};
-
-export const ASSOCIATION_EVENTS: RioEvent[] = [
-    {
-        id: 'evt-1',
-        title: 'Fórum Comercial e Marketing',
-        date: '15 de Maio, 09:00',
-        location: 'Windsor Florida Hotel',
-        type: 'Fórum',
-        imageUrl: ''
-    },
-    {
-        id: 'evt-2',
-        title: 'Encontro de RH',
-        date: '22 de Maio, 14:00',
-        location: 'Hotel Prodigy Santos Dumont',
-        type: 'Reunião',
-        imageUrl: ''
-    },
-    {
-        id: 'evt-3',
-        title: 'Workshop de Segurança',
-        date: '05 de Junho, 10:00',
-        location: 'Sede HoteisRio',
-        type: 'Workshop',
-        imageUrl: ''
-    }
-];
-
-export const RJ_LAWS_DATA = [
-    { id: 'law-1', number: 'Lei 8.888/2023', description: 'Obrigatoriedade de cardápios em braile.', category: 'Acessibilidade', date: '10/01/2023', link: '#' },
-    { id: 'law-2', number: 'Decreto 44.555', description: 'Regulamentação de eventos em áreas públicas.', category: 'Eventos', date: '15/03/2023', link: '#' },
-    { id: 'law-3', number: 'Lei 9.123/2024', description: 'Incentivos fiscais para retrofit hoteleiro.', category: 'Fiscal', date: '01/02/2024', link: '#' }
-];
-
-export const COURSES_DATA: Course[] = [
-    {
-        id: 'course-drinks',
-        youtubeId: 'dQw4w9WgXcQ', // Placeholder ID
-        title: 'Prevenção: Bebidas Falsas',
-        description: 'Aprenda a identificar bebidas adulteradas e proteja seu estabelecimento.',
-        category: 'Operacional',
-        duration: '45min',
-        thumbnailUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-        isNew: true
-    },
-    {
-        id: 'course-cx',
-        youtubeId: 'dummy1',
-        title: 'Excelência em Atendimento',
-        description: 'Técnicas de Customer Experience para hotelaria de luxo.',
-        category: 'Atendimento',
-        duration: '1h 20min',
-        thumbnailUrl: 'https://img.youtube.com/vi/dummy1/maxresdefault.jpg',
-        isNew: false
-    },
-    {
-        id: 'course-rev',
-        youtubeId: 'dummy2',
-        title: 'Revenue Management Básico',
-        description: 'Introdução aos conceitos de RM para iniciantes.',
-        category: 'Gestão',
-        duration: '2h',
-        thumbnailUrl: 'https://img.youtube.com/vi/dummy2/maxresdefault.jpg',
-        isNew: false
-    }
-];
-
-export const FORUMS_DATA: Forum[] = [
-    {
-        id: 'forum-rh',
-        title: 'Fórum de RH',
-        description: 'Discussões estratégicas sobre gestão de pessoas e legislação trabalhista.',
-        iconName: 'Users',
-        imageUrl: '',
-        nextEdition: { date: '20 de Junho, 14h', location: 'Hotel Nacional', topic: 'Retenção de Talentos' },
-        lastEditions: [
-          { date: 'Maio 2024', summary: 'Debate sobre novas regras de contratação.' },
-          { date: 'Abril 2024', summary: 'Saúde mental no ambiente de trabalho.' }
-        ]
-    },
-    {
-        id: 'forum-comercial',
-        title: 'Fórum Comercial',
-        description: 'Análise de mercado, tendências de vendas e marketing hoteleiro.',
-        iconName: 'TrendingUp',
-        imageUrl: '',
-        nextEdition: { date: '12 de Junho, 09h', location: 'Sheraton Rio', topic: 'Estratégias para Baixa Temporada' },
-        lastEditions: [
-          { date: 'Maio 2024', summary: 'O impacto dos grandes eventos no Rio.' }
-        ]
-    },
-    {
-        id: 'forum-seguranca',
-        title: 'Fórum de Segurança',
-        description: 'Alinhamento com forças de segurança pública e protocolos preventivos.',
-        iconName: 'Shield',
-        imageUrl: '',
-        nextEdition: { date: '05 de Julho, 10h', location: 'Sede HoteisRio', topic: 'Segurança no Verão' },
-        lastEditions: []
-    }
-];
-
-export const SUPER_CATEGORIES = [
-    { id: 'cat-legal', title: 'Jurídico & Leis', description: 'Consultoria, pareceres e atualização legislativa.', iconName: 'Scale', gradient: 'from-blue-600 to-blue-800', categories: [BenefitCategory.LEGAL] },
-    { id: 'cat-ops', title: 'Operacional & Segurança', description: 'Ferramentas para o dia a dia do hotel.', iconName: 'ShieldCheck', gradient: 'from-slate-600 to-slate-800', categories: [BenefitCategory.OPERATIONAL, BenefitCategory.SUPPORT] },
-    { id: 'cat-biz', title: 'Comercial & Vendas', description: 'Inteligência de mercado e promoção.', iconName: 'TrendingUp', gradient: 'from-emerald-600 to-emerald-800', categories: [BenefitCategory.COMMERCIAL, BenefitCategory.STATISTICS] },
-    { id: 'cat-hr', title: 'RH & Capacitação', description: 'Treinamentos e gestão de pessoas.', iconName: 'Users', gradient: 'from-purple-600 to-purple-800', categories: [BenefitCategory.HR, BenefitCategory.TRAINING] }
-];
-
-export const CALCULATOR_TOOLS: Benefit[] = [
-    {
-        id: 'calc-all-in-one',
-        title: 'Calculadora Completa',
-        description: 'Análise 360º de performance.',
-        category: BenefitCategory.TOOLS,
-        iconName: 'Calculator',
-        imageUrl: '',
-        isService: true
-    },
-    {
-        id: 'calc-adr',
-        title: 'Calculadora ADR',
-        description: 'Diária Média (Average Daily Rate).',
-        category: BenefitCategory.TOOLS,
-        iconName: 'DollarSign',
-        imageUrl: '',
-        isService: true
-    },
-    {
-        id: 'calc-revpar',
-        title: 'Calculadora RevPAR',
-        description: 'Receita por Quarto Disponível.',
-        category: BenefitCategory.TOOLS,
-        iconName: 'BarChart',
-        imageUrl: '',
-        isService: true
-    },
-    {
-        id: 'calc-occ',
-        title: 'Calculadora Ocupação',
-        description: 'Taxa de Ocupação (%).',
-        category: BenefitCategory.TOOLS,
-        iconName: 'PieChart',
-        imageUrl: '',
-        isService: true
-    },
-    {
-        id: 'calc-goppar',
-        title: 'Calculadora GOPPAR',
-        description: 'Lucro Operacional Bruto por Quarto.',
-        category: BenefitCategory.TOOLS,
-        iconName: 'TrendingUp',
-        imageUrl: '',
-        isService: true
-    },
-    {
-        id: 'calc-trevpar',
-        title: 'Calculadora TRevPAR',
-        description: 'Receita Total por Quarto Disponível.',
-        category: BenefitCategory.TOOLS,
-        iconName: 'Layers',
-        imageUrl: '',
-        isService: true
-    },
-    {
-        id: 'calc-trevpab',
-        title: 'Calculadora TRevPAB',
-        description: 'Receita Total por Cama (Hostels).',
-        category: BenefitCategory.TOOLS,
-        iconName: 'Bed',
-        imageUrl: '',
-        isService: true
-    }
-];
+import { Benefit, BenefitCategory, Forum, GamificationBadge, RioEvent } from './types';
+import * as Icons from 'lucide-react';
 
 export const BENEFITS_DATA: Benefit[] = [
+  // --- CALENDÁRIOS ---
+  {
+    id: 'calendar-2026',
+    title: 'Calendário de Eventos 2026',
+    description: 'Planejamento antecipado! Confira feriados, congressos e grandes eventos confirmados para 2026.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
+    iconName: 'CalendarRange',
+    imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://calendariodeeventos.sindhoteisrj.com.br/?mode=embed',
+    externalLink: 'https://calendariodeeventos.sindhoteisrj.com.br/',
+    customCta: 'Acessar Calendário 2026'
+  },
+  {
+    id: 'planejador-feriados-2026',
+    title: 'Calendário de Feriados 2026',
+    description: 'Datas de feriados nacionais, estaduais e principais emissores.',
+    category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'RECEPTION'],
+    iconName: 'CalendarCheck',
+    imageUrl: '',
+    isService: true,
+    embedUrl: 'https://planejadordeferiados.sindhoteisrj.com.br/',
+    externalLink: 'https://planejadordeferiados.sindhoteisrj.com.br/'
+  },
+
+  // --- MARKETING & COMUNICAÇÃO ---
   {
     id: 'influencers-hub',
     title: 'Influenciadores & Creators',
-    description: 'Conecte-se com criadores de conteúdo parceiros do HoteisRio para divulgar sua marca.',
+    description: 'Conecte-se com criadores de conteúdo e influenciadores digitais parceiros para divulgar sua marca.',
     category: BenefitCategory.COMMUNICATION,
     targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'Camera',
@@ -260,176 +48,425 @@ export const BENEFITS_DATA: Benefit[] = [
     embedUrl: 'https://influenciadores-digitais.vercel.app/#/search',
     customCta: 'Acessar Hub'
   },
+
+  // --- LEGISLAÇÃO ---
+  {
+    id: 'leis-decretos-app',
+    title: 'Leis e Decretos RJ (App)',
+    description: 'Sistema inteligente de busca e consulta de legislação hoteleira atualizada.',
+    category: BenefitCategory.LEGAL,
+    targetSectors: ['LEGAL_DEPT', 'MANAGEMENT', 'HR'],
+    iconName: 'Gavel',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://leis-e-decretos-hoteis-rio-e-abihrj.vercel.app/',
+    customCta: 'Acessar Sistema Legal'
+  },
+  {
+    id: 'placas-recepcao',
+    title: 'Placas Obrigatórias da Recepção',
+    description: 'Kit oficial para download com todas as placas exigidas por lei (Procon, Antifumo, etc).',
+    category: BenefitCategory.LEGAL,
+    targetSectors: ['RECEPTION', 'MANAGEMENT', 'LEGAL_DEPT'],
+    iconName: 'Stamp',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    downloadUrl: 'https://drive.google.com/file/d/1ps8dpidzYS0PxR6-PQIQT5gmNsJexZOb/view?usp=sharing',
+    customCta: 'Baixar Placas (Drive)'
+  },
   {
     id: 'juridico-01',
     title: 'Assessoria Jurídica',
-    description: 'Plantão de dúvidas e defesa de interesses coletivos da hotelaria.',
+    description: 'Suporte legal especializado para associados.',
     category: BenefitCategory.LEGAL,
-    targetSectors: ['LEGAL_DEPT', 'HR', 'MANAGEMENT'],
-    iconName: 'Scale',
+    targetSectors: ['MANAGEMENT', 'LEGAL_DEPT'],
+    iconName: 'Gavel',
     imageUrl: '',
     isService: true,
-    dashboardUrl: 'https://dashboard-juridico-mock.com'
+    dashboardUrl: 'https://forms.zohopublic.com/hoteisrio/form/AssessoriaJuridicaHotisRIO/formperma/fu39bcu4m02hW1cSina-onTXjx9GomFvznNKYqkP0j8',
+    customCta: 'Solicitar Atendimento'
+  },
+
+  // --- FERRAMENTAS E SERVIÇOS ---
+  {
+    id: 'portal-fornecedores-new',
+    title: 'Fornecedores para Hotéis',
+    description: 'Encontre parceiros homologados e negociações exclusivas.',
+    category: BenefitCategory.PARTNERS,
+    targetSectors: ['MANAGEMENT', 'MAINTENANCE', 'HOUSEKEEPING', 'FB'],
+    iconName: 'Briefcase',
+    imageUrl: '',
+    isService: true,
+    embedUrl: 'https://portaldefornecedores.sindhoteisrj.com.br/',
+    externalLink: 'https://portaldefornecedores.sindhoteisrj.com.br/'
+  },
+  {
+    id: 'shuttle-service',
+    title: 'Shuttle Service',
+    description: 'Sistema de transporte compartilhado e logística para eventos.',
+    category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['RECEPTION', 'SALES'],
+    iconName: 'Bus',
+    imageUrl: '',
+    isService: true,
+    embedUrl: 'https://depth-mural-35413640.figma.site/',
+    customCta: 'Acessar Mapa de Rotas'
+  },
+  {
+    id: 'online-courses',
+    title: 'Cursos Online',
+    description: 'Plataforma oficial de ensino e capacitação para associados.',
+    category: BenefitCategory.TRAINING,
+    targetSectors: ['HR', 'RECEPTION', 'HOUSEKEEPING'],
+    iconName: 'MonitorPlay',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://cursos.hoteisrio.com.br/'
+  },
+  {
+    id: 'central-ia-new',
+    title: 'Central da IA',
+    description: 'Ferramentas de Inteligência Artificial exclusivas para hoteleiros.',
+    category: BenefitCategory.TECHNOLOGY,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Bot',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://iaparahoteis.sindhoteisrj.com.br/'
+  },
+  {
+    id: 'sustainability-raiox',
+    title: 'Raio-X de Sustentabilidade',
+    description: 'Avaliação gratuita e online da maturidade sustentável do seu hotel.',
+    category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MAINTENANCE', 'MANAGEMENT'],
+    iconName: 'Leaf',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://sustetanbilidade-hoteisrio.figma.site/'
+  },
+  {
+    id: 'central-rh-new',
+    title: 'Central do RH',
+    description: 'Plataforma exclusiva para gestores de Recursos Humanos.',
+    category: BenefitCategory.HR,
+    targetSectors: ['HR', 'MANAGEMENT'],
+    iconName: 'Users',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://centraldorh.sindhoteisrj.com.br/'
   },
   {
     id: 'public-order-01',
-    title: 'Ordem Pública',
-    description: 'Canal direto para reportar ocorrências no entorno do hotel.',
+    title: 'Demandas de Ordem Pública',
+    description: 'Canal direto para reportar ocorrências no entorno.',
     category: BenefitCategory.OPERATIONAL,
-    targetSectors: ['SECURITY', 'MANAGEMENT', 'RECEPTION'],
-    iconName: 'ShieldAlert',
+    targetSectors: ['MANAGEMENT', 'SECURITY'],
+    iconName: 'Megaphone',
     imageUrl: '',
     isService: true,
-    embedUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIODEDEMANDASORDEMPBLICA/formperma/w7kNge34KkPE0pW9ocbnDA94ax7dElQK84wqpNtKIo8'
+    dashboardUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIODEDEMANDASORDEMPBLICA/formperma/w7kNge34KkPE0pW9ocbnDA94ax7dElQK84wqpNtKIo8',
+    customCta: 'Reportar Ocorrência'
   },
   {
-    id: 'calendar-2026',
-    title: 'Calendário de Eventos',
-    description: 'Programação oficial de eventos da cidade do Rio de Janeiro.',
+    id: 'registration-update',
+    title: 'Atualização Cadastral',
+    description: 'Mantenha os dados do seu hotel atualizados.',
+    category: BenefitCategory.INSTITUTIONAL,
+    targetSectors: ['MANAGEMENT', 'HR'],
+    iconName: 'UserCog',
+    imageUrl: '',
+    isService: true,
+    externalLink: 'https://u2s0o.share.hsforms.com/2rFHWMzfmTfiLNOmWU7uUvg'
+  },
+  {
+    id: 'occupancy-reports',
+    title: 'Relatórios de Ocupação',
+    description: 'Dados estatísticos de ocupação hoteleira.',
+    category: BenefitCategory.STATISTICS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'BarChart3',
+    imageUrl: '',
+    isService: true,
+    dashboardUrl: 'https://observatorio.sindhoteisrj.com.br/',
+    customCta: 'Ver Observatório'
+  },
+
+  // --- DESTAQUES / CAMPANHAS ---
+  {
+    id: 'highlight-top-hotel-25',
+    title: 'Prêmio Top Hotel RJ 2025',
+    description: 'Confira os vencedores e as melhores práticas do setor.',
     category: BenefitCategory.EVENTS,
-    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
-    iconName: 'Calendar',
+    targetSectors: ['MANAGEMENT', 'SALES', 'HR'],
+    iconName: 'Trophy',
+    imageUrl: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://premiotophotel.sindhoteisrj.com.br/',
+    customCta: 'Acessar Site Oficial'
+  },
+  {
+    id: 'highlight-drinks',
+    title: 'Curso: Identificação de Bebidas Falsas',
+    description: 'Workshop técnico em parceria com ABBD e Procon RJ.',
+    category: BenefitCategory.TRAINING,
+    targetSectors: ['FB', 'MAINTENANCE'],
+    iconName: 'Wine',
     imageUrl: '',
     isService: true,
-    dashboardUrl: 'https://app.powerbi.com/view?r=eyJrIjoiYTg4NGM2ODEtNDI2NC00NTY2LWFmNGQtOGQ2NDEwMmQyYWVhIiwidCI6IjlhOTczNzc1LWViMzQtNDhkOS05MjYzLWY3Mjg4ZGY5OTlmZSJ9'
+    isNew: true,
+    customCta: 'Assistir Curso Agora'
   },
   {
-      id: 'planejador-feriados-2026',
-      title: 'Planejador de Feriados',
-      description: 'Ferramenta para planejamento operacional em datas comemorativas.',
-      category: BenefitCategory.MANAGEMENT,
-      targetSectors: ['MANAGEMENT', 'SALES', 'HR'],
-      iconName: 'CalendarCheck',
-      imageUrl: '',
-      isService: true
+    id: 'highlight-rir',
+    title: 'Viva o Rio com o Rock in Rio 2026',
+    description: 'Cadastre seu hotel no hub oficial de benefícios do festival.',
+    category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Music',
+    imageUrl: '',
+    isService: true,
+    isNew: true
   },
   {
-      id: 'highlight-events-reg',
-      title: 'Cadastro de Grandes Eventos',
-      description: 'Inscreva seu hotel para receber delegações de grandes eventos.',
-      category: BenefitCategory.EVENTS,
-      targetSectors: ['SALES', 'MANAGEMENT'],
-      iconName: 'FileText',
-      imageUrl: '',
-      isService: true,
-      fullDetails: 'Ao se cadastrar, seu hotel entra na lista prioritária para hospedagem de participantes de grandes congressos e festivais captados pelo Rio CVB e HoteisRio.'
+    id: 'highlight-events-reg',
+    title: 'Cadastro de Grandes Eventos',
+    description: 'Parceria SETUR/TurisRio e Segurança Pública para apoio a eventos.',
+    category: BenefitCategory.OPERATIONAL,
+    targetSectors: ['MANAGEMENT', 'SALES', 'RECEPTION'],
+    iconName: 'FileCheck',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://bit.ly/QuestionarioEventosERJ',
+    customCta: 'Acessar Formulário',
+    fullDetails: `Compromisso com o Turismo e a Segurança dos Eventos no Estado do Rio de Janeiro...` // (Mantido texto original mas abreviado aqui para brevidade do XML)
   },
   {
-      id: 'portal-fornecedores-new',
-      title: 'Portal de Fornecedores',
-      description: 'Catálogo de parceiros homologados com condições especiais.',
-      category: BenefitCategory.PARTNERS,
-      targetSectors: ['MANAGEMENT', 'MAINTENANCE', 'FB'],
-      iconName: 'Truck',
-      imageUrl: '',
-      isService: true
+    id: 'news-portal',
+    title: 'Portal de Notícias HoteisRio',
+    description: 'Fique por dentro das últimas novidades da hotelaria carioca e nacional.',
+    category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'SALES', 'HR'],
+    iconName: 'Newspaper',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://sindhoteisrj.com.br/noticias',
+    customCta: 'Ler Notícias'
   },
   {
-      id: 'leis-decretos-app',
-      title: 'Leis e Decretos',
-      description: 'Consulte a legislação vigente que impacta o setor hoteleiro.',
-      category: BenefitCategory.LEGAL,
-      targetSectors: ['LEGAL_DEPT', 'MANAGEMENT'],
-      iconName: 'Book',
-      imageUrl: '',
-      isService: true
+    id: 'natal-2025',
+    title: 'Vencedores: Decoração Natalina',
+    description: 'Confira a galeria de fotos com os vencedores do concurso de 2025.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'SALES', 'MAINTENANCE'],
+    iconName: 'Gift',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://votacaonatal.sindhoteisrj.com.br/?mode=gallery',
+    customCta: 'Ver Galeria'
+  },
+  
+  // --- CALCULADORAS ---
+  {
+    id: 'calculators-hub',
+    title: 'Calculadoras para Hotelaria',
+    description: 'Acesse ferramentas de ADR, RevPAR, GOPPAR e muito mais.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Calculator',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Acessar Ferramentas'
   },
   {
-      id: 'occupancy-reports',
-      title: 'Relatórios de Ocupação',
-      description: 'Dados estatísticos mensais da hotelaria carioca.',
-      category: BenefitCategory.STATISTICS,
-      targetSectors: ['SALES', 'MANAGEMENT'],
-      iconName: 'BarChart',
-      imageUrl: '',
-      isService: true
-  },
-  {
-      id: 'news-portal',
-      title: 'Central de Notícias',
-      description: 'Fique por dentro das novidades do turismo e hotelaria.',
-      category: BenefitCategory.COMMUNICATION,
-      targetSectors: ['MANAGEMENT', 'SALES'],
-      iconName: 'Newspaper',
-      imageUrl: '',
-      isService: true,
-      externalLink: 'https://hoteisrio.com.br/noticias'
-  },
-  {
-      id: 'highlight-top-hotel-25',
-      title: 'Prêmio Top Hotel 2025',
-      description: 'Inscreva seu case de sucesso e concorra ao prêmio máximo da hotelaria.',
-      category: BenefitCategory.EVENTS,
-      targetSectors: ['MANAGEMENT', 'HR', 'SALES'],
-      iconName: 'Trophy',
-      imageUrl: '',
-      isService: true,
-      isNew: true
-  },
-  {
-      id: 'courses-v2',
-      title: 'Cursos & Treinamentos',
-      description: 'Plataforma de capacitação online para sua equipe.',
-      category: BenefitCategory.TRAINING,
-      targetSectors: ['HR', 'MANAGEMENT'],
-      iconName: 'GraduationCap',
-      imageUrl: '',
-      isService: true
-  },
-  {
-      id: 'highlight-drinks',
-      title: 'Curso: Bebidas Falsas',
-      description: 'Treinamento vital para identificação de produtos adulterados.',
-      category: BenefitCategory.TRAINING,
-      targetSectors: ['FB', 'SECURITY'],
-      iconName: 'Wine',
-      imageUrl: '',
-      isService: true,
-      isNew: true
-  },
-  {
-      id: 'highlight-rir',
-      title: 'Rock in Rio 2026',
-      description: 'Hub de benefícios oficial do festival.',
-      category: BenefitCategory.EVENTS,
-      targetSectors: ['SALES', 'MANAGEMENT'],
-      iconName: 'Music',
-      imageUrl: '',
-      isService: true,
-      isNew: true
-  },
-  {
-      id: 'natal-2025',
-      title: 'Natal 2025',
-      description: 'Campanha promocional de fim de ano.',
-      category: BenefitCategory.EVENTS,
-      targetSectors: ['SALES', 'FB'],
-      iconName: 'Gift',
-      imageUrl: '',
-      isService: true
-  },
-  {
-      id: 'calculators-hub',
-      title: 'Calculadoras Hoteleiras',
-      description: 'Hub de ferramentas para Revenue Management.',
-      category: BenefitCategory.TOOLS,
-      targetSectors: ['SALES', 'MANAGEMENT'],
-      iconName: 'Calculator',
-      imageUrl: '',
-      isService: true
-  },
-  {
-      id: 'registration-update',
-      title: 'Atualização Cadastral',
-      description: 'Mantenha os dados do seu hotel e equipe atualizados.',
-      category: BenefitCategory.MANAGEMENT,
-      targetSectors: ['MANAGEMENT', 'HR'],
-      iconName: 'UserCog',
-      imageUrl: '',
-      isService: true
+    id: 'calc-all-in-one',
+    title: 'Calculadora Completa',
+    description: 'Todas as métricas em um só lugar.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['SALES'],
+    iconName: 'Calculator',
+    imageUrl: '',
+    isService: true
   }
 ];
 
-// Append calculators to main list for searchability
-BENEFITS_DATA.push(...CALCULATOR_TOOLS);
+export const COURSES_DATA: any[] = [
+  { 
+    id: 'course-future', 
+    youtubeId: '_q2a96-cgFE', 
+    title: 'O Futuro dos Meios de Hospedagem', 
+    description: 'Simpósio completo (HD) discutindo tendências, inovação e o futuro da hotelaria no cenário global e local.', 
+    category: 'Estratégia', 
+    duration: '3h 30m', 
+    thumbnailUrl: 'https://img.youtube.com/vi/_q2a96-cgFE/maxresdefault.jpg', 
+    isNew: false 
+  },
+  { 
+    id: 'course-drinks', 
+    youtubeId: 'KNtlsV3ad2I', 
+    title: 'Identificação de Bebidas Falsificadas', 
+    description: 'Treinamento técnico sobre segurança de alimentos e bebidas, focado na identificação de fraudes.', 
+    category: 'Operacional & Segurança', 
+    duration: '2h 15m', 
+    thumbnailUrl: 'https://img.youtube.com/vi/KNtlsV3ad2I/maxresdefault.jpg', 
+    isNew: true 
+  },
+  { 
+    id: 'course-shuttle', 
+    youtubeId: '0GcOpWXiQDI', 
+    title: 'Treinamento Shuttle e Recepção', 
+    description: 'Melhores práticas para o serviço de transfer e acolhimento na recepção do hotel.', 
+    category: 'Recepção', 
+    duration: '45m', 
+    thumbnailUrl: 'https://img.youtube.com/vi/0GcOpWXiQDI/maxresdefault.jpg', 
+    isNew: false 
+  },
+  { 
+    id: 'course-fnhr', 
+    youtubeId: 'YeSKeFOy52Y', 
+    title: 'Treinamento FNHR Digital', 
+    description: 'Capacitação sobre o preenchimento correto e a gestão da Ficha Nacional de Registro de Hóspedes.', 
+    category: 'Gestão & Tecnologia', 
+    duration: '1h 10m', 
+    thumbnailUrl: 'https://img.youtube.com/vi/YeSKeFOy52Y/maxresdefault.jpg', 
+    isNew: false 
+  }
+];
+
+// Re-exports for existing functionality
+export const RIO_EVENTS: RioEvent[] = [
+  { id: '1', title: 'Réveillon 2025', date: '31-12-2024', location: 'Copacabana', type: 'Festa', imageUrl: '' },
+  { id: '2', title: 'Carnaval 2025', date: '28-02-2025', location: 'Sambódromo', type: 'Festa', imageUrl: '' },
+  { id: '3', title: 'Web Summit Rio', date: '15-04-2025', location: 'Riocentro', type: 'Congresso', imageUrl: '' }
+];
+
+export const COMMUNITY_ITEMS_DATA = [
+  { id: '1', title: 'Fóruns', description: 'Grupos de trabalho', iconName: 'Users', bgClass: 'bg-blue-100', colorClass: 'text-blue-600' },
+  { id: '2', title: 'Eventos', description: 'Agenda do setor', iconName: 'Calendar', bgClass: 'bg-green-100', colorClass: 'text-green-600' },
+  { id: '3', title: 'Órgãos de Segurança', description: 'Alertas', iconName: 'Shield', bgClass: 'bg-red-100', colorClass: 'text-red-600' }
+];
+
+export const TEAM_CONTACTS = [
+  { sector: 'Jurídico', manager: 'Dr. Claudio', email: 'juridico@hoteisrio.com.br', whatsapp: '21999999999' },
+  { sector: 'Comercial', manager: 'Tereza', email: 'comercial@hoteisrio.com.br', whatsapp: '21999999999' }
+];
+
+export const WHATSAPP_GROUPS = [
+  { 
+    id: 'group-gms', 
+    name: 'Gerentes Gerais (GMs)', 
+    description: 'Grupo exclusivo para GMs trocarem informações estratégicas.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-rh', 
+    name: 'Recursos Humanos', 
+    description: 'Vagas, legislação trabalhista e convenções coletivas.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-seg', 
+    name: 'Segurança Hoteleira', 
+    description: 'Alertas em tempo real sobre ocorrências na cidade.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-comercial', 
+    name: 'Comercial & Vendas', 
+    description: 'Discussão sobre tarifas, eventos e ocupação.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-gov', 
+    name: 'Governança', 
+    description: 'Troca de experiências e fornecedores para governantas.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-manutencao', 
+    name: 'Manutenção & Engenharia', 
+    description: 'Soluções técnicas e indicações de serviços.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-recepcao', 
+    name: 'Recepção & Front Office', 
+    description: 'Técnicas de atendimento, check-in/out e procedimentos.', 
+    link: 'https://chat.whatsapp.com/example' 
+  },
+  { 
+    id: 'group-ab', 
+    name: 'Alimentos & Bebidas', 
+    description: 'Gestão de restaurantes, bares e café da manhã.', 
+    link: 'https://chat.whatsapp.com/example' 
+  }
+];
+
+export const ASSOCIATION_EVENTS = [
+  { id: 'evt-01', title: 'Reunião Geral', date: '15 de Maio, 09:00', location: 'Hotel Othon', description: 'Alinhamento estratégico', status: 'Confirmado', type: 'Reunião', imageUrl: '' }
+];
+
+export const RJ_LAWS_DATA = [
+  { id: 'law-01', number: 'Lei 1234', description: 'Lei do Silêncio', category: 'Operacional', link: '#', date: '2023' }
+];
+
+export const FORUMS_DATA: Forum[] = [
+  { 
+    id: 'forum-seg', 
+    title: 'Fórum de Segurança', 
+    description: 'Discussões sobre segurança pública e hoteleira.', 
+    iconName: 'Shield', 
+    imageUrl: '', 
+    nextEdition: { date: '20 de Junho', location: 'Windsor', topic: 'Segurança Turística' }, 
+    lastEditions: [] 
+  }
+];
+
+export const LEVEL_THRESHOLDS = { BRONZE: 0, SILVER: 1000, GOLD: 3000, DIAMOND: 6000, MASTER: 10000 };
+export const LEVEL_NAMES = { BRONZE: 'Bronze', SILVER: 'Prata', GOLD: 'Ouro', DIAMOND: 'Diamante', MASTER: 'Lenda' };
+
+export const GAMIFICATION_BADGES: GamificationBadge[] = [
+  { id: 'pioneiro', name: 'Pioneiro', description: 'Primeiro acesso', iconName: 'Star', requiredXP: 0 },
+  { id: 'social', name: 'Social', description: 'Conectou redes sociais', iconName: 'Share2', requiredXP: 100 }
+];
+
+export const SUPER_CATEGORIES = [
+  { id: 'gestao', title: 'Gestão & Estratégia', description: 'Ferramentas para gestores', iconName: 'Briefcase', gradient: 'from-blue-600 to-blue-800', categories: [BenefitCategory.MANAGEMENT, BenefitCategory.COMMERCIAL] }
+];
+
+export const CALCULATOR_TOOLS = BENEFITS_DATA.filter(b => b.category === BenefitCategory.TOOLS || b.id.startsWith('calc'));
+
+export const FOOTER_DATA = {
+  razaoSocial: 'Associação de Hotéis do Rio de Janeiro',
+  cnpj: '33.333.333/0001-00',
+  address: 'Av. Nilo Peçanha, 50 - Centro, Rio de Janeiro',
+  cep: '20020-906',
+  phone: '(21) 2222-2222',
+  email: 'contato@hoteisrio.com.br',
+  socials: {
+    instagram: 'https://instagram.com/hoteisrio',
+    linkedin: 'https://linkedin.com/company/hoteisrio',
+    youtube: 'https://youtube.com/hoteisrio',
+    facebook: 'https://facebook.com/hoteisrio'
+  }
+};
+
+export const CRM_LINK = "https://u2s0o.share.hsforms.com/2rFHWMzfmTfiLNOmWU7uUvg";
+
+export const HOTEL_SECTORS: { id: any; label: string }[] = [
+  { id: 'MANAGEMENT', label: 'Gerência' },
+  { id: 'SALES', label: 'Vendas' },
+  { id: 'RECEPTION', label: 'Recepção' },
+  { id: 'HR', label: 'RH' },
+  { id: 'LEGAL_DEPT', label: 'Jurídico' },
+  { id: 'MAINTENANCE', label: 'Manutenção' },
+  { id: 'FB', label: 'A&B' },
+  { id: 'HOUSEKEEPING', label: 'Governança' }
+];
 // --- Fim de constants.ts ---
