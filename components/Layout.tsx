@@ -9,7 +9,7 @@ import {
   Menu, X, LogOut, User as UserIcon, Bell, 
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
-  MessageCircle, Phone, Shield, UserCog
+  MessageCircle, Phone, Shield, UserCog, Camera
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -106,6 +106,10 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button onClick={() => onNavigate('COURSES_V2')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
+                </button>
+
+                <button onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores & Creators</span>
                 </button>
 
                 <button onClick={() => onNavigate('SECURITY_PAGE')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>

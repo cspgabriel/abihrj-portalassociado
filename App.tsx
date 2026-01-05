@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -96,6 +97,18 @@ export default function App() {
   };
 
   const handleBenefitClick = (benefit: Benefit) => {
+    // --- SPECIAL CASE: Curso Bebidas Falsas ---
+    if (benefit.id === 'highlight-drinks') {
+        // Atualiza a URL para abrir o modal do curso específico
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.set('view', 'courses-v2');
+        newUrl.searchParams.set('courseId', 'course-drinks');
+        window.history.pushState({}, '', newUrl);
+        
+        navigateTo('COURSES_V2');
+        return;
+    }
+
     // --- FORCED INTERNAL NAVIGATION FOR SPECIFIC IDS ---
     const forceInternalIds = [
         'juridico-01', 
@@ -105,7 +118,8 @@ export default function App() {
         'registration-update',
         'leis-decretos-app',
         'planejador-feriados-2026', 
-        'portal-fornecedores-new'
+        'portal-fornecedores-new',
+        'influencers-hub'
     ];
 
     if (forceInternalIds.includes(benefit.id)) {
@@ -410,4 +424,3 @@ export default function App() {
     </Layout>
   );
 }
-// --- Fim de App.tsx ---

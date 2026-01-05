@@ -19,7 +19,6 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
       'natal-2025', 
       'highlight-drinks', 
       'highlight-rir', 
-      'highlight-job-fair', 
       'highlight-events-reg',
       'portal-fornecedores-new',
       'leis-decretos-app'
