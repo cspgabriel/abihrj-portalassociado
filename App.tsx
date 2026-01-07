@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -37,38 +38,46 @@ import InteractiveTutorial from './components/InteractiveTutorial';
 import AiAssistant from './components/AiAssistant';
 import Footer from './components/Footer';
 
-import { Loader2, LogIn } from 'lucide-react';
+import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState('LANDING_PAGE');
   
-  // State for navigation data
   const [selectedBenefit, setSelectedBenefit] = useState<Benefit | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedForum, setSelectedForum] = useState<Forum | null>(null);
 
-  // Modal States
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showBenefitModal, setShowBenefitModal] = useState(false);
   
-  // Login Form State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const [authSuccess, setAuthSuccess] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [regName, setRegName] = useState('');
   const [regHotel, setRegHotel] = useState('');
 
   useEffect(() => {
+    const safetyTimer = setTimeout(() => {
+      if (loading) setLoading(false);
+    }, 5000);
+
     const unsubscribe = authService.subscribeToAuthChanges((u) => {
       setUser(u);
       setLoading(false);
+      clearTimeout(safetyTimer);
     });
-    return () => unsubscribe();
+    
+    return () => {
+      unsubscribe();
+      clearTimeout(safetyTimer);
+    };
   }, []);
 
   const navigateTo = (view: string) => {
@@ -84,8 +93,13 @@ export default function App() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError('');
+    setAuthSuccess('');
     try {
-      if (isRegistering) {
+      if (isForgotPassword) {
+        await authService.sendPasswordReset(email);
+        setAuthSuccess('E-mail de recuperação enviado com sucesso!');
+        setIsForgotPassword(false);
+      } else if (isRegistering) {
          await authService.register(email, password, regName, regHotel, 'Associado');
       } else {
          await authService.login(email, password);
@@ -96,31 +110,12 @@ export default function App() {
   };
 
   const handleBenefitClick = (benefit: Benefit) => {
-    // --- SPECIAL CASE: Curso Bebidas Falsas ---
     if (benefit.id === 'highlight-drinks') {
-        // Atualiza a URL para abrir o modal do curso específico
-        const newUrl = new URL(window.location.href);
-        newUrl.searchParams.set('view', 'courses-v2');
-        newUrl.searchParams.set('courseId', 'course-drinks');
-        window.history.pushState({}, '', newUrl);
-        
         navigateTo('COURSES_V2');
         return;
     }
 
-    // --- FORCED INTERNAL NAVIGATION FOR SPECIFIC IDS ---
-    const forceInternalIds = [
-        'juridico-01', 
-        'public-order-01', 
-        'calendar-2026', 
-        'occupancy-reports',
-        'registration-update',
-        'leis-decretos-app',
-        'planejador-feriados-2026', 
-        'portal-fornecedores-new',
-        'influencers-hub',
-        'clipping-service'
-    ];
+    const forceInternalIds = ['juridico-01', 'public-order-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service'];
 
     if (forceInternalIds.includes(benefit.id)) {
         setSelectedBenefit(benefit);
@@ -128,52 +123,25 @@ export default function App() {
         return;
     }
 
-    // --- SPECIAL CASE: Cadastro de Grandes Eventos (Show Info First) ---
-    if (benefit.id === 'highlight-events-reg') {
-        // Se ainda não estiver na página de detalhes, vai para ela.
-        // Se já estiver (clicou no botão de ação dentro da página), executa o link padrão abaixo.
-        if (currentView !== 'BENEFIT_DETAILS' || selectedBenefit?.id !== benefit.id) {
-            setSelectedBenefit(benefit);
-            navigateTo('BENEFIT_DETAILS');
-            return;
-        }
-    }
-
     if (benefit.isService) {
-       // Check for general embed/dashboard capability
        if (benefit.embedUrl || benefit.dashboardUrl) {
            setSelectedBenefit(benefit);
            navigateTo('SERVICE_VIEWER');
            return;
        }
-
        if (benefit.id === 'calendar-01') {
            setShowCalendarModal(true);
            return;
        }
-       
        if (benefit.id.startsWith('calc-') || benefit.id === 'calculators-hub') {
-           if (benefit.id === 'calculators-hub') {
-             navigateTo('CALCULATORS_PAGE');
-           } else {
-             setSelectedBenefit(benefit);
-             setShowCalculatorModal(true);
-           }
+           if (benefit.id === 'calculators-hub') navigateTo('CALCULATORS_PAGE');
+           else { setSelectedBenefit(benefit); setShowCalculatorModal(true); }
            return;
        } 
-       
-       if (benefit.id === 'courses-v2') {
-           navigateTo('COURSES_V2');
-           return;
-       } 
-       
-       if (benefit.externalLink) {
-           window.open(benefit.externalLink, '_blank');
-       } else if (benefit.downloadUrl) {
-           window.open(benefit.downloadUrl, '_blank');
-       }
+       if (benefit.id === 'courses-v2') { navigateTo('COURSES_V2'); return; } 
+       if (benefit.externalLink) window.open(benefit.externalLink, '_blank');
+       else if (benefit.downloadUrl) window.open(benefit.downloadUrl, '_blank');
     } else {
-       // View Details Page
        setSelectedBenefit(benefit);
        navigateTo('BENEFIT_DETAILS');
     }
@@ -181,8 +149,9 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="w-8 h-8 animate-spin text-rio-blue" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+        <Loader2 className="w-10 h-10 animate-spin text-rio-blue mb-4" />
+        <p className="text-rio-blue font-medium animate-pulse">Carregando informações...</p>
       </div>
     );
   }
@@ -194,88 +163,87 @@ export default function App() {
            <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
                 <div className="bg-rio-blue p-4 rounded-xl shadow-lg shadow-blue-100">
-                    <img 
-                      src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-                      alt="HoteisRio" 
-                      className="h-12 w-auto" 
-                    />
+                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-12 w-auto" />
                 </div>
               </div>
-              <h1 className="text-2xl font-bold text-gray-800">Portal do Associado</h1>
-              <p className="text-gray-500 text-sm">Acesse sua central de benefícios exclusiva.</p>
+              <h1 className="text-2xl font-bold text-gray-800">
+                {isForgotPassword ? 'Recuperar Senha' : 'Portal do Associado'}
+              </h1>
+              <p className="text-gray-500 text-sm">
+                {isForgotPassword ? 'Enviaremos um link de redefinição para seu e-mail.' : 'Acesse sua central de benefícios exclusiva.'}
+              </p>
            </div>
            
            <form onSubmit={handleLogin} className="space-y-4">
-              {isRegistering && (
+              {isRegistering && !isForgotPassword && (
                 <>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                    <input 
-                      type="text" 
-                      required 
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
-                      value={regName}
-                      onChange={e => setRegName(e.target.value)}
-                    />
+                    <input type="text" required className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={regName} onChange={e => setRegName(e.target.value)} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Hotel</label>
-                    <input 
-                      type="text" 
-                      required 
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
-                      value={regHotel}
-                      onChange={e => setRegHotel(e.target.value)}
-                    />
+                    <input type="text" required className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={regHotel} onChange={e => setRegHotel(e.target.value)} />
                   </div>
                 </>
               )}
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">E-mail Corporativo</label>
-                <input 
-                  type="email" 
-                  required 
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="seu.nome@hotel.com.br"
-                />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                  <input type="email" required className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={email} onChange={e => setEmail(e.target.value)} placeholder="seu.nome@hotel.com.br" />
+                </div>
               </div>
               
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-                <input 
-                  type="password" 
-                  required 
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-              </div>
+              {!isForgotPassword && (
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-medium text-gray-700">Senha</label>
+                    <button 
+                      type="button"
+                      onClick={() => setIsForgotPassword(true)}
+                      className="text-xs text-rio-blue hover:underline font-semibold"
+                    >
+                      Esqueceu a senha?
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <Key className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                    <input type="password" required className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={password} onChange={e => setPassword(e.target.value)} />
+                  </div>
+                </div>
+              )}
 
               {authError && (
-                <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+                <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100 animate-shake">
                   {authError}
                 </div>
               )}
 
-              <button 
-                type="submit" 
-                className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-              >
-                <LogIn className="w-5 h-5" />
-                {isRegistering ? 'Criar Conta' : 'Entrar'}
+              {authSuccess && (
+                <div className="bg-green-50 text-green-700 text-sm p-3 rounded-lg border border-green-100 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  {authSuccess}
+                </div>
+              )}
+
+              <button type="submit" className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                {isForgotPassword ? <Mail className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                {isForgotPassword ? 'Enviar E-mail' : isRegistering ? 'Criar Conta' : 'Entrar'}
               </button>
            </form>
            
            <div className="mt-6 text-center text-sm">
-             <button 
-               onClick={() => { setIsRegistering(!isRegistering); setAuthError(''); }}
-               className="text-rio-blue hover:underline font-medium"
-             >
-               {isRegistering ? 'Já tenho conta. Fazer Login.' : 'Não tem acesso? Cadastre-se.'}
-             </button>
+             {isForgotPassword ? (
+               <button onClick={() => { setIsForgotPassword(false); setAuthError(''); setAuthSuccess(''); }} className="text-rio-blue hover:underline font-medium flex items-center justify-center gap-1 mx-auto">
+                 <ArrowLeft className="w-4 h-4" /> Voltar para o Login
+               </button>
+             ) : (
+               <button onClick={() => { setIsRegistering(!isRegistering); setAuthError(''); setAuthSuccess(''); }} className="text-rio-blue hover:underline font-medium">
+                 {isRegistering ? 'Já tenho conta. Fazer Login.' : 'Não tem acesso? Cadastre-se.'}
+               </button>
+             )}
            </div>
         </div>
       </div>
@@ -284,139 +252,35 @@ export default function App() {
 
   const renderContent = () => {
     switch (currentView) {
-      case 'LANDING_PAGE':
-        return (
-          <LandingPage 
-             userName={user.name} 
-             onNavigate={navigateTo} 
-             onBenefitClick={handleBenefitClick}
-          />
-        );
-      case 'MODERN_DASHBOARD':
-        return (
-          <ModernDashboard 
-             user={user} 
-             onUseBenefit={handleBenefitClick}
-             onViewDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }}
-          />
-        );
-      case 'ALL_BENEFITS':
-        return (
-          <AllBenefitsPage 
-             onBack={() => navigateTo('LANDING_PAGE')}
-             onUse={handleBenefitClick}
-             onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }}
-          />
-        );
-      case 'BENEFIT_DETAILS':
-        return selectedBenefit ? (
-          <BenefitPage 
-             benefit={selectedBenefit} 
-             onBack={() => navigateTo('ALL_BENEFITS')}
-             onUse={handleBenefitClick}
-          />
-        ) : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'SERVICE_VIEWER':
-        return selectedBenefit ? (
-          <ServiceViewerPage 
-             benefit={selectedBenefit} 
-             onBack={() => navigateTo('ALL_BENEFITS')}
-          />
-        ) : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'CATEGORY_LISTING':
-        return (
-          <CategoryListingPage 
-             categoryId={selectedCategory} 
-             onBack={() => navigateTo('MODERN_DASHBOARD')}
-             onUse={handleBenefitClick}
-             onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }}
-          />
-        );
-      case 'SECURITY_PAGE':
-        return (
-          <SecurityPage 
-             onBack={() => navigateTo('LANDING_PAGE')}
-             onReport={() => {
-                // Temporary mock benefit for reporting logic to redirect to service viewer with public order url
-                const publicOrderBenefit = { 
-                   id: 'public-order-01', 
-                   title: 'Ordem Pública',
-                   embedUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIODEDEMANDASORDEMPBLICA/formperma/w7kNge34KkPE0pW9ocbnDA94ax7dElQK84wqpNtKIo8',
-                   isService: true
-                } as Benefit; 
-                setSelectedBenefit(publicOrderBenefit);
-                navigateTo('SERVICE_VIEWER');
-             }}
-          />
-        );
-      case 'FORUMS_OVERVIEW':
-        return (
-          <ForumsOverviewPage 
-             onBack={() => navigateTo('LANDING_PAGE')}
-             onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }}
-          />
-        );
-      case 'FORUM_DETAILS':
-        return selectedForum ? (
-          <ForumPage 
-             forum={selectedForum} 
-             onBack={() => navigateTo('FORUMS_OVERVIEW')}
-             onRegisterUpdate={() => navigateTo('REGISTRATION_UPDATE')}
-          />
-        ) : <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
-      case 'ASSOCIATION_EVENTS':
-        return <AssociationEventsPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'WHATSAPP_GROUPS':
-        return <WhatsAppGroupsPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'CONTACTS':
-        return <ContactsPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'LAWS_REGULATION':
-        return <LawsRegulationPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'PLATFORM_TUTORIAL':
-        return <PlatformTutorial onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'ROCK_IN_RIO':
-        return <RockInRioPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'CALCULATORS_PAGE':
-        return (
-          <CalculatorsPage 
-             onBack={() => navigateTo('LANDING_PAGE')} 
-             onOpenCalculator={(b) => { setSelectedBenefit(b); setShowCalculatorModal(true); }}
-          />
-        );
-      case 'REGISTRATION_UPDATE':
-        return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'COURSES_V2':
-        return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'BENEFIT_CATEGORIZER':
-        return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'ADMIN_PANEL':
-        return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
-      default:
-        return (
-          <LandingPage 
-             userName={user.name} 
-             onNavigate={navigateTo} 
-             onBenefitClick={handleBenefitClick}
-          />
-        );
+      case 'LANDING_PAGE': return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
+      case 'MODERN_DASHBOARD': return <ModernDashboard user={user} onUseBenefit={handleBenefitClick} onViewDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'ALL_BENEFITS': return <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} onReport={() => { const publicOrderBenefit = { id: 'public-order-01', title: 'Ordem Pública', embedUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIODEDEMANDASORDEMPBLICA/formperma/w7kNge34KkPE0pW9ocbnDA94ax7dElQK84wqpNtKIo8', isService: true } as Benefit; setSelectedBenefit(publicOrderBenefit); navigateTo('SERVICE_VIEWER'); }} />;
+      case 'FORUMS_OVERVIEW': return <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
+      case 'FORUM_DETAILS': return selectedForum ? <ForumPage forum={selectedForum} onBack={() => navigateTo('FORUMS_OVERVIEW')} onRegisterUpdate={() => navigateTo('REGISTRATION_UPDATE')} /> : <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
+      case 'ASSOCIATION_EVENTS': return <AssociationEventsPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'WHATSAPP_GROUPS': return <WhatsAppGroupsPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'CONTACTS': return <ContactsPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'LAWS_REGULATION': return <LawsRegulationPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'PLATFORM_TUTORIAL': return <PlatformTutorial onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'ROCK_IN_RIO': return <RockInRioPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'CALCULATORS_PAGE': return <CalculatorsPage onBack={() => navigateTo('LANDING_PAGE')} onOpenCalculator={(b) => { setSelectedBenefit(b); setShowCalculatorModal(true); }} />;
+      case 'REGISTRATION_UPDATE': return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'COURSES_V2': return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'ADMIN_PANEL': return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
+      default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout 
-      user={user} 
-      onLogout={handleLogout} 
-      onNavigate={navigateTo}
-      onBenefitClick={handleBenefitClick}
-      currentView={currentView}
-      isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER'].includes(currentView)}
-    >
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER'].includes(currentView)}>
        {renderContent()}
-       
        <Footer />
        <AiAssistant />
-
-       {/* Modals */}
        {showCalendarModal && <CalendarModal onClose={() => setShowCalendarModal(false)} />}
        {showCalculatorModal && <CalculatorModal onClose={() => setShowCalculatorModal(false)} benefit={selectedBenefit || undefined} />}
        {showTutorial && <InteractiveTutorial onClose={() => setShowTutorial(false)} />}
@@ -424,4 +288,3 @@ export default function App() {
     </Layout>
   );
 }
-// --- Fim de App.tsx ---
