@@ -36,6 +36,19 @@ export const BENEFITS_DATA: Benefit[] = [
 
   // --- MARKETING & COMUNICAÇÃO ---
   {
+    id: 'clipping-service',
+    title: 'Clipping HoteisRio',
+    description: 'Monitoramento diário de notícias e menções sobre a hotelaria carioca na mídia.',
+    category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'SALES', 'LEGAL_DEPT'],
+    iconName: 'FileSearch',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://clippings-hoteisrioo.vercel.app/',
+    customCta: 'Ler Clipping'
+  },
+  {
     id: 'influencers-hub',
     title: 'Influenciadores & Creators',
     description: 'Conecte-se com criadores de conteúdo e influenciadores digitais parceiros para divulgar sua marca.',

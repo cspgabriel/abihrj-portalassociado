@@ -118,7 +118,8 @@ export default function App() {
         'leis-decretos-app',
         'planejador-feriados-2026', 
         'portal-fornecedores-new',
-        'influencers-hub'
+        'influencers-hub',
+        'clipping-service'
     ];
 
     if (forceInternalIds.includes(benefit.id)) {
