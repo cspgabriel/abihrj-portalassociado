@@ -10,7 +10,7 @@ import {
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-  Users, Search, MessageSquarePlus
+  Users, Search, MessageSquarePlus, Globe, Presentation
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -145,6 +145,10 @@ const Layout: React.FC<LayoutProps> = ({
                     <MessageSquarePlus className="w-4 h-4 shrink-0" /> <span className="truncate">Enviar Sugestão de Pauta</span>
                 </button>
 
+                <button onClick={() => handleOpenBenefit('portal-fornecedores-new')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
+                </button>
+
                 <button onClick={() => onNavigate('FORUMS_OVERVIEW')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'FORUMS_OVERVIEW' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Fóruns da Hotelaria</span>
                 </button>
@@ -153,16 +157,12 @@ const Layout: React.FC<LayoutProps> = ({
                     <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores & Creators</span>
                 </button>
 
-                <button onClick={() => onNavigate('SECURITY_PAGE')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
-                    <Shield className="w-4 h-4 shrink-0" /> <span className="truncate">Órgãos de Segurança</span>
-                </button>
-
-                <button onClick={() => handleOpenBenefit('portal-fornecedores-new')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
-                </button>
-
                 <button onClick={() => handleOpenBenefit('leis-decretos-app')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Leis e Decretos RJ</span>
+                </button>
+
+                <button onClick={() => onNavigate('SECURITY_PAGE')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <Shield className="w-4 h-4 shrink-0" /> <span className="truncate">Órgãos de Segurança</span>
                 </button>
 
                 <button onClick={() => handleOpenBenefit('occupancy-reports')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
@@ -171,6 +171,27 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button onClick={() => onNavigate('ROCK_IN_RIO')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'ROCK_IN_RIO' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Music className="w-4 h-4 shrink-0" /> <span className="truncate">Rock in Rio 2026</span>
+                </button>
+            </div>
+
+            <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
+
+            {/* AÇÕES COMERCIAIS (NEW) */}
+            <div className="px-1 space-y-1">
+                <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-2 mt-2">
+                    AÇÕES COMERCIAIS
+                </div>
+
+                <button onClick={() => handleOpenBenefit('commercial-xp-rio')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Sparkles className="w-4 h-4 shrink-0" /> <span className="truncate">Experiência Rio</span>
+                </button>
+
+                <button onClick={() => handleOpenBenefit('commercial-fairs')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Globe className="w-4 h-4 shrink-0" /> <span className="truncate">Inscrições em Feiras</span>
+                </button>
+
+                <button onClick={() => handleOpenBenefit('commercial-procap')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Presentation className="w-4 h-4 shrink-0" /> <span className="truncate">PROCAP - Capacitação</span>
                 </button>
             </div>
 
