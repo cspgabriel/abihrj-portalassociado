@@ -53,20 +53,6 @@ const Layout: React.FC<LayoutProps> = ({
     }
   };
 
-  // Lógica inteligente para o botão Voltar
-  const handleBack = () => {
-    if (currentView === 'BENEFIT_DETAILS' || currentView === 'SERVICE_VIEWER') {
-        onNavigate('ALL_BENEFITS');
-    } else if (currentView === 'FORUM_DETAILS') {
-        onNavigate('FORUMS_OVERVIEW');
-    } else {
-        onNavigate('DASHBOARD');
-    }
-  };
-
-  // Mostrar botão apenas se não estiver nas telas iniciais
-  const showBackButton = currentView !== 'LANDING_PAGE' && currentView !== 'DASHBOARD' && currentView !== 'MODERN_DASHBOARD';
-
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       <div className="p-6 flex justify-center">
@@ -208,6 +194,59 @@ const Layout: React.FC<LayoutProps> = ({
           <LogOut className="w-5 h-5 shrink-0" />
           Sair
         </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-rio-blue text-white shadow-xl transform transition-transform duration-300 ease-in-out
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <SidebarContent />
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Topbar */}
+        <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-8 shrink-0 relative z-30">
+          <button 
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="lg:hidden text-gray-600 hover:text-rio-blue p-2 -ml-2"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+
+          <div className="flex items-center gap-4 ml-auto">
+             <div className="hidden md:flex flex-col items-end mr-2">
+               <span className="text-sm font-bold text-gray-800">{user.name}</span>
+               <span className="text-xs text-gray-500">{user.hotel}</span>
+             </div>
+             
+             {user.avatarUrl ? (
+               <img src={user.avatarUrl} alt="Profile" className="w-10 h-10 rounded-full border-2 border-gray-100" />
+             ) : (
+               <div className="w-10 h-10 rounded-full bg-blue-100 text-rio-blue flex items-center justify-center font-bold border border-blue-200">
+                 <UserIcon className="w-5 h-5" />
+               </div>
+             )}
+          </div>
+        </header>
+
+        {/* Main Scrollable Area */}
+        <main 
+          id="main-content" 
+          className={`flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 scroll-smooth ${isFullPage ? 'p-0' : ''}`}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );
