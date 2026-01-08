@@ -1,14 +1,16 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Layout principal com Sidebar e Topbar
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Benefit } from '../types';
 import { 
   Menu, X, LogOut, User as UserIcon, Bell, 
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
-  MessageCircle, Phone, Shield, UserCog, Camera, FileSearch
+  MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
+  Users, Search, MessageSquarePlus
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -33,6 +35,16 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Lógica de Correção de Scroll
+  useEffect(() => {
+    // Busca o elemento principal de conteúdo
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      // Força o scroll para o topo (0)
+      mainContent.scrollTop = 0;
+    }
+  }, [currentView]); // Executa sempre que a visualização (currentView) mudar
+
   const handleOpenBenefit = (benefitId: string) => {
     const benefit = BENEFITS_DATA.find(b => b.id === benefitId);
     if (benefit) {
@@ -40,6 +52,20 @@ const Layout: React.FC<LayoutProps> = ({
       setIsMobileMenuOpen(false);
     }
   };
+
+  // Lógica inteligente para o botão Voltar
+  const handleBack = () => {
+    if (currentView === 'BENEFIT_DETAILS' || currentView === 'SERVICE_VIEWER') {
+        onNavigate('ALL_BENEFITS');
+    } else if (currentView === 'FORUM_DETAILS') {
+        onNavigate('FORUMS_OVERVIEW');
+    } else {
+        onNavigate('DASHBOARD');
+    }
+  };
+
+  // Mostrar botão apenas se não estiver nas telas iniciais
+  const showBackButton = currentView !== 'LANDING_PAGE' && currentView !== 'DASHBOARD' && currentView !== 'MODERN_DASHBOARD';
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
@@ -90,6 +116,10 @@ const Layout: React.FC<LayoutProps> = ({
                 <button onClick={() => handleOpenBenefit('juridico-01')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Assessoria Jurídica</span>
                 </button>
+                
+                <button onClick={() => handleOpenBenefit('banco-talentos')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Banco de Talentos</span>
+                </button>
 
                 <button onClick={() => handleOpenBenefit('highlight-events-reg')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <FileText className="w-4 h-4 shrink-0" /> <span className="truncate">Cadastro de Grandes Eventos</span>
@@ -111,6 +141,14 @@ const Layout: React.FC<LayoutProps> = ({
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
                 </button>
                 
+                <button onClick={() => handleOpenBenefit('sugestao-pauta')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <MessageSquarePlus className="w-4 h-4 shrink-0" /> <span className="truncate">Enviar Sugestão de Pauta</span>
+                </button>
+
+                <button onClick={() => onNavigate('FORUMS_OVERVIEW')} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'FORUMS_OVERVIEW' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Fóruns da Hotelaria</span>
+                </button>
+
                 <button onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores & Creators</span>
                 </button>
@@ -173,7 +211,7 @@ const Layout: React.FC<LayoutProps> = ({
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Sidebar Desktop */}
-      <aside className="hidden md:block w-72 bg-rio-blue h-full shadow-2xl z-20 overflow-hidden">
+      <aside className="hidden md:block w-72 bg-rio-blue h-full shadow-2xl z-20 overflow-hidden shrink-0">
         <SidebarContent />
       </aside>
 
@@ -197,7 +235,7 @@ const Layout: React.FC<LayoutProps> = ({
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Topbar */}
         {!isFullPage && (
-          <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shrink-0">
+          <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shrink-0 relative z-10 gap-4">
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
@@ -213,6 +251,32 @@ const Layout: React.FC<LayoutProps> = ({
                     className="h-8 w-auto bg-rio-blue p-1 rounded"
                  />
               </div>
+
+              {/* Back Button - Visible on Desktop & Mobile (if not Home) */}
+              {showBackButton && (
+                <button 
+                  onClick={handleBack}
+                  className="flex items-center gap-2 text-gray-500 hover:text-rio-blue hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors font-bold text-sm"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  <span className="hidden sm:inline">Voltar</span>
+                </button>
+              )}
+            </div>
+            
+            {/* Search Bar (Centered/Flexible) */}
+            <div className="hidden md:flex flex-1 max-w-md mx-4 relative">
+                <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input 
+                    type="text" 
+                    placeholder="Buscar benefício..." 
+                    className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 focus:bg-white focus:border-rio-blue rounded-lg text-sm transition-all outline-none"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            onNavigate('ALL_BENEFITS');
+                        }
+                    }}
+                />
             </div>
 
             <div className="flex items-center gap-4">
@@ -238,8 +302,11 @@ const Layout: React.FC<LayoutProps> = ({
           </header>
         )}
 
-        {/* Page Content */}
-        <main className={`flex-1 overflow-y-auto ${!isFullPage ? 'p-0' : ''}`}>
+        {/* Page Content with ID for Scrolling */}
+        <main 
+            id="main-content"
+            className={`flex-1 overflow-y-auto scroll-smooth ${!isFullPage ? 'p-0' : ''}`}
+        >
            {children}
         </main>
       </div>
@@ -248,4 +315,3 @@ const Layout: React.FC<LayoutProps> = ({
 };
 
 export default Layout;
-// --- Fim de components/Layout.tsx ---

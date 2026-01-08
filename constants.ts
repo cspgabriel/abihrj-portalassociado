@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Constantes e dados estáticos da aplicação
@@ -35,6 +36,19 @@ export const BENEFITS_DATA: Benefit[] = [
   },
 
   // --- MARKETING & COMUNICAÇÃO ---
+  {
+    id: 'sugestao-pauta',
+    title: 'Enviar Sugestão de Pauta',
+    description: 'Contribua com temas relevantes para os próximos fóruns e reuniões da hotelaria.',
+    category: BenefitCategory.COMMUNICATION,
+    targetSectors: ['MANAGEMENT', 'SALES', 'HR', 'SECURITY'],
+    iconName: 'MessageSquarePlus',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIOESCOLHAOFRUMEMQUEDESEJASUGERIRTEMAS/formperma/uljenH3hU8MRUodJ40hZh_b7rG1vRqgWhxs6MJdJOis?_sc=NTI0ODkzNiM4NTQy',
+    customCta: 'Enviar Sugestão'
+  },
   {
     id: 'clipping-service',
     title: 'Clipping HoteisRio',
@@ -103,6 +117,19 @@ export const BENEFITS_DATA: Benefit[] = [
   },
 
   // --- FERRAMENTAS E SERVIÇOS ---
+  {
+    id: 'banco-talentos',
+    title: 'Banco de Talentos',
+    description: 'Plataforma exclusiva de currículos para hotelaria. Encontre os melhores profissionais.',
+    category: BenefitCategory.HR,
+    targetSectors: ['HR', 'MANAGEMENT'],
+    iconName: 'Users',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://talentos.sindhoteisrj.com.br/',
+    customCta: 'Acessar Currículos'
+  },
   {
     id: 'portal-fornecedores-new',
     title: 'Fornecedores para Hotéis',
@@ -180,7 +207,7 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'Megaphone',
     imageUrl: '',
     isService: true,
-    dashboardUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIODEDEMANDASORDEMPBLICA/formperma/w7kNge34KkPE0pW9ocbnDA94ax7dElQK84wqpNtKIo8',
+    // dashboardUrl REMOVED as requested
     customCta: 'Reportar Ocorrência'
   },
   {
@@ -254,7 +281,7 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: '',
     isService: true,
     isNew: true,
-    externalLink: 'https://bit.ly/QuestionarioEventosERJ',
+    embedUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdm5ehKWYpU3e70FTKUWUnaRget8l9l3d-Y-xU7qEnCABcCZA/viewform',
     customCta: 'Acessar Formulário',
     fullDetails: `Compromisso com o Turismo e a Segurança dos Eventos no Estado do Rio de Janeiro...` // (Mantido texto original mas abreviado aqui para brevidade do XML)
   },
@@ -431,12 +458,48 @@ export const RJ_LAWS_DATA = [
 
 export const FORUMS_DATA: Forum[] = [
   { 
+    id: 'forum-comercial', 
+    title: 'Fórum Comercial', 
+    description: 'Estratégias de vendas, revenue management e tendências de mercado.', 
+    iconName: 'TrendingUp', 
+    imageUrl: '', 
+    nextEdition: { date: 'Data a ser informada', location: 'A definir', topic: 'Inscrições em breve' }, 
+    lastEditions: [] 
+  },
+  { 
+    id: 'forum-rh', 
+    title: 'Fórum de RH e DP', 
+    description: 'Melhores práticas de gestão de pessoas, legislação trabalhista e retenção de talentos.', 
+    iconName: 'Users', 
+    imageUrl: '', 
+    nextEdition: { date: 'Data a ser informada', location: 'A definir', topic: 'Inscrições em breve' }, 
+    lastEditions: [] 
+  },
+  { 
     id: 'forum-seg', 
     title: 'Fórum de Segurança', 
-    description: 'Discussões sobre segurança pública e hoteleira.', 
+    description: 'Integração com forças policiais e protocolos de segurança hoteleira.', 
     iconName: 'Shield', 
     imageUrl: '', 
-    nextEdition: { date: '20 de Junho', location: 'Windsor', topic: 'Segurança Turística' }, 
+    nextEdition: { date: 'Data a ser informada', location: 'A definir', topic: 'Inscrições em breve' }, 
+    lastEditions: [] 
+  },
+  { 
+    id: 'forum-control', 
+    title: 'Fórum de Controladoria', 
+    description: 'Gestão financeira, auditoria, tributação e compliance.', 
+    iconName: 'PieChart', 
+    imageUrl: '', 
+    nextEdition: { date: 'Data a ser informada', location: 'A definir', topic: 'Inscrições em breve' }, 
+    lastEditions: [] 
+  },
+  { 
+    id: 'forum-ab', 
+    title: 'Fórum de A&B', 
+    description: 'Gestão de restaurantes, bares, custos e tendências gastronômicas.', 
+    iconName: 'Utensils', 
+    imageUrl: '', 
+    nextEdition: { date: 'Data a ser informada', location: 'A definir', topic: 'Inscrições em breve' }, 
     lastEditions: [] 
   }
 ];
@@ -482,4 +545,3 @@ export const HOTEL_SECTORS: { id: any; label: string }[] = [
   { id: 'FB', label: 'A&B' },
   { id: 'HOUSEKEEPING', label: 'Governança' }
 ];
-// --- Fim de constants.ts ---

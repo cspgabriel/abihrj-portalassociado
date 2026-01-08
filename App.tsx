@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -127,7 +128,7 @@ export default function App() {
         return;
     }
 
-    const forceInternalIds = ['juridico-01', 'public-order-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service'];
+    const forceInternalIds = ['juridico-01', 'public-order-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service', 'highlight-events-reg', 'sugestao-pauta'];
 
     if (forceInternalIds.includes(benefit.id)) {
         setSelectedBenefit(benefit);
