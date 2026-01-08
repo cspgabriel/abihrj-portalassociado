@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Benefit } from '../types';
-import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown, Globe, Presentation, Calendar } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { generateBenefitDetails } from '../services/geminiService';
 
@@ -41,6 +41,60 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
     } finally {
         setLoadingAi(false);
     }
+  };
+
+  const renderCommercialActions = () => {
+    const actions = [
+      {
+        id: 'feiras',
+        title: 'Inscrições em Feiras',
+        description: 'Participe dos estandes cooperados da HoteisRio em feiras nacionais e internacionais (WTM, ABAV, FIT, etc).',
+        link: 'https://hoteisrio.com.br/feiras',
+        icon: Globe,
+        color: 'bg-blue-100 text-blue-600'
+      },
+      {
+        id: 'procap',
+        title: 'PROCAP - Capacitação',
+        description: 'Projetos de capacitação e workshops junto a emissores, agentes de viagens e operadores de turismo.',
+        link: 'https://hoteisrio.com.br/procap',
+        icon: Presentation,
+        color: 'bg-green-100 text-green-600'
+      },
+      {
+        id: 'xp-rio',
+        title: 'Experiência Rio',
+        description: 'Ações de promoção do destino, famtours e experiências exclusivas para o trade turístico.',
+        link: 'https://hoteisrio.com.br/experiencia',
+        icon: Sparkles,
+        color: 'bg-purple-100 text-purple-600'
+      }
+    ];
+
+    return (
+      <div className="grid grid-cols-1 gap-6">
+        {actions.map(action => (
+          <div key={action.id} className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start hover:shadow-lg transition-shadow">
+             <div className={`p-4 rounded-xl ${action.color} shrink-0`}>
+                <action.icon className="w-8 h-8" />
+             </div>
+             <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{action.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">{action.description}</p>
+                <a 
+                  href={action.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-rio-blue hover:text-blue-800 transition-colors"
+                >
+                  Acessar e Inscrever-se
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+             </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -92,51 +146,58 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
         {/* Left Column (Content) */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Section: How it works */}
-          <div className="bg-white border border-gray-100 rounded-xl p-6 md:p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
-              <Info className="w-5 h-5 text-rio-blue" />
-              {benefit.id === 'highlight-events-reg' ? 'Carta Compromisso' : 'Como Funciona'}
-            </h2>
-            <div className="prose prose-blue text-gray-600 leading-relaxed">
-              {benefit.fullDetails ? (
-                <div className="whitespace-pre-line text-justify">{benefit.fullDetails}</div>
-              ) : (
-                <>
-                  <p>
-                    O benefício <strong>{benefit.title}</strong> é uma das iniciativas da HoteisRio para fortalecer 
-                    a hotelaria carioca. Este serviço foi desenhado para atender às necessidades específicas 
-                    da categoria {benefit.category.toLowerCase()}, oferecendo suporte prático e estratégico.
-                  </p>
-                  <p className="mt-4">
-                    Ao utilizar este recurso, seu hotel ganha agilidade nos processos e acesso a informações 
-                    privilegiadas do setor, garantindo maior competitividade no mercado do Rio de Janeiro.
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Section: Usage Steps */}
-          {benefit.usageSteps && benefit.usageSteps.length > 0 && (
-            <div className="bg-white border border-gray-100 rounded-xl p-6 md:p-8 shadow-sm">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
-                <FileText className="w-5 h-5 text-rio-blue" />
-                Como Utilizar: Passo a Passo
-              </h2>
-              <div className="space-y-6">
-                {benefit.usageSteps.map((step, index) => (
-                  <div key={index} className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-rio-blue text-white flex items-center justify-center font-bold text-sm shadow-md">
-                      {index + 1}
-                    </div>
-                    <div className="pt-1">
-                      <p className="text-gray-700 leading-relaxed">{step}</p>
-                    </div>
-                  </div>
-                ))}
+          {/* Custom Section for Commercial Actions */}
+          {benefit.id === 'commercial-actions' ? (
+             renderCommercialActions()
+          ) : (
+            <>
+              {/* Standard Content Section: How it works */}
+              <div className="bg-white border border-gray-100 rounded-xl p-6 md:p-8 shadow-sm">
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
+                  <Info className="w-5 h-5 text-rio-blue" />
+                  {benefit.id === 'highlight-events-reg' ? 'Carta Compromisso' : 'Como Funciona'}
+                </h2>
+                <div className="prose prose-blue text-gray-600 leading-relaxed">
+                  {benefit.fullDetails ? (
+                    <div className="whitespace-pre-line text-justify">{benefit.fullDetails}</div>
+                  ) : (
+                    <>
+                      <p>
+                        O benefício <strong>{benefit.title}</strong> é uma das iniciativas da HoteisRio para fortalecer 
+                        a hotelaria carioca. Este serviço foi desenhado para atender às necessidades específicas 
+                        da categoria {benefit.category.toLowerCase()}, oferecendo suporte prático e estratégico.
+                      </p>
+                      <p className="mt-4">
+                        Ao utilizar este recurso, seu hotel ganha agilidade nos processos e acesso a informações 
+                        privilegiadas do setor, garantindo maior competitividade no mercado do Rio de Janeiro.
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
+
+              {/* Section: Usage Steps */}
+              {benefit.usageSteps && benefit.usageSteps.length > 0 && (
+                <div className="bg-white border border-gray-100 rounded-xl p-6 md:p-8 shadow-sm">
+                  <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
+                    <FileText className="w-5 h-5 text-rio-blue" />
+                    Como Utilizar: Passo a Passo
+                  </h2>
+                  <div className="space-y-6">
+                    {benefit.usageSteps.map((step, index) => (
+                      <div key={index} className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-rio-blue text-white flex items-center justify-center font-bold text-sm shadow-md">
+                          {index + 1}
+                        </div>
+                        <div className="pt-1">
+                          <p className="text-gray-700 leading-relaxed">{step}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -147,18 +208,27 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
           <div className="bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 p-6">
             <h3 className="font-bold text-gray-800 mb-4 text-lg">Ações Disponíveis</h3>
             
-            <button 
-              onClick={() => onUse(benefit)}
-              className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-200 transition-all transform active:scale-95 flex items-center justify-center gap-2 mb-4"
-            >
-              {benefit.isService ? (benefit.customCta || 'Acessar Serviço Agora') : 'Solicitar Benefício'}
-              <ExternalLink className="w-4 h-4" />
-            </button>
+            {/* If commercial actions, specific text, otherwise standard button */}
+            {benefit.id === 'commercial-actions' ? (
+                <p className="text-sm text-gray-600 mb-4">
+                    Utilize os botões ao lado (ou acima no mobile) para acessar cada programa específico.
+                </p>
+            ) : (
+                <button 
+                onClick={() => onUse(benefit)}
+                className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-blue-200 transition-all transform active:scale-95 flex items-center justify-center gap-2 mb-4"
+                >
+                {benefit.isService ? (benefit.customCta || 'Acessar Serviço Agora') : 'Solicitar Benefício'}
+                <ExternalLink className="w-4 h-4" />
+                </button>
+            )}
 
             <div className="text-xs text-gray-500 text-center px-4 leading-relaxed">
-              {benefit.isService 
-                ? "Este botão abrirá a ferramenta oficial ou formulário de solicitação em uma nova janela ou modal." 
-                : "Ao solicitar, nossa equipe entrará em contato com você para dar prosseguimento."}
+              {benefit.id !== 'commercial-actions' && (
+                  benefit.isService 
+                    ? "Este botão abrirá a ferramenta oficial ou formulário de solicitação em uma nova janela ou modal." 
+                    : "Ao solicitar, nossa equipe entrará em contato com você para dar prosseguimento."
+              )}
             </div>
 
             <hr className="my-6 border-gray-100" />
@@ -171,7 +241,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-500" />
-                <span>Suporte Jurídico incluso</span>
+                <span>Suporte da equipe comercial</span>
               </li>
             </ul>
           </div>
