@@ -53,6 +53,20 @@ const Layout: React.FC<LayoutProps> = ({
     }
   };
 
+  // Lógica inteligente para o botão Voltar
+  const handleBack = () => {
+    if (currentView === 'BENEFIT_DETAILS' || currentView === 'SERVICE_VIEWER') {
+        onNavigate('ALL_BENEFITS');
+    } else if (currentView === 'FORUM_DETAILS') {
+        onNavigate('FORUMS_OVERVIEW');
+    } else {
+        onNavigate('DASHBOARD');
+    }
+  };
+
+  // Mostrar botão apenas se não estiver nas telas iniciais
+  const showBackButton = currentView !== 'LANDING_PAGE' && currentView !== 'DASHBOARD' && currentView !== 'MODERN_DASHBOARD';
+
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       <div className="p-6 flex justify-center">
@@ -99,10 +113,6 @@ const Layout: React.FC<LayoutProps> = ({
                     Principais Benefícios
                 </div>
 
-                <button onClick={() => handleOpenBenefit('commercial-actions')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-yellow-300 hover:bg-white/10 hover:text-white transition-all overflow-hidden font-bold">
-                    <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Ações Comerciais</span>
-                </button>
-
                 <button onClick={() => handleOpenBenefit('juridico-01')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Assessoria Jurídica</span>
                 </button>
@@ -115,7 +125,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <FileText className="w-4 h-4 shrink-0" /> <span className="truncate">Cadastro de Grandes Eventos</span>
                 </button>
 
-                <button onClick={() => handleOpenBenefit('calendar-2026')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                <button onClick={() => handleOpenBenefit('calendar-2026')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-yellow-300 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Sparkles className="w-4 h-4 shrink-0" /> <span className="truncate">Calendário de Eventos</span>
                 </button>
 
@@ -166,6 +176,27 @@ const Layout: React.FC<LayoutProps> = ({
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
 
+            {/* AÇÕES COMERCIAIS (NEW) */}
+            <div className="px-1 space-y-1">
+                <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-2 mt-2">
+                    AÇÕES COMERCIAIS
+                </div>
+
+                <button onClick={() => handleOpenBenefit('commercial-xp-rio')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Sparkles className="w-4 h-4 shrink-0" /> <span className="truncate">Experiência Rio</span>
+                </button>
+
+                <button onClick={() => handleOpenBenefit('commercial-fairs')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Globe className="w-4 h-4 shrink-0" /> <span className="truncate">Inscrições em Feiras</span>
+                </button>
+
+                <button onClick={() => handleOpenBenefit('commercial-procap')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Presentation className="w-4 h-4 shrink-0" /> <span className="truncate">PROCAP - Capacitação</span>
+                </button>
+            </div>
+
+            <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
+
             {/* CONEXÃO */}
             <div className="px-1 space-y-1">
                 <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-2 mt-2">
@@ -200,52 +231,104 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* Mobile Sidebar Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />
-      )}
-
-      {/* Sidebar */}
-      <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-rio-blue text-white shadow-xl transform transition-transform duration-300 ease-in-out
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+      {/* Sidebar Desktop */}
+      <aside className="hidden md:block w-72 bg-rio-blue h-full shadow-2xl z-20 overflow-hidden shrink-0">
         <SidebarContent />
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Topbar */}
-        <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-8 shrink-0 relative z-30">
-          <button 
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden text-gray-600 hover:text-rio-blue p-2 -ml-2"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-
-          <div className="flex items-center gap-4 ml-auto">
-             <div className="hidden md:flex flex-col items-end mr-2">
-               <span className="text-sm font-bold text-gray-800">{user.name}</span>
-               <span className="text-xs text-gray-500">{user.hotel}</span>
-             </div>
-             
-             {user.avatarUrl ? (
-               <img src={user.avatarUrl} alt="Profile" className="w-10 h-10 rounded-full border-2 border-gray-100" />
-             ) : (
-               <div className="w-10 h-10 rounded-full bg-blue-100 text-rio-blue flex items-center justify-center font-bold border border-blue-200">
-                 <UserIcon className="w-5 h-5" />
-               </div>
-             )}
-          </div>
-        </header>
-
-        {/* Main Scrollable Area */}
-        <main 
-          id="main-content" 
-          className={`flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 scroll-smooth ${isFullPage ? 'p-0' : ''}`}
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileMenuOpen(false)} />
+      )}
+      
+      {/* Mobile Sidebar */}
+      <aside className={`fixed top-0 left-0 bottom-0 w-72 bg-rio-blue z-50 transform transition-transform duration-300 md:hidden ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <button 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="absolute top-4 right-4 text-white hover:bg-white/10 p-2 rounded-full"
         >
-          {children}
+          <X className="w-6 h-6" />
+        </button>
+        <SidebarContent />
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
+        {/* Topbar */}
+        {!isFullPage && (
+          <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shrink-0 relative z-10 gap-4">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden text-gray-600 hover:bg-gray-100 p-2 rounded-lg"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+              
+              <div className="flex items-center gap-3 md:hidden">
+                 <img 
+                    src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
+                    alt="HoteisRio" 
+                    className="h-8 w-auto bg-rio-blue p-1 rounded"
+                 />
+              </div>
+
+              {/* Back Button - Visible on Desktop & Mobile (if not Home) */}
+              {showBackButton && (
+                <button 
+                  onClick={handleBack}
+                  className="flex items-center gap-2 text-gray-500 hover:text-rio-blue hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors font-bold text-sm"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  <span className="hidden sm:inline">Voltar</span>
+                </button>
+              )}
+            </div>
+            
+            {/* Search Bar (Centered/Flexible) */}
+            <div className="hidden md:flex flex-1 max-w-md mx-4 relative">
+                <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input 
+                    type="text" 
+                    placeholder="Buscar benefício..." 
+                    className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 focus:bg-white focus:border-rio-blue rounded-lg text-sm transition-all outline-none"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            onNavigate('ALL_BENEFITS');
+                        }
+                    }}
+                />
+            </div>
+
+            <div className="flex items-center gap-4">
+               <button className="relative p-2 text-gray-400 hover:text-rio-blue hover:bg-blue-50 rounded-full transition-all">
+                 <Bell className="w-5 h-5" />
+                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+               </button>
+               
+               <div className="flex items-center gap-3 pl-4 border-l border-gray-100">
+                  <div className="text-right hidden sm:block">
+                     <p className="text-sm font-bold text-gray-800 leading-none">{user.name}</p>
+                     <p className="text-xs text-gray-500 mt-1">{user.hotel}</p>
+                  </div>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border-2 border-white shadow-sm overflow-hidden">
+                     {user.avatarUrl ? (
+                       <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                     ) : (
+                       <UserIcon className="w-5 h-5 text-gray-400" />
+                     )}
+                  </div>
+               </div>
+            </div>
+          </header>
+        )}
+
+        {/* Page Content with ID for Scrolling */}
+        <main 
+            id="main-content"
+            className={`flex-1 overflow-y-auto scroll-smooth ${!isFullPage ? 'p-0' : ''}`}
+        >
+           {children}
         </main>
       </div>
     </div>

@@ -7,18 +7,45 @@ import { Benefit, BenefitCategory, Forum, GamificationBadge, RioEvent } from './
 import * as Icons from 'lucide-react';
 
 export const BENEFITS_DATA: Benefit[] = [
-  // --- AÇÕES COMERCIAIS (UNIFICADO) ---
+  // --- AÇÕES COMERCIAIS (NOVO) ---
   {
-    id: 'commercial-actions',
-    title: 'Ações Comerciais',
-    description: 'Central de inscrições para Feiras, PROCAP e Experiência Rio. Acesse o calendário oficial de promoção do destino.',
+    id: 'commercial-fairs',
+    title: 'Inscrições em Feiras',
+    description: 'Garanta sua participação nos estandes da HoteisRio em feiras nacionais e internacionais (WTM, ABAV, FIT, etc).',
     category: BenefitCategory.COMMERCIAL,
     targetSectors: ['SALES', 'MANAGEMENT'],
-    iconName: 'Briefcase', // Ícone genérico para a categoria
+    iconName: 'Globe',
     imageUrl: '',
-    isService: false, // Abre a página de detalhes customizada
+    isService: true,
     isNew: true,
-    customCta: 'Ver Calendário Comercial'
+    customCta: 'Ver Agenda de Feiras',
+    externalLink: 'https://hoteisrio.com.br/feiras' // Placeholder URL
+  },
+  {
+    id: 'commercial-procap',
+    title: 'PROCAP - Capacitação',
+    description: 'Inscreva-se nos projetos de capacitação junto a emissores, agentes e operadores de turismo.',
+    category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'MANAGEMENT'],
+    iconName: 'Presentation',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    customCta: 'Inscrever no PROCAP',
+    externalLink: 'https://hoteisrio.com.br/procap' // Placeholder URL
+  },
+  {
+    id: 'commercial-xp-rio',
+    title: 'Experiência Rio',
+    description: 'Participe das ações de promoção do destino e famtours exclusivos para mostrar o melhor do Rio.',
+    category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'MANAGEMENT', 'FB'],
+    iconName: 'Sparkles',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    customCta: 'Acessar Experiência Rio',
+    externalLink: 'https://hoteisrio.com.br/experiencia' // Placeholder URL
   },
 
   // --- CALENDÁRIOS ---
