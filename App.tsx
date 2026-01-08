@@ -1,4 +1,3 @@
-
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -94,18 +93,31 @@ export default function App() {
     e.preventDefault();
     setAuthError('');
     setAuthSuccess('');
+    setLoading(true); // Feedback visual imediato
+
     try {
+      let loggedUser: User | null = null;
+
       if (isForgotPassword) {
         await authService.sendPasswordReset(email);
         setAuthSuccess('E-mail de recuperação enviado com sucesso!');
         setIsForgotPassword(false);
+        setLoading(false);
+        return;
       } else if (isRegistering) {
-         await authService.register(email, password, regName, regHotel, 'Associado');
+         loggedUser = await authService.register(email, password, regName, regHotel, 'Associado');
       } else {
-         await authService.login(email, password);
+         loggedUser = await authService.login(email, password);
+      }
+
+      // Forçar atualização do estado imediatamente após sucesso
+      if (loggedUser) {
+        setUser(loggedUser);
       }
     } catch (err: any) {
       setAuthError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
