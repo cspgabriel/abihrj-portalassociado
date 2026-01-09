@@ -74,6 +74,7 @@ const Layout: React.FC<LayoutProps> = ({
             {/* PRINCIPAL SECTION */}
             <div className="mb-2 px-1">
                 <button 
+                id="sidebar-home"
                 onClick={() => { onNavigate('LANDING_PAGE'); setIsMobileMenuOpen(false); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mb-1
                     ${currentView === 'LANDING_PAGE'
@@ -86,6 +87,7 @@ const Layout: React.FC<LayoutProps> = ({
                 </button>
 
                 <button 
+                id="sidebar-all-benefits"
                 onClick={() => { onNavigate('ALL_BENEFITS'); setIsMobileMenuOpen(false); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
                     ${currentView === 'ALL_BENEFITS' 
@@ -110,7 +112,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <ShoppingBag className="w-4 h-4 shrink-0" /> <span className="truncate">Ações Comerciais</span>
                 </button>
 
-                <button onClick={() => handleOpenBenefit('juridico-01')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                <button id="sidebar-juridico" onClick={() => handleOpenBenefit('juridico-01')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Assessoria Jurídica</span>
                 </button>
                 
@@ -150,7 +152,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
                 </button>
 
-                <button onClick={() => { onNavigate('FORUMS_OVERVIEW'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'FORUMS_OVERVIEW' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                <button id="sidebar-forums" onClick={() => { onNavigate('FORUMS_OVERVIEW'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'FORUMS_OVERVIEW' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Fóruns da Hotelaria</span>
                 </button>
 
@@ -162,7 +164,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Leis e Decretos RJ</span>
                 </button>
 
-                <button onClick={() => { onNavigate('SECURITY_PAGE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                <button id="sidebar-security" onClick={() => { onNavigate('SECURITY_PAGE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Shield className="w-4 h-4 shrink-0" /> <span className="truncate">Órgãos de Segurança</span>
                 </button>
 
@@ -183,7 +185,7 @@ const Layout: React.FC<LayoutProps> = ({
                     CONEXÃO
                 </div>
                 
-                <button onClick={() => { onNavigate('WHATSAPP_GROUPS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'WHATSAPP_GROUPS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                <button id="sidebar-community" onClick={() => { onNavigate('WHATSAPP_GROUPS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'WHATSAPP_GROUPS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MessageCircle className="w-4 h-4 shrink-0" /> <span className="truncate">Grupos WhatsApp</span>
                 </button>
 
