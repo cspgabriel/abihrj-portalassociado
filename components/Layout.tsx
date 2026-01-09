@@ -127,6 +127,10 @@ const Layout: React.FC<LayoutProps> = ({
                 <button onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
                 </button>
+
+                <button onClick={() => handleOpenBenefit('public-order-01')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Megaphone className="w-4 h-4 shrink-0" /> <span className="truncate">Demandas de Ordem Pública</span>
+                </button>
                 
                 <button onClick={() => handleOpenBenefit('sugestao-pauta')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <MessageSquarePlus className="w-4 h-4 shrink-0" /> <span className="truncate">Enviar Sugestão de Pauta</span>

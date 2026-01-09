@@ -122,8 +122,7 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: '',
     isService: true,
     isNew: true,
-    embedUrl: 'https://influenciadores-digitais.vercel.app/#/search',
-    customCta: 'Acessar Hub'
+    customCta: 'Em Breve'
   },
 
   // --- LEGISLAÇÃO ---
@@ -257,7 +256,7 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'Megaphone',
     imageUrl: '',
     isService: true,
-    // dashboardUrl REMOVED as requested
+    externalLink: 'http://hoteisrio.com.br/ordem-publica',
     customCta: 'Reportar Ocorrência'
   },
   {
