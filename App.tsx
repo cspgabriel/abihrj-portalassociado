@@ -32,6 +32,7 @@ import BenefitCategorizerPage from './components/BenefitCategorizerPage';
 import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
+import PhotoGalleryPage from './components/PhotoGalleryPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -298,12 +299,13 @@ export default function App() {
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'PHOTO_GALLERY': return <PhotoGalleryPage onBack={() => navigateTo('LANDING_PAGE')} />;
       default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />

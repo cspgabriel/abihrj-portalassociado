@@ -10,7 +10,7 @@ import {
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle
+  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -154,6 +154,11 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button id="sidebar-forums" onClick={() => { onNavigate('FORUMS_OVERVIEW'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'FORUMS_OVERVIEW' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Fóruns da Hotelaria</span>
+                </button>
+
+                {/* NEW GALLERY LINK */}
+                <button id="sidebar-gallery" onClick={() => { onNavigate('PHOTO_GALLERY'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'PHOTO_GALLERY' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <Image className="w-4 h-4 shrink-0" /> <span className="truncate">Galeria de Fotos</span>
                 </button>
 
                 <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">

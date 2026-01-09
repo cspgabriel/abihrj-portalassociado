@@ -15,7 +15,7 @@ export const COMMERCIAL_SUB_ACTIONS = [
     buttonText: 'Inscrições em Breve!',
     link: 'https://hoteisrio.com.br/feiras',
     color: 'bg-blue-600',
-    textClass: 'text-blue-600', // Cor explícita para o ícone
+    textClass: 'text-blue-600',
     iconColor: 'text-blue-200'
   },
   {
@@ -26,7 +26,7 @@ export const COMMERCIAL_SUB_ACTIONS = [
     buttonText: 'Inscrições em Breve!',
     link: 'https://hoteisrio.com.br/procap',
     color: 'bg-indigo-600',
-    textClass: 'text-indigo-600', // Cor explícita para o ícone
+    textClass: 'text-indigo-600',
     iconColor: 'text-indigo-200'
   },
   {
@@ -37,8 +37,35 @@ export const COMMERCIAL_SUB_ACTIONS = [
     buttonText: 'Inscrições em Breve!',
     link: 'https://hoteisrio.com.br/experiencia',
     color: 'bg-pink-600',
-    textClass: 'text-pink-600', // Cor explícita para o ícone
+    textClass: 'text-pink-600',
     iconColor: 'text-pink-200'
+  }
+];
+
+export const GALLERY_EVENTS = [
+  {
+    id: 'gal-01',
+    title: 'Prêmio Top Hotel RJ 2025',
+    date: '10/02/2025',
+    coverUrl: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=400',
+    driveLink: '', // Vazio para testar o popup "Em breve"
+    photosCount: 120
+  },
+  {
+    id: 'gal-02',
+    title: 'Fórum Comercial - Janeiro 2025',
+    date: '15/01/2025',
+    coverUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=400',
+    driveLink: 'https://drive.google.com', // Link fictício
+    photosCount: 45
+  },
+  {
+    id: 'gal-natal',
+    title: 'Concurso de Decoração Natalina',
+    date: '25/12/2024',
+    coverUrl: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&q=80&w=400',
+    driveLink: 'https://votacaonatal.sindhoteisrj.com.br/?mode=gallery',
+    photosCount: 60
   }
 ];
 
@@ -615,5 +642,6 @@ export const HOTEL_SECTORS: { id: any; label: string }[] = [
   { id: 'LEGAL_DEPT', label: 'Jurídico' },
   { id: 'MAINTENANCE', label: 'Manutenção' },
   { id: 'FB', label: 'A&B' },
-  { id: 'HOUSEKEEPING', label: 'Governança' }
+  { id: 'HOUSEKEEPING', label: 'Governança' },
+  { id: 'SECURITY', label: 'Segurança' }
 ];
