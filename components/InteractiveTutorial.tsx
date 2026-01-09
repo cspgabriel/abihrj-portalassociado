@@ -50,55 +50,147 @@ const ADVANCED_STEPS: Step[] = [
   {
     targetId: 'header-welcome',
     title: 'Bem-vindo ao Portal',
-    description: 'Vamos fazer um tour completo por todas as funcionalidades da sua nova plataforma.',
+    description: 'Vamos fazer um tour completo por TODAS as funcionalidades do menu lateral.',
     position: 'bottom'
   },
   {
     targetId: 'sidebar-home',
-    title: 'Menu Lateral',
-    description: 'Sua navegação principal. Acesse qualquer área do sistema rapidamente por aqui.',
+    title: 'Início',
+    description: 'Volte sempre para esta página inicial com o resumo do dia e previsão do tempo.',
     position: 'right'
   },
   {
     targetId: 'sidebar-all-benefits',
-    title: 'Catálogo de Benefícios',
-    description: 'A lista completa de serviços filtráveis por categoria (Jurídico, RH, Comercial, etc).',
+    title: 'Todos os Benefícios',
+    description: 'O catálogo completo de vantagens, filtrável por categoria.',
+    position: 'right'
+  },
+  // --- Start of Sidebar Items Loop ---
+  {
+    targetId: 'sidebar-commercial',
+    title: 'Ações Comerciais',
+    description: 'Inscreva-se em feiras, workshops e roadshows organizados pelo HoteisRio.',
     position: 'right'
   },
   {
     targetId: 'sidebar-juridico',
-    title: 'Acesso Rápido Jurídico',
-    description: 'Link direto para abrir chamados e consultar a assessoria jurídica.',
+    title: 'Assessoria Jurídica',
+    description: 'Abra chamados para dúvidas trabalhistas, cíveis e tributárias diretamente pelo portal.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-talentos',
+    title: 'Banco de Talentos',
+    description: 'Acesse currículos de profissionais do setor para contratação imediata.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-events-reg',
+    title: 'Grandes Eventos',
+    description: 'Formulário oficial para cadastro de hóspedes e staff em grandes operações.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-calendar',
+    title: 'Calendário de Eventos',
+    description: 'Painel de inteligência com todos os congressos e shows confirmados na cidade.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-holidays',
+    title: 'Planejador de Feriados',
+    description: 'Visualize feriados nacionais e internacionais para prever picos de demanda.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-clipping',
+    title: 'Clipping Diário',
+    description: 'Monitore o que sai na mídia sobre a hotelaria e o turismo do Rio.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-courses',
+    title: 'HoteisRio Academy',
+    description: 'Plataforma de cursos e treinamentos online para capacitar sua equipe.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-public-order',
+    title: 'Ordem Pública',
+    description: 'Canal direto para reportar problemas urbanos no entorno do hotel.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-suggestion',
+    title: 'Sugestão de Pauta',
+    description: 'Envie temas que você gostaria de ver debatidos nos próximos fóruns.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-suppliers',
+    title: 'Portal de Fornecedores',
+    description: 'Encontre empresas parceiras e homologadas com condições especiais.',
     position: 'right'
   },
   {
     targetId: 'sidebar-forums',
     title: 'Fóruns da Hotelaria',
-    description: 'Participe dos comitês estratégicos e inscreva-se nas próximas reuniões.',
+    description: 'Acompanhe a agenda e as atas das reuniões dos comitês setoriais.',
     position: 'right'
   },
+  {
+    targetId: 'sidebar-influencers',
+    title: 'Influenciadores',
+    description: 'Conecte-se com criadores de conteúdo para divulgar sua marca (Em breve).',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-laws',
+    title: 'Leis e Decretos',
+    description: 'Biblioteca digital com toda a legislação pertinente ao setor hoteleiro.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-security',
+    title: 'Segurança',
+    description: 'Telefones úteis, cartilhas de prevenção e contato com a polícia turística.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-stats',
+    title: 'Estatísticas',
+    description: 'Dados históricos e parciais de ocupação hoteleira.',
+    position: 'right'
+  },
+  {
+    targetId: 'sidebar-rir',
+    title: 'Rock in Rio 2026',
+    description: 'Área exclusiva para adesão ao clube de benefícios do festival.',
+    position: 'right'
+  },
+  // --- Connection Section ---
   {
     targetId: 'sidebar-community',
-    title: 'Comunidade & WhatsApp',
-    description: 'Entre nos grupos oficiais do HoteisRio para networking e alertas em tempo real.',
+    title: 'Grupos WhatsApp',
+    description: 'Links diretos para entrar nos grupos oficiais de debate e networking.',
     position: 'right'
   },
   {
-    targetId: 'highlights-section',
-    title: 'Novidades',
-    description: 'O carrossel de destaques traz sempre o que é mais urgente ou novo no setor.',
-    position: 'bottom'
+    targetId: 'sidebar-contacts',
+    title: 'Contatos da Equipe',
+    description: 'Fale diretamente com os responsáveis de cada departamento do sindicato.',
+    position: 'right'
   },
   {
-    targetId: 'quick-access-section',
-    title: 'Ferramentas do Dia a Dia',
-    description: 'Cards de acesso rápido para as funções mais críticas da operação hoteleira.',
-    position: 'top'
+    targetId: 'sidebar-registration',
+    title: 'Atualização Cadastral',
+    description: 'Mantenha os contatos do seu hotel em dia para receber nossos comunicados.',
+    position: 'right'
   },
   {
     targetId: 'ai-assistant-btn',
-    title: 'Suporte Inteligente',
-    description: 'Nossa IA foi treinada para responder dúvidas sobre leis, contatos e benefícios 24/7.',
+    title: 'Fim do Tour!',
+    description: 'Você conheceu tudo! Se tiver dúvidas, nossa IA está aqui para ajudar.',
     position: 'left'
   }
 ];
@@ -218,7 +310,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
                   </div>
                   <div>
                      <h3 className="font-bold text-gray-800 text-lg">Tour Completo</h3>
-                     <p className="text-sm text-gray-500">Exploração detalhada de menus e recursos.</p>
+                     <p className="text-sm text-gray-500">Apresentação de TODOS os itens do menu lateral.</p>
                   </div>
                </button>
             </div>
