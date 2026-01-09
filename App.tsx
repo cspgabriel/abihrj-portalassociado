@@ -1,4 +1,3 @@
-
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -6,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Benefit, Forum } from './types';
 import { authService } from './services/authService';
+import { BENEFITS_DATA } from './constants';
 
 // Components
 import Layout from './components/Layout';
@@ -30,6 +30,7 @@ import CoursesPage from './components/CoursesPage';
 import BenefitCategorizerPage from './components/BenefitCategorizerPage';
 import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
+import WelcomeOnboarding from './components/WelcomeOnboarding';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -129,7 +130,7 @@ export default function App() {
         return;
     }
 
-    const forceInternalIds = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service', 'highlight-events-reg', 'sugestao-pauta'];
+    const forceInternalIds = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service', 'highlight-events-reg', 'sugestao-pauta', 'public-order-01'];
 
     if (forceInternalIds.includes(benefit.id)) {
         setSelectedBenefit(benefit);
@@ -269,12 +270,13 @@ export default function App() {
   const renderContent = () => {
     switch (currentView) {
       case 'LANDING_PAGE': return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
+      case 'WELCOME': return <WelcomeOnboarding onStartTutorial={() => { navigateTo('LANDING_PAGE'); setTimeout(() => setShowTutorial(true), 500); }} onSkip={() => navigateTo('LANDING_PAGE')} />;
       case 'MODERN_DASHBOARD': return <ModernDashboard user={user} onUseBenefit={handleBenefitClick} onViewDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'ALL_BENEFITS': return <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} onReport={() => window.open('http://hoteisrio.com.br/ordem-publica', '_blank')} />;
+      case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} onReport={() => { const op = BENEFITS_DATA.find(b => b.id === 'public-order-01'); if(op) handleBenefitClick(op); }} />;
       case 'FORUMS_OVERVIEW': return <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'FORUM_DETAILS': return selectedForum ? <ForumPage forum={selectedForum} onBack={() => navigateTo('FORUMS_OVERVIEW')} onRegisterUpdate={() => navigateTo('REGISTRATION_UPDATE')} /> : <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'ASSOCIATION_EVENTS': return <AssociationEventsPage onBack={() => navigateTo('LANDING_PAGE')} />;
@@ -294,7 +296,7 @@ export default function App() {
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />

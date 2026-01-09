@@ -256,7 +256,7 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'Megaphone',
     imageUrl: '',
     isService: true,
-    externalLink: 'http://hoteisrio.com.br/ordem-publica',
+    embedUrl: 'http://hoteisrio.com.br/ordem-publica',
     customCta: 'Reportar Ocorrência'
   },
   {

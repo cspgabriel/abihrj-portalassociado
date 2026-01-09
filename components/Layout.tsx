@@ -10,7 +10,7 @@ import {
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag
+  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -187,7 +187,15 @@ const Layout: React.FC<LayoutProps> = ({
             </div>
       </nav>
 
-      <div className="p-4 mt-auto shrink-0">
+      <div className="p-4 mt-auto shrink-0 space-y-2">
+        <button 
+          onClick={() => { onNavigate('WELCOME'); setIsMobileMenuOpen(false); }}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${currentView === 'WELCOME' ? 'bg-white/20 text-white font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+        >
+          <HelpCircle className="w-5 h-5 shrink-0" />
+          Como Funciona
+        </button>
+
         <button 
           onClick={onLogout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-300 hover:bg-white/10 hover:text-white transition-all"
