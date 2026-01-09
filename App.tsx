@@ -28,6 +28,7 @@ import CalculatorsPage from './components/CalculatorsPage';
 import RegistrationUpdatePage from './components/RegistrationUpdatePage';
 import CoursesPage from './components/CoursesPage';
 import BenefitCategorizerPage from './components/BenefitCategorizerPage';
+import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
 
 // Modals & Widgets
@@ -152,6 +153,8 @@ export default function App() {
            return;
        } 
        if (benefit.id === 'courses-v2') { navigateTo('COURSES_V2'); return; } 
+       if (benefit.id === 'commercial-actions-hub') { navigateTo('COMMERCIAL_ACTIONS_PAGE'); return; }
+       
        if (benefit.externalLink) window.open(benefit.externalLink, '_blank');
        else if (benefit.downloadUrl) window.open(benefit.downloadUrl, '_blank');
     } else {
@@ -284,13 +287,14 @@ export default function App() {
       case 'REGISTRATION_UPDATE': return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COURSES_V2': return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
       default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />

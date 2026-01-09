@@ -6,46 +6,55 @@
 import { Benefit, BenefitCategory, Forum, GamificationBadge, RioEvent } from './types';
 import * as Icons from 'lucide-react';
 
-export const BENEFITS_DATA: Benefit[] = [
-  // --- AÇÕES COMERCIAIS (NOVO) ---
+export const COMMERCIAL_SUB_ACTIONS = [
   {
     id: 'commercial-fairs',
     title: 'Inscrições em Feiras',
     description: 'Garanta sua participação nos estandes da HoteisRio em feiras nacionais e internacionais (WTM, ABAV, FIT, etc).',
-    category: BenefitCategory.COMMERCIAL,
-    targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'Globe',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    customCta: 'Ver Agenda de Feiras',
-    externalLink: 'https://hoteisrio.com.br/feiras' // Placeholder URL
+    buttonText: 'Inscrições em Breve!',
+    link: 'https://hoteisrio.com.br/feiras',
+    color: 'bg-blue-600',
+    textClass: 'text-blue-600', // Cor explícita para o ícone
+    iconColor: 'text-blue-200'
   },
   {
     id: 'commercial-procap',
     title: 'PROCAP - Capacitação',
     description: 'Inscreva-se nos projetos de capacitação junto a emissores, agentes e operadores de turismo.',
-    category: BenefitCategory.COMMERCIAL,
-    targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'Presentation',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    customCta: 'Inscrever no PROCAP',
-    externalLink: 'https://hoteisrio.com.br/procap' // Placeholder URL
+    buttonText: 'Inscrições em Breve!',
+    link: 'https://hoteisrio.com.br/procap',
+    color: 'bg-indigo-600',
+    textClass: 'text-indigo-600', // Cor explícita para o ícone
+    iconColor: 'text-indigo-200'
   },
   {
     id: 'commercial-xp-rio',
     title: 'Experiência Rio',
     description: 'Participe das ações de promoção do destino e famtours exclusivos para mostrar o melhor do Rio.',
-    category: BenefitCategory.COMMERCIAL,
-    targetSectors: ['SALES', 'MANAGEMENT', 'FB'],
     iconName: 'Sparkles',
+    buttonText: 'Inscrições em Breve!',
+    link: 'https://hoteisrio.com.br/experiencia',
+    color: 'bg-pink-600',
+    textClass: 'text-pink-600', // Cor explícita para o ícone
+    iconColor: 'text-pink-200'
+  }
+];
+
+export const BENEFITS_DATA: Benefit[] = [
+  // --- AÇÕES COMERCIAIS (HUB UNIFICADO) ---
+  {
+    id: 'commercial-actions-hub',
+    title: 'Ações Comerciais',
+    description: 'Central de inscrições para Feiras, PROCAP e Experiência Rio.',
+    category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'MANAGEMENT'],
+    iconName: 'ShoppingBag',
     imageUrl: '',
     isService: true,
     isNew: true,
-    customCta: 'Acessar Experiência Rio',
-    externalLink: 'https://hoteisrio.com.br/experiencia' // Placeholder URL
+    customCta: 'Acessar Ações'
   },
 
   // --- CALENDÁRIOS ---
