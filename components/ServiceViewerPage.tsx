@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, ExternalLink, RefreshCw, XCircle, Rocket } from 'lucide-react';
+import { ArrowLeft, ExternalLink, RefreshCw, XCircle, Rocket, Users } from 'lucide-react';
 import { Benefit } from '../types';
 
 interface ServiceViewerPageProps {
@@ -15,20 +15,22 @@ const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }
   // Determine URL: Prefer embedUrl, then dashboardUrl, then externalLink
   const url = benefit.embedUrl || benefit.dashboardUrl || benefit.externalLink;
 
-  if (benefit.id === 'influencers-hub') {
+  if (benefit.id === 'influencers-hub' || benefit.id === 'portal-rh-future') {
     return (
       <div className="flex flex-col items-center justify-center h-full bg-gray-50 min-h-[60vh]">
          <div className="text-center p-8 bg-white rounded-xl shadow-lg max-w-md mx-auto">
-            <div className="bg-blue-50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                <Rocket className="w-10 h-10 text-rio-blue" />
+            <div className={`${benefit.id === 'portal-rh-future' ? 'bg-purple-50' : 'bg-blue-50'} p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6`}>
+                {benefit.id === 'portal-rh-future' ? <Users className="w-10 h-10 text-purple-600" /> : <Rocket className="w-10 h-10 text-rio-blue" />}
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Em Breve!</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-                Estamos preparando um novo hub de influenciadores para conectar sua marca aos melhores criadores de conteúdo do Rio.
+                {benefit.id === 'portal-rh-future' 
+                 ? 'Estamos finalizando o novo Portal de RH, onde você terá acesso direto a milhares de currículos filtrados por cargo e região.'
+                 : 'Estamos preparando um novo hub de influenciadores para conectar sua marca aos melhores criadores de conteúdo do Rio.'}
             </p>
             <button 
                 onClick={onBack} 
-                className="bg-rio-blue hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition-all shadow-md"
+                className={`${benefit.id === 'portal-rh-future' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-rio-blue hover:bg-blue-700'} text-white font-bold px-8 py-3 rounded-xl transition-all shadow-md`}
             >
                 Voltar
             </button>

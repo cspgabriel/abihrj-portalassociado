@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LayoutDashboard, LayoutGrid, ArrowRight, Star, Shield, Calendar } from 'lucide-react';
+import { LayoutDashboard, LayoutGrid, ArrowRight, Instagram, Linkedin } from 'lucide-react';
 import HighlightsSlider from './HighlightsSlider';
 import { Benefit } from '../types';
 
@@ -50,52 +50,59 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
          {onBenefitClick && <HighlightsSlider onUseBenefit={onBenefitClick} />}
       </div>
 
-      {/* Quick Access Cards */}
+      {/* Social Media Widget */}
       <div id="quick-access-section" className="max-w-6xl mx-auto px-6 relative z-20 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          <div 
-            onClick={() => onNavigate('ASSOCIATION_EVENTS')}
-            className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 cursor-pointer hover:border-rio-blue transition-all group"
-          >
-            <div className="w-12 h-12 bg-blue-50 text-rio-blue rounded-xl flex items-center justify-center mb-4 group-hover:bg-rio-blue group-hover:text-white transition-colors">
-              <Calendar className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Agenda Oficial</h3>
-            <p className="text-gray-500 text-sm mb-4">Confira os próximos fóruns, reuniões e eventos do setor.</p>
-            <span className="text-rio-blue font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-              Ver Agenda <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden relative group">
+           {/* Background decorative elements */}
+           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full -mr-20 -mt-20 z-0 transition-transform group-hover:scale-110" />
+           <div className="absolute bottom-0 left-0 w-40 h-40 bg-rio-gold/10 rounded-full -ml-10 -mb-10 z-0" />
 
-          <div 
-            onClick={() => onNavigate('SECURITY_PAGE')}
-            className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 cursor-pointer hover:border-rio-blue transition-all group"
-          >
-            <div className="w-12 h-12 bg-blue-50 text-rio-blue rounded-xl flex items-center justify-center mb-4 group-hover:bg-rio-blue group-hover:text-white transition-colors">
-              <Shield className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Segurança</h3>
-            <p className="text-gray-500 text-sm mb-4">Alertas em tempo real e canal direto com autoridades.</p>
-            <span className="text-rio-blue font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-              Acessar Central <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
+           <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="text-center md:text-left max-w-xl">
+                 <h2 className="text-3xl font-bold text-gray-800 mb-3">Fique por dentro de tudo!</h2>
+                 <p className="text-gray-600 text-lg leading-relaxed">
+                   Siga nossas redes sociais e acompanhe as novidades, tendências e os bastidores do turismo carioca em tempo real.
+                 </p>
+              </div>
 
-          <div 
-            onClick={() => onNavigate('ROCK_IN_RIO')}
-            className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 cursor-pointer hover:border-rio-blue transition-all group"
-          >
-            <div className="w-12 h-12 bg-blue-50 text-rio-blue rounded-xl flex items-center justify-center mb-4 group-hover:bg-rio-blue group-hover:text-white transition-colors">
-              <Star className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Rock in Rio 2026</h3>
-            <p className="text-gray-500 text-sm mb-4">Cadastre seu hotel no hub oficial de benefícios do festival.</p>
-            <span className="text-rio-blue font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-              Participar <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
+              <div className="flex gap-4">
+                 {/* Instagram */}
+                 <a 
+                   href="https://instagram.com/hoteisrio" 
+                   target="_blank" 
+                   rel="noreferrer"
+                   className="w-16 h-16 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-2xl flex items-center justify-center text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all group/icon"
+                   title="Instagram"
+                 >
+                   <Instagram className="w-8 h-8 group-hover/icon:rotate-6 transition-transform" />
+                 </a>
 
+                 {/* LinkedIn */}
+                 <a 
+                   href="https://linkedin.com/company/hoteisrio" 
+                   target="_blank" 
+                   rel="noreferrer"
+                   className="w-16 h-16 bg-[#0077b5] rounded-2xl flex items-center justify-center text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all group/icon"
+                   title="LinkedIn"
+                 >
+                   <Linkedin className="w-8 h-8 group-hover/icon:-rotate-6 transition-transform" />
+                 </a>
+
+                 {/* TikTok */}
+                 <a 
+                   href="https://tiktok.com/@hoteisrio" 
+                   target="_blank" 
+                   rel="noreferrer"
+                   className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all group/icon"
+                   title="TikTok"
+                 >
+                   {/* TikTok Icon SVG */}
+                   <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 group-hover/icon:rotate-6 transition-transform">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                   </svg>
+                 </a>
+              </div>
+           </div>
         </div>
       </div>
     </div>

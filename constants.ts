@@ -196,15 +196,14 @@ export const BENEFITS_DATA: Benefit[] = [
   {
     id: 'banco-talentos',
     title: 'Banco de Talentos',
-    description: 'Plataforma exclusiva de currículos para hotelaria. Encontre os melhores profissionais.',
+    description: 'Plataforma exclusiva de recrutamento. Divulgue vagas ou acesse a base de candidatos.',
     category: BenefitCategory.HR,
     targetSectors: ['HR', 'MANAGEMENT'],
     iconName: 'Users',
     imageUrl: '',
     isService: true,
     isNew: true,
-    externalLink: 'https://talentos.sindhoteisrj.com.br/',
-    customCta: 'Acessar Currículos'
+    customCta: 'Acessar Plataforma'
   },
   {
     id: 'portal-fornecedores-new',

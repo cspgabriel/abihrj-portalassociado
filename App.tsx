@@ -33,6 +33,7 @@ import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
 import PhotoGalleryPage from './components/PhotoGalleryPage';
+import TalentBankPage from './components/TalentBankPage'; // NEW IMPORT
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -138,6 +139,11 @@ export default function App() {
         return;
     }
 
+    if (benefit.id === 'banco-talentos') {
+        navigateTo('TALENT_BANK');
+        return;
+    }
+
     const forceInternalIds = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service', 'highlight-events-reg', 'sugestao-pauta', 'public-order-01'];
 
     if (forceInternalIds.includes(benefit.id)) {
@@ -147,6 +153,13 @@ export default function App() {
     }
 
     if (benefit.isService) {
+       // Check for temp benefits from Talent Bank that are services
+       if (benefit.id === 'job-post-zoho' || benefit.id === 'portal-rh-future') {
+           setSelectedBenefit(benefit);
+           navigateTo('SERVICE_VIEWER');
+           return;
+       }
+
        if (benefit.embedUrl || benefit.dashboardUrl) {
            setSelectedBenefit(benefit);
            navigateTo('SERVICE_VIEWER');
@@ -300,12 +313,13 @@ export default function App() {
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'PHOTO_GALLERY': return <PhotoGalleryPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />; // NEW ROUTE
       default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />
