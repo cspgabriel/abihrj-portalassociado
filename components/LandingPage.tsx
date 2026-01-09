@@ -14,7 +14,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
   return (
     <div className="min-h-full bg-white animate-fade-in">
       {/* Hero Section */}
-      <div className="relative bg-rio-blue overflow-hidden rounded-b-[3rem] shadow-xl">
+      <div id="header-welcome" className="relative bg-rio-blue overflow-hidden rounded-b-[3rem] shadow-xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-rio-gold/20 rounded-full -ml-10 -mb-10 blur-2xl" />
         
@@ -34,6 +34,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
+              id="explore-benefits-btn"
               onClick={() => onNavigate('ALL_BENEFITS')}
               className="px-8 py-4 bg-rio-gold text-blue-900 rounded-xl font-bold text-lg shadow-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 flex items-center justify-center gap-2"
             >
@@ -45,12 +46,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
       </div>
 
       {/* Highlights Slider */}
-      <div className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-10">
+      <div id="highlights-section" className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-10">
          {onBenefitClick && <HighlightsSlider onUseBenefit={onBenefitClick} />}
       </div>
 
       {/* Quick Access Cards */}
-      <div className="max-w-6xl mx-auto px-6 relative z-20 pb-20">
+      <div id="quick-access-section" className="max-w-6xl mx-auto px-6 relative z-20 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <div 

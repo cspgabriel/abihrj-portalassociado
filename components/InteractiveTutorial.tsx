@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { X, ChevronRight, ChevronLeft, MousePointer2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, ChevronRight, ChevronLeft, MousePointer2, SkipForward } from 'lucide-react';
 
 interface Step {
   targetId: string;
@@ -16,32 +16,32 @@ interface InteractiveTutorialProps {
 const steps: Step[] = [
   {
     targetId: 'header-welcome',
-    title: 'Bem-vindo à Central!',
-    description: 'Este é o seu novo painel de controle. Aqui você encontra todas as ferramentas para gerenciar seu relacionamento com a HoteisRio.',
+    title: 'Seu Painel Principal',
+    description: 'Bem-vindo! Este é o seu novo centro de comando. Aqui você encontra as informações mais importantes e acesso rápido aos serviços.',
+    position: 'bottom'
+  },
+  {
+    targetId: 'highlights-section',
+    title: 'Destaques e Novidades',
+    description: 'Fique por dentro das últimas notícias, eventos importantes e benefícios recém-lançados pelo HoteisRio.',
     position: 'bottom'
   },
   {
     targetId: 'quick-access-section',
-    title: 'Serviços Online',
-    description: 'Nesta área superior, circundada aqui, estão as ferramentas de uso diário. Clique em "Utilizar" para abrir chamados jurídicos, acessar o calendário ou reportar ocorrências.',
-    position: 'bottom'
-  },
-  {
-    targetId: 'community-section',
-    title: 'Comunidade & Conexão',
-    description: 'Acesse rapidamente os contatos da equipe, entre nos grupos de WhatsApp oficiais e veja a agenda de reuniões.',
+    title: 'Acesso Rápido',
+    description: 'Atalhos diretos para as ferramentas mais utilizadas: Agenda Oficial, Central de Segurança e Campanhas Especiais.',
     position: 'top'
   },
   {
-    targetId: 'catalog-section',
-    title: 'Catálogo de Benefícios',
-    description: 'Logo abaixo, você encontra a lista completa de benefícios. Use os filtros (Jurídico, Comercial, etc.) para encontrar o que precisa.',
+    targetId: 'explore-benefits-btn',
+    title: 'Todos os Benefícios',
+    description: 'Clique neste botão para explorar o catálogo completo de serviços, parcerias e descontos exclusivos para associados.',
     position: 'top'
   },
   {
     targetId: 'ai-assistant-btn',
     title: 'Assistente Inteligente',
-    description: 'Dúvidas? Clique neste ícone flutuante a qualquer momento. Nossa IA responde perguntas sobre legislação, turismo e uso do portal.',
+    description: 'Dúvidas sobre legislação ou benefícios? Clique neste ícone flutuante a qualquer momento para falar com nossa IA.',
     position: 'left'
   }
 ];
@@ -49,11 +49,11 @@ const steps: Step[] = [
 const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-
+  
   // Update target position on step change or resize
   useEffect(() => {
     let timeoutId: any;
+    let attempts = 0;
 
     const updatePosition = () => {
       const step = steps[currentStep];
@@ -63,34 +63,56 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
         // Smooth scroll to element
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // Wait for scroll to finish a bit or just grab rect immediately
+        // Wait slightly for scroll to settle
         timeoutId = setTimeout(() => {
             const rect = element.getBoundingClientRect();
-            setTargetRect(rect);
-        }, 400); // Increased delay to allow scroll animation to settle
+            // Check if element is actually visible/has dimensions
+            if (rect.width > 0 && rect.height > 0) {
+                setTargetRect(rect);
+            } else {
+                // Retry if element found but hidden (unlikely but safe)
+                if(attempts < 3) {
+                    attempts++;
+                    requestAnimationFrame(updatePosition);
+                }
+            }
+        }, 300);
+      } else {
+        // Element not found - skip step automatically or wait
+        console.warn(`Tutorial target ${step.targetId} not found.`);
+        if (attempts < 5) {
+            // Element might be mounting
+            attempts++;
+            timeoutId = setTimeout(updatePosition, 500);
+        } else {
+            // Give up and go next if possible, or close if last
+            if (currentStep < steps.length - 1) {
+                setCurrentStep(prev => prev + 1);
+            } else {
+                onClose();
+            }
+        }
       }
     };
 
+    // Initial call
     updatePosition();
     
-    // Add resize listener
     const handleResize = () => {
-        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-        // Recalculate immediately on resize
         const step = steps[currentStep];
         const element = document.getElementById(step.targetId);
         if (element) setTargetRect(element.getBoundingClientRect());
     };
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleResize); // Recalc on scroll too for safety
+    window.addEventListener('scroll', handleResize, { passive: true });
     
     return () => {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('scroll', handleResize);
         clearTimeout(timeoutId);
     };
-  }, [currentStep]);
+  }, [currentStep, onClose]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -110,10 +132,11 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
   // Calculate Tooltip Position
   const getTooltipStyle = () => {
-    if (!targetRect) return { opacity: 0 };
+    if (!targetRect) return { display: 'none' };
     
     const spacing = 20;
-    const tooltipWidth = 320; // approximate width from w-80 class
+    const tooltipWidth = 320; 
+    const windowWidth = window.innerWidth;
     
     let top = 0;
     let left = 0;
@@ -124,7 +147,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
         left = targetRect.left + (targetRect.width / 2) - (tooltipWidth / 2);
         break;
       case 'top':
-        top = targetRect.top - spacing - 220; // approximate height
+        top = targetRect.top - spacing - 200; // Approximate height of card
         left = targetRect.left + (targetRect.width / 2) - (tooltipWidth / 2);
         break;
       case 'left':
@@ -139,8 +162,13 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
     // Boundary checks to keep tooltip on screen
     if (left < 10) left = 10;
-    if (left + tooltipWidth > window.innerWidth - 10) left = window.innerWidth - tooltipWidth - 10;
+    if (left + tooltipWidth > windowWidth - 10) left = windowWidth - tooltipWidth - 10;
     if (top < 10) top = 10;
+    
+    // Check vertical overflow (very rough)
+    if (top + 200 > window.innerHeight) {
+        top = targetRect.top - 220; // Flip to top if bottom overflows
+    }
 
     return { top, left, opacity: 1 };
   };
@@ -148,10 +176,10 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
   if (!targetRect) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] overflow-hidden">
-      {/* Background Mask - Using a massive box-shadow on the highlight element to create the "hole" effect */}
+    <div className="fixed inset-0 z-[100] overflow-hidden">
+      {/* Background Mask - "Spotlight" effect */}
       <div 
-        className="absolute transition-all duration-300 ease-in-out border-2 border-rio-gold rounded-xl animate-pulse shadow-[0_0_0_9999px_rgba(0,0,0,0.75)] pointer-events-none"
+        className="absolute transition-all duration-500 ease-in-out border-[2px] border-rio-gold rounded-xl shadow-[0_0_0_9999px_rgba(0,0,0,0.75)] pointer-events-none z-[101]"
         style={{
           top: targetRect.top - 5,
           left: targetRect.left - 5,
@@ -160,9 +188,9 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
         }}
       />
 
-      {/* Animated Pointer/Hand */}
+      {/* Animated Pointer */}
       <div 
-        className="absolute transition-all duration-300 ease-in-out z-[70] pointer-events-none"
+        className="absolute transition-all duration-500 ease-in-out z-[102] pointer-events-none hidden md:block"
         style={{
             top: targetRect.bottom - 10,
             left: targetRect.right - 20,
@@ -175,14 +203,14 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
 
       {/* Tooltip Card */}
       <div 
-        className="absolute z-[70] w-80 bg-white rounded-2xl shadow-2xl p-6 border-t-4 border-rio-blue transition-all duration-300"
-        style={getTooltipStyle()}
+        className="absolute z-[103] w-80 bg-white rounded-2xl shadow-2xl p-6 border-t-4 border-rio-blue transition-all duration-500 ease-in-out"
+        style={getTooltipStyle() as any}
       >
         <div className="flex justify-between items-start mb-3">
           <span className="bg-blue-100 text-rio-blue text-xs font-bold px-2 py-1 rounded-full uppercase">
             Passo {currentStep + 1} de {steps.length}
           </span>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors" title="Sair do Tutorial">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -192,22 +220,32 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onClose }) =>
           {step.description}
         </p>
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-2">
           <button 
             onClick={handlePrev}
             disabled={currentStep === 0}
-            className={`flex items-center text-sm font-medium ${currentStep === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-rio-blue'}`}
+            className={`flex items-center text-sm font-medium px-2 py-1 rounded hover:bg-gray-100 ${currentStep === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-rio-blue'}`}
           >
             <ChevronLeft className="w-4 h-4" /> Anterior
           </button>
 
-          <button 
-            onClick={handleNext}
-            className="bg-rio-blue hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-bold text-sm shadow-md flex items-center gap-1 transition-all"
-          >
-            {currentStep === steps.length - 1 ? 'Concluir' : 'Próximo'}
-            {currentStep !== steps.length - 1 && <ChevronRight className="w-4 h-4" />}
-          </button>
+          <div className="flex gap-2">
+             {currentStep < steps.length - 1 && (
+                 <button 
+                   onClick={onClose}
+                   className="text-xs font-bold text-gray-400 hover:text-gray-600 px-3 py-2"
+                 >
+                   Pular
+                 </button>
+             )}
+             <button 
+                onClick={handleNext}
+                className="bg-rio-blue hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-bold text-sm shadow-md flex items-center gap-1 transition-all"
+             >
+                {currentStep === steps.length - 1 ? 'Concluir' : 'Próximo'}
+                {currentStep !== steps.length - 1 && <ChevronRight className="w-4 h-4" />}
+             </button>
+          </div>
         </div>
       </div>
     </div>
