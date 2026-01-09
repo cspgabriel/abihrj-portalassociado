@@ -1,3 +1,4 @@
+
 // Autor: Gabriel Salles
 // Suporte do SO: Windows11
 // Descrição: Componente principal da aplicação
@@ -50,6 +51,7 @@ export default function App() {
   const [selectedBenefit, setSelectedBenefit] = useState<Benefit | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedForum, setSelectedForum] = useState<Forum | null>(null);
+  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
 
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
@@ -85,6 +87,11 @@ export default function App() {
   const navigateTo = (view: string) => {
     setCurrentView(view);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
+  const handleGlobalSearch = (term: string) => {
+    setGlobalSearchTerm(term);
+    navigateTo('ALL_BENEFITS');
   };
 
   const handleLogout = () => {
@@ -272,7 +279,7 @@ export default function App() {
       case 'LANDING_PAGE': return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
       case 'WELCOME': return <WelcomeOnboarding onStartTutorial={() => { navigateTo('LANDING_PAGE'); setTimeout(() => setShowTutorial(true), 500); }} onSkip={() => navigateTo('LANDING_PAGE')} />;
       case 'MODERN_DASHBOARD': return <ModernDashboard user={user} onUseBenefit={handleBenefitClick} onViewDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'ALL_BENEFITS': return <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'ALL_BENEFITS': return <AllBenefitsPage initialSearchTerm={globalSearchTerm} onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
@@ -296,7 +303,7 @@ export default function App() {
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />

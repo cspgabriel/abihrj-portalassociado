@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, LayoutGrid, Filter, ArrowDownAZ, ArrowUpAZ, List, Grid } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import { Benefit, BenefitCategory } from '../types';
@@ -10,13 +10,20 @@ interface AllBenefitsPageProps {
   onBack: () => void;
   onUse: (benefit: Benefit) => void;
   onDetails: (benefit: Benefit) => void;
+  initialSearchTerm?: string;
 }
 
-const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDetails }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDetails, initialSearchTerm = '' }) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
+
+  useEffect(() => {
+    if (initialSearchTerm) {
+      setSearchTerm(initialSearchTerm);
+    }
+  }, [initialSearchTerm]);
 
   const categories = ['Todos', ...Object.values(BenefitCategory)];
 

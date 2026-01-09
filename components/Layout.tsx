@@ -19,6 +19,7 @@ interface LayoutProps {
   onLogout: () => void;
   onNavigate: (view: string) => void;
   onBenefitClick: (benefit: Benefit) => void;
+  onSearch?: (term: string) => void;
   currentView: string;
   isFullPage?: boolean;
   children: React.ReactNode;
@@ -29,11 +30,13 @@ const Layout: React.FC<LayoutProps> = ({
   onLogout, 
   onNavigate, 
   onBenefitClick, 
+  onSearch,
   currentView, 
   isFullPage = false, 
   children 
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [localSearch, setLocalSearch] = useState('');
 
   useEffect(() => {
     const mainContent = document.getElementById('main-content');
@@ -47,6 +50,13 @@ const Layout: React.FC<LayoutProps> = ({
     if (benefit) {
       onBenefitClick(benefit);
       setIsMobileMenuOpen(false);
+    }
+  };
+
+  const handleSearchSubmit = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && onSearch && localSearch.trim()) {
+      onSearch(localSearch);
+      setLocalSearch(''); // Optional: clear after search or keep it
     }
   };
 
@@ -246,8 +256,8 @@ const Layout: React.FC<LayoutProps> = ({
 
             {/* Desktop Header - Only show if not a "Full Page" view */}
             {!isFullPage && (
-                <header className="hidden md:flex bg-white h-16 border-b border-gray-200 justify-between items-center px-8 shrink-0 z-20">
-                    <div className="flex items-center gap-2 text-gray-400 text-sm">
+                <header className="hidden md:flex bg-white h-16 border-b border-gray-200 justify-between items-center px-8 shrink-0 z-20 gap-4">
+                    <div className="flex items-center gap-2 text-gray-400 text-sm whitespace-nowrap">
                         <Home className="w-4 h-4" />
                         <span>/</span>
                         <span className="font-medium text-gray-600">
@@ -255,6 +265,19 @@ const Layout: React.FC<LayoutProps> = ({
                              currentView === 'MODERN_DASHBOARD' ? 'Dashboard' : 
                              currentView.replace(/_/g, ' ').toLowerCase()}
                         </span>
+                    </div>
+
+                    {/* Search Bar - Added back as requested */}
+                    <div className="flex-1 max-w-md mx-4 relative">
+                        <input 
+                            type="text"
+                            value={localSearch}
+                            onChange={(e) => setLocalSearch(e.target.value)}
+                            onKeyDown={handleSearchSubmit}
+                            placeholder="Buscar benefício ou serviço..."
+                            className="w-full bg-gray-100 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-rio-blue focus:bg-white transition-all outline-none text-gray-700"
+                        />
+                        <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
                     </div>
 
                     <div className="flex items-center gap-4">
