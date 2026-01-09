@@ -361,27 +361,50 @@ export const BENEFITS_DATA: Benefit[] = [
     customCta: 'Ver Galeria'
   },
   
-  // --- CALCULADORAS ---
+  // --- CALCULADORAS INDIVIDUAIS ---
   {
-    id: 'calculators-hub',
-    title: 'Calculadoras para Hotelaria',
-    description: 'Acesse ferramentas de ADR, RevPAR, GOPPAR e muito mais.',
+    id: 'calc-adr',
+    title: 'Calculadora de Diária Média (ADR)',
+    description: 'Calcule o valor médio pago por apartamento ocupado em um período determinado.',
     category: BenefitCategory.TOOLS,
-    targetSectors: ['MANAGEMENT', 'SALES'],
-    iconName: 'Calculator',
+    targetSectors: ['SALES', 'MANAGEMENT'],
+    iconName: 'TrendingUp',
     imageUrl: '',
     isService: true,
-    customCta: 'Acessar Ferramentas'
+    customCta: 'Calcular ADR'
   },
   {
-    id: 'calc-all-in-one',
-    title: 'Calculadora Completa',
-    description: 'Todas as métricas em um só lugar.',
+    id: 'calc-revpar',
+    title: 'Calculadora de RevPAR',
+    description: 'Indicador de receita por quarto disponível. Essencial para análise de desempenho.',
     category: BenefitCategory.TOOLS,
-    targetSectors: ['SALES'],
-    iconName: 'Calculator',
+    targetSectors: ['SALES', 'MANAGEMENT'],
+    iconName: 'BarChart3',
     imageUrl: '',
-    isService: true
+    isService: true,
+    customCta: 'Calcular RevPAR'
+  },
+  {
+    id: 'calc-occ',
+    title: 'Calculadora de Ocupação',
+    description: 'Monitore a taxa de ocupação do hotel em relação à capacidade total.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['SALES', 'RECEPTION', 'MANAGEMENT'],
+    iconName: 'PieChart',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular %'
+  },
+  {
+    id: 'calc-goppar',
+    title: 'Calculadora de GOPPAR',
+    description: 'Avalie o lucro operacional bruto por quarto disponível.',
+    category: BenefitCategory.TOOLS,
+    targetSectors: ['MANAGEMENT', 'SALES'],
+    iconName: 'Wallet',
+    imageUrl: '',
+    isService: true,
+    customCta: 'Calcular Lucro'
   }
 ];
 
