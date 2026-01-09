@@ -10,7 +10,7 @@ import {
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image
+  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -275,7 +275,7 @@ const Layout: React.FC<LayoutProps> = ({
                         </span>
                     </div>
 
-                    {/* Search Bar - Added back as requested */}
+                    {/* Search Bar */}
                     <div className="flex-1 max-w-md mx-4 relative">
                         <input 
                             type="text"
@@ -289,10 +289,16 @@ const Layout: React.FC<LayoutProps> = ({
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button className="p-2 text-gray-400 hover:text-rio-blue transition-colors relative">
-                            <Bell className="w-5 h-5" />
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                        {/* Como Funciona Button (Substituindo Notificações) */}
+                        <button 
+                            onClick={() => onNavigate('WELCOME')}
+                            className="p-2 text-gray-400 hover:text-rio-blue transition-colors flex items-center gap-2 group"
+                            title="Como Funciona / Tutorial"
+                        >
+                            <BookOpen className="w-5 h-5" />
+                            <span className="text-xs font-medium hidden lg:block group-hover:underline">Como Funciona</span>
                         </button>
+
                         <div className="h-8 w-px bg-gray-200 mx-2"></div>
                         <div className="flex items-center gap-3">
                             <div className="text-right">

@@ -91,14 +91,23 @@ const PhotoGalleryPage: React.FC<PhotoGalleryPageProps> = ({ onBack }) => {
                 className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
                 {/* Cover Image */}
-                <div className="h-48 overflow-hidden relative">
-                   <div className="absolute inset-0 bg-gray-200 animate-pulse" /> {/* Placeholder */}
-                   <img 
-                     src={event.coverUrl} 
-                     alt={event.title}
-                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 relative z-10"
-                     loading="lazy"
-                   />
+                <div className="h-48 overflow-hidden relative bg-gray-100">
+                   {event.coverUrl ? (
+                        <>
+                            <div className="absolute inset-0 bg-gray-200 animate-pulse" /> {/* Placeholder */}
+                            <img 
+                                src={event.coverUrl} 
+                                alt={event.title}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 relative z-10"
+                                loading="lazy"
+                            />
+                        </>
+                   ) : (
+                        <div className="w-full h-full flex items-center justify-center relative z-10 bg-gray-50 group-hover:scale-110 transition-transform duration-700">
+                            <ImageIcon className="w-12 h-12 text-gray-300" />
+                        </div>
+                   )}
+                   
                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors z-20 flex items-center justify-center">
                       <Maximize2 className="text-white w-8 h-8 opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300 drop-shadow-lg" />
                    </div>

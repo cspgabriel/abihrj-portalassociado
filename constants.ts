@@ -44,28 +44,36 @@ export const COMMERCIAL_SUB_ACTIONS = [
 
 export const GALLERY_EVENTS = [
   {
-    id: 'gal-01',
-    title: 'Prêmio Top Hotel RJ 2025',
-    date: '10/02/2025',
-    coverUrl: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=400',
-    driveLink: '', // Vazio para testar o popup "Em breve"
-    photosCount: 120
+    id: 'gal-soon-01',
+    title: 'Galeria de Eventos',
+    date: 'Em Breve',
+    coverUrl: '', 
+    driveLink: '',
+    photosCount: 0
   },
   {
-    id: 'gal-02',
-    title: 'Fórum Comercial - Janeiro 2025',
-    date: '15/01/2025',
-    coverUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=400',
-    driveLink: 'https://drive.google.com', // Link fictício
-    photosCount: 45
+    id: 'gal-soon-02',
+    title: 'Cobertura Fotográfica',
+    date: 'Em Breve',
+    coverUrl: '',
+    driveLink: '',
+    photosCount: 0
   },
   {
-    id: 'gal-natal',
-    title: 'Concurso de Decoração Natalina',
-    date: '25/12/2024',
-    coverUrl: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&q=80&w=400',
-    driveLink: 'https://votacaonatal.sindhoteisrj.com.br/?mode=gallery',
-    photosCount: 60
+    id: 'gal-soon-03',
+    title: 'Momentos HoteisRio',
+    date: 'Em Breve',
+    coverUrl: '',
+    driveLink: '',
+    photosCount: 0
+  },
+  {
+    id: 'gal-soon-04',
+    title: 'Fóruns e Reuniões',
+    date: 'Em Breve',
+    coverUrl: '',
+    driveLink: '',
+    photosCount: 0
   }
 ];
 
@@ -491,8 +499,10 @@ export const COMMUNITY_ITEMS_DATA = [
 ];
 
 export const TEAM_CONTACTS = [
-  { sector: 'Jurídico', manager: 'Dr. Claudio', email: 'juridico@hoteisrio.com.br', whatsapp: '21999999999' },
-  { sector: 'Comercial', manager: 'Tereza', email: 'comercial@hoteisrio.com.br', whatsapp: '21999999999' }
+  { sector: 'Superintendência', manager: 'Theresa Jansen', email: 'theresa.jansen@hoteisrio.com.br', whatsapp: '21988888888' },
+  { sector: 'Gerência Operacional', manager: 'Julio Correa', email: 'julio.correa@hoteisrio.com.br', whatsapp: '21988888888' },
+  { sector: 'Eventos', manager: 'Julie Souza', email: 'julie.souza@hoteisrio.com.br', whatsapp: '21988888888' },
+  { sector: 'Financeiro', manager: 'Mauricio Ferreira', email: 'mauricio.ferreira@hoteisrio.com.br', whatsapp: '21988888888' }
 ];
 
 export const WHATSAPP_GROUPS = [
