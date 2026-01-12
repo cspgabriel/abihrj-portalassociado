@@ -11,7 +11,7 @@ import {
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
   Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen,
-  LayoutDashboard
+  LayoutDashboard, Book
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -87,17 +87,18 @@ const Layout: React.FC<LayoutProps> = ({
                 Início
                 </button>
 
+                {/* SUBSTITUÍDO: Dashboard -> Como Funciona */}
                 <button 
-                id="sidebar-dashboard"
-                onClick={() => { onNavigate('MODERN_DASHBOARD'); setIsMobileMenuOpen(false); }}
+                id="sidebar-tutorial"
+                onClick={() => { onNavigate('PLATFORM_TUTORIAL'); setIsMobileMenuOpen(false); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mb-1
-                    ${currentView === 'MODERN_DASHBOARD'
+                    ${currentView === 'PLATFORM_TUTORIAL'
                     ? 'bg-white text-rio-blue font-bold shadow-lg' 
                     : 'text-white/80 hover:bg-white/10 hover:text-white'}
                 `}
                 >
-                <LayoutDashboard className="w-5 h-5 shrink-0" />
-                Meu Painel
+                <BookOpen className="w-5 h-5 shrink-0" />
+                Como Funciona
                 </button>
 
                 <button 
@@ -220,15 +221,6 @@ const Layout: React.FC<LayoutProps> = ({
 
       <div className="p-4 mt-auto shrink-0 space-y-2 hidden md:block">
         <button 
-          id="sidebar-help"
-          onClick={() => { onNavigate('WELCOME'); setIsMobileMenuOpen(false); }}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${currentView === 'WELCOME' ? 'bg-white/20 text-white font-bold' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
-        >
-          <HelpCircle className="w-5 h-5 shrink-0" />
-          Como Funciona
-        </button>
-
-        <button 
           onClick={onLogout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-300 hover:bg-white/10 hover:text-white transition-all"
         >
@@ -295,7 +287,7 @@ const Layout: React.FC<LayoutProps> = ({
                         <span>/</span>
                         <span className="font-medium text-gray-600">
                             {currentView === 'LANDING_PAGE' ? 'Início' : 
-                             currentView === 'MODERN_DASHBOARD' ? 'Dashboard' : 
+                             currentView === 'PLATFORM_TUTORIAL' ? 'Como Funciona' : 
                              currentView.replace(/_/g, ' ').toLowerCase()}
                         </span>
                     </div>
@@ -352,12 +344,13 @@ const Layout: React.FC<LayoutProps> = ({
                     <span className="text-[10px] font-medium">Início</span>
                 </button>
 
+                {/* SUBSTITUÍDO: Painel -> Ajuda (Tutorial) */}
                 <button 
-                    onClick={() => onNavigate('MODERN_DASHBOARD')}
-                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${currentView === 'MODERN_DASHBOARD' ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                    onClick={() => onNavigate('PLATFORM_TUTORIAL')}
+                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${currentView === 'PLATFORM_TUTORIAL' ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
                 >
-                    <LayoutDashboard className={`w-6 h-6 ${currentView === 'MODERN_DASHBOARD' ? 'fill-blue-100' : ''}`} strokeWidth={currentView === 'MODERN_DASHBOARD' ? 2 : 1.5} />
-                    <span className="text-[10px] font-medium">Painel</span>
+                    <Book className={`w-6 h-6 ${currentView === 'PLATFORM_TUTORIAL' ? 'fill-blue-100' : ''}`} strokeWidth={currentView === 'PLATFORM_TUTORIAL' ? 2 : 1.5} />
+                    <span className="text-[10px] font-medium">Ajuda</span>
                 </button>
 
                 <button 

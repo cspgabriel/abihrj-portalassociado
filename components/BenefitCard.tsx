@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { Benefit } from '../types';
 import * as Icons from 'lucide-react';
@@ -13,7 +12,6 @@ interface BenefitCardProps {
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, layout = 'grid' }) => {
-  // Dynamically resolve icon
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
 
   const handleDashboardClick = (e: React.MouseEvent) => {
@@ -30,57 +28,86 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
       className={`
         bg-white rounded-xl shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_-4px_rgba(0,74,173,0.15)] 
         border border-gray-100 relative transition-all duration-300 group cursor-default
-        ${isList ? 'flex flex-row items-center p-4 gap-4 h-auto' : 'flex flex-col h-full p-5'}
+        ${isList 
+          ? 'flex flex-col sm:flex-row sm:items-center p-4 gap-4 h-auto' 
+          : 'flex flex-col h-full p-5'}
       `}
     >
       
-      {/* Icon Section */}
-      <div className={`${isList ? 'shrink-0' : 'flex justify-between items-start mb-4'}`}>
-        <div className={`
-          w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center 
-          group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300
-        `}>
-          <IconComponent className="w-6 h-6" strokeWidth={1.5} />
-        </div>
-        
-        {!isList && (
-          <div className="flex flex-col items-end gap-2">
-            <div className="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-green-100">
-              <CheckCircle2 className="w-3 h-3" />
-              Ativo
+      {/* Content Wrapper */}
+      {isList ? (
+        // LIST LAYOUT (Responsive: Stacked on mobile, Row on desktop)
+        <div className="flex items-center gap-4 w-full sm:w-auto flex-1">
+            {/* Icon */}
+            <div className="shrink-0">
+                <div className={`
+                w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center 
+                group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300
+                `}>
+                <IconComponent className="w-6 h-6" strokeWidth={1.5} />
+                </div>
             </div>
-            {benefit.isNew && (
-              <div className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
-                NOVO
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      
-      {/* Content Section */}
-      <div className={`flex-1 ${isList ? 'flex flex-col justify-center' : 'mb-6'}`}>
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-lg font-bold text-gray-800 leading-tight group-hover:text-rio-blue transition-colors">
-            {benefit.title}
-          </h3>
-          {isList && benefit.isNew && (
-             <span className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">NOVO</span>
-          )}
+            
+            {/* Text */}
+            <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-bold text-gray-800 leading-tight group-hover:text-rio-blue transition-colors line-clamp-2">
+                        {benefit.title}
+                    </h3>
+                    {benefit.isNew && (
+                        <span className="bg-rio-gold text-blue-900 text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm shrink-0">NOVO</span>
+                    )}
+                </div>
+                <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                    {benefit.description}
+                </p>
+            </div>
         </div>
-        <p className={`text-gray-500 text-xs leading-relaxed ${isList ? 'line-clamp-1' : 'line-clamp-2'}`}>
-          {benefit.description}
-        </p>
-      </div>
+      ) : (
+        // GRID LAYOUT (Default vertical card)
+        <>
+            <div className="flex justify-between items-start mb-4">
+                <div className={`
+                w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center 
+                group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300
+                `}>
+                <IconComponent className="w-6 h-6" strokeWidth={1.5} />
+                </div>
+                
+                <div className="flex flex-col items-end gap-2">
+                    <div className="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-green-100">
+                        <CheckCircle2 className="w-3 h-3" />
+                        Ativo
+                    </div>
+                    {benefit.isNew && (
+                        <div className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
+                        NOVO
+                        </div>
+                    )}
+                </div>
+            </div>
+            
+            <div className="mb-6 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-bold text-gray-800 leading-tight group-hover:text-rio-blue transition-colors">
+                    {benefit.title}
+                </h3>
+                </div>
+                <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                {benefit.description}
+                </p>
+            </div>
+        </>
+      )}
       
       {/* Actions Section */}
-      <div className={`${isList ? 'shrink-0 flex gap-2' : 'mt-auto'}`}>
+      <div className={`${isList ? 'w-full sm:w-auto sm:shrink-0 mt-0' : 'mt-auto'}`}>
         {benefit.dashboardUrl ? (
           // Dashboard Buttons
           <div className={`grid ${isList ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-2'}`}>
             <button 
               onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm whitespace-nowrap"
+              className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm whitespace-nowrap"
               title={benefit.externalLink ? "Abrir Link Externo" : "Utilizar Serviço"}
             >
               {benefit.customCta || (benefit.externalLink ? 'Acessar' : 'Utilizar')}
@@ -88,7 +115,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
             </button>
             <button 
               onClick={handleDashboardClick}
-              className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-indigo-50 text-indigo-700 border border-transparent text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-sm whitespace-nowrap"
+              className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 border border-transparent text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-sm whitespace-nowrap"
               title="Ver Dashboard de Dados"
             >
               Dashboard
@@ -97,7 +124,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
           </div>
         ) : (
           // Standard Buttons
-          <div className={`grid ${isList ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-3'}`}>
+          <div className={`grid ${isList ? 'grid-cols-2 gap-2 w-full sm:w-auto' : 'grid-cols-2 gap-3'}`}>
             <button 
               onClick={(e) => { e.stopPropagation(); onDetails(benefit); }}
               className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1 whitespace-nowrap"

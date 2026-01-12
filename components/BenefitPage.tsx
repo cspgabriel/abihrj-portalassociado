@@ -18,8 +18,11 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
 
   useEffect(() => {
-    // Force scroll to top instantly when component mounts or benefit changes
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Force scroll main content to top instantly when component mounts or benefit changes
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
     
     // Reset state on benefit change
     setAiAnalysis('');

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ExternalLink, RefreshCw, XCircle, Rocket, Users } from 'lucide-react';
 import { Benefit } from '../types';
 
@@ -11,6 +11,14 @@ interface ServiceViewerPageProps {
 const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }) => {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => {
+    // Force scroll main content to top instantly
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [benefit]);
 
   // Determine URL: Prefer embedUrl, then dashboardUrl, then externalLink
   const url = benefit.embedUrl || benefit.dashboardUrl || benefit.externalLink;
