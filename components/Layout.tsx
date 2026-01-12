@@ -10,7 +10,8 @@ import {
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen
+  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen,
+  LayoutDashboard
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 
@@ -70,7 +71,7 @@ const Layout: React.FC<LayoutProps> = ({
         />
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 space-y-4 custom-scrollbar">
+      <nav className="flex-1 overflow-y-auto px-4 space-y-4 custom-scrollbar pb-24 md:pb-4">
             {/* PRINCIPAL SECTION */}
             <div className="mb-2 px-1">
                 <button 
@@ -84,6 +85,19 @@ const Layout: React.FC<LayoutProps> = ({
                 >
                 <Home className="w-5 h-5 shrink-0" />
                 Início
+                </button>
+
+                <button 
+                id="sidebar-dashboard"
+                onClick={() => { onNavigate('MODERN_DASHBOARD'); setIsMobileMenuOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mb-1
+                    ${currentView === 'MODERN_DASHBOARD'
+                    ? 'bg-white text-rio-blue font-bold shadow-lg' 
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'}
+                `}
+                >
+                <LayoutDashboard className="w-5 h-5 shrink-0" />
+                Meu Painel
                 </button>
 
                 <button 
@@ -204,7 +218,7 @@ const Layout: React.FC<LayoutProps> = ({
             </div>
       </nav>
 
-      <div className="p-4 mt-auto shrink-0 space-y-2">
+      <div className="p-4 mt-auto shrink-0 space-y-2 hidden md:block">
         <button 
           id="sidebar-help"
           onClick={() => { onNavigate('WELCOME'); setIsMobileMenuOpen(false); }}
@@ -227,7 +241,7 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-        {/* Mobile Overlay */}
+        {/* Mobile Overlay for Sidebar */}
         {isMobileMenuOpen && (
             <div 
                 className="fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity" 
@@ -241,28 +255,39 @@ const Layout: React.FC<LayoutProps> = ({
             md:translate-x-0 md:static md:inset-auto md:shadow-none
             ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
+            {/* Close button inside drawer for easier mobile exit */}
+            {isMobileMenuOpen && (
+                <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="absolute top-4 right-4 text-white/70 hover:text-white md:hidden"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+            )}
             <SidebarContent />
         </aside>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative" id="main-content">
             
-            {/* Mobile Top Bar */}
-            <div className="md:hidden bg-rio-blue p-4 flex items-center justify-between text-white shadow-md z-30 shrink-0">
-                <button onClick={() => setIsMobileMenuOpen(true)}>
-                    <Menu className="w-6 h-6" />
-                </button>
+            {/* Mobile Top Bar (Simplified) */}
+            <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between text-rio-blue shadow-sm z-30 shrink-0 h-16">
                 <div className="flex items-center gap-2">
                     <img 
                         src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
                         alt="HoteisRio" 
-                        className="h-8 w-auto brightness-0 invert"
+                        className="h-8 w-auto filter invert brightness-0" // Using black version for white header or blue version if available
+                        style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }} // Rio Blue Filter
                     />
                 </div>
-                <div className="w-6" /> {/* Spacer */}
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-rio-blue font-bold text-xs">
+                        {user.name.charAt(0).toUpperCase()}
+                    </div>
+                </div>
             </div>
 
-            {/* Desktop Header - Only show if not a "Full Page" view */}
+            {/* Desktop Header */}
             {!isFullPage && (
                 <header className="hidden md:flex bg-white h-16 border-b border-gray-200 justify-between items-center px-8 shrink-0 z-20 gap-4">
                     <div className="flex items-center gap-2 text-gray-400 text-sm whitespace-nowrap">
@@ -289,7 +314,6 @@ const Layout: React.FC<LayoutProps> = ({
                     </div>
 
                     <div className="flex items-center gap-4">
-                        {/* Como Funciona Button (Substituindo Notificações) */}
                         <button 
                             onClick={() => onNavigate('WELCOME')}
                             className="p-2 text-gray-400 hover:text-rio-blue transition-colors flex items-center gap-2 group"
@@ -313,10 +337,45 @@ const Layout: React.FC<LayoutProps> = ({
                 </header>
             )}
 
-            {/* Scrollable Main Content */}
-            <main className="flex-1 overflow-y-auto bg-gray-50 relative scroll-smooth w-full">
+            {/* Scrollable Main Content - Padding bottom added for mobile nav */}
+            <main className="flex-1 overflow-y-auto bg-gray-50 relative scroll-smooth w-full pb-20 md:pb-0">
                 {children}
             </main>
+
+            {/* Mobile Bottom Navigation Bar */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-between items-center px-6 py-2 pb-safe z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <button 
+                    onClick={() => onNavigate('LANDING_PAGE')}
+                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${currentView === 'LANDING_PAGE' ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                    <Home className={`w-6 h-6 ${currentView === 'LANDING_PAGE' ? 'fill-current' : ''}`} strokeWidth={currentView === 'LANDING_PAGE' ? 2 : 1.5} />
+                    <span className="text-[10px] font-medium">Início</span>
+                </button>
+
+                <button 
+                    onClick={() => onNavigate('MODERN_DASHBOARD')}
+                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${currentView === 'MODERN_DASHBOARD' ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                    <LayoutDashboard className={`w-6 h-6 ${currentView === 'MODERN_DASHBOARD' ? 'fill-blue-100' : ''}`} strokeWidth={currentView === 'MODERN_DASHBOARD' ? 2 : 1.5} />
+                    <span className="text-[10px] font-medium">Painel</span>
+                </button>
+
+                <button 
+                    onClick={() => onNavigate('ALL_BENEFITS')}
+                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${currentView === 'ALL_BENEFITS' ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                    <LayoutGrid className={`w-6 h-6 ${currentView === 'ALL_BENEFITS' ? 'fill-blue-100' : ''}`} strokeWidth={currentView === 'ALL_BENEFITS' ? 2 : 1.5} />
+                    <span className="text-[10px] font-medium">Benefícios</span>
+                </button>
+
+                <button 
+                    onClick={() => setIsMobileMenuOpen(true)}
+                    className="flex flex-col items-center gap-1 p-2 rounded-lg text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                    <Menu className="w-6 h-6" strokeWidth={1.5} />
+                    <span className="text-[10px] font-medium">Menu</span>
+                </button>
+            </div>
         </div>
     </div>
   );

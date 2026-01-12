@@ -52,7 +52,7 @@ const AiAssistant: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+    <div className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 flex flex-col items-end">
       {/* Chat Window */}
       {isOpen && (
         <div className="bg-white rounded-2xl shadow-2xl mb-4 w-80 sm:w-96 flex flex-col border border-gray-100 overflow-hidden animate-fade-in-up" style={{ maxHeight: '600px', height: '500px' }}>

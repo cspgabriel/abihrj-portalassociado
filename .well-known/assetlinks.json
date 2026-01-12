@@ -5,7 +5,7 @@
     "target": {
       "namespace": "android_app",
       "package_name": "br.com.sindhoteisrj.portaldoassociado.twa",
-      "sha256_cert_fingerprints": ["44:9B:D3:22:E3:AB:E3:F3:79:42:48:74:53:CC:83:A9:4D:A8:FD:A4:04:F0:BE:44:F1:16:7E:C4:0D:23:8C:94"]
+      "sha256_cert_fingerprints": ["1C:7A:9D:D2:2C:81:C1:E4:BD:94:C4:9C:17:23:22:51:32:F0:8D:32:21:C9:B6:ED:59:BE:A3:5F:F2:D0:42:CD"]
     }
   }
 ]

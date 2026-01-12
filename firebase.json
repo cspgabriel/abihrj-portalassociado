@@ -1,9 +1,11 @@
+
 {
   "hosting": {
     "public": ".",
     "ignore": [
       "firebase.json",
-      "**/.*",
+      "**/.git/**",
+      "**/.gitignore",
       "**/node_modules/**"
     ],
     "headers": [
@@ -29,6 +31,15 @@
           {
             "key": "Permissions-Policy",
             "value": "accelerometer=(), camera=(self), geolocation=(self), gyroscope=(), magnetometer=(), microphone=(self), payment=(), usb=()"
+          }
+        ]
+      },
+      {
+        "source": "/.well-known/assetlinks.json",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
           }
         ]
       }
