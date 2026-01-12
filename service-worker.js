@@ -3,7 +3,7 @@
 // Suporte do SO: Windows11
 // Descrição: Service Worker para cache e funcionalidade offline
 
-const CACHE_NAME = 'hoteisrio-pwa-v1';
+const CACHE_NAME = 'hoteisrio-pwa-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -11,6 +11,9 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', (event) => {
+  // Forçar o service worker a ativar imediatamente
+  self.skipWaiting();
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -32,6 +35,9 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
+  // Reivindicar controle dos clientes imediatamente
+  event.waitUntil(self.clients.claim());
+
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -45,4 +51,3 @@ self.addEventListener('activate', (event) => {
     })
   );
 });
-// --- Fim de service-worker.js ---
