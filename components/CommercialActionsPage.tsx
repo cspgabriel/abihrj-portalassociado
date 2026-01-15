@@ -15,6 +15,15 @@ const CommercialActionsPage: React.FC<CommercialActionsPageProps> = ({ onBack })
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!suggestion.trim()) return;
+
+    // Construct mailto link
+    const recipient = "julie.souza@hoteisrio.com.br";
+    const subject = encodeURIComponent("Sugestão de Nova Ação Comercial - Portal do Associado");
+    const body = encodeURIComponent(`Olá,\n\nGostaria de sugerir a seguinte ação comercial:\n\n${suggestion}\n\nAtenciosamente,\nAssociado HoteisRio`);
+
+    // Open email client
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+
     setSent(true);
     setTimeout(() => {
         setSent(false);
@@ -121,12 +130,12 @@ const CommercialActionsPage: React.FC<CommercialActionsPageProps> = ({ onBack })
                         {sent ? (
                             <>
                                 <CheckCircle2 className="w-5 h-5" />
-                                Sugestão Enviada!
+                                Abrindo E-mail...
                             </>
                         ) : (
                             <>
                                 <Send className="w-5 h-5" />
-                                Enviar Sugestão
+                                Enviar por E-mail
                             </>
                         )}
                     </button>
