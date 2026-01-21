@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Mail, MessageCircle, Copy, CheckCircle2, Rocket, Download, LayoutTemplate, Smartphone, Monitor, Star, Share2 } from 'lucide-react';
+import { ArrowLeft, Mail, MessageCircle, Copy, CheckCircle2, Rocket, Download, Monitor, Star, Share2, Eye, FileText, ExternalLink } from 'lucide-react';
 
 interface MarketingLaunchKitProps {
   onBack: () => void;
@@ -8,22 +8,25 @@ interface MarketingLaunchKitProps {
 
 const MarketingLaunchKit: React.FC<MarketingLaunchKitProps> = ({ onBack }) => {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
+  const [emailViewMode, setEmailViewMode] = useState<'PREVIEW' | 'CODE'>('PREVIEW');
 
   const emailSubject = "🚀 Chegou! O Novo Portal do Associado HoteisRio está no ar";
-  const emailBody = `Prezado(a) Associado(a),
+  
+  // Texto puro para cópia
+  const emailBodyText = `Prezado(a) Associado(a),
 
 É com grande satisfação que apresentamos a sua nova central de inteligência e gestão: o **Novo Portal do Associado HoteisRio**.
 
 Desenvolvemos uma plataforma moderna, rápida e integrada para facilitar o seu dia a dia. Agora, em um único lugar, você tem acesso a:
 
-✅ **Painel de Gestão:** Indicadores de mercado e previsão do tempo em tempo real.
-✅ **Serviços Online:** Solicitações jurídicas e demandas de ordem pública com um clique.
-✅ **Calendário Integrado:** Todos os eventos da cidade e do setor hoteleiro.
-✅ **Comunidade:** Acesso direto aos grupos de WhatsApp oficiais.
-✅ **HoteisRio Academy:** Treinamentos e cursos exclusivos para sua equipe.
+✅ Painel de Gestão: Indicadores de mercado e previsão do tempo em tempo real.
+✅ Serviços Online: Solicitações jurídicas e demandas de ordem pública com um clique.
+✅ Calendário Integrado: Todos os eventos da cidade e do setor hoteleiro.
+✅ Comunidade: Acesso direto aos grupos de WhatsApp oficiais.
+✅ HoteisRio Academy: Treinamentos e cursos exclusivos para sua equipe.
 
-**Acesse agora mesmo:**
-[Link do Portal Aqui]
+Acesse agora mesmo:
+https://portal.hoteisrio.com.br
 
 Dúvidas? Nossa nova Inteligência Artificial está pronta para te ajudar no canto da tela!
 
@@ -34,14 +37,14 @@ Equipe HoteisRio`;
 
 Grandes novidades para a hotelaria carioca! 🏨🚀
 
-Acabamos de lançar o **Novo Portal do Associado HoteisRio**. Tudo o que você precisa para gerir seu hotel e se conectar com o setor, agora em um só lugar.
+Acabamos de lançar o *Novo Portal do Associado HoteisRio*. Tudo o que você precisa para gerir seu hotel e se conectar com o setor, agora em um só lugar.
 
 🔹 Jurídico e Ordem Pública
 🔹 Calendário de Eventos 2026
 🔹 Clube de Benefícios
 🔹 Assistente Virtual Inteligente 🤖
 
-Acesse agora e confira: [Link do Portal Aqui]
+Acesse agora e confira: https://portal.hoteisrio.com.br
 
 Contamos com você!`;
 
@@ -73,15 +76,14 @@ Contamos com você!`;
 
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-12">
         
-        {/* SECTION 1: LANDING PAGE / PRESENTATION */}
+        {/* SECTION 1: APRESENTAÇÃO */}
         <section className="space-y-6">
             <div className="flex items-center gap-2 text-rio-blue font-bold uppercase tracking-wider text-sm">
                 <Monitor className="w-4 h-4" />
-                Apresentação do Produto
+                Visão Geral
             </div>
             
             <div className="bg-gradient-to-br from-slate-900 via-rio-blue to-blue-900 rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
-                {/* Abstract Shapes */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full -mr-40 -mt-40 blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-rio-gold/10 rounded-full -ml-20 -mb-20 blur-3xl" />
 
@@ -107,27 +109,28 @@ Contamos com você!`;
                                 <span className="text-sm font-medium">IA Integrada</span>
                             </div>
                             <div className="flex items-center gap-2 bg-black/20 px-4 py-2 rounded-lg border border-white/10">
-                                <Smartphone className="w-4 h-4 text-rio-gold" />
-                                <span className="text-sm font-medium">100% Mobile</span>
+                                <Monitor className="w-4 h-4 text-rio-gold" />
+                                <span className="text-sm font-medium">100% Web App</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Mockup Visual */}
                     <div className="relative hidden lg:block">
-                        <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-slate-800/50 transform rotate-2 hover:rotate-0 transition-all duration-500">
+                        <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-slate-800/50 transform rotate-2 hover:rotate-0 transition-all duration-500 max-w-sm mx-auto">
                             <div className="bg-slate-100 border-b border-gray-200 p-3 flex gap-2">
                                 <div className="w-3 h-3 rounded-full bg-red-400" />
                                 <div className="w-3 h-3 rounded-full bg-yellow-400" />
                                 <div className="w-3 h-3 rounded-full bg-green-400" />
                             </div>
                             <div className="bg-gray-50 p-6 space-y-4">
-                                <div className="h-32 bg-rio-blue rounded-xl w-full opacity-90" />
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="h-24 bg-white rounded-xl shadow-sm" />
-                                    <div className="h-24 bg-white rounded-xl shadow-sm" />
-                                    <div className="h-24 bg-white rounded-xl shadow-sm" />
+                                <div className="h-20 bg-rio-blue rounded-xl w-full opacity-90 flex items-center justify-center">
+                                    <span className="text-white font-bold text-xs opacity-50">DASHBOARD</span>
                                 </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="h-16 bg-white rounded-xl shadow-sm" />
+                                    <div className="h-16 bg-white rounded-xl shadow-sm" />
+                                </div>
+                                <div className="h-32 bg-white rounded-xl shadow-sm" />
                             </div>
                         </div>
                     </div>
@@ -144,41 +147,92 @@ Contamos com você!`;
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
-                {/* Email Card */}
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
+                {/* Email Card Template */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
                     <div className="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
                         <div className="flex items-center gap-3">
                             <div className="bg-blue-200 p-2 rounded-lg text-blue-700"><Mail className="w-5 h-5" /></div>
-                            <h3 className="font-bold text-blue-900">E-mail Marketing</h3>
+                            <h3 className="font-bold text-blue-900">Template de E-mail</h3>
                         </div>
-                        <span className="text-xs font-bold text-blue-600 bg-white px-2 py-1 rounded border border-blue-200">Alta Abertura</span>
+                        <div className="flex bg-white rounded-lg p-1 border border-blue-200">
+                            <button 
+                                onClick={() => setEmailViewMode('PREVIEW')}
+                                className={`p-1.5 rounded-md transition-all ${emailViewMode === 'PREVIEW' ? 'bg-blue-100 text-blue-700' : 'text-gray-400 hover:text-gray-600'}`}
+                                title="Visualizar Layout"
+                            >
+                                <Eye className="w-4 h-4" />
+                            </button>
+                            <button 
+                                onClick={() => setEmailViewMode('CODE')}
+                                className={`p-1.5 rounded-md transition-all ${emailViewMode === 'CODE' ? 'bg-blue-100 text-blue-700' : 'text-gray-400 hover:text-gray-600'}`}
+                                title="Ver Texto"
+                            >
+                                <FileText className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
                     
-                    <div className="p-6 flex-1 space-y-6">
-                        <div>
-                            <div className="flex justify-between mb-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Assunto</label>
-                                <button onClick={() => copyToClipboard(emailSubject, 'subject')} className="text-rio-blue hover:underline text-xs font-bold">Copiar</button>
-                            </div>
-                            <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-gray-800 text-sm font-medium">
-                                {emailSubject}
-                            </div>
-                        </div>
+                    <div className="flex-1 bg-gray-100 p-6 overflow-y-auto max-h-[600px]">
+                        {emailViewMode === 'PREVIEW' ? (
+                            // HTML EMAIL PREVIEW SIMULATION
+                            <div className="max-w-md mx-auto bg-white shadow-xl rounded-none border-t-4 border-rio-blue">
+                                <div className="p-6 text-center border-b border-gray-100 bg-gray-50">
+                                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-8 mx-auto filter invert brightness-0" style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }} />
+                                </div>
+                                <div className="p-8 text-gray-700 font-sans text-sm leading-relaxed">
+                                    <p className="mb-4">Prezado(a) Associado(a),</p>
+                                    <p className="mb-6">É com grande satisfação que apresentamos a sua nova central de inteligência e gestão: o <strong>Novo Portal do Associado HoteisRio</strong>.</p>
+                                    
+                                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6 text-left">
+                                        <ul className="space-y-2">
+                                            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 shrink-0" /> <span><strong>Painel de Gestão:</strong> Indicadores e clima em tempo real.</span></li>
+                                            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 shrink-0" /> <span><strong>Serviços Online:</strong> Jurídico e Ordem Pública num clique.</span></li>
+                                            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 shrink-0" /> <span><strong>Comunidade:</strong> Acesso direto aos grupos oficiais.</span></li>
+                                        </ul>
+                                    </div>
 
-                        <div>
-                            <div className="flex justify-between mb-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Conteúdo</label>
-                                <button onClick={() => copyToClipboard(emailBody, 'body')} className="text-rio-blue hover:underline text-xs font-bold">Copiar</button>
+                                    <div className="text-center mb-8">
+                                        <button className="bg-rio-blue text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-800 transition-colors inline-block">
+                                            Acessar Portal Agora
+                                        </button>
+                                    </div>
+
+                                    <p className="text-xs text-gray-500 text-center border-t border-gray-100 pt-4">
+                                        Dúvidas? Nossa IA está pronta para ajudar no canto da tela!<br/>
+                                        Equipe HoteisRio
+                                    </p>
+                                </div>
                             </div>
-                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-600 text-sm whitespace-pre-line leading-relaxed font-mono h-64 overflow-y-auto">
-                                {emailBody}
+                        ) : (
+                            // PLAIN TEXT MODE
+                            <div className="space-y-4">
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <label className="text-xs font-bold text-gray-400 uppercase">Assunto</label>
+                                        <button onClick={() => copyToClipboard(emailSubject, 'subject')} className="text-rio-blue hover:underline text-xs font-bold">Copiar</button>
+                                    </div>
+                                    <div className="bg-white p-3 rounded-lg border border-gray-200 text-gray-800 text-sm font-medium">
+                                        {emailSubject}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <label className="text-xs font-bold text-gray-400 uppercase">Corpo do E-mail</label>
+                                        <button onClick={() => copyToClipboard(emailBodyText, 'body')} className="text-rio-blue hover:underline text-xs font-bold">Copiar</button>
+                                    </div>
+                                    <textarea 
+                                        readOnly 
+                                        className="w-full bg-white p-4 rounded-xl border border-gray-200 text-gray-600 text-sm h-64 focus:outline-none resize-none font-mono"
+                                        value={emailBodyText}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
-                    <div className="bg-gray-50 p-4 border-t border-gray-200">
-                        <button onClick={() => copyToClipboard(emailBody, 'body-full')} className="w-full bg-white border border-gray-300 hover:border-rio-blue text-gray-700 hover:text-rio-blue font-bold py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
-                            {copiedSection === 'body-full' ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                            Copiar Tudo
+                    <div className="bg-white p-4 border-t border-gray-200">
+                        <button onClick={() => copyToClipboard(emailBodyText, 'email-full')} className="w-full bg-white border border-gray-300 hover:border-rio-blue text-gray-700 hover:text-rio-blue font-bold py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            {copiedSection === 'email-full' ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                            {copiedSection === 'email-full' ? 'Copiado!' : 'Copiar Texto Completo'}
                         </button>
                     </div>
                 </div>

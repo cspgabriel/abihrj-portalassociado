@@ -34,7 +34,8 @@ import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
 import PhotoGalleryPage from './components/PhotoGalleryPage';
 import TalentBankPage from './components/TalentBankPage';
-import MarketingLaunchKit from './components/MarketingLaunchKit'; // NEW IMPORT
+import MarketingLaunchKit from './components/MarketingLaunchKit';
+import BenefitsShowcase from './components/BenefitsShowcase'; // NEW IMPORT
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -44,7 +45,7 @@ import InteractiveTutorial from './components/InteractiveTutorial';
 import AiAssistant from './components/AiAssistant';
 import Footer from './components/Footer';
 
-import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -84,8 +85,9 @@ export default function App() {
             setCurrentView('CALCULATORS_PAGE');
         } else if (viewParam === 'ASSOCIATION_EVENTS') {
             setCurrentView('ASSOCIATION_EVENTS');
+        } else if (viewParam === 'BENEFITS_SHOWCASE') {
+            setCurrentView('BENEFITS_SHOWCASE');
         }
-        // Add more routes if needed
     }
   }, []);
 
@@ -125,14 +127,14 @@ export default function App() {
     e.preventDefault();
     setAuthError('');
     setAuthSuccess('');
-    setLoading(true); // Feedback visual imediato
+    setLoading(true); 
 
     try {
       let loggedUser: User | null = null;
 
       if (isForgotPassword) {
         await authService.sendPasswordReset(email);
-        setAuthSuccess('E-mail de recuperação enviado com sucesso!');
+        setAuthSuccess('Link de recuperação enviado para o seu e-mail!');
         setIsForgotPassword(false);
         setLoading(false);
         return;
@@ -142,7 +144,6 @@ export default function App() {
          loggedUser = await authService.login(email, password);
       }
 
-      // Forçar atualização do estado imediatamente após sucesso
       if (loggedUser) {
         setUser(loggedUser);
       }
@@ -214,7 +215,11 @@ export default function App() {
     );
   }
 
-  // Allow MARKETING_KIT to be viewed even without login, or treat it separately
+  // PUBLIC ROUTES (No Login Required)
+  if (currentView === 'BENEFITS_SHOWCASE') {
+      return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
+  }
+
   if (currentView === 'MARKETING_KIT') {
       return (
           <Layout user={user || { id: 'guest', name: 'Visitante', email: '', hotel: '', role: '' }} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={true}>
@@ -237,7 +242,9 @@ export default function App() {
                 {isForgotPassword ? 'Recuperar Senha' : 'Portal do Associado'}
               </h1>
               <p className="text-gray-500 text-sm">
-                {isForgotPassword ? 'Enviaremos um link de redefinição para seu e-mail.' : 'Acesse sua central de benefícios exclusiva.'}
+                {isForgotPassword 
+                  ? 'Digite seu e-mail para receber o link de redefinição.' 
+                  : 'Acesse sua central de benefícios exclusiva.'}
               </p>
            </div>
            
@@ -269,7 +276,7 @@ export default function App() {
                     <label className="block text-sm font-medium text-gray-700">Senha</label>
                     <button 
                       type="button"
-                      onClick={() => setIsForgotPassword(true)}
+                      onClick={() => { setIsForgotPassword(true); setAuthError(''); setAuthSuccess(''); }}
                       className="text-xs text-rio-blue hover:underline font-semibold"
                     >
                       Esqueceu a senha?
@@ -289,25 +296,38 @@ export default function App() {
               )}
 
               {authSuccess && (
-                <div className="bg-green-50 text-green-700 text-sm p-3 rounded-lg border border-green-100 flex items-center gap-2">
+                <div className="bg-green-50 text-green-700 text-sm p-3 rounded-lg border border-green-100 flex items-center gap-2 animate-fade-in">
                   <CheckCircle className="w-4 h-4" />
                   {authSuccess}
                 </div>
               )}
 
               <button type="submit" className="w-full bg-rio-blue hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
-                {isForgotPassword ? <Mail className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
-                {isForgotPassword ? 'Enviar E-mail' : isRegistering ? 'Criar Conta' : 'Entrar'}
+                {isForgotPassword ? <Unlock className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                {isForgotPassword ? 'Enviar Link de Recuperação' : isRegistering ? 'Criar Conta' : 'Entrar'}
               </button>
            </form>
            
-           <div className="mt-6 text-center text-sm">
+           <div className="mt-6 text-center space-y-4">
+             {!isForgotPassword && (
+                <button 
+                    onClick={() => navigateTo('BENEFITS_SHOWCASE')}
+                    className="text-gray-500 hover:text-rio-blue hover:underline text-xs flex items-center justify-center gap-1 mx-auto transition-colors"
+                >
+                    <LayoutGrid className="w-3 h-3" />
+                    Ainda não é associado? Conheça nossos benefícios
+                </button>
+             )}
+
              {isForgotPassword ? (
-               <button onClick={() => { setIsForgotPassword(false); setAuthError(''); setAuthSuccess(''); }} className="text-rio-blue hover:underline font-medium flex items-center justify-center gap-1 mx-auto">
+               <button 
+                 onClick={() => { setIsForgotPassword(false); setAuthError(''); setAuthSuccess(''); }} 
+                 className="text-gray-500 hover:text-rio-blue hover:underline font-medium flex items-center justify-center gap-1 mx-auto text-sm"
+               >
                  <ArrowLeft className="w-4 h-4" /> Voltar para o Login
                </button>
              ) : (
-               <button onClick={() => { setIsRegistering(!isRegistering); setAuthError(''); setAuthSuccess(''); }} className="text-rio-blue hover:underline font-medium">
+               <button onClick={() => { setIsRegistering(!isRegistering); setAuthError(''); setAuthSuccess(''); }} className="text-rio-blue hover:underline font-medium text-sm">
                  {isRegistering ? 'Já tenho conta. Fazer Login.' : 'Não tem acesso? Cadastre-se.'}
                </button>
              )}
@@ -343,13 +363,14 @@ export default function App() {
       case 'ADMIN_PANEL': return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'PHOTO_GALLERY': return <PhotoGalleryPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
-      case 'MARKETING_KIT': return <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />; // NEW ROUTE
+      case 'MARKETING_KIT': return <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />; 
+      case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />; // ROUTE HANDLER
       default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'MARKETING_KIT'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />
