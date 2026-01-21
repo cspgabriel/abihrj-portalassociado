@@ -33,7 +33,8 @@ import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
 import PhotoGalleryPage from './components/PhotoGalleryPage';
-import TalentBankPage from './components/TalentBankPage'; // NEW IMPORT
+import TalentBankPage from './components/TalentBankPage';
+import MarketingLaunchKit from './components/MarketingLaunchKit'; // NEW IMPORT
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -68,6 +69,25 @@ export default function App() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [regName, setRegName] = useState('');
   const [regHotel, setRegHotel] = useState('');
+
+  // Initial Route Check
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get('view');
+    
+    if (viewParam) {
+        if (viewParam === 'MARKETING_KIT') {
+            setCurrentView('MARKETING_KIT');
+        } else if (viewParam === 'ALL_BENEFITS') {
+            setCurrentView('ALL_BENEFITS');
+        } else if (viewParam === 'CALCULATORS_PAGE') {
+            setCurrentView('CALCULATORS_PAGE');
+        } else if (viewParam === 'ASSOCIATION_EVENTS') {
+            setCurrentView('ASSOCIATION_EVENTS');
+        }
+        // Add more routes if needed
+    }
+  }, []);
 
   useEffect(() => {
     const safetyTimer = setTimeout(() => {
@@ -194,6 +214,15 @@ export default function App() {
     );
   }
 
+  // Allow MARKETING_KIT to be viewed even without login, or treat it separately
+  if (currentView === 'MARKETING_KIT') {
+      return (
+          <Layout user={user || { id: 'guest', name: 'Visitante', email: '', hotel: '', role: '' }} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={true}>
+              <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />
+          </Layout>
+      );
+  }
+
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
@@ -313,13 +342,14 @@ export default function App() {
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={user} onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'PHOTO_GALLERY': return <PhotoGalleryPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />; // NEW ROUTE
+      case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
+      case 'MARKETING_KIT': return <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />; // NEW ROUTE
       default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'MARKETING_KIT'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <AiAssistant />
