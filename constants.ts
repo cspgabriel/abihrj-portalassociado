@@ -43,38 +43,7 @@ export const COMMERCIAL_SUB_ACTIONS = [
 ];
 
 export const GALLERY_EVENTS = [
-  {
-    id: 'gal-soon-01',
-    title: 'Galeria de Eventos',
-    date: 'Em Breve',
-    coverUrl: '', 
-    driveLink: '',
-    photosCount: 0
-  },
-  {
-    id: 'gal-soon-02',
-    title: 'Cobertura Fotográfica',
-    date: 'Em Breve',
-    coverUrl: '',
-    driveLink: '',
-    photosCount: 0
-  },
-  {
-    id: 'gal-soon-03',
-    title: 'Momentos HoteisRio',
-    date: 'Em Breve',
-    coverUrl: '',
-    driveLink: '',
-    photosCount: 0
-  },
-  {
-    id: 'gal-soon-04',
-    title: 'Fóruns e Reuniões',
-    date: 'Em Breve',
-    coverUrl: '',
-    driveLink: '',
-    photosCount: 0
-  }
+  // Galeria removida conforme solicitação
 ];
 
 export const BENEFITS_DATA: Benefit[] = [
@@ -137,7 +106,7 @@ export const BENEFITS_DATA: Benefit[] = [
   {
     id: 'clipping-service',
     title: 'Clipping HoteisRio',
-    description: 'Monitoramento diário de notícias e menções sobre a hotelaria carioca na mídia.',
+    description: 'Monitoramento diário de notícias (atualizado toda sexta-feira).',
     category: BenefitCategory.COMMUNICATION,
     targetSectors: ['MANAGEMENT', 'SALES', 'LEGAL_DEPT'],
     iconName: 'FileSearch',
@@ -149,15 +118,15 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'influencers-hub',
-    title: 'Influenciadores & Creators',
-    description: 'Conecte-se com criadores de conteúdo e influenciadores digitais parceiros para divulgar sua marca.',
+    title: 'Parceiros Influenciadores',
+    description: 'Conecte-se com nossos parceiros para divulgar sua marca.',
     category: BenefitCategory.COMMUNICATION,
     targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'Camera',
     imageUrl: '',
     isService: true,
     isNew: true,
-    customCta: 'Em Breve'
+    customCta: 'Ver Parceiros'
   },
 
   // --- LEGISLAÇÃO ---
@@ -226,18 +195,6 @@ export const BENEFITS_DATA: Benefit[] = [
     externalLink: 'https://portaldefornecedores.sindhoteisrj.com.br/'
   },
   {
-    id: 'shuttle-service',
-    title: 'Shuttle Service',
-    description: 'Sistema de transporte compartilhado e logística para eventos.',
-    category: BenefitCategory.OPERATIONAL,
-    targetSectors: ['RECEPTION', 'SALES'],
-    iconName: 'Bus',
-    imageUrl: '',
-    isService: true,
-    embedUrl: 'https://depth-mural-35413640.figma.site/',
-    customCta: 'Acessar Mapa de Rotas'
-  },
-  {
     id: 'online-courses',
     title: 'Cursos Online',
     description: 'Plataforma oficial de ensino e capacitação para associados.',
@@ -248,17 +205,8 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     externalLink: 'https://cursos.hoteisrio.com.br/'
   },
-  {
-    id: 'central-ia-new',
-    title: 'Central da IA',
-    description: 'Ferramentas de Inteligência Artificial exclusivas para hoteleiros.',
-    category: BenefitCategory.TECHNOLOGY,
-    targetSectors: ['MANAGEMENT', 'SALES'],
-    iconName: 'Bot',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://iaparahoteis.sindhoteisrj.com.br/'
-  },
+  // Shuttle Service Removido
+  // Central IA Removido
   {
     id: 'sustainability-raiox',
     title: 'Raio-X de Sustentabilidade',
@@ -268,19 +216,10 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'Leaf',
     imageUrl: '',
     isService: true,
+    fullDetails: 'Elaborado pela IA.',
     externalLink: 'https://sustetanbilidade-hoteisrio.figma.site/'
   },
-  {
-    id: 'central-rh-new',
-    title: 'Central do RH',
-    description: 'Plataforma exclusiva para gestores de Recursos Humanos.',
-    category: BenefitCategory.HR,
-    targetSectors: ['HR', 'MANAGEMENT'],
-    iconName: 'Users',
-    imageUrl: '',
-    isService: true,
-    externalLink: 'https://centraldorh.sindhoteisrj.com.br/'
-  },
+  // Central RH Removido
   {
     id: 'public-order-01',
     title: 'Demandas de Ordem Pública',
@@ -366,7 +305,15 @@ export const BENEFITS_DATA: Benefit[] = [
     isNew: true,
     embedUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdm5ehKWYpU3e70FTKUWUnaRget8l9l3d-Y-xU7qEnCABcCZA/viewform',
     customCta: 'Acessar Formulário',
-    fullDetails: `Compromisso com o Turismo e a Segurança dos Eventos no Estado do Rio de Janeiro...` // (Mantido texto original mas abreviado aqui para brevidade do XML)
+    fullDetails: `O HotéisRIO vem comunicar aos hotéis associados que a Secretaria de Estado de Turismo – SETUR e a Companhia de Turismo do Estado do Rio de Janeiro – TurisRio criaram um Grupo de Trabalho de Apoio aos Eventos e Negócios Corporativos e uma das ações implementadas por ele foi disponibilizar um formulário para que os organizadores de eventos, meios de hospedagens e Centro de convenções informem detalhes do seus eventos ao Governo do Estado.
+
+O formulário somente deverá ser preenchido para eventos de negócios corporativos que promovam concentração a partir de 500 pessoas.
+
+Caberá a SETUR/TurisRio encaminhar o formulário com as informações relativas ao evento ao setor da Polícia Militar responsável pela região.
+
+Esta iniciativa visa contribuir para que as informações sobre os eventos cheguem ao comando de área da Polícia Militar e ao respectivo batalhão para que providenciem o apoio, caso julguem necessário.
+
+Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado interno sobre este assunto - HOTÉIS-RIO-CI-106/2023`
   },
   {
     id: 'news-portal',
@@ -391,7 +338,7 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: '',
     isService: true,
     isNew: true,
-    embedUrl: 'https://votacaonatal.sindhoteisrj.com.br/?mode=gallery',
+    externalLink: 'https://hoteisrio.com.br/natal-2025-vencedores', // Link corrigido
     customCta: 'Ver Galeria'
   },
   
@@ -492,17 +439,12 @@ export const RIO_EVENTS: RioEvent[] = [
   { id: '3', title: 'Web Summit Rio', date: '15-04-2025', location: 'Riocentro', type: 'Congresso', imageUrl: '' }
 ];
 
-export const COMMUNITY_ITEMS_DATA = [
-  { id: '1', title: 'Fóruns', description: 'Grupos de trabalho', iconName: 'Users', bgClass: 'bg-blue-100', colorClass: 'text-blue-600' },
-  { id: '2', title: 'Eventos', description: 'Agenda do setor', iconName: 'Calendar', bgClass: 'bg-green-100', colorClass: 'text-green-600' },
-  { id: '3', title: 'Órgãos de Segurança', description: 'Alertas', iconName: 'Shield', bgClass: 'bg-red-100', colorClass: 'text-red-600' }
-];
-
 export const TEAM_CONTACTS = [
   { sector: 'Superintendência', manager: 'Theresa Jansen', email: 'theresa.jansen@hoteisrio.com.br', whatsapp: '21988888888' },
   { sector: 'Gerência Operacional', manager: 'Julio Correa', email: 'julio.correa@hoteisrio.com.br', whatsapp: '21988888888' },
   { sector: 'Eventos', manager: 'Julie Souza', email: 'julie.souza@hoteisrio.com.br', whatsapp: '21988888888' },
-  { sector: 'Financeiro', manager: 'Mauricio Ferreira', email: 'mauricio.ferreira@hoteisrio.com.br', whatsapp: '21988888888' }
+  { sector: 'Financeiro', manager: 'Mauricio Ferreira', email: 'mauricio.ferreira@hoteisrio.com.br', whatsapp: '' },
+  { sector: 'Marketing', manager: 'Equipe Marketing', email: 'marketing@hoteisrio.com.br', whatsapp: '21988888888' }
 ];
 
 export const WHATSAPP_GROUPS = [
@@ -629,9 +571,9 @@ export const CALCULATOR_TOOLS = BENEFITS_DATA.filter(b => b.category === Benefit
 export const FOOTER_DATA = {
   razaoSocial: 'Associação de Hotéis do Rio de Janeiro',
   cnpj: '33.333.333/0001-00',
-  address: 'Av. Nilo Peçanha, 50 - Centro, Rio de Janeiro',
-  cep: '20020-906',
-  phone: '(21) 2222-2222',
+  address: 'Maria Eugenia 300 – sala 13 – Humaitá',
+  cep: '22261-000',
+  phone: '(21) 2226-2520',
   email: 'contato@hoteisrio.com.br',
   socials: {
     instagram: 'https://instagram.com/hoteisrio',

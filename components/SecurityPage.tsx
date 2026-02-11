@@ -10,11 +10,7 @@ interface SecurityPageProps {
 const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
   
   const downloads = [
-    "Cartilha de Segurança na Recepção",
-    "Guia Oficial: Operação Verão",
-    "Protocolos de Segurança Hoteleira",
-    "Manual de Prevenção a Furtos",
-    "Procedimentos em Caso de Ameaça"
+    "Guia Oficial: Operação Verão (Parceria SETUR/DEAT)"
   ];
 
   const whatsappGroups = [
@@ -90,7 +86,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Left Column: Cartilhas (Taking the space previously used by Alerts) */}
+          {/* Left Column: Cartilhas */}
           <div className="lg:col-span-2 space-y-6">
              
              {/* Protocols Downloads */}
@@ -102,7 +98,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
               <p className="text-gray-500 text-sm mb-6">
                   Material oficial desenvolvido em parceria com as forças de segurança para orientação das equipes hoteleiras.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                   {downloads.map((doc, idx) => (
                     <div key={idx} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-rio-blue hover:bg-blue-50 transition-all group cursor-pointer">
                       <div className="flex items-center gap-3">

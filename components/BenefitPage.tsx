@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Benefit } from '../types';
-import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown, Bot } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { generateBenefitDetails } from '../services/geminiService';
 
@@ -47,7 +47,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
   };
 
   return (
-    <div className="bg-white min-h-screen pb-12 animate-fade-in">
+    <div className="bg-white min-h-screen pb-20 animate-fade-in">
       {/* Hero Header */}
       <div className="bg-rio-blue text-white py-12 px-4 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl" />
@@ -78,6 +78,11 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                      Serviço Online
                    </span>
+                )}
+                {benefit.id === 'sustainability-raiox' && (
+                    <span className="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide flex items-center gap-1">
+                        <Bot className="w-3 h-3" /> Elaborado pela IA
+                    </span>
                 )}
               </div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{benefit.title}</h1>

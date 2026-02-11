@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { ArrowLeft, Gavel, Search, ExternalLink, FileText, AlertCircle } from 'lucide-react';
 import { RJ_LAWS_DATA } from '../constants';
@@ -12,10 +11,13 @@ const LawsRegulationPage: React.FC<LawsRegulationPageProps> = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
 
-  // Categorias únicas
-  const categories = ['Todos', ...Array.from(new Set(RJ_LAWS_DATA.map(l => l.category)))];
+  // Filter out PLs first (Projects of Law) - Only Leis and Decretos
+  const activeLaws = RJ_LAWS_DATA.filter(l => !l.number.toLowerCase().includes('pl') && !l.description.toLowerCase().includes('projeto de lei'));
 
-  const filteredLaws = RJ_LAWS_DATA.filter(law => {
+  // Categorias únicas
+  const categories = ['Todos', ...Array.from(new Set(activeLaws.map(l => l.category)))];
+
+  const filteredLaws = activeLaws.filter(law => {
     const matchesSearch = 
       law.description.toLowerCase().includes(searchTerm.toLowerCase()) || 
       law.number.toLowerCase().includes(searchTerm.toLowerCase());
