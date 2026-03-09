@@ -71,6 +71,18 @@ export default function App() {
   const [regName, setRegName] = useState('');
   const [regHotel, setRegHotel] = useState('');
 
+  const scrollToTop = () => {
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    } catch {
+      // ignore
+    }
+    const main = document.getElementById('main-content');
+    if (main && 'scrollTo' in main) {
+      (main as any).scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  };
+
   // Initial Route Check
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -110,7 +122,7 @@ export default function App() {
 
   const navigateTo = (view: string) => {
     setCurrentView(view);
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    scrollToTop();
   };
 
   const handleGlobalSearch = (term: string) => {
@@ -162,6 +174,7 @@ export default function App() {
   };
 
   const handleBenefitClick = (benefit: Benefit) => {
+    scrollToTop();
     if (benefit.id === 'highlight-drinks') {
         navigateTo('COURSES_V2');
         return;

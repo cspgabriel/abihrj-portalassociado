@@ -47,9 +47,37 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
       </div>
 
       {/* Destaques de Benefícios */}
-      <div id="highlights-section" className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-16">
+      <div id="highlights-section" className="max-w-6xl mx-auto px-6 -mt-16 relative z-20 pb-12">
          {onBenefitClick && <HighlightsSlider onUseBenefit={onBenefitClick} />}
       </div>
+
+      {/* Fornecedores em Destaque - carrossel via iframe */}
+      <section className="max-w-6xl mx-auto px-6 pb-20">
+        <div className="bg-white rounded-3xl shadow-md border border-gray-100 p-6 md:p-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">
+                Fornecedores em Destaque
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Banners dos parceiros oficiais com condições especiais para associados HoteisRio.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <iframe 
+              src="https://sistema-divulgacao-fornecedores.vercel.app/#/embed?theme=light&color=0284c7&speed=3000&desc=true" 
+              width="340" 
+              height="450" 
+              frameBorder="0" 
+              scrolling="no" 
+              style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', borderRadius: 8, display: 'block', margin: '0 auto' }}
+              title="Parceiros" 
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
