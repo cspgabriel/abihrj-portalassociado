@@ -117,14 +117,26 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                     <div className="space-y-8">
                         <GamificationWidget profile={profile as any} />
                         
-                        {/* Banner / Ad */}
-                        <div className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-xl p-6 text-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10" />
-                            <h3 className="font-bold text-lg mb-2 relative z-10">Prêmio Top Hotel 2025</h3>
-                            <p className="text-sm text-blue-200 mb-4 relative z-10">Inscreva seu case de sucesso e seja reconhecido pelo mercado.</p>
-                            <button className="bg-white text-blue-900 px-4 py-2 rounded-lg text-sm font-bold relative z-10">
-                                Saiba Mais
-                            </button>
+                        {/* Fornecedores em Destaque - Carrossel via iframe */}
+                        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                            <h3 className="text-sm font-bold text-gray-800 mb-3">
+                              Fornecedores em Destaque
+                            </h3>
+                            <p className="text-xs text-gray-500 mb-4">
+                              Ofertas e condições especiais dos parceiros oficiais HoteisRio.
+                            </p>
+                            <div className="flex justify-center">
+                              <iframe
+                                src="https://sistema-divulgacao-fornecedores.vercel.app/#/embed?theme=light&color=0284c7&speed=3000&desc=true"
+                                width="340"
+                                height="450"
+                                frameBorder="0"
+                                scrolling="no"
+                                style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', borderRadius: 8, display: 'block', margin: '0 auto' }}
+                                title="Fornecedores HoteisRio"
+                                loading="lazy"
+                              />
+                            </div>
                         </div>
                     </div>
                 </div>

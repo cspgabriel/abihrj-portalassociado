@@ -132,6 +132,13 @@ export default function App() {
     try {
       let loggedUser: User | null = null;
 
+      const allowedDomain = '@';
+      if (!isForgotPassword && !email.includes(allowedDomain)) {
+        setAuthError('Use seu e-mail corporativo válido.');
+        setLoading(false);
+        return;
+      }
+
       if (isForgotPassword) {
         await authService.sendPasswordReset(email);
         setAuthSuccess('Link de recuperação enviado para o seu e-mail!');
@@ -266,7 +273,16 @@ export default function App() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">E-mail Corporativo</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-                  <input type="email" required className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={email} onChange={e => setEmail(e.target.value)} placeholder="seu.nome@hotel.com.br" />
+                  <input 
+                    type="email" 
+                    required 
+                    autoComplete="email"
+                    inputMode="email"
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" 
+                    value={email} 
+                    onChange={e => setEmail(e.target.value)} 
+                    placeholder="seu.nome@hotel.com.br" 
+                  />
                 </div>
               </div>
               
@@ -284,7 +300,14 @@ export default function App() {
                   </div>
                   <div className="relative">
                     <Key className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-                    <input type="password" required className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={password} onChange={e => setPassword(e.target.value)} />
+                    <input 
+                      type="password" 
+                      required 
+                      autoComplete={isRegistering ? 'new-password' : 'current-password'}
+                      className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" 
+                      value={password} 
+                      onChange={e => setPassword(e.target.value)} 
+                    />
                   </div>
                 </div>
               )}

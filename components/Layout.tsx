@@ -14,6 +14,7 @@ import {
   LayoutDashboard, Book
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
+import Breadcrumb from './Breadcrumb';
 
 interface LayoutProps {
   user: User;
@@ -277,15 +278,7 @@ const Layout: React.FC<LayoutProps> = ({
             {/* Desktop Header */}
             {!isFullPage && (
                 <header className="hidden md:flex bg-white h-16 border-b border-gray-200 justify-between items-center px-8 shrink-0 z-20 gap-4">
-                    <div className="flex items-center gap-2 text-gray-400 text-sm whitespace-nowrap">
-                        <Home className="w-4 h-4" />
-                        <span>/</span>
-                        <span className="font-medium text-gray-600">
-                            {currentView === 'LANDING_PAGE' ? 'Início' : 
-                             currentView === 'PLATFORM_TUTORIAL' ? 'Como Funciona' : 
-                             currentView.replace(/_/g, ' ').toLowerCase()}
-                        </span>
-                    </div>
+                    <Breadcrumb currentView={currentView} />
 
                     {/* Search Bar */}
                     <div className="flex-1 max-w-md mx-4 relative">
