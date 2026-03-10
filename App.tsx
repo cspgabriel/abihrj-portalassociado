@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Benefit, Forum } from './types';
 import { authService } from './services/authService';
+import { analyticsService } from './services/analyticsService';
 import { BENEFITS_DATA } from './constants';
 
 // Components
@@ -175,6 +176,12 @@ export default function App() {
 
   const handleBenefitClick = (benefit: Benefit) => {
     scrollToTop();
+    // enviar evento analítico de interação
+    analyticsService.logEvent({
+      type: 'USE_BENEFIT',
+      details: { benefitId: benefit.id, title: benefit.title }
+    }).catch(() => {});
+
     if (benefit.id === 'highlight-drinks') {
         navigateTo('COURSES_V2');
         return;

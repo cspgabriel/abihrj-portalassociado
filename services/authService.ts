@@ -1,6 +1,7 @@
 
 import { User } from '../types';
 import { auth, db } from '../firebaseConfig';
+import { analyticsService } from './analyticsService';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -18,6 +19,18 @@ const LOCAL_STORAGE_SESSION_KEY = 'rio_session_user';
 const LOCAL_STORAGE_LOGS_KEY = 'rio_access_logs';
 
 let mockObserver: ((user: User | null) => void) | null = null;
+
+const getStoredSessionUser = (): User | null => {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as User;
+  } catch (e) {
+    // Sessao invalida/corrompida nao pode quebrar o bootstrap.
+    localStorage.removeItem(LOCAL_STORAGE_SESSION_KEY);
+    return null;
+  }
+};
 
 // Função auxiliar para registrar log
 const logAccess = async (user: User) => {
@@ -40,6 +53,13 @@ const logAccess = async (user: User) => {
       console.warn("Falha ao salvar log no Firestore, usando fallback local.");
     }
   }
+  // também gravar evento genérico para painel analítico
+  analyticsService.logEvent({
+    userId: logData.userId,
+    userEmail: logData.userEmail,
+    type: 'ACCESS',
+    details: { role: logData.userRole, hotel: logData.userHotel }
+  }).catch(()=>{});
 
   try {
     const existingLogs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LOGS_KEY) || '[]');
@@ -172,19 +192,8 @@ export const authService = {
   },
 
   subscribeToAuthChanges: (callback: (user: User | null) => void) => {
-    let callbackCalled = false;
-    const secureCallback = (user: User | null) => {
-      if (!callbackCalled) {
-        callbackCalled = true;
-        callback(user);
-      }
-    };
-
     const timeoutId = setTimeout(() => {
-      if (!callbackCalled) {
-        const local = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
-        secureCallback(local ? JSON.parse(local) : null);
-      }
+      callback(getStoredSessionUser());
     }, 2500);
 
     if (isFirebaseConfigured) {
@@ -212,10 +221,9 @@ export const authService = {
               avatarUrl: firebaseUser.photoURL || undefined
             };
             localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(userObj));
-            secureCallback(userObj);
+            callback(userObj);
           } else {
-            const local = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
-            secureCallback(local ? JSON.parse(local) : null);
+            callback(getStoredSessionUser());
           }
         });
         return () => {
@@ -227,9 +235,8 @@ export const authService = {
       }
     }
 
-    const localUser = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
-    secureCallback(localUser ? JSON.parse(localUser) : null);
-    mockObserver = secureCallback;
+    callback(getStoredSessionUser());
+    mockObserver = callback;
     return () => { 
       clearTimeout(timeoutId);
       mockObserver = null; 

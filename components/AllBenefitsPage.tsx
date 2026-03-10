@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, LayoutGrid, Filter, ArrowDownAZ, ArrowUpAZ, List, Grid } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import { Benefit, BenefitCategory } from '../types';
+import { benefitsService } from '../services/benefitsService';
 import BenefitCard from './BenefitCard';
 import HighlightsSlider from './HighlightsSlider';
 
@@ -19,15 +20,39 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortOrder, setSortOrder] = useState<'az' | 'za'>('az');
 
+  // dynamic list fetched from external projects
+  const [benefits, setBenefits] = useState<Benefit[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+
   useEffect(() => {
     if (initialSearchTerm) {
       setSearchTerm(initialSearchTerm);
     }
   }, [initialSearchTerm]);
 
-  const categories = ['Todos', ...Object.values(BenefitCategory)];
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    // fallback para constantes se o serviço falhar
+    benefitsService.getAll().then(data => {
+      if (mounted) {
+        setBenefits(data.length ? data : BENEFITS_DATA);
+        setLoading(false);
+      }
+    }).catch(() => {
+      if (mounted) {
+        setBenefits(BENEFITS_DATA);
+        setLoading(false);
+      }
+    });
+    return () => { mounted = false; };
+  }, []);
 
-  const filteredBenefits = BENEFITS_DATA.filter(b => {
+
+  const categories = ['Todos', ...Array.from(new Set(benefits.map(b => b.category)))];
+
+  const filteredBenefits = benefits.filter(b => {
     const matchesSearch = b.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           b.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;
@@ -123,6 +148,11 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
         </div>
 
         {/* Grid/List */}
+        {loading ? (
+          <div className="col-span-full py-16 text-center">
+            Carregando benefícios...
+          </div>
+        ) : null}
         <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'} gap-6`}>
             {sortedBenefits.length > 0 ? (
                 sortedBenefits.map(benefit => (

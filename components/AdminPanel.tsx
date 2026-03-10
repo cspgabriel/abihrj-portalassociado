@@ -7,6 +7,8 @@ import React, { useEffect, useState } from 'react';
 import { User } from '../types';
 import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, Filter, ArrowDownAZ, ArrowUpAZ, Calendar } from 'lucide-react';
 import { authService } from '../services/authService';
+import { analyticsService } from '../services/analyticsService';
+
 
 interface AdminPanelProps {
   user: User;
@@ -16,9 +18,10 @@ interface AdminPanelProps {
 type SortOption = 'NEWEST' | 'OLDEST' | 'AZ' | 'ZA';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
-  const [activeTab, setActiveTab] = useState<'LOGS' | 'USERS'>('LOGS');
+  const [activeTab, setActiveTab] = useState<'LOGS' | 'USERS' | 'EVENTS'>('LOGS');
   const [logs, setLogs] = useState<any[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
+  const [eventsList, setEventsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState<SortOption>('NEWEST');
 
@@ -41,24 +44,27 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
     if (activeTab === 'LOGS') {
         const data = await authService.getLogs();
         setLogs(data);
-    } else {
+    } else if (activeTab === 'USERS') {
         const data = await authService.getUsers();
         setUsersList(data);
+    } else if (activeTab === 'EVENTS') {
+        const data = await analyticsService.getEvents();
+        setEventsList(data);
     }
     setLoading(false);
   };
 
   const getSortedData = () => {
-    const data = activeTab === 'LOGS' ? logs : usersList;
+    const data = activeTab === 'LOGS' ? logs : activeTab === 'USERS' ? usersList : eventsList;
     
     return [...data].sort((a, b) => {
-        // Logica para Data (Logs usa 'timestamp', Users usa 'createdAt')
-        const dateA = new Date(activeTab === 'LOGS' ? (a.timestamp || 0) : (a.createdAt || 0)).getTime();
-        const dateB = new Date(activeTab === 'LOGS' ? (b.timestamp || 0) : (b.createdAt || 0)).getTime();
+        // Logica para Data (Logs e Events usam 'timestamp', Users usa 'createdAt')
+        const dateA = new Date(activeTab === 'USERS' ? (a.createdAt || 0) : (a.timestamp || 0)).getTime();
+        const dateB = new Date(activeTab === 'USERS' ? (b.createdAt || 0) : (b.timestamp || 0)).getTime();
 
-        // Logica para Nome (Logs usa 'userName', Users usa 'name')
-        const nameA = (activeTab === 'LOGS' ? a.userName : a.name) || '';
-        const nameB = (activeTab === 'LOGS' ? b.userName : b.name) || '';
+        // Logica para Nome (Logs usa 'userName', Users usa 'name', Events não usa)
+        const nameA = activeTab === 'LOGS' ? (a.userName || '') : activeTab === 'USERS' ? (a.name || '') : '';
+        const nameB = activeTab === 'LOGS' ? (b.userName || '') : activeTab === 'USERS' ? (b.name || '') : '';
 
         switch (sortOrder) {
             case 'NEWEST':
@@ -197,6 +203,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                     <Users className="w-4 h-4" />
                     Usuários Cadastrados
                 </button>
+                <button 
+                onClick={() => setActiveTab('EVENTS')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'EVENTS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                >
+                    <FileText className="w-4 h-4" />
+                    Eventos
+                </button>
             </div>
 
             {/* Sort Controls */}
@@ -248,13 +261,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         <th className="px-6 py-4">Cargo</th>
                         <th className="px-6 py-4">Acesso em</th>
                     </tr>
-                ) : (
+                ) : activeTab === 'USERS' ? (
                     <tr>
                         <th className="px-6 py-4">Nome</th>
                         <th className="px-6 py-4">Email</th>
-                        <th className="px-6 py-4">Hotel</th>
+                        <th classthan="px-6 py-4">Hotel</th>
                         <th className="px-6 py-4">Cargo</th>
                         <th className="px-6 py-4">Data Cadastro</th>
+                    </tr>
+                ) : (
+                    <tr>
+                        <th className="px-6 py-4">Timestamp</th>
+                        <th className="px-6 py-4">Usuário / Email</th>
+                        <th className="px-6 py-4">Evento</th>
+                        <th className="px-6 py-4">Detalhes</th>
                     </tr>
                 )}
               </thead>
@@ -287,7 +307,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         </td>
                     </tr>
                     )
-                ) : (
+                ) : activeTab === 'USERS' ? (
                     sortedData.length > 0 ? (
                         sortedData.map((usr, idx) => (
                             <tr key={idx} className="hover:bg-green-50/50 transition-colors">
@@ -304,6 +324,23 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         <tr>
                             <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
                             Nenhum usuário encontrado na base.
+                            </td>
+                        </tr>
+                    )
+                ) : (
+                    sortedData.length > 0 ? (
+                        sortedData.map((evt, idx) => (
+                            <tr key={idx} className="hover:bg-yellow-50/50 transition-colors">
+                            <td className="px-6 py-4 text-gray-700">{evt.timestamp ? new Date(evt.timestamp).toLocaleString('pt-BR') : '-'}</td>
+                            <td className="px-6 py-4 text-gray-700 font-mono text-xs">{evt.userName || evt.userEmail || evt.email || ''}</td>
+                            <td className="px-6 py-4 text-gray-800 font-semibold">{evt.type}</td>
+                            <td className="px-6 py-4 text-gray-600 text-xs break-words">{evt.details ? JSON.stringify(evt.details) : ''}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
+                            Nenhum evento registrado ainda.
                             </td>
                         </tr>
                     )
