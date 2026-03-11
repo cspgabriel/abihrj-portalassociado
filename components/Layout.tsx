@@ -10,7 +10,7 @@ import {
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
   MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen,
+    Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen, Newspaper,
   LayoutDashboard, Book
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
@@ -148,7 +148,9 @@ const Layout: React.FC<LayoutProps> = ({
                     <Calendar className="w-4 h-4 shrink-0" /> <span className="truncate">Calendário de Feriados 2026</span>
                 </button>
                 
-                {/* Clipping ocultado conforme solicitação */}
+                <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
+                </button>
 
                 <button id="sidebar-courses" onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
