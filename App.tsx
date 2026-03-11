@@ -353,7 +353,7 @@ export default function App() {
                 </div>
               )}
 
-              <button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+              <button type="submit" className="w-full bg-gradient-to-r from-rio-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
                 {isForgotPassword ? <Unlock className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
                 {isForgotPassword ? 'Enviar Link de Recuperação' : isRegistering ? 'Criar Conta' : 'Entrar'}
               </button>
