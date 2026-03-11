@@ -148,9 +148,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <Calendar className="w-4 h-4 shrink-0" /> <span className="truncate">Calendário de Feriados 2026</span>
                 </button>
                 
-                <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
-                </button>
+                {/* Rio International Press will appear in alphabetical order below (after Rock in Rio) */}
 
                 <button id="sidebar-courses" onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
@@ -190,6 +188,9 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button id="sidebar-rir" onClick={() => { onNavigate('ROCK_IN_RIO'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'ROCK_IN_RIO' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Music className="w-4 h-4 shrink-0" /> <span className="truncate">Rock in Rio 2026</span>
+                </button>
+                <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
                 </button>
             </div>
 

@@ -113,7 +113,7 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: '',
     isService: true,
     isNew: false,
-    externalLink: 'https://presscenter.abihrj.com.br',
+    embedUrl: 'https://presscenter.abihrj.com.br',
     customCta: 'Acessar Press Center'
   },
   {
