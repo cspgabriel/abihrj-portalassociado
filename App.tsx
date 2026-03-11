@@ -42,7 +42,7 @@ import BenefitModal from './components/BenefitModal';
 import CalendarModal from './components/CalendarModal';
 import CalculatorModal from './components/CalculatorModal';
 import InteractiveTutorial from './components/InteractiveTutorial';
-import AiAssistant from './components/AiAssistant';
+import QuickAccessMenu from './components/QuickAccessMenu';
 import Footer from './components/Footer';
 
 import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid } from 'lucide-react';
@@ -424,7 +424,10 @@ export default function App() {
     <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer />
-       <AiAssistant />
+       <QuickAccessMenu onUse={(id)=>{
+         const b = BENEFITS_DATA.find(x => x.id === id);
+         if (b) handleBenefitClick(b);
+       }} />
        {showCalendarModal && <CalendarModal onClose={() => setShowCalendarModal(false)} />}
        {showCalculatorModal && <CalculatorModal onClose={() => setShowCalculatorModal(false)} benefit={selectedBenefit || undefined} />}
        {showTutorial && <InteractiveTutorial onClose={() => setShowTutorial(false)} />}
