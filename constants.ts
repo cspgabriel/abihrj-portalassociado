@@ -72,7 +72,7 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400',
     isService: true,
     isNew: true,
-    embedUrl: 'https://calendariodeeventos.sindhoteisrj.com.br/?mode=embed',
+    embedUrl: 'https://calendarioeventos.sindhoteisrj.com.br',
     externalLink: 'https://calendariodeeventos.sindhoteisrj.com.br/',
     customCta: 'Acessar Calendário 2026'
   },

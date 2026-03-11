@@ -88,19 +88,7 @@ const Layout: React.FC<LayoutProps> = ({
                 Início
                 </button>
 
-                {/* SUBSTITUÍDO: Dashboard -> Como Funciona */}
-                <button 
-                id="sidebar-tutorial"
-                onClick={() => { onNavigate('PLATFORM_TUTORIAL'); setIsMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group mb-1
-                    ${currentView === 'PLATFORM_TUTORIAL'
-                    ? 'bg-white text-rio-blue font-bold shadow-lg' 
-                    : 'text-white/80 hover:bg-white/10 hover:text-white'}
-                `}
-                >
-                <BookOpen className="w-5 h-5 shrink-0" />
-                Como Funciona
-                </button>
+                {/* Removed: 'Como Funciona' tutorial per request */}
 
                 <button 
                 id="sidebar-all-benefits"
@@ -295,14 +283,7 @@ const Layout: React.FC<LayoutProps> = ({
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button 
-                            onClick={() => onNavigate('WELCOME')}
-                            className="p-2 text-gray-400 hover:text-rio-blue transition-colors flex items-center gap-2 group"
-                            title="Como Funciona / Tutorial"
-                        >
-                            <BookOpen className="w-5 h-5" />
-                            <span className="text-xs font-medium hidden lg:block group-hover:underline">Como Funciona</span>
-                        </button>
+                        {/* 'Como Funciona' removed from header */}
 
                         <div className="h-8 w-px bg-gray-200 mx-2"></div>
                         <div className="flex items-center gap-3">
@@ -333,14 +314,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <span className="text-[10px] font-medium">Início</span>
                 </button>
 
-                {/* SUBSTITUÍDO: Painel -> Ajuda (Tutorial) */}
-                <button 
-                    onClick={() => onNavigate('PLATFORM_TUTORIAL')}
-                    className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${currentView === 'PLATFORM_TUTORIAL' ? 'text-rio-blue' : 'text-gray-400 hover:text-gray-600'}`}
-                >
-                    <Book className={`w-6 h-6 ${currentView === 'PLATFORM_TUTORIAL' ? 'fill-blue-100' : ''}`} strokeWidth={currentView === 'PLATFORM_TUTORIAL' ? 2 : 1.5} />
-                    <span className="text-[10px] font-medium">Ajuda</span>
-                </button>
+                {/* 'Como Funciona' / tutorial removed per request */}
 
                 <button 
                     onClick={() => onNavigate('ALL_BENEFITS')}

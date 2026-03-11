@@ -24,7 +24,6 @@ import AssociationEventsPage from './components/AssociationEventsPage';
 import WhatsAppGroupsPage from './components/WhatsAppGroupsPage';
 import ContactsPage from './components/ContactsPage';
 import LawsRegulationPage from './components/LawsRegulationPage';
-import PlatformTutorial from './components/PlatformTutorial';
 import RockInRioPage from './components/RockInRioPage';
 import CalculatorsPage from './components/CalculatorsPage';
 import RegistrationUpdatePage from './components/RegistrationUpdatePage';
@@ -405,7 +404,7 @@ export default function App() {
       case 'WHATSAPP_GROUPS': return <WhatsAppGroupsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'CONTACTS': return <ContactsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LAWS_REGULATION': return <LawsRegulationPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'PLATFORM_TUTORIAL': return <PlatformTutorial onBack={() => navigateTo('LANDING_PAGE')} />;
+      // PLATFORM_TUTORIAL removed
       case 'ROCK_IN_RIO': return <RockInRioPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'CALCULATORS_PAGE': return <CalculatorsPage onBack={() => navigateTo('LANDING_PAGE')} onOpenCalculator={(b) => { setSelectedBenefit(b); setShowCalculatorModal(true); }} />;
       case 'REGISTRATION_UPDATE': return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;

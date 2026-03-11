@@ -17,7 +17,6 @@ const VIEW_LABELS: Record<string, string> = {
   FORUM_DETAILS: 'Detalhes do Fórum',
   ASSOCIATION_EVENTS: 'Eventos da Associação',
   LAWS_REGULATION: 'Leis & Decretos',
-  PLATFORM_TUTORIAL: 'Como Funciona',
   ROCK_IN_RIO: 'Rock in Rio 2026',
   CALCULATORS_PAGE: 'Calculadoras',
   BENEFIT_DETAILS: 'Detalhes do Benefício',
