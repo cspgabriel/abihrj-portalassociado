@@ -1,50 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BENEFITS_DATA } from '../constants';
-import { ButtonHTMLAttributes } from 'react';
-import { Menu, X, Grid, Search } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 interface QuickAccessMenuProps {
-  onUse: (benefitId: string) => void;
+  onUse: (id: string) => void;
 }
 
 const QUICK_IDS = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'portal-fornecedores-new', 'rio-international-press'];
 
 const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({ onUse }) => {
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('Atalhos');
+
+  const grouped = useMemo(() => {
+    const map: Record<string, typeof BENEFITS_DATA> = {} as any;
+    QUICK_IDS.forEach(id => {
+      const b = BENEFITS_DATA.find(x => x.id === id);
+      if (!b) return;
+      const cat = b.category || 'Outros';
+      if (!map[cat]) map[cat] = [] as any;
+      map[cat].push(b);
+    });
+    return map;
+  }, []);
+
+  const tabs = useMemo(() => ['Atalhos', ...Object.keys(grouped)], [grouped]);
 
   const handleClick = (id: string) => {
-    const benefit = BENEFITS_DATA.find(b => b.id === id);
-    if (benefit) onUse(id);
+    onUse(id);
     setOpen(false);
   };
 
   return (
     <div className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 flex flex-col items-end">
       {open && (
-        <div className="mb-3 w-64 bg-white rounded-2xl shadow-2xl p-3 border border-gray-100">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="text-sm font-bold">Acesso Rápido</h4>
-            <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-700"><X className="w-4 h-4" /></button>
+        <div className="mb-3 w-72 bg-gradient-to-br from-rio-blue/95 to-blue-600/90 text-white rounded-2xl shadow-2xl p-0 border border-white/10 overflow-hidden">
+          <div className="p-3 flex items-center justify-between">
+            <h4 className="text-sm font-semibold">Acesso Rápido</h4>
+            <button onClick={() => setOpen(false)} className="text-white/80 hover:text-white"><X className="w-4 h-4" /></button>
           </div>
-          <div className="grid grid-cols-1 gap-2">
-            {QUICK_IDS.map(id => {
-              const b = BENEFITS_DATA.find(x => x.id === id);
-              if (!b) return null;
-              return (
-                <button key={id} onClick={() => handleClick(id)} className="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
-                  <div className="w-8 h-8 rounded-md bg-gray-100 flex items-center justify-center text-gray-700 font-semibold">{b.title.charAt(0)}</div>
+
+          <div className="px-3">
+            <div className="flex gap-2 mb-3">
+              {tabs.map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`text-xs px-2 py-1 rounded-full ${activeTab === tab ? 'bg-white/20 text-white font-semibold' : 'text-white/80 bg-white/0 hover:bg-white/10'}`}>
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="max-h-60 overflow-y-auto px-2 pb-3">
+            <div className="space-y-2">
+              {(activeTab === 'Atalhos' ? QUICK_IDS.map(id => BENEFITS_DATA.find(b => b.id === id)).filter(Boolean) as any[] : (grouped[activeTab] || [])).map(b => (
+                <button key={b.id} onClick={() => handleClick(b.id)} className="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition">
+                  <div className="w-8 h-8 rounded-md bg-white/10 flex items-center justify-center text-white font-semibold">{b.title.charAt(0)}</div>
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-800 truncate">{b.title}</div>
-                    <div className="text-xs text-gray-500 truncate">{b.description}</div>
+                    <div className="text-sm font-medium truncate">{b.title}</div>
+                    <div className="text-xs text-white/80 truncate">{b.description}</div>
                   </div>
                 </button>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      <button onClick={() => setOpen(!open)} className="bg-rio-blue hover:bg-blue-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center">
+      <button onClick={() => setOpen(!open)} className="bg-gradient-to-r from-rio-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center">
         <Menu className="w-5 h-5" />
       </button>
     </div>
