@@ -10,52 +10,43 @@ const QUICK_IDS = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'portal-
 
 const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({ onUse }) => {
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('Atalhos');
+  const [query, setQuery] = useState('');
 
-  const grouped = useMemo(() => {
-    const map: Record<string, typeof BENEFITS_DATA> = {} as any;
-    QUICK_IDS.forEach(id => {
-      const b = BENEFITS_DATA.find(x => x.id === id);
-      if (!b) return;
-      const cat = b.category || 'Outros';
-      if (!map[cat]) map[cat] = [] as any;
-      map[cat].push(b);
-    });
-    return map;
-  }, []);
+  const defaultItems = useMemo(() => QUICK_IDS.map(id => BENEFITS_DATA.find(b => b.id === id)).filter(Boolean) as any[], []);
 
-  const tabs = useMemo(() => ['Atalhos', ...Object.keys(grouped)], [grouped]);
+  const filtered = useMemo(() => {
+    if (!query.trim()) return defaultItems;
+    const q = query.toLowerCase();
+    return BENEFITS_DATA.filter(b => (b.title + ' ' + (b.description || '')).toLowerCase().includes(q)).slice(0, 50);
+  }, [query, defaultItems]);
 
   const handleClick = (id: string) => {
     onUse(id);
     setOpen(false);
+    setQuery('');
   };
 
   return (
     <div className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 flex flex-col items-end">
       {open && (
-        <div className="mb-3 w-72 bg-gradient-to-br from-rio-blue/95 to-blue-600/90 text-white rounded-2xl shadow-2xl p-0 border border-white/10 overflow-hidden">
+        <div className="mb-3 w-80 bg-gradient-to-br from-rio-blue to-blue-600 text-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="p-3 flex items-center justify-between">
             <h4 className="text-sm font-semibold">Acesso Rápido</h4>
-            <button onClick={() => setOpen(false)} className="text-white/80 hover:text-white"><X className="w-4 h-4" /></button>
+            <button onClick={() => { setOpen(false); setQuery(''); }} className="text-white/90 hover:text-white"><X className="w-4 h-4" /></button>
           </div>
 
-          <div className="px-3">
-            <div className="flex gap-2 mb-3">
-              {tabs.map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`text-xs px-2 py-1 rounded-full ${activeTab === tab ? 'bg-white/20 text-white font-semibold' : 'text-white/80 bg-white/0 hover:bg-white/10'}`}>
-                  {tab}
-                </button>
-              ))}
-            </div>
+          <div className="px-3 pb-2">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Pesquisar benefícios..."
+              className="w-full mb-2 px-3 py-2 rounded-lg text-sm bg-white/10 placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
+            />
           </div>
 
-          <div className="max-h-60 overflow-y-auto px-2 pb-3">
+          <div className="max-h-64 overflow-y-auto px-2 pb-3">
             <div className="space-y-2">
-              {(activeTab === 'Atalhos' ? QUICK_IDS.map(id => BENEFITS_DATA.find(b => b.id === id)).filter(Boolean) as any[] : (grouped[activeTab] || [])).map(b => (
+              {filtered.map(b => (
                 <button key={b.id} onClick={() => handleClick(b.id)} className="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition">
                   <div className="w-8 h-8 rounded-md bg-white/10 flex items-center justify-center text-white font-semibold">{b.title.charAt(0)}</div>
                   <div className="flex-1">
