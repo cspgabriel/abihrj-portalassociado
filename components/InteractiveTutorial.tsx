@@ -103,12 +103,6 @@ const ADVANCED_STEPS: Step[] = [
     position: 'right'
   },
   {
-    targetId: 'sidebar-clipping',
-    title: 'Clipping Diário',
-    description: 'Monitore o que sai na mídia sobre a hotelaria e o turismo do Rio.',
-    position: 'right'
-  },
-  {
     targetId: 'sidebar-courses',
     title: 'HoteisRio Academy',
     description: 'Plataforma de cursos e treinamentos online para capacitar sua equipe.',

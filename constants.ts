@@ -104,17 +104,17 @@ export const BENEFITS_DATA: Benefit[] = [
     customCta: 'Enviar Sugestão'
   },
   {
-    id: 'clipping-service',
-    title: 'Clipping HoteisRio',
-    description: 'Monitoramento diário de notícias (atualizado toda sexta-feira).',
+    id: 'rio-international-press',
+    title: 'Rio International Press',
+    description: 'Acesse o Press Center com releases e contato de imprensa.',
     category: BenefitCategory.COMMUNICATION,
-    targetSectors: ['MANAGEMENT', 'SALES', 'LEGAL_DEPT'],
-    iconName: 'FileSearch',
+    targetSectors: ['MANAGEMENT', 'COMMUNICATION'],
+    iconName: 'Newspaper',
     imageUrl: '',
     isService: true,
-    isNew: true,
-    embedUrl: 'https://clippings-hoteisrioo.vercel.app/',
-    customCta: 'Ler Clipping'
+    isNew: false,
+    externalLink: 'https://presscenter.abihrj.com.br',
+    customCta: 'Acessar Press Center'
   },
   {
     id: 'influencers-hub',

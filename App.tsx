@@ -192,7 +192,7 @@ export default function App() {
         return;
     }
 
-    const forceInternalIds = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'clipping-service', 'highlight-events-reg', 'sugestao-pauta', 'public-order-01'];
+    const forceInternalIds = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'influencers-hub', 'highlight-events-reg', 'sugestao-pauta', 'public-order-01'];
 
     if (forceInternalIds.includes(benefit.id)) {
         setSelectedBenefit(benefit);
