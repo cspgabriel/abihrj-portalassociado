@@ -12,13 +12,15 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({ onUse }) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
 
-  const defaultItems = useMemo(() => QUICK_IDS.map(id => BENEFITS_DATA.find(b => b.id === id)).filter(Boolean) as any[], []);
+  const allItems = useMemo(() => {
+    return BENEFITS_DATA.slice().sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+  }, []);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return defaultItems;
+    if (!query.trim()) return allItems;
     const q = query.toLowerCase();
-    return BENEFITS_DATA.filter(b => (b.title + ' ' + (b.description || '')).toLowerCase().includes(q)).slice(0, 50);
-  }, [query, defaultItems]);
+    return allItems.filter(b => (b.title + ' ' + (b.description || '')).toLowerCase().includes(q)).slice(0, 200);
+  }, [query, allItems]);
 
   const handleClick = (id: string) => {
     onUse(id);
