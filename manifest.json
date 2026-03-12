@@ -1,11 +1,10 @@
-
 {
-  "short_name": "HoteisRio",
-  "name": "HoteisRio - Portal do Associado",
+  "short_name": "Hotéis RIO",
+  "name": "HoteisRIO - Portal do Associado",
   "description": "Portal exclusivo para associados HoteisRio acessarem benefícios, notícias, suporte jurídico e ferramentas de gestão.",
   "id": "/",
   "lang": "pt-BR",
-  "start_url": "/",
+  "start_url": "https://portaldoassociado.sindhoteisrj.com.br",
   "display": "standalone",
   "theme_color": "#004aad",
   "background_color": "#004aad",
@@ -43,14 +42,14 @@
   ],
   "screenshots": [
     {
-      "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=1280",
+      "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&amp;fit=crop&amp;q=80&amp;w=1280",
       "sizes": "1280x720",
       "type": "image/jpg",
       "form_factor": "wide",
       "label": "Painel de Gestão e Benefícios"
     },
     {
-      "src": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=720",
+      "src": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&amp;fit=crop&amp;q=80&amp;w=720",
       "sizes": "720x1280",
       "type": "image/jpg",
       "form_factor": "narrow",
