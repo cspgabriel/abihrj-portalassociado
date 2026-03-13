@@ -7,16 +7,6 @@ interface PublicOrderPageProps {
 
 const cards = [
   {
-    title: 'Consulta de Demanda',
-    description: 'Acompanhe o status de uma solicitacao ja enviada e consulte os registros de forma rapida.',
-    href: 'https://ordempublica.sindhoteisrj.com.br/consultar',
-    cta: 'Consultar Agora',
-    icon: ClipboardList,
-    accent: 'bg-rio-blue',
-    iconWrap: 'bg-blue-50 text-rio-blue group-hover:bg-rio-blue group-hover:text-white',
-    button: 'bg-rio-blue text-white group-hover:bg-blue-700'
-  },
-  {
     title: 'Cadastro e Envio de Demanda',
     description: 'Registre uma nova demanda de ordem publica com os detalhes necessarios para o encaminhamento.',
     href: 'https://ordempublica.sindhoteisrj.com.br/enviar',
@@ -25,6 +15,16 @@ const cards = [
     accent: 'bg-emerald-600',
     iconWrap: 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white',
     button: 'border-2 border-emerald-600 text-emerald-600 bg-white group-hover:bg-emerald-600 group-hover:text-white'
+  },
+  {
+    title: 'Consulta de Demanda',
+    description: 'Acompanhe o status de uma solicitacao ja enviada e consulte os registros de forma rapida.',
+    href: 'https://ordempublica.sindhoteisrj.com.br/consultar',
+    cta: 'Consultar Agora',
+    icon: ClipboardList,
+    accent: 'bg-rio-blue',
+    iconWrap: 'bg-blue-50 text-rio-blue group-hover:bg-rio-blue group-hover:text-white',
+    button: 'bg-rio-blue text-white group-hover:bg-blue-700'
   }
 ];
 
