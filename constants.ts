@@ -118,15 +118,17 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'influencers-hub',
-    title: 'Parceiros Influenciadores',
-    description: 'Conecte-se com nossos parceiros para divulgar sua marca.',
+    title: 'Influenciadores / UGC',
+    description: 'Conecte-se com criadores e parceiros para divulgar sua marca com conteudo autentico.',
     category: BenefitCategory.COMMUNICATION,
     targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'Camera',
     imageUrl: '',
     isService: true,
     isNew: true,
-    customCta: 'Ver Parceiros'
+    embedUrl: 'https://influenciadoresdigitais.abihrj.com.br/',
+    externalLink: 'https://influenciadoresdigitais.abihrj.com.br/',
+    customCta: 'Acessar Plataforma'
   },
 
   // --- LEGISLAÇÃO ---
@@ -223,14 +225,13 @@ export const BENEFITS_DATA: Benefit[] = [
   {
     id: 'public-order-01',
     title: 'Demandas de Ordem Pública',
-    description: 'Canal direto para reportar ocorrências no entorno.',
+    description: 'Consulte o andamento das demandas ou cadastre uma nova solicitacao em um fluxo dedicado.',
     category: BenefitCategory.OPERATIONAL,
     targetSectors: ['MANAGEMENT', 'SECURITY'],
     iconName: 'Megaphone',
     imageUrl: '',
     isService: true,
-    embedUrl: 'http://hoteisrio.com.br/ordem-publica',
-    customCta: 'Reportar Ocorrência'
+    customCta: 'Acessar Opcoes'
   },
   {
     id: 'registration-update',
