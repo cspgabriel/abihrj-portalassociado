@@ -16,44 +16,28 @@
   ],
   "icons": [
     {
-      "src": "https://iili.io/qaAFuj9.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://iili.io/qaAFuj9.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://iili.io/qaAFuj9.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://iili.io/qaAFuj9.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "https://iili.io/qaAFuj9.png",
-      "sizes": "1280x720",
-      "type": "image/jpg",
-      "form_factor": "wide",
-      "label": "Painel de Gestão e Benefícios"
-    },
-    {
-      "src": "https://iili.io/qaAFuj9.png",
-      "sizes": "720x1280",
-      "type": "image/jpg",
-      "form_factor": "narrow",
-      "label": "Acesso Mobile Rápido"
     }
   ],
   "shortcuts": [
@@ -64,7 +48,7 @@
       "url": "/?view=ALL_BENEFITS",
       "icons": [
         {
-          "src": "https://iili.io/qaAFuj9.png",
+          "src": "/icons/icon-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -77,7 +61,7 @@
       "url": "/?view=ASSOCIATION_EVENTS",
       "icons": [
         {
-          "src": "https://iili.io/qaAFuj9.png",
+          "src": "/icons/icon-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -90,7 +74,7 @@
       "url": "/?view=CALCULATORS_PAGE",
       "icons": [
         {
-          "src": "https://iili.io/qaAFuj9.png",
+          "src": "/icons/icon-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
