@@ -126,8 +126,8 @@ export const BENEFITS_DATA: Benefit[] = [
     imageUrl: '',
     isService: true,
     isNew: true,
-    embedUrl: 'https://influenciadoresdigitais.abihrj.com.br/',
-    externalLink: 'https://influenciadoresdigitais.abihrj.com.br/',
+    embedUrl: 'https://influenciadoresdigitais.abihrj.com.br/#/influenciadores',
+    externalLink: 'https://influenciadoresdigitais.abihrj.com.br/#/influenciadores',
     customCta: 'Acessar Plataforma'
   },
 

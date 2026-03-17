@@ -84,9 +84,9 @@ export default function App() {
     } catch {
       // ignore
     }
-    const main = document.getElementById('main-content');
-    if (main && 'scrollTo' in main) {
-      (main as any).scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    const scrollable = document.getElementById('scrollable-content');
+    if (scrollable && 'scrollTo' in scrollable) {
+      (scrollable as any).scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
   };
 
