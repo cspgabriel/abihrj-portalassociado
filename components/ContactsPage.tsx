@@ -47,12 +47,14 @@ const ContactsPage: React.FC<ContactsPageProps> = ({ onBack }) => {
                     <span className="text-gray-600 group-hover:text-rio-blue transition-colors truncate">{contact.email}</span>
                   </a>
 
+                  {contact.whatsapp && (
                   <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group text-sm">
                     <div className="bg-white p-1.5 rounded-full shadow-sm group-hover:bg-green-500 group-hover:text-white transition-colors text-gray-500">
                       <Phone className="w-4 h-4" />
                     </div>
                     <span className="text-gray-600 group-hover:text-green-600 transition-colors">WhatsApp Oficial</span>
                   </a>
+                  )}
                 </div>
               </div>
             ))}
