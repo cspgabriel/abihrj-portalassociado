@@ -34,8 +34,8 @@ export const COMMERCIAL_SUB_ACTIONS = [
     title: 'Experiência Rio',
     description: 'Participe das ações de promoção do destino e famtours exclusivos para mostrar o melhor do Rio.',
     iconName: 'Sparkles',
-    buttonText: 'Inscrições em Breve!',
-    link: 'https://hoteisrio.com.br/experiencia',
+    buttonText: 'Manifestar Interesse',
+    link: 'https://docs.google.com/forms/d/e/1FAIpQLSdL-Z_o-2TV6mRXquFiUM55wLXgWQfm3CxbIkQtlOuKnmOn_w/viewform?authuser=1',
     color: 'bg-pink-600',
     textClass: 'text-pink-600',
     iconColor: 'text-pink-200'
