@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowLeft, MessageCircle, ExternalLink, ShieldCheck, Users, Briefcase, Wrench, Bed, TrendingUp, Bell, Utensils } from 'lucide-react';
+import { ArrowLeft, MessageCircle, ExternalLink, ShieldCheck, Users, Briefcase, Wrench, Bed, TrendingUp, Bell, Utensils, ShoppingCart, DollarSign } from 'lucide-react';
 import { WHATSAPP_GROUPS } from '../constants';
 
 interface WhatsAppGroupsPageProps {
@@ -17,6 +17,8 @@ const WhatsAppGroupsPage: React.FC<WhatsAppGroupsPageProps> = ({ onBack }) => {
       if (id.includes('gms')) return <Briefcase className="w-6 h-6" />;
       if (id.includes('recepcao')) return <Bell className="w-6 h-6" />;
       if (id.includes('ab')) return <Utensils className="w-6 h-6" />;
+      if (id.includes('compras')) return <ShoppingCart className="w-6 h-6" />;
+      if (id.includes('controller')) return <DollarSign className="w-6 h-6" />;
       return <Users className="w-6 h-6" />;
   };
 

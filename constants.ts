@@ -496,6 +496,54 @@ export const WHATSAPP_GROUPS = [
     name: 'Alimentos & Bebidas', 
     description: 'Gestão de restaurantes, bares e café da manhã.', 
     link: 'https://chat.whatsapp.com/example' 
+  },
+  {
+    id: 'group-compras',
+    name: 'Forum Compras HOTEISRIO',
+    description: 'Fórum de compras e fornecedores do setor hoteleiro.',
+    link: 'https://chat.whatsapp.com/Geb55xwOXUxFR7laa6pK0N'
+  },
+  {
+    id: 'group-seg-barra',
+    name: 'F. Hotéis - Segurança Barra',
+    description: 'Alertas e informações de segurança para hotéis da Barra.',
+    link: 'https://chat.whatsapp.com/IP2MxB4ljuGCwyjwefy1qk'
+  },
+  {
+    id: 'group-controller',
+    name: '💰F. Controller | HOTEISRIO',
+    description: 'Fórum de controllers e financeiro dos hotéis associados.',
+    link: 'https://chat.whatsapp.com/DgIxUo3lbW7KiCT5YL7K89'
+  },
+  {
+    id: 'group-manutencao-forum',
+    name: 'F. Manutenção/Engenharia | HoteisRio',
+    description: 'Soluções técnicas, engenharia e manutenção predial.',
+    link: 'https://chat.whatsapp.com/HLObcAQFDn45WapkZl7OSH'
+  },
+  {
+    id: 'group-recepcao-forum',
+    name: 'F. Recepção | HotéisRio',
+    description: 'Fórum de recepcionistas e front office dos hotéis associados.',
+    link: 'https://chat.whatsapp.com/CWjHitKt4vPKn0iYq9xP6r'
+  },
+  {
+    id: 'group-comercial-r1',
+    name: 'Comercial Região 1',
+    description: 'Grupo comercial e de vendas da Região 1.',
+    link: 'https://chat.whatsapp.com/GTElKW0OZWK2VFd3v2JLoi'
+  },
+  {
+    id: 'group-comercial-r3',
+    name: 'Comercial Região 3',
+    description: 'Grupo comercial e de vendas da Região 3.',
+    link: 'https://chat.whatsapp.com/F4DSnACJbhc2n2e2eiVQcg'
+  },
+  {
+    id: 'group-rh-dp',
+    name: 'RH e DP | HOTEISRIO',
+    description: 'Recursos Humanos e Departamento Pessoal dos hotéis associados.',
+    link: 'https://chat.whatsapp.com/KoGzWYWY6fwGL5pO9hJfc5'
   }
 ];
 
