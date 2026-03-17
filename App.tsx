@@ -46,7 +46,7 @@ import InteractiveTutorial from './components/InteractiveTutorial';
 import QuickAccessMenu from './components/QuickAccessMenu';
 import Footer from './components/Footer';
 
-import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid } from 'lucide-react';
+import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid, Phone, Briefcase, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { firestoreBenefitsService } from './services/firestoreBenefitsService';
 
 export default function App() {
@@ -72,6 +72,11 @@ export default function App() {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [regName, setRegName] = useState('');
   const [regHotel, setRegHotel] = useState('');
+  const [regCargo, setRegCargo] = useState('');
+  const [regWhatsapp, setRegWhatsapp] = useState('');
+  const [regConfirmPassword, setRegConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const scrollToTop = () => {
     try {
@@ -83,6 +88,21 @@ export default function App() {
     if (main && 'scrollTo' in main) {
       (main as any).scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
+  };
+
+  const getPasswordStrength = (pwd: string): { label: string; color: string; width: string } => {
+    if (!pwd) return { label: '', color: '', width: '0%' };
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (pwd.length >= 12) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+    if (score <= 1) return { label: 'Fraca', color: 'bg-red-500', width: '20%' };
+    if (score === 2) return { label: 'Fraca', color: 'bg-red-400', width: '30%' };
+    if (score === 3) return { label: 'Média', color: 'bg-yellow-400', width: '55%' };
+    if (score === 4) return { label: 'Boa', color: 'bg-blue-500', width: '75%' };
+    return { label: 'Forte', color: 'bg-green-500', width: '100%' };
   };
 
   // Initial Route Check
@@ -168,7 +188,12 @@ export default function App() {
         setLoading(false);
         return;
       } else if (isRegistering) {
-         loggedUser = await authService.register(email, password, regName, regHotel, 'Associado');
+        if (password !== regConfirmPassword) {
+          setAuthError('As senhas não coincidem. Verifique e tente novamente.');
+          setLoading(false);
+          return;
+        }
+         loggedUser = await authService.register(email, password, regName, regHotel, 'Associado', regCargo, regWhatsapp);
       } else {
          loggedUser = await authService.login(email, password);
       }
@@ -300,6 +325,20 @@ export default function App() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Hotel</label>
                     <input type="text" required className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={regHotel} onChange={e => setRegHotel(e.target.value)} />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Cargo <span className="text-gray-400 font-normal">(opcional)</span></label>
+                    <div className="relative">
+                      <Briefcase className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                      <input type="text" className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={regCargo} onChange={e => setRegCargo(e.target.value)} placeholder="Ex: Gerente, Recepcionista..." />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp <span className="text-gray-400 font-normal">(opcional)</span></label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                      <input type="tel" inputMode="tel" className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" value={regWhatsapp} onChange={e => setRegWhatsapp(e.target.value)} placeholder="(21) 99999-9999" />
+                    </div>
+                  </div>
                 </>
               )}
               
@@ -324,25 +363,71 @@ export default function App() {
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <label className="block text-sm font-medium text-gray-700">Senha</label>
-                    <button 
-                      type="button"
-                      onClick={() => { setIsForgotPassword(true); setAuthError(''); setAuthSuccess(''); }}
-                      className="text-xs text-rio-blue hover:underline font-semibold"
-                    >
-                      Esqueceu a senha?
-                    </button>
+                    {!isRegistering && (
+                      <button 
+                        type="button"
+                        onClick={() => { setIsForgotPassword(true); setAuthError(''); setAuthSuccess(''); }}
+                        className="text-xs text-rio-blue hover:underline font-semibold"
+                      >
+                        Esqueceu a senha?
+                      </button>
+                    )}
                   </div>
                   <div className="relative">
                     <Key className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
                     <input 
-                      type="password" 
+                      type={showPassword ? 'text' : 'password'}
                       required 
                       autoComplete={isRegistering ? 'new-password' : 'current-password'}
-                      className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" 
+                      className="w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none" 
                       value={password} 
                       onChange={e => setPassword(e.target.value)} 
                     />
+                    <button type="button" onClick={() => setShowPassword(v => !v)} className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600" title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}>
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
                   </div>
+                  {isRegistering && password && (() => {
+                    const strength = getPasswordStrength(password);
+                    return (
+                      <div className="mt-2">
+                        <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full transition-all duration-300 ${strength.color}`} style={{ width: strength.width }} />
+                        </div>
+                        <p className="text-xs mt-1 text-gray-500 flex items-center gap-1">
+                          <ShieldCheck className="w-3 h-3" />
+                          Força da senha: <span className="font-semibold">{strength.label}</span>
+                        </p>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {isRegistering && !isForgotPassword && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Confirmar Senha</label>
+                  <div className="relative">
+                    <Key className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      required
+                      autoComplete="new-password"
+                      className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none ${regConfirmPassword && password !== regConfirmPassword ? 'border-red-400' : ''}`}
+                      value={regConfirmPassword}
+                      onChange={e => setRegConfirmPassword(e.target.value)}
+                      placeholder="Repita a senha"
+                    />
+                    <button type="button" onClick={() => setShowConfirmPassword(v => !v)} className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600" title={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}>
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {regConfirmPassword && password !== regConfirmPassword && (
+                    <p className="text-xs text-red-500 mt-1">As senhas não coincidem.</p>
+                  )}
+                  {regConfirmPassword && password === regConfirmPassword && (
+                    <p className="text-xs text-green-600 mt-1 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Senhas coincidem.</p>
+                  )}
                 </div>
               )}
 
@@ -384,7 +469,7 @@ export default function App() {
                  <ArrowLeft className="w-4 h-4" /> Voltar para o Login
                </button>
              ) : (
-               <button onClick={() => { setIsRegistering(!isRegistering); setAuthError(''); setAuthSuccess(''); }} className="text-rio-blue hover:underline font-medium text-sm">
+               <button onClick={() => { setIsRegistering(!isRegistering); setAuthError(''); setAuthSuccess(''); setRegCargo(''); setRegWhatsapp(''); setRegConfirmPassword(''); setShowPassword(false); setShowConfirmPassword(false); }} className="text-rio-blue hover:underline font-medium text-sm">
                  {isRegistering ? 'Já tenho conta. Fazer Login.' : 'Não tem acesso? Cadastre-se.'}
                </button>
              )}
