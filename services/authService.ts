@@ -99,12 +99,16 @@ export const authService = {
         let hotel = 'Hotel Associado';
         let role = 'Associado';
         
+        let cargo = '';
+        let whatsapp = '';
         try {
           const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
           if (userDoc.exists()) {
             const data = userDoc.data();
             hotel = data.hotel || hotel;
             role = data.role || role;
+            cargo = data.cargo || cargo;
+            whatsapp = data.whatsapp || whatsapp;
           }
         } catch (e) {}
 
@@ -114,6 +118,8 @@ export const authService = {
           email: firebaseUser.email || '',
           hotel: hotel,
           role: role,
+          cargo: cargo,
+          whatsapp: whatsapp,
           avatarUrl: firebaseUser.photoURL || undefined
         };
         
@@ -146,7 +152,7 @@ export const authService = {
     return mockUser;
   },
 
-  register: async (email: string, password: string, name: string, hotel: string, role: string): Promise<User> => {
+  register: async (email: string, password: string, name: string, hotel: string, role: string, cargo: string = '', whatsapp: string = ''): Promise<User> => {
     if (isFirebaseConfigured) {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -155,12 +161,12 @@ export const authService = {
 
         try {
             await setDoc(doc(db, "users", firebaseUser.uid), {
-                name, email, hotel, role,
+                name, email, hotel, role, cargo, whatsapp,
                 createdAt: serverTimestamp()
             });
         } catch (e) {}
 
-        const newUser: User = { id: firebaseUser.uid, name, email, hotel, role };
+        const newUser: User = { id: firebaseUser.uid, name, email, hotel, role, cargo, whatsapp };
         localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(newUser));
         await logAccess(newUser);
         return newUser;
@@ -170,7 +176,7 @@ export const authService = {
         throw new Error("Erro ao criar conta: " + (error.message || "Erro desconhecido"));
       }
     }
-    const mockUser: User = { id: 'mock-reg-' + Date.now(), name, email, hotel, role };
+    const mockUser: User = { id: 'mock-reg-' + Date.now(), name, email, hotel, role, cargo, whatsapp };
     localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(mockUser));
     await logAccess(mockUser);
     if (mockObserver) mockObserver(mockUser);

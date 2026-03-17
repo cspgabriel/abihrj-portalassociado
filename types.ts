@@ -10,6 +10,8 @@ export interface User {
   email: string;
   hotel: string;
   role: string;
+  cargo?: string;
+  whatsapp?: string;
   avatarUrl?: string;
   gamification?: UserGamificationProfile;
 }
