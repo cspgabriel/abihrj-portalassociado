@@ -442,9 +442,9 @@ export const RIO_EVENTS: RioEvent[] = [
 
 export const TEAM_CONTACTS = [
   { sector: 'Superintendência', manager: 'Theresa Jansen', email: 'theresa.jansen@hoteisrio.com.br', whatsapp: '21988888888' },
-  { sector: 'Gerência Operacional', manager: 'Julio Correa', email: 'julio.correa@hoteisrio.com.br', whatsapp: '21988888888' },
-  { sector: 'Eventos', manager: 'Julie Souza', email: 'julie.souza@hoteisrio.com.br', whatsapp: '21988888888' },
-  { sector: 'Financeiro', manager: 'Mauricio Ferreira', email: 'mauricio.ferreira@hoteisrio.com.br', whatsapp: '' },
+  { sector: 'Gerência Operacional', manager: 'Julio Correa', email: 'julio.correa@hoteisrio.com.br', whatsapp: '21970186447' },
+  { sector: 'Eventos', manager: 'Julie Souza', email: 'julie.souza@hoteisrio.com.br', whatsapp: '21970179949' },
+  { sector: 'Financeiro', manager: 'Mauricio Ferreira', email: 'mauricio.ferreira@hoteisrio.com.br', whatsapp: '21994979099' },
   { sector: 'Marketing', manager: 'Equipe Marketing', email: 'marketing@hoteisrio.com.br', whatsapp: '21988888888' }
 ];
 
