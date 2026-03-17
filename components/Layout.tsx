@@ -41,9 +41,9 @@ const Layout: React.FC<LayoutProps> = ({
   const [localSearch, setLocalSearch] = useState('');
 
   useEffect(() => {
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-      mainContent.scrollTop = 0;
+    const scrollable = document.getElementById('scrollable-content');
+    if (scrollable) {
+      scrollable.scrollTop = 0;
     }
   }, [currentView]);
 
@@ -154,9 +154,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
                 </button>
 
-                <button id="sidebar-forums" onClick={() => { onNavigate('FORUMS_OVERVIEW'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'FORUMS_OVERVIEW' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
-                    <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Fóruns da Hotelaria</span>
-                </button>
+                {/* Fóruns da Hotelaria hidden per request */}
 
                 <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores / UGC</span>
@@ -300,7 +298,7 @@ const Layout: React.FC<LayoutProps> = ({
             )}
 
             {/* Scrollable Main Content - Padding bottom added for mobile nav */}
-            <main className="flex-1 overflow-y-auto bg-gray-50 relative scroll-smooth w-full pb-20 md:pb-0">
+            <main id="scrollable-content" className="flex-1 overflow-y-auto bg-gray-50 relative scroll-smooth w-full pb-20 md:pb-0">
                 {children}
             </main>
 
