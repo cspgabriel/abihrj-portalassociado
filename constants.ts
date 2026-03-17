@@ -13,7 +13,7 @@ export const COMMERCIAL_SUB_ACTIONS = [
     description: 'Garanta sua participação nos estandes da HoteisRio em feiras nacionais e internacionais (WTM, ABAV, FIT, etc).',
     iconName: 'Globe',
     buttonText: 'Inscrições em Breve!',
-    link: 'https://hoteisrio.com.br/feiras',
+    link: null,
     color: 'bg-blue-600',
     textClass: 'text-blue-600',
     iconColor: 'text-blue-200'
@@ -21,10 +21,10 @@ export const COMMERCIAL_SUB_ACTIONS = [
   {
     id: 'commercial-procap',
     title: 'PROCAP - Capacitação',
-    description: 'Inscreva-se nos projetos de capacitação junto a emissores, agentes e operadores de turismo.',
+    description: 'Programa de capacitação de venda do destino – confira as edições',
     iconName: 'Presentation',
     buttonText: 'Inscrições em Breve!',
-    link: 'https://hoteisrio.com.br/procap',
+    link: 'https://procaprj.com.br',
     color: 'bg-indigo-600',
     textClass: 'text-indigo-600',
     iconColor: 'text-indigo-200'
@@ -449,54 +449,6 @@ export const TEAM_CONTACTS = [
 ];
 
 export const WHATSAPP_GROUPS = [
-  { 
-    id: 'group-gms', 
-    name: 'Gerentes Gerais (GMs)', 
-    description: 'Grupo exclusivo para GMs trocarem informações estratégicas.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-rh', 
-    name: 'Recursos Humanos', 
-    description: 'Vagas, legislação trabalhista e convenções coletivas.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-seg', 
-    name: 'Segurança Hoteleira', 
-    description: 'Alertas em tempo real sobre ocorrências na cidade.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-comercial', 
-    name: 'Comercial & Vendas', 
-    description: 'Discussão sobre tarifas, eventos e ocupação.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-gov', 
-    name: 'Governança', 
-    description: 'Troca de experiências e fornecedores para governantas.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-manutencao', 
-    name: 'Manutenção & Engenharia', 
-    description: 'Soluções técnicas e indicações de serviços.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-recepcao', 
-    name: 'Recepção & Front Office', 
-    description: 'Técnicas de atendimento, check-in/out e procedimentos.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
-  { 
-    id: 'group-ab', 
-    name: 'Alimentos & Bebidas', 
-    description: 'Gestão de restaurantes, bares e café da manhã.', 
-    link: 'https://chat.whatsapp.com/example' 
-  },
   {
     id: 'group-compras',
     name: 'Forum Compras HOTEISRIO',

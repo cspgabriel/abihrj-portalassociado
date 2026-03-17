@@ -37,6 +37,7 @@ import TalentBankPage from './components/TalentBankPage';
 import MarketingLaunchKit from './components/MarketingLaunchKit';
 import BenefitsShowcase from './components/BenefitsShowcase'; // NEW IMPORT
 import PublicOrderPage from './components/PublicOrderPage';
+import LegalAdvisoryPage from './components/LegalAdvisoryPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -231,7 +232,12 @@ export default function App() {
       return;
     }
 
-    const forceInternalIds = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'highlight-events-reg', 'sugestao-pauta'];
+    if (benefit.id === 'juridico-01') {
+      navigateTo('LEGAL_ADVISORY_PAGE');
+      return;
+    }
+
+    const forceInternalIds = ['calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'highlight-events-reg', 'sugestao-pauta'];
 
     if (forceInternalIds.includes(benefit.id)) {
         setSelectedBenefit(benefit);
@@ -506,6 +512,7 @@ export default function App() {
       case 'PHOTO_GALLERY': return <PhotoGalleryPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'LEGAL_ADVISORY_PAGE': return <LegalAdvisoryPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'MARKETING_KIT': return <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />; 
       case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />; // ROUTE HANDLER
       default: return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
@@ -513,7 +520,7 @@ export default function App() {
   };
 
   return (
-    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
+    <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer />
        <QuickAccessMenu onUse={(id)=>{
