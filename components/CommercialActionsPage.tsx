@@ -129,15 +129,21 @@ const CommercialActionsPage: React.FC<CommercialActionsPageProps> = ({ onBack })
                             </p>
                             
                             <div className="mt-auto w-full">
-                                <a 
-                                    href={action.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`w-full block py-4 px-6 rounded-xl text-white font-bold shadow-md transition-all hover:opacity-90 flex items-center justify-center gap-2 ${action.color}`}
-                                >
-                                    {action.buttonText}
-                                    <ExternalLink className="w-4 h-4" />
-                                </a>
+                                {action.link ? (
+                                    <a 
+                                        href={action.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`w-full block py-4 px-6 rounded-xl text-white font-bold shadow-md transition-all hover:opacity-90 flex items-center justify-center gap-2 ${action.color}`}
+                                    >
+                                        {action.buttonText}
+                                        <ExternalLink className="w-4 h-4" />
+                                    </a>
+                                ) : (
+                                    <span className={`w-full block py-4 px-6 rounded-xl text-white font-bold shadow-md opacity-60 cursor-not-allowed flex items-center justify-center gap-2 ${action.color}`}>
+                                        {action.buttonText}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </div>
