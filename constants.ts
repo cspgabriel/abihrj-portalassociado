@@ -330,6 +330,19 @@ Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado
     customCta: 'Ler Notícias'
   },
   {
+    id: 'natal-concurso',
+    title: 'Concurso de Decoração Natalina',
+    description: 'Participe do concurso de decoração natalina dos hotéis associados HoteisRio.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'SALES', 'MAINTENANCE'],
+    iconName: 'TreePine',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://decoracaonatalina.sindhoteisrj.com.br',
+    customCta: 'Participar do Concurso'
+  },
+  {
     id: 'natal-2025',
     title: 'Vencedores: Decoração Natalina',
     description: 'Confira a galeria de fotos com os vencedores do concurso de 2025.',
