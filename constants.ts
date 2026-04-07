@@ -20,10 +20,10 @@ export const COMMERCIAL_SUB_ACTIONS = [
   },
   {
     id: 'commercial-procap',
-    title: 'PROCAP - Capacitação',
+    title: 'Descubra RJ (Projeto Procap)',
     description: 'Programa de capacitação de venda do destino – confira as edições',
     iconName: 'Presentation',
-    buttonText: 'Inscrições em Breve!',
+    buttonText: 'Conheça o projeto',
     link: 'https://procaprj.com.br',
     color: 'bg-indigo-600',
     textClass: 'text-indigo-600',

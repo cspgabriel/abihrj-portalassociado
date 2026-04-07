@@ -217,7 +217,7 @@ export default function App() {
       details: { benefitId: benefit.id, title: benefit.title }
     }).catch(() => {});
 
-    if (benefit.id === 'highlight-drinks') {
+    if (benefit.id === 'highlight-drinks' || benefit.id === 'online-courses') {
         navigateTo('COURSES_V2');
         return;
     }
@@ -494,7 +494,7 @@ export default function App() {
       case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
       case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} onReport={() => { const op = BENEFITS_DATA.find(b => b.id === 'public-order-01'); if(op) handleBenefitClick(op); }} />;
+      case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'FORUMS_OVERVIEW': return <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'FORUM_DETAILS': return selectedForum ? <ForumPage forum={selectedForum} onBack={() => navigateTo('FORUMS_OVERVIEW')} onRegisterUpdate={() => navigateTo('REGISTRATION_UPDATE')} /> : <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'ASSOCIATION_EVENTS': return <AssociationEventsPage onBack={() => navigateTo('LANDING_PAGE')} />;
@@ -522,7 +522,7 @@ export default function App() {
   return (
     <Layout user={user} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
-       <Footer />
+       <Footer onNavigate={navigateTo} onBenefitClick={(id) => { const b = BENEFITS_DATA.find(x => x.id === id); if (b) handleBenefitClick(b); }} />
        <QuickAccessMenu onUse={(id)=>{
          const b = BENEFITS_DATA.find(x => x.id === id);
          if (b) handleBenefitClick(b);

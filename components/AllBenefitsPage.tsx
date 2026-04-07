@@ -53,6 +53,7 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
   const categories = ['Todos', ...Array.from(new Set(benefits.map(b => b.category)))];
 
   const filteredBenefits = benefits.filter(b => {
+    if (b.id === 'highlight-drinks') return false;
     const matchesSearch = b.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           b.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;

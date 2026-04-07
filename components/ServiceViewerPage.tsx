@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, ExternalLink, RefreshCw, XCircle, Rocket, Users } from 'lucide-react';
+import { ArrowLeft, ExternalLink, RefreshCw, XCircle, Rocket, Users, Info, X } from 'lucide-react';
 import { Benefit } from '../types';
 
 interface ServiceViewerPageProps {
@@ -11,6 +11,7 @@ interface ServiceViewerPageProps {
 const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }) => {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   useEffect(() => {
     // Force scroll main content to top instantly
@@ -85,6 +86,16 @@ const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }
                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             </button>
             
+            {benefit.fullDetails && (
+              <button
+                onClick={() => setShowInfoModal(true)}
+                className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors"
+              >
+                <Info className="w-3 h-3" />
+                Mais Informações
+              </button>
+            )}
+
             <a 
                href={url} 
                target="_blank" 
@@ -96,6 +107,33 @@ const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }
             </a>
          </div>
       </div>
+
+      {/* Info Modal */}
+      {showInfoModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowInfoModal(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <Info className="w-5 h-5 text-rio-blue" />
+                <h2 className="text-lg font-bold text-gray-800">{benefit.title}</h2>
+              </div>
+              <button onClick={() => setShowInfoModal(false)} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-500 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto">
+              <p className="text-gray-700 leading-relaxed whitespace-pre-line text-sm text-justify">
+                {benefit.fullDetails}
+              </p>
+            </div>
+            <div className="p-4 border-t border-gray-100 flex justify-end">
+              <button onClick={() => setShowInfoModal(false)} className="px-5 py-2 bg-rio-blue text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors">
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Iframe Container */}
       <div className="flex-1 relative bg-white overflow-hidden">
