@@ -20,10 +20,10 @@ export const COMMERCIAL_SUB_ACTIONS = [
   },
   {
     id: 'commercial-procap',
-    title: 'PROCAP - Capacitação',
+    title: 'Descubra RJ (Projeto Procap)',
     description: 'Programa de capacitação de venda do destino – confira as edições',
     iconName: 'Presentation',
-    buttonText: 'Inscrições em Breve!',
+    buttonText: 'Conheça o projeto',
     link: 'https://procaprj.com.br',
     color: 'bg-indigo-600',
     textClass: 'text-indigo-600',
@@ -328,6 +328,19 @@ Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado
     isNew: true,
     externalLink: 'https://sindhoteisrj.com.br/noticias',
     customCta: 'Ler Notícias'
+  },
+  {
+    id: 'natal-concurso',
+    title: 'Concurso de Decoração Natalina',
+    description: 'Participe do concurso de decoração natalina dos hotéis associados HoteisRio.',
+    category: BenefitCategory.EVENTS,
+    targetSectors: ['MANAGEMENT', 'SALES', 'MAINTENANCE'],
+    iconName: 'TreePine',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    externalLink: 'https://decoracaonatalina.sindhoteisrj.com.br',
+    customCta: 'Participar do Concurso'
   },
   {
     id: 'natal-2025',

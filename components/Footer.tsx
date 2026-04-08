@@ -1,11 +1,18 @@
 
-
 import React from 'react';
 import { FOOTER_DATA, WHATSAPP_GROUPS } from '../constants';
 import { MapPin, Phone, Mail, Instagram, Linkedin, Youtube, Facebook, ArrowUpRight } from 'lucide-react';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  onNavigate?: (view: string) => void;
+  onBenefitClick?: (id: string) => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
   const currentYear = new Date().getFullYear();
+
+  const handleNav = (view: string) => onNavigate?.(view);
+  const handleBenefit = (id: string) => onBenefitClick?.(id);
 
   return (
     <footer className="bg-rio-blue text-blue-100 pt-16 pb-8 border-t border-blue-800">
@@ -54,8 +61,31 @@ const Footer: React.FC = () => {
               Acesso Rápido
             </h3>
             <ul className="space-y-3">
-              <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Calendário de Eventos</a></li>
-              <li><a href="#" className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm"><ArrowUpRight className="w-3 h-3" /> Central de Notícias</a></li>
+              <li>
+                <button onClick={() => handleBenefit('calendar-2026')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Calendário de Eventos
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleBenefit('portal-fornecedores-new')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Fornecedores
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNav('COURSES_V2')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Cursos &amp; Treinamentos
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleBenefit('public-order-01')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Demandas de Ordem Pública
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleBenefit('leis-decretos-app')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Leis e Decretos
+                </button>
+              </li>
             </ul>
           </div>
 

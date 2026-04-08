@@ -1,16 +1,22 @@
 
 import React from 'react';
-import { ArrowLeft, Shield, Phone, AlertTriangle, FileText, ExternalLink, Siren, Users, Link as LinkIcon, FileCheck } from 'lucide-react';
+import { ArrowLeft, Shield, Phone, FileText, ExternalLink, Siren, Users, Link as LinkIcon, FileCheck } from 'lucide-react';
 
 interface SecurityPageProps {
   onBack: () => void;
-  onReport: () => void;
 }
 
-const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
+const SecurityPage: React.FC<SecurityPageProps> = ({ onBack }) => {
   
   const downloads = [
-    "Guia Oficial: Operação Verão (Parceria SETUR/DEAT)"
+    {
+      label: "Guia Oficial: Operação Verão (Parceria SETUR/DEAT)",
+      url: null
+    },
+    {
+      label: "Cartilha de Conscientização de Segurança Turística – SETUR/RJ",
+      url: "https://www.turismo.rj.gov.br/cartilha-de-conscientizacao-de-seguranca-turistica/"
+    }
   ];
 
   const whatsappGroups = [
@@ -46,14 +52,6 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
                  Canal direto com as autoridades, cartilhas de prevenção e ferramentas oficiais.
                </p>
             </div>
-            
-            <button 
-              onClick={onReport}
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-red-900/20 flex items-center gap-2 transition-transform hover:scale-105"
-            >
-              <AlertTriangle className="w-5 h-5" />
-              Reportar Incidente (Interno)
-            </button>
           </div>
         </div>
       </div>
@@ -100,15 +98,33 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack, onReport }) => {
               </p>
               <div className="grid grid-cols-1 gap-4">
                   {downloads.map((doc, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-rio-blue hover:bg-blue-50 transition-all group cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-gray-100 p-2 rounded text-gray-500 group-hover:text-rio-blue group-hover:bg-white transition-colors">
-                          <FileCheck className="w-5 h-5" />
+                    doc.url ? (
+                      <a
+                        key={idx}
+                        href={doc.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-rio-blue hover:bg-blue-50 transition-all group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="bg-gray-100 p-2 rounded text-gray-500 group-hover:text-rio-blue group-hover:bg-white transition-colors">
+                            <FileCheck className="w-5 h-5" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-700 group-hover:text-rio-blue">{doc.label}</span>
                         </div>
-                        <span className="text-sm font-medium text-gray-700 group-hover:text-rio-blue">{doc}</span>
+                        <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-rio-blue" />
+                      </a>
+                    ) : (
+                      <div key={idx} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-default">
+                        <div className="flex items-center gap-3">
+                          <div className="bg-gray-100 p-2 rounded text-gray-500">
+                            <FileCheck className="w-5 h-5" />
+                          </div>
+                          <span className="text-sm font-medium text-gray-700">{doc.label}</span>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-gray-300" />
                       </div>
-                      <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-rio-blue" />
-                    </div>
+                    )
                   ))}
               </div>
             </div>
