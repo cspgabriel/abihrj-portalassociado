@@ -383,7 +383,9 @@ export default function App() {
       );
   }
 
-  if (!user) {
+  // Allow certain pages to be publicly accessible without login
+  const publicViews = ['LANDING_PAGE', 'BENEFITS_SHOWCASE', 'ALL_BENEFITS', 'BENEFIT_DETAILS', 'SERVICE_VIEWER', 'MARKETING_KIT'];
+  if (!user && !publicViews.includes(currentView)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in-up">
