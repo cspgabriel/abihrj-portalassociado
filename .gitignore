@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.vercel/
+.env
+.env.local
+*.log
+*.webm
+*.mp4
+
+# Other repos / subprojects
+cc-spex/
+wppconnect-server/
+
+# Generated output
+dogfood-output/
+screenshots/
+benefit-screenshots/
+
+# IDE
+.vscode/
+.specify/

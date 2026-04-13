@@ -1,0 +1,9 @@
+node_modules
+.git
+wppconnect-server
+cc-spex
+*.cjs
+*.webm
+screenshots
+benefit-screenshots
+dogfood-output

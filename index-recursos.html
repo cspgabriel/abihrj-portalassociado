@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📚 Centro de Recursos - Portal do Associado</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 16px;
+      padding: 50px 40px;
+      margin-bottom: 40px;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+    }
+
+    .header h1 {
+      color: #667eea;
+      font-size: 2.5em;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 8px;
+    }
+
+    .header .subtitle {
+      color: #999;
+      font-size: 0.95em;
+    }
+
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .resource-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      transition: all 0.3s;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+
+    .resource-icon {
+      font-size: 2.5em;
+      margin-bottom: 16px;
+    }
+
+    .resource-card h3 {
+      color: #333;
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
+
+    .resource-card p {
+      color: #666;
+      margin-bottom: 12px;
+      line-height: 1.6;
+      font-size: 0.95em;
+    }
+
+    .resource-features {
+      list-style: none;
+      margin: 16px 0;
+      padding-left: 0;
+    }
+
+    .resource-features li {
+      color: #555;
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+      font-size: 0.9em;
+    }
+
+    .resource-features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(102,126,234,0.3);
+    }
+
+    .btn-secondary {
+      background: #f0f4ff;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .section h2 {
+      color: #667eea;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section h2:before {
+      content: attr(data-icon);
+      font-size: 1.2em;
+    }
+
+    .command-box {
+      background: #f5f5f5;
+      border-left: 4px solid #667eea;
+      padding: 16px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      margin: 12px 0;
+      overflow-x: auto;
+      font-size: 0.9em;
+    }
+
+    .command-box code {
+      color: #333;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-weight: 600;
+      color: #333;
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .footer {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .footer p {
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #667eea;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 600;
+      margin: 4px 4px 4px 0;
+    }
+
+    .badge-primary {
+      background: #e0e7ff;
+      color: #667eea;
+    }
+
+    .badge-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .badge-warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8em;
+      }
+
+      .resources-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <h1>📚 Centro de Recursos</h1>
+      <p>Portal do Associado - Documentação Completa</p>
+      <div class="subtitle">Guias, tutoriais, scripts e documentação sobre todos os benefícios</div>
+    </div>
+
+    <!-- RESOURCES CARDS -->
+    <div class="resources-grid">
+      <!-- Card 1: Main Guide -->
+      <div class="resource-card">
+        <div class="resource-icon">🎁</div>
+        <h3>Todos os Benefícios</h3>
+        <p>Guia completo e detalhado de cada um dos 8 benefícios do portal.</p>
+        <ul class="resource-features">
+          <li>8 benefícios explicados</li>
+          <li>Funcionalidades por módulo</li>
+          <li>Passo-a-passo "Como Usar"</li>
+          <li>Screenshots e visual</li>
+        </ul>
+        <a href="todos-beneficios-explicado.html" class="btn">Abrir Guia →</a>
+        <span class="badge badge-success" style="margin-top: 12px;">⭐ Recomendado</span>
+      </div>
+
+      <!-- Card 2: Tutorial -->
+      <div class="resource-card">
+        <div class="resource-icon">🎬</div>
+        <h3>Tutorial Interativo</h3>
+        <p>Passo-a-passo interativo com 10 etapas para dominar o portal.</p>
+        <ul class="resource-features">
+          <li>10 passos detalhados</li>
+          <li>Instruções de login</li>
+          <li>Exploração de módulos</li>
+          <li>Tempo estimado</li>
+        </ul>
+        <a href="tutorial-completo.html" class="btn">Iniciar Tutorial →</a>
+      </div>
+
+      <!-- Card 3: Documentation -->
+      <div class="resource-card">
+        <div class="resource-icon">📖</div>
+        <h3>Documentação Técnica</h3>
+        <p>Guia técnico completo com instruções para gravação e processamento.</p>
+        <ul class="resource-features">
+          <li>Scripts de automação</li>
+          <li>Instruções de gravação</li>
+          <li>Processamento com Remotion</li>
+          <li>Troubleshooting</li>
+        </ul>
+        <a href="SCREEN_RECORDING_GUIDE.md" class="btn btn-secondary">Ler Documentação →</a>
+      </div>
+    </div>
+
+    <!-- MAIN RESOURCES -->
+    <div class="section" data-icon="🎯">
+      <h2>Recursos Principais</h2>
+      
+      <table class="table-responsive">
+        <thead>
+          <tr>
+            <th>📄 Arquivo</th>
+            <th>📝 Descrição</th>
+            <th>⚡ Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>todos-beneficios-explicado.html</strong></td>
+            <td>Guia completo com todos os 8 benefícios e explicações detalhadas</td>
+            <td><a href="todos-beneficios-explicado.html" class="btn" style="padding: 8px 16px; font-size: 0.85em;">Abrir</a></td>
+          </tr>
+          <tr>
+            <td><strong>tutorial-completo.html</strong></td>
+            <td>Tutorial passo-a-passo interativo com 10 etapas</td>
+            <td><a href="tutorial-completo.html" class="btn" style="padding: 8px 16px; font-size: 0.85em;">Abrir</a></td>
+          </tr>
+          <tr>
+            <td><strong>modules-hub.html</strong></td>
+            <td>Hub central de módulos com navigation</td>
+            <td><a href="modules-hub.html" class="btn" style="padding: 8px 16px; font-size: 0.85em;">Abrir</a></td>
+          </tr>
+          <tr>
+            <td><strong>SCREEN_RECORDING_GUIDE.md</strong></td>
+            <td>Documentação técnica completa (Markdown)</td>
+            <td><a href="SCREEN_RECORDING_GUIDE.md" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85em;">Ler</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SCRIPTS SECTION -->
+    <div class="section" data-icon="⚙️">
+      <h2>Scripts de Automação</h2>
+      
+      <h3 style="color: #333; margin-top: 24px; margin-bottom: 12px;">1️⃣ Capturar Screenshots</h3>
+      <p style="color: #666; margin-bottom: 8px;"><strong>Arquivo:</strong> <code>capture-benefits-tutorial.cjs</code></p>
+      <p style="color: #666; margin-bottom: 12px;">Captura screenshots de todos os 8 benefícios (16 imagens no total)</p>
+      <div class="command-box">
+        <code>node capture-benefits-tutorial.cjs</code>
+      </div>
+      <p style="color: #999; font-size: 0.9em; margin-top: 8px;">Tempo: ~5-10 minutos | Saída: <code>benefit-screenshots/</code> e <code>screenshots-index.html</code></p>
+
+      <h3 style="color: #333; margin-top: 24px; margin-bottom: 12px;">2️⃣ Gravar Vídeo Completo</h3>
+      <p style="color: #666; margin-bottom: 8px;"><strong>Arquivo:</strong> <code>record-all-benefits.cjs</code></p>
+      <p style="color: #666; margin-bottom: 12px;">Grava vídeo completo mostrando cada benefício 1 por 1</p>
+      <div class="command-box">
+        <code>node record-all-benefits.cjs</code>
+      </div>
+      <p style="color: #999; font-size: 0.9em; margin-top: 8px;">Tempo: ~15-20 minutos | Saída: <code>tutorials/</code> com moments.json e vídeos</p>
+
+      <h3 style="color: #333; margin-top: 24px; margin-bottom: 12px;">3️⃣ Processar com Remotion</h3>
+      <p style="color: #666; margin-bottom: 8px;"><strong>Arquivo:</strong> <code>process-tutorial-remotion.cjs</code></p>
+      <p style="color: #666; margin-bottom: 12px;">Processa vídeo bruto com Remotion: trim, merge, zoom, gradientes</p>
+      <div class="command-box">
+        <code>node process-tutorial-remotion.cjs</code>
+      </div>
+      <p style="color: #999; font-size: 0.9em; margin-top: 8px;">Tempo: ~2-3 minutos | Saída: <code>remotion-composition.json</code> e <code>processing-summary.json</code></p>
+
+      <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 16px; border-radius: 6px; margin-top: 20px;">
+        <p style="color: #856404;"><strong>⚠️ Pré-requisitos:</strong></p>
+        <p style="color: #856404; margin-top: 8px;">Node.js instalado | Playwright instalado (<code>npm install playwright</code>)</p>
+      </div>
+    </div>
+
+    <!-- MODULES OVERVIEW -->
+    <div class="section" data-icon="🎁">
+      <h2>Os 8 Benefícios do Portal</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px;">
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #667eea;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">📊</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Dashboard</h4>
+          <p style="color: #666; font-size: 0.9em;">Painel principal com widgets e gamificação</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #764ba2;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">🎁</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Benefícios</h4>
+          <p style="color: #666; font-size: 0.9em;">Cupons, descontos e ofertas exclusivas</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #667eea;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">📈</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Ações Comerciais</h4>
+          <p style="color: #666; font-size: 0.9em;">Cotações em tempo real e análises</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #764ba2;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">📚</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Cursos</h4>
+          <p style="color: #666; font-size: 0.9em;">Treinamentos com certificados</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #667eea;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">🎤</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Eventos</h4>
+          <p style="color: #666; font-size: 0.9em;">Palestras, workshops e networking</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #764ba2;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">💬</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Fórum</h4>
+          <p style="color: #666; font-size: 0.9em;">Comunidade com sistema de reputação</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #667eea;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">👔</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Talent Bank</h4>
+          <p style="color: #666; font-size: 0.9em;">Vagas e oportunidades de carreira</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; border-left: 4px solid #764ba2;">
+          <div style="font-size: 1.8em; margin-bottom: 8px;">📋</div>
+          <h4 style="color: #333; margin-bottom: 4px;">Legislação</h4>
+          <p style="color: #666; font-size: 0.9em;">Documentações e regulamentações</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREDENTIALS SECTION -->
+    <div class="section" data-icon="🔐">
+      <h2>Credenciais do Portal</h2>
+      
+      <div style="background: #e7f3ff; border-left: 4px solid #2196F3; padding: 20px; border-radius: 8px; margin-top: 16px;">
+        <p style="color: #1565c0; margin-bottom: 12px;"><strong>Portal:</strong> <code>https://associados.sindhoteisrj.com.br</code></p>
+        <p style="color: #1565c0; margin-bottom: 12px;"><strong>Email:</strong> <code>marketing@hoteisrio.com.br</code></p>
+        <p style="color: #1565c0;"><strong>Senha:</strong> <code>sind2025</code></p>
+      </div>
+
+      <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 16px; border-radius: 8px; margin-top: 16px;">
+        <p style="color: #856404;"><strong>⚠️ Nota Importante:</strong></p>
+        <p style="color: #856404; margin-top: 8px;">Estas credenciais são usadas automaticamente pelos scripts de captura e gravação. Não compartilhe publicamente.</p>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <h3 style="color: #667eea; margin-bottom: 16px;">🎉 Obrigado por Usar Este Recurso!</h3>
+      <p>Todos os 8 benefícios do Portal do Associado estão documentados em detalhes.</p>
+      <p style="margin-top: 12px; margin-bottom: 20px;">Abra um dos guias acima para começar!</p>
+      
+      <a href="todos-beneficios-explicado.html" class="btn" style="margin-right: 12px;">Guia Completo →</a>
+      <a href="tutorial-completo.html" class="btn btn-secondary">Tutorial →</a>
+
+      <p style="margin-top: 24px; font-size: 0.9em; color: #999;">
+        Gerado em: 2026-04-06 | Versão: 1.0<br>
+        <strong>Status:</strong> <span class="badge badge-success">✅ Completo e Pronto</span>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

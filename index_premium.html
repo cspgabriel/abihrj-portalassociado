@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoteisRio | Elite Associate Portal</title>
+    
+    <!-- Fonts: High-Contrast Serif & Refined Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Color System: Midnight Gold & Deep Ocean */
+            --bg-midnight: #05070a;
+            --accent-gold: #c5a059;
+            --accent-gold-bright: #e7c787;
+            --surface: #121418;
+            --text-main: #f8f9fa;
+            --text-dim: #8e95a1;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --sidebar-width: 280px;
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-midnight);
+            color: var(--text-main);
+            font-family: 'Lexend', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* --- Noise Grain Overlay --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --- Sidebar: Refined Category Grouping --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: rgba(10, 12, 16, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 24px;
+            z-index: 100;
+        }
+
+        .logo-box {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .logo-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-group {
+            margin-bottom: 40px;
+        }
+
+        .group-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            display: block;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dim);
+            text-decoration: none;
+            padding: 12px 0;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-main);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active::after {
+            content: "";
+            width: 4px; height: 4px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin-left: auto;
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        /* --- Main Content --- */
+        .main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px 60px;
+            background: radial-gradient(circle at 70% 30%, rgba(197, 160, 89, 0.05), transparent 60%);
+        }
+
+        /* --- Header / Top Bar --- */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            animation: slideDown 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--glass-bg);
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--bg-midnight));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Dash Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
+            gap: 30px;
+        }
+
+        .welcome-card {
+            grid-column: span 4;
+            padding: 100px 60px;
+            background: url('./demo_images/home.png'); /* Fallback image from previous task */
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+            animation: fadeInScale 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .welcome-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(5,7,10, 0.95), rgba(5,7,10, 0.5));
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .welcome-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .welcome-content h1 span { color: var(--accent-gold); font-style: italic; font-weight: 400; }
+
+        .welcome-content p {
+            max-width: 500px;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+        }
+
+        /* --- Bento Cards --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: revealUp 0.8s backwards;
+        }
+
+        .glass-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+        }
+
+        .card-icon {
+            width: 48px; height: 48px;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent-gold);
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .glass-card p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .span-2 { grid-column: span 2; }
+
+        /* --- Animations --- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(1.05); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes revealUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Cascading reveals */
+        .glass-card:nth-child(2) { animation-delay: 0.2s; }
+        .glass-card:nth-child(3) { animation-delay: 0.3s; }
+        .glass-card:nth-child(4) { animation-delay: 0.4s; }
+        .glass-card:nth-child(5) { animation-delay: 0.5s; }
+        .glass-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* --- Search Interaction --- */
+        .search-bar {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 400px;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="logo-box">
+            <h2>HoteisRio</h2>
+            <p style="font-size: 0.6rem; letter-spacing: 3px; color: var(--text-dim);">ELITE PORTAL</p>
+        </div>
+
+        <div class="nav-group">
+            <span class="group-label">Inteligência</span>
+            <a href="#" class="nav-link active"><span>🏠</span> Início</a>
+            <a href="#" class="nav-link"><span>📊</span> Relatórios Operacionais</a>
+            <a href="#" class="nav-link"><span>📅</span> Calendário 2026</a>
+        </div>
+
+        <div class="nav-group">
+            <span class="group-label">Serviços</span>
+            <a href="#" class="nav-link"><span>⚖️</span> Assessoria Jurídica</a>
+            <a href="#" class="nav-link"><span>🤝</span> Fornecedores</a>
+            <a href="#" class="nav-link"><span>🎓</span> Academy</a>
+        </div>
+
+        <div class="nav-group">
+            <span class="group-label">Operacional</span>
+            <a href="#" class="nav-link"><span>🛡️</span> Segurança</a>
+            <a href="#" class="nav-link"><span>💼</span> Banco de Talentos</a>
+            <a href="#" class="nav-link"><span>📝</span> Cadastro Eventos</a>
+        </div>
+        
+        <div style="margin-top: auto;">
+            <a href="#" class="nav-link" style="color: #ff4d4d; opacity: 0.7;"><span>🚪</span> Sair do Portal</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="topbar">
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" placeholder="Buscar benefício, relatório ou serviço...">
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">G</div>
+                <div style="text-align: left;">
+                    <p style="font-size: 0.85rem; font-weight: 600;">Gabriel Hotéis</p>
+                    <p style="font-size: 0.7rem; color: var(--text-dim);">Master Partner</p>
+                </div>
+                <span style="font-size: 0.8rem; margin-left: 20px;">⚙️</span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <section class="welcome-card">
+                <div class="welcome-content">
+                    <h1>Seja muito bem-vindo,<br><span>Gabriel</span></h1>
+                    <p>Sua central exclusiva de inteligência e gestão hoteleira está sincronizada com as últimas tendências do Rio em 2026.</p>
+                    <a href="#" style="display:inline-block; padding: 16px 32px; background: var(--accent-gold); color: black; border-radius: 100px; text-decoration: none; font-weight: 700;">Explorar Benefícios</a>
+                </div>
+            </section>
+
+            <div class="glass-card span-2">
+                <div class="card-icon">⚡</div>
+                <h4>Calendários Estratégicos</h4>
+                <p>Otimize suas tarifas com base no volume de eventos e feriados internacionais mapeados para os próximos 12 meses.</p>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-icon">📈</div>
+                <h4>Relatórios de Ocupação</h4>
+                <p>Dados consolidados da rede hoteleira para benchmarking de precisão.</p>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-icon">⚖️</div>
+                <h4>Suporte Jurídico</h4>
+                <p>Consulte andamentos de processos e legislação vigente para o setor.</p>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-icon">🧮</div>
+                <h4>RevPAR & ADR</h4>
+                <p>Calculadora instantânea de performance financeira.</p>
+            </div>
+
+            <div class="glass-card span-2">
+                <div class="card-icon">🛡️</div>
+                <h4>Hub de Segurança</h4>
+                <p>Integração direta com DEAT e BPTur para monitoramento de ordens públicas e proteção do hóspede.</p>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-icon">🎓</div>
+                <h4>Academy</h4>
+                <p>Treinamentos técnicos de alto nível para sua equipe de front e back office.</p>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

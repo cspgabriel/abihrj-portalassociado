@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Como Usar o Portal do Associado</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .header h1 {
+      color: #667eea;
+      font-size: 2.2em;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    .portal-url {
+      background: #f0f4ff;
+      padding: 12px 20px;
+      border-radius: 6px;
+      border-left: 4px solid #667eea;
+      color: #333;
+      font-family: monospace;
+      font-size: 0.95em;
+    }
+
+    .steps-container {
+      display: grid;
+      gap: 20px;
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid #667eea;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .step-card:nth-child(odd) {
+      border-left-color: #667eea;
+    }
+
+    .step-card:nth-child(even) {
+      border-left-color: #764ba2;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .step-title {
+      color: #333;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+
+    .step-description {
+      color: #666;
+      font-size: 1em;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .step-actions {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .step-actions h4 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 0.95em;
+    }
+
+    .step-actions ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .step-actions li {
+      color: #555;
+      padding: 6px 0;
+      padding-left: 24px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .step-actions li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .step-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .feature-tag {
+      background: #e0e7ff;
+      color: #667eea;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .step-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #e0e7ff;
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    .duration {
+      background: #fef3c7;
+      padding: 4px 12px;
+      border-radius: 12px;
+      color: #92400e;
+    }
+
+    .footer {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-top: 30px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .footer h3 {
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+
+    .footer p {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    }
+
+    .credentials {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #333;
+    }
+
+    .credentials strong {
+      color: #856404;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 25px;
+      }
+
+      .header h1 {
+        font-size: 1.6em;
+      }
+
+      .step-card {
+        padding: 20px;
+      }
+
+      .step-features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎬 Tutorial: Como Usar o Portal do Associado</h1>
+      <p>Guia completo para acessar e aproveitar os benefícios do portal</p>
+      <div class="portal-url">
+        🔗 https://associados.sindhoteisrj.com.br
+      </div>
+    </div>
+
+    <div class="steps-container">
+      <!-- PASSO 1 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div>
+            <div class="step-title">Acessar o Portal</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Navegue até o portal usando seu navegador web</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Abra seu navegador (Chrome, Firefox, Safari, Edge)</li>
+            <li>Acesse: https://associados.sindhoteisrj.com.br</li>
+            <li>Você verá a página de login</li>
+          </ul>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 30 segundos</span>
+          <span class="duration">Passo 1 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 2 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div>
+            <div class="step-title">Fazer Login</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Autentique-se com suas credenciais</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Insira seu email no campo de login</li>
+            <li>Insira sua senha no campo correspondente</li>
+            <li>Clique no botão "Entrar"</li>
+            <li>Aguarde o carregamento do dashboard</li>
+          </ul>
+        </div>
+
+        <div class="credentials">
+          <strong>Credenciais de login:</strong><br>
+          Email: marketing@hoteisrio.com.br<br>
+          Senha: sind2025
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 1 minuto</span>
+          <span class="duration">Passo 2 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 3 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div>
+            <div class="step-title">Explorar Dashboard</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Conheça o painel principal com todos os widgets</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Visualize os widgets informativos no topo</li>
+            <li>Confira sua pontuação de gamificação</li>
+            <li>Veja as informações meteorológicas</li>
+            <li>Acesse os atalhos rápidos para módulos</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">📊 Dashboard</div>
+            <div class="feature-tag">🎮 Gamificação</div>
+            <div class="feature-tag">🌤️ Clima</div>
+            <div class="feature-tag">⚡ Atalhos</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 2 minutos</span>
+          <span class="duration">Passo 3 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 4 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <div>
+            <div class="step-title">Explorar Benefícios Exclusivos</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Descubra todas as ofertas disponíveis</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Clique em "Benefícios" no menu</li>
+            <li>Explore as categorias de ofertas</li>
+            <li>Veja os cupons e descontos disponíveis</li>
+            <li>Role para ver mais benefícios</li>
+            <li>Clique em um benefício para detalhes</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Catálogo de ofertas</div>
+            <div class="feature-tag">Códigos de desconto</div>
+            <div class="feature-tag">Filtros por categoria</div>
+            <div class="feature-tag">Descrição completa</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 3 minutos</span>
+          <span class="duration">Passo 4 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 5 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <div>
+            <div class="step-title">Módulo de Ações Comerciais</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Gerenciar investimentos e acompanhar cotações</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Acesse "Ações Comerciais" no menu</li>
+            <li>Visualize as cotações em tempo real</li>
+            <li>Leia análises de especialistas</li>
+            <li>Configure alertas de preço</li>
+            <li>Acompanhe sua carteira</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Cotações em tempo real</div>
+            <div class="feature-tag">Análises profissionais</div>
+            <div class="feature-tag">Gráficos detalhados</div>
+            <div class="feature-tag">Alertas personalizados</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 3 minutos</span>
+          <span class="duration">Passo 5 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 6 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">6</div>
+          <div>
+            <div class="step-title">Cursos e Treinamentos</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Aperfeiçoe-se com programas de desenvolvimento</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Clique em "Cursos" no menu</li>
+            <li>Explore o catálogo de cursos</li>
+            <li>Leia descrições e requisitos</li>
+            <li>Inscreva-se em um curso</li>
+            <li>Acompanhe seu progresso</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Cursos variados</div>
+            <div class="feature-tag">Certificações profissionais</div>
+            <div class="feature-tag">Cronograma flexível</div>
+            <div class="feature-tag">Instrutores qualificados</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 2 minutos</span>
+          <span class="duration">Passo 6 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 7 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">7</div>
+          <div>
+            <div class="step-title">Eventos da Associação</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Participe de eventos e networking</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Navegue para "Eventos"</li>
+            <li>Veja o calendário completo</li>
+            <li>Clique em um evento para detalhes</li>
+            <li>Inscreva-se nos de seu interesse</li>
+            <li>Receba confirmação por email</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Calendário de eventos</div>
+            <div class="feature-tag">Agendas e palestrantes</div>
+            <div class="feature-tag">Inscrição online</div>
+            <div class="feature-tag">Certificados de participação</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 2 minutos</span>
+          <span class="duration">Passo 7 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 8 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">8</div>
+          <div>
+            <div class="step-title">Fórum de Discussão</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Conecte-se com a comunidade</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Abra "Fórum" no menu</li>
+            <li>Explore tópicos organizados</li>
+            <li>Leia discussões da comunidade</li>
+            <li>Faça uma pergunta ou comente</li>
+            <li>Construa sua reputação</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Tópicos por categoria</div>
+            <div class="feature-tag">Sistema de reputação</div>
+            <div class="feature-tag">Busca avançada</div>
+            <div class="feature-tag">Notificações de resposta</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 2 minutos</span>
+          <span class="duration">Passo 8 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 9 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">9</div>
+          <div>
+            <div class="step-title">Talent Bank - Oportunidades</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Explore carreiras e conecte com recrutadores</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Acesse "Talent Bank"</li>
+            <li>Complete seu perfil profissional</li>
+            <li>Explore vagas disponíveis</li>
+            <li>Candidate-se para posições</li>
+            <li>Conecte-se com recrutadores</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Banco de oportunidades</div>
+            <div class="feature-tag">Perfil profissional</div>
+            <div class="feature-tag">Vagas exclusivas</div>
+            <div class="feature-tag">Rede de contatos</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 3 minutos</span>
+          <span class="duration">Passo 9 de 10</span>
+        </div>
+      </div>
+
+      <!-- PASSO 10 -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-number">10</div>
+          <div>
+            <div class="step-title">Legislação e Normas</div>
+          </div>
+        </div>
+        
+        <div class="step-description">Consulte documentações e regulamentações</div>
+
+        <div class="step-actions">
+          <h4>📋 Como fazer:</h4>
+          <ul>
+            <li>Clique em "Legislação" no menu</li>
+            <li>Busque por documento ou tema</li>
+            <li>Leia legislações completas</li>
+            <li>Faça download de PDFs</li>
+            <li>Mantenha-se atualizado</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; color: #333;">✨ Funcionalidades</h4>
+          <div class="step-features">
+            <div class="feature-tag">Legislações atualizadas</div>
+            <div class="feature-tag">Regulamentações oficiais</div>
+            <div class="feature-tag">Busca avançada</div>
+            <div class="feature-tag">Download de documentos</div>
+          </div>
+        </div>
+
+        <div class="step-meta">
+          <span>⏱️ Tempo estimado: 2 minutos</span>
+          <span class="duration">Passo 10 de 10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <h3>🎯 Parabéns!</h3>
+      <p>Você concluiu o tutorial de como usar o Portal do Associado!</p>
+      <p>Agora você conhece todos os módulos e funcionalidades disponíveis.</p>
+      <a href="https://associados.sindhoteisrj.com.br" class="cta-button">→ Acessar Portal Agora</a>
+    </div>
+  </div>
+</body>
+</html>

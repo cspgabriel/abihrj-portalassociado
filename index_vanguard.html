@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoteisRio | Vanguard Associate Experience</title>
+    
+    <!-- Ultra-Refined Font Stack -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Deep Obsidian, Raw Platinum, Electric Gold */
+            --bg: #050505;
+            --surface-outer: #0a0a0a;
+            --surface-inner: #111111;
+            --accent: #d4af37;
+            --accent-soft: rgba(212, 175, 55, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --border-refined: rgba(255, 255, 255, 0.06);
+            --bezier-spring: cubic-bezier(0.32, 0.72, 0, 1);
+            --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- Global Reset & Art Gallery Atmosphere --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: 'Geist', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* Film Grain Overlay (Fixed) */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: var(--noise-url);
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Background Mesh Gradient (Floating Light) */
+        .ambient-light {
+            position: fixed;
+            top: -20%; right: -10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
+            animation: pulseLight 15s infinite alternate var(--bezier-spring);
+        }
+
+        @keyframes pulseLight {
+            from { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            to { transform: translate(-10%, 10%) scale(1.2); opacity: 0.6; }
+        }
+
+        /* --- Floating Island Navigation --- */
+        .nav-island {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(24px) saturate(1.8);
+            border: 1px solid var(--border-refined);
+            padding: 8px 32px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideInDown 1s var(--bezier-spring);
+        }
+
+        .nav-island a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            transition: color 0.4s var(--bezier-spring);
+        }
+
+        .nav-island a:hover, .nav-island a.active { color: var(--text-primary); }
+        .nav-island .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin-right: 16px; }
+
+        /* --- Container & Vertical Tension --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 160px 40px 80px;
+        }
+
+        /* --- Hero: Editorial Split --- */
+        .hero {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 120px;
+            gap: 60px;
+        }
+
+        .hero-title {
+            max-width: 800px;
+        }
+
+        .hero-title h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(4rem, 8vw, 7rem);
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            margin-bottom: 40px;
+            animation: revealText 1.2s var(--bezier-spring);
+        }
+
+        .hero-title h1 i { font-weight: 400; color: var(--accent); }
+
+        .hero-meta {
+            width: 300px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            animation: fadeIn 1.5s var(--bezier-spring) 0.5s both;
+        }
+
+        /* --- Vanguard Bento Grid (Asymmetric) --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 240px;
+            gap: 40px;
+        }
+
+        /* Double-Bezel Enclosure technique */
+        .bento-card {
+            background: var(--surface-outer);
+            border-radius: 48px;
+            padding: 8px; /* The outer bezel spacing */
+            border: 1px solid var(--border-refined);
+            transition: transform 0.6s var(--bezier-spring);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .card-inner {
+            background: var(--surface-inner);
+            height: 100%;
+            border-radius: 40px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+        }
+
+        /* Varied Sizes (Tension) */
+        .card-lg { grid-column: span 8; grid-row: span 2; }
+        .card-md { grid-column: span 4; grid-row: span 2; }
+        .card-sm { grid-column: span 4; grid-row: span 1; }
+        .card-wide { grid-column: span 12; grid-row: span 2; }
+
+        .card-inner h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .card-inner p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            max-width: 280px;
+            font-weight: 300;
+        }
+
+        .card-action {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            align-self: flex-end;
+            transition: all 0.4s var(--bezier-spring);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .bento-card:hover .card-action {
+            background: var(--accent);
+            color: black;
+            transform: scale(1.1) rotate(-45deg);
+        }
+        
+        .bento-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Micro-data pattern */
+        .metric {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* --- Special Module: The "Magnetic" Header Image --- */
+        .main-image-wrap {
+            width: 100%;
+            height: 100%;
+            background-image: url('./demo_images/home.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 32px;
+            filter: grayscale(0.5) contrast(1.2);
+            transition: filter 0.8s var(--bezier-spring);
+        }
+
+        .bento-card:hover .main-image-wrap {
+            filter: grayscale(0) contrast(1);
+        }
+
+        /* --- Animations --- */
+        @keyframes revealText {
+            from { transform: translateY(100px); opacity: 0; filter: blur(10px); }
+            to { transform: translateY(0); opacity: 1; filter: blur(0); }
+        }
+
+        @keyframes slideInDown {
+            from { transform: translate(-50%, -100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Staggered reveals for bento */
+        .bento-card { animation: revealUp 1s var(--bezier-spring) backwards; }
+        .bento-card:nth-child(1) { animation-delay: 0.2s; }
+        .bento-card:nth-child(2) { animation-delay: 0.3s; }
+        .bento-card:nth-child(3) { animation-delay: 0.4s; }
+        .bento-card:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes revealUp {
+            from { transform: translateY(80px); opacity: 0; filter: blur(5px); }
+            to { transform: translateY(0); opacity: 1; filter: blur(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+
+    <nav class="nav-island">
+        <div class="logo">H/R</div>
+        <a href="#" class="active">Intelligence</a>
+        <a href="#">Operations</a>
+        <a href="#">Legal</a>
+        <a href="#">Academy</a>
+        <div style="width: 1px; height: 16px; background: var(--border-refined);"></div>
+        <div style="font-size: 0.7rem; font-weight: 800; color: white;">GA</div>
+    </nav>
+
+    <div class="container">
+        
+        <header class="hero">
+            <div class="hero-title">
+                <h1>Hospitality,<br>Refined by <i>Intelligence.</i></h1>
+            </div>
+            <div class="hero-meta">
+                <p>O Portal do Associado HoteisRio em 2026 transcende a ferramenta funcional para se tornar o hub de comando estratégico dos maiores players do mercado carioca.</p>
+                <div style="margin-top: 32px; font-weight: 800; letter-spacing: 2px; font-size: 0.7rem; color: var(--accent);">STATUS // SYNCHRONIZED</div>
+            </div>
+        </header>
+
+        <section class="bento-grid">
+            <!-- Strategic Insight (Large Highlight) -->
+            <div class="bento-card card-lg">
+                <div class="card-inner" style="padding: 0; position: relative;">
+                    <div class="main-image-wrap"></div>
+                    <div style="position: absolute; bottom: 40px; left: 40px; right: 40px;">
+                        <span class="metric">Master Report</span>
+                        <h3 style="font-size: 2.5rem; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">Panorama de Ocupação e ADR 2026</h3>
+                        <p style="color: white; max-width: 400px; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Métricas consolidadas em tempo real para benchmarking de alta octanagem.</p>
+                        <a href="#" class="card-action">→</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operations (Balanced) -->
+            <div class="bento-card card-md">
+                <div class="card-inner">
+                    <div>
+                        <span class="metric">Action Center</span>
+                        <h3>Agenda de Eventos Estreitados</h3>
+                        <p>Planejamento tarifário baseado em feriados mundiais e fluxos de grandes eventos no RJ.</p>
+                    </div>
+                    <a href="#" class="card-action">→</a>
+                </div>
+            </div>
+
+            <!-- Tactical Tools (Small but Punchy) -->
+            <div class="bento-card card-sm">
+                <div class="card-inner">
+                    <div>
+                        <span class="metric">Calculator V3</span>
+                        <h3>RevPAR & GOPPAR</h3>
+                        <p>Simulador instantâneo de lucro operacional bruto.</p>
+                    </div>
+                    <a href="#" class="card-action">→</a>
+                </div>
+            </div>
+
+            <div class="bento-card card-sm">
+                <div class="card-inner">
+                    <div>
+                        <span class="metric">Support</span>
+                        <h3>Suporte Jurídico</h3>
+                        <p>Andamento processual e decretos do setor em vigor.</p>
+                    </div>
+                    <a href="#" class="card-action">→</a>
+                </div>
+            </div>
+
+            <!-- Deep Dive (Wide Section) -->
+            <div class="bento-card card-wide">
+                <div class="card-inner" style="flex-direction: row; align-items: center; gap: 60px;">
+                    <div style="flex: 1;">
+                        <span class="metric">Security Hub</span>
+                        <h3 style="font-size: 3rem;">Blindagem Operacional.</h3>
+                        <p style="max-width: 600px;">Integração via API com os órgãos de segurança pública para monitoramento de ordens e proteção do patrimônio e hóspedes.</p>
+                    </div>
+                    <div style="width: 200px; height: 200px; border-radius: 50%; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.5rem;">
+                        98% SECURE
+                    </div>
+                    <a href="#" class="card-action" style="position: absolute; bottom: 40px; right: 40px;">→</a>
+                </div>
+            </div>
+
+        </section>
+
+        <footer style="margin-top: 120px; border-top: 1px solid var(--border-refined); padding-top: 40px; display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">
+            <div>HoteisRio &copy; 2026 // Design by Antigravity Vanguard</div>
+            <div>Associado Premium // Gabriel Araújo</div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

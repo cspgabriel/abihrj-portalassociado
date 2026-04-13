@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia Completo - Todos os Benefícios do Portal do Associado</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 16px;
+      padding: 50px 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      animation: slideDown 0.6s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header h1 {
+      color: #667eea;
+      font-size: 2.5em;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 1.1em;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .nav-breadcrumb {
+      background: white;
+      padding: 16px 40px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-breadcrumb a {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 0.95em;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .nav-breadcrumb a:hover {
+      background: #f0f4ff;
+    }
+
+    .nav-breadcrumb span {
+      color: #ccc;
+    }
+
+    .benefits-grid {
+      display: grid;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .benefit-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      transition: all 0.4s;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18);
+    }
+
+    .benefit-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .benefit-icon {
+      font-size: 3em;
+      min-width: 60px;
+    }
+
+    .benefit-title-group h2 {
+      font-size: 1.8em;
+      margin-bottom: 8px;
+    }
+
+    .benefit-number {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    .benefit-body {
+      padding: 40px;
+    }
+
+    .benefit-description {
+      font-size: 1.08em;
+      color: #333;
+      margin-bottom: 24px;
+      line-height: 1.8;
+      padding: 20px;
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+    }
+
+    .benefit-sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+    }
+
+    .section:nth-child(even) {
+      border-left-color: #764ba2;
+    }
+
+    .section h3 {
+      color: #667eea;
+      font-size: 1.1em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section h3:before {
+      content: attr(data-icon);
+      font-size: 1.3em;
+    }
+
+    .section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .section li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+      color: #555;
+    }
+
+    .section li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .screenshot-container {
+      margin: 30px 0;
+      background: #f0f4ff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px dashed #667eea;
+      text-align: center;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #667eea;
+    }
+
+    .screenshot-placeholder {
+      font-size: 3em;
+      margin-bottom: 12px;
+    }
+
+    .how-to-section {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 24px;
+      border-radius: 8px;
+      margin-top: 24px;
+    }
+
+    .how-to-section h3 {
+      color: #856404;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .how-to-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .step {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      border: 2px solid #ffc107;
+      counter-increment: step;
+    }
+
+    .step::before {
+      content: counter(step);
+      display: inline-block;
+      background: #ffc107;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .benefit-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .feature-tag {
+      background: #e0e7ff;
+      color: #667eea;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.95em;
+      font-weight: 500;
+      text-align: center;
+      border: 1px solid #667eea;
+      transition: all 0.3s;
+    }
+
+    .feature-tag:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .footer {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      margin-top: 40px;
+    }
+
+    .footer h3 {
+      color: #667eea;
+      font-size: 1.4em;
+      margin-bottom: 16px;
+    }
+
+    .footer p {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1em;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+    }
+
+    .toc {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .toc h3 {
+      color: #667eea;
+      margin-bottom: 16px;
+      font-size: 1.2em;
+    }
+
+    .toc-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .toc-item {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 3px solid #667eea;
+    }
+
+    .toc-item a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .toc-item a:hover {
+      text-decoration: underline;
+    }
+
+    counter-reset: step;
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8em;
+      }
+
+      .benefit-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .benefit-sections {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-breadcrumb {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <h1>🎁 Todos os Benefícios do Portal do Associado</h1>
+      <p>Guia completo e detalhado de cada benefício disponível para associados do Sinrato Rio, com instruções passo a passo e funcionalidades destacadas.</p>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="toc">
+      <h3>📑 Índice de Benefícios</h3>
+      <div class="toc-list">
+        <div class="toc-item">
+          <a href="#benefit-1">1️⃣ Dashboard</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-2">2️⃣ Benefícios Exclusivos</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-3">3️⃣ Ações Comerciais</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-4">4️⃣ Cursos</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-5">5️⃣ Eventos</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-6">6️⃣ Fórum</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-7">7️⃣ Talent Bank</a>
+        </div>
+        <div class="toc-item">
+          <a href="#benefit-8">8️⃣ Legislação</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BENEFITS -->
+    <div class="benefits-grid">
+      <!-- BENEFÍCIO 1: DASHBOARD -->
+      <div class="benefit-card" id="benefit-1">
+        <div class="benefit-header">
+          <div class="benefit-icon">📊</div>
+          <div class="benefit-title-group">
+            <h2>Dashboard - Painel Principal</h2>
+            <div class="benefit-number">Benefício 1 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            O Dashboard é seu ponto de entrada no Portal do Associado. Ele oferece uma visão completa e personalizada com widgets informativos, pontuação de gamificação e acesso rápido a todos os módulos.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="📱">O que é?</h3>
+              <ul>
+                <li>Painel principal personalizado</li>
+                <li>Visão 360° de dados relevantes</li>
+                <li>Atalhos para módulos</li>
+                <li>Informações em tempo real</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="✨">Funcionalidades</h3>
+              <ul>
+                <li>Widgets personalizáveis</li>
+                <li>Gamificação com pontos</li>
+                <li>Clima em tempo real</li>
+                <li>Resumo de atividades</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🎯">Benefícios</h3>
+              <ul>
+                <li>Acesso centralizado</li>
+                <li>Informações customizadas</li>
+                <li>Melhor experiência</li>
+                <li>Navegação facilitada</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot do Dashboard pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar o Dashboard</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Acesse o portal e você verá o Dashboard automaticamente</div>
+              <div class="step">Explore os widgets informativos no topo</div>
+              <div class="step">Confira sua pontuação de gamificação</div>
+              <div class="step">Use os atalhos para acessar outros módulos</div>
+              <div class="step">Personalize os widgets conforme necessário</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">💻 Interface Moderna</div>
+            <div class="feature-tag">⚡ Rápido</div>
+            <div class="feature-tag">🎮 Gamificado</div>
+            <div class="feature-tag">♿ Acessível</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 2: BENEFÍCIOS EXCLUSIVOS -->
+      <div class="benefit-card" id="benefit-2">
+        <div class="benefit-header">
+          <div class="benefit-icon">🎁</div>
+          <div class="benefit-title-group">
+            <h2>Benefícios Exclusivos</h2>
+            <div class="benefit-number">Benefício 2 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Acesse um catálogo completo de ofertas, cupons, descontos e parcerias exclusivas para associados. Explore benefícios por categoria e economize em suas compras e serviços.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="🏪">Tipos de Ofertas</h3>
+              <ul>
+                <li>Descontos em compras</li>
+                <li>Cupons promocionais</li>
+                <li>Parcerias comerciais</li>
+                <li>Ofertas especiais sazonais</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🔍">Como Encontrar</h3>
+              <ul>
+                <li>Filtrar por categoria</li>
+                <li>Busca por palavra-chave</li>
+                <li>Ofertas em destaque</li>
+                <li>Novas ofertas diárias</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="💰">Economie</h3>
+              <ul>
+                <li>Até 50% de desconto</li>
+                <li>Cashback em compras</li>
+                <li>Ofertas exclusivas</li>
+                <li>Sem limitação de uso</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot de Benefícios Exclusivos pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar Benefícios Exclusivos</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Clique em "Benefícios" no menu lateral</div>
+              <div class="step">Explore as categorias disponíveis</div>
+              <div class="step">Clique em um benefício para mais detalhes</div>
+              <div class="step">Copie o código do cupom</div>
+              <div class="step">Utilize na checkout do parceiro</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">🎫 Cupons</div>
+            <div class="feature-tag">💳 Desconto</div>
+            <div class="feature-tag">🤝 Parcerias</div>
+            <div class="feature-tag">📅 Atualizado</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 3: AÇÕES COMERCIAIS -->
+      <div class="benefit-card" id="benefit-3">
+        <div class="benefit-header">
+          <div class="benefit-icon">📈</div>
+          <div class="benefit-title-group">
+            <h2>Ações Comerciais</h2>
+            <div class="benefit-number">Benefício 3 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Acompanhe cotações em tempo real, análises de especialistas, gráficos detalhados e gerencie seus alertas de preço personalizados. Tome decisões informadas sobre seus investimentos.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="📊">Dados em Tempo Real</h3>
+              <ul>
+                <li>Cotações atualizadas</li>
+                <li>Histórico de preços</li>
+                <li>Gráficos interativos</li>
+                <li>Comparação de ativos</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="📚">Análises</h3>
+              <ul>
+                <li>Análises de especialistas</li>
+                <li>Relatórios técnicos</li>
+                <li>Notícias do mercado</li>
+                <li>Tendências de preço</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🔔">Alertas</h3>
+              <ul>
+                <li>Alertas personalizados</li>
+                <li>Notificações por email</li>
+                <li>Limites de preço</li>
+                <li>Atualizações em tempo real</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot de Ações Comerciais pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar Ações Comerciais</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Acesse "Ações Comerciais" no menu</div>
+              <div class="step">Visualize as cotações em tempo real</div>
+              <div class="step">Clique em um ativo para análise detalhada</div>
+              <div class="step">Configure alertas de preço desejados</div>
+              <div class="step">Receba notificações quando alertas disparam</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">📊 Gráficos</div>
+            <div class="feature-tag">🔔 Alertas</div>
+            <div class="feature-tag">📈 Análises</div>
+            <div class="feature-tag">⚡ Tempo Real</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 4: CURSOS -->
+      <div class="benefit-card" id="benefit-4">
+        <div class="benefit-header">
+          <div class="benefit-icon">📚</div>
+          <div class="benefit-title-group">
+            <h2>Cursos e Treinamentos</h2>
+            <div class="benefit-number">Benefício 4 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Aperfeiçoe-se profissionalmente com programas de desenvolvimento, cursos certificados e treinamentos especializados. Acesse conteúdo de qualidade com cronograma flexível.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="🎓">Tipos de Cursos</h3>
+              <ul>
+                <li>Cursos profissionalizantes</li>
+                <li>Certificações reconhecidas</li>
+                <li>Treinamentos especializados</li>
+                <li>Workshops e seminários</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="⏱️">Flexibilidade</h3>
+              <ul>
+                <li>Cronograma flexível</li>
+                <li>Estude em seu ritmo</li>
+                <li>Acesso 24/7</li>
+                <li>Sem pré-requisitos rigorosos</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🎖️">Certificados</h3>
+              <ul>
+                <li>Certificados profissionais</li>
+                <li>Validação de competências</li>
+                <li>Reconhecimento no mercado</li>
+                <li>Download de certificado</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot de Cursos pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar Cursos e Treinamentos</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Clique em "Cursos" no menu</div>
+              <div class="step">Explore o catálogo disponível</div>
+              <div class="step">Leia descrição e requisitos</div>
+              <div class="step">Inscreva-se no curso desejado</div>
+              <div class="step">Acompanhe seu progresso e conclua</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">📖 Conteúdo</div>
+            <div class="feature-tag">🎖️ Certificado</div>
+            <div class="feature-tag">👨‍🏫 Instrutores</div>
+            <div class="feature-tag">✅ Validado</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 5: EVENTOS -->
+      <div class="benefit-card" id="benefit-5">
+        <div class="benefit-header">
+          <div class="benefit-icon">🎤</div>
+          <div class="benefit-title-group">
+            <h2>Eventos da Associação</h2>
+            <div class="benefit-number">Benefício 5 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Participe de eventos da associação, palestras, workshops e oportunidades de networking com profissionais da indústria hoteleira. Construa relacionamentos valiosos e amplie sua rede profissional.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="📅">Tipos de Eventos</h3>
+              <ul>
+                <li>Palestras e conferências</li>
+                <li>Workshops práticos</li>
+                <li>Networking sessions</li>
+                <li>Encontros regionais</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="👥">Networking</h3>
+              <ul>
+                <li>Conexão com pares</li>
+                <li>Relacionamento profissional</li>
+                <li>Parcerias comerciais</li>
+                <li>Troca de experiências</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🎖️">Certificação</h3>
+              <ul>
+                <li>Certificados de presença</li>
+                <li>Horas de treinamento</li>
+                <li>Reconhecimento profissional</li>
+                <li>Portfolio de eventos</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot de Eventos pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar Eventos da Associação</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Navegue para "Eventos" no menu</div>
+              <div class="step">Visualize o calendário completo</div>
+              <div class="step">Clique em um evento para detalhes</div>
+              <div class="step">Inscreva-se no evento desejado</div>
+              <div class="step">Receberá confirmação por email</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">📅 Calendário</div>
+            <div class="feature-tag">🎙️ Palestrantes</div>
+            <div class="feature-tag">🤝 Networking</div>
+            <div class="feature-tag">🎖️ Certificados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 6: FÓRUM -->
+      <div class="benefit-card" id="benefit-6">
+        <div class="benefit-header">
+          <div class="benefit-icon">💬</div>
+          <div class="benefit-title-group">
+            <h2>Fórum de Discussão</h2>
+            <div class="benefit-number">Benefício 6 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Conecte-se com a comunidade de associados, compartilhe experiências, faça perguntas e construa sua reputação respondendo dúvidas de outros membros. Comunidade ativa e colaborativa.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="📂">Organizações</h3>
+              <ul>
+                <li>Tópicos categorizados</li>
+                <li>Discussões organizadas</li>
+                <li>Threads por assunto</li>
+                <li>Busca avançada</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="⭐">Reputação</h3>
+              <ul>
+                <li>Sistema de pontos</li>
+                <li>Badges e conquistas</li>
+                <li>Ranking de membros</li>
+                <li>Reputação construída</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🔔">Engajamento</h3>
+              <ul>
+                <li>Notificações para respostas</li>
+                <li>Follow em tópicos</li>
+                <li>Votação de mensagens</li>
+                <li>Moderação da comunidade</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot do Fórum pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar o Fórum</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Abra "Fórum" no menu lateral</div>
+              <div class="step">Explore tópicos por categoria</div>
+              <div class="step">Leia discussões da comunidade</div>
+              <div class="step">Faça uma pergunta ou comente</div>
+              <div class="step">Construa sua reputação respondendo</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">💬 Discussões</div>
+            <div class="feature-tag">⭐ Reputação</div>
+            <div class="feature-tag">🔔 Notificações</div>
+            <div class="feature-tag">🤝 Comunidade</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 7: TALENT BANK -->
+      <div class="benefit-card" id="benefit-7">
+        <div class="benefit-header">
+          <div class="benefit-icon">👔</div>
+          <div class="benefit-title-group">
+            <h2>Talent Bank - Oportunidades</h2>
+            <div class="benefit-number">Benefício 7 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Explore oportunidades de carreira, publique seu perfil profissional e conecte-se com recrutadores. Acesse vagas exclusivas da rede de associados e dentro da indústria hoteleira.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="💼">Oportunidades</h3>
+              <ul>
+                <li>Vagas exclusivas</li>
+                <li>Posições estratégicas</li>
+                <li>Rede de contatos</li>
+                <li>Projetos projetos</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="👤">Perfil Profissional</h3>
+              <ul>
+                <li>Portfólio profissional</li>
+                <li>Experiência e habilidades</li>
+                <li>Recomendações</li>
+                <li>Visibilidade para recrutadores</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🤝">Conexões</h3>
+              <ul>
+                <li>Rede de profissionais</li>
+                <li>Recrutadores atentos</li>
+                <li>Mensagens diretas</li>
+                <li>Oportunidades personalizadas</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot de Talent Bank pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar Talent Bank</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Acesse "Talent Bank" no menu</div>
+              <div class="step">Complete seu perfil profissional</div>
+              <div class="step">Explore vagas disponíveis</div>
+              <div class="step">Candidate-se para posições</div>
+              <div class="step">Conecte-se com recrutadores</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">💼 Vagas</div>
+            <div class="feature-tag">👤 Perfil</div>
+            <div class="feature-tag">🤝 Rede</div>
+            <div class="feature-tag">📊 Oportunidades</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFÍCIO 8: LEGISLAÇÃO -->
+      <div class="benefit-card" id="benefit-8">
+        <div class="benefit-header">
+          <div class="benefit-icon">📋</div>
+          <div class="benefit-title-group">
+            <h2>Legislação e Normas</h2>
+            <div class="benefit-number">Benefício 8 de 8</div>
+          </div>
+        </div>
+        <div class="benefit-body">
+          <div class="benefit-description">
+            Consulte documentações oficiais, regulamentações atualizadas, normas do setor hoteleiro e legislações importantes. Mantenha-se informado sobre as exigências legais e regulatórias.
+          </div>
+
+          <div class="benefit-sections">
+            <div class="section">
+              <h3 data-icon="📚">Conteúdo</h3>
+              <ul>
+                <li>Legislações oficiais</li>
+                <li>Regulamentações setoriais</li>
+                <li>Normas técnicas</li>
+                <li>Portarias e resoluções</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="🔍">Busca</h3>
+              <ul>
+                <li>Busca avançada</li>
+                <li>Filtro por tema</li>
+                <li>Ordenação por data</li>
+                <li>Conteúdo categorizado</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3 data-icon="📥">Download</h3>
+              <ul>
+                <li>Download de documentos</li>
+                <li>Formatos PDF</li>
+                <li>Sem restrições</li>
+                <li>Atualizado regularmente</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="screenshot-container">
+            <div class="screenshot-placeholder">📸</div>
+            <p>Screenshot de Legislação e Normas pertence aqui</p>
+          </div>
+
+          <div class="how-to-section">
+            <h3>🚀 Como Usar Legislação e Normas</h3>
+            <div class="how-to-steps" style="counter-reset: step;">
+              <div class="step">Clique em "Legislação" no menu</div>
+              <div class="step">Busque por documento ou tema</div>
+              <div class="step">Revise legislações e regulamentações</div>
+              <div class="step">Faça download de PDFs conforme necessário</div>
+              <div class="step">Mantenha sua equipe atualizada</div>
+            </div>
+          </div>
+
+          <div class="benefit-features">
+            <div class="feature-tag">📚 Legislação</div>
+            <div class="feature-tag">🔍 Busca</div>
+            <div class="feature-tag">📥 Download</div>
+            <div class="feature-tag">📅 Atualizado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <h3>🎉 Aproveite Todos os Benefícios!</h3>
+      <p>Você agora conhece todos os 8 benefícios exclusivos disponíveis para associados do Portal do Associado.</p>
+      <p style="font-size: 0.95em; color: #999;">Cada benefício foi desenvolvido especificamente para maximizar o valor agregado à sua experiência como associado.</p>
+      <a href="https://associados.sindhoteisrj.com.br" class="cta-button">→ Acessar Portal Agora</a>
+    </div>
+  </div>
+</body>
+</html>

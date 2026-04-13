@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Associado - Documentação | HotéisRio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066CC;
+            --primary-dark: #0052A3;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-600: #4B5563;
+            --gray-900: #111827;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            color: var(--gray-900);
+            background: #fff;
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), #0052A3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* QUICKSTART */
+        .quickstart {
+            max-width: 1200px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .quickstart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quickstart-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .quickstart-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .quickstart-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #e0eaff, #f0f4ff);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quickstart-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .quickstart-card p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+        }
+
+        section > p {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        /* FEATURES GRID */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .feature-item:hover {
+            transform: translateX(4px);
+        }
+
+        .feature-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .feature-item p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        /* STEPS */
+        .steps {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            align-items: start;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .step h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .step p {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .step code {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            color: var(--primary);
+            border: 1px solid var(--gray-200);
+        }
+
+        /* FAQ */
+        .faq-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-toggle {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            color: var(--gray-600);
+            margin-top: 1rem;
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SUPPORT SECTION */
+        .support-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+        }
+
+        .support-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .support-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .support-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .support-item strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .support-item a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: #9CA3AF;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9CA3AF;
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .step {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #E0EAFF;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* CODE BLOCK */
+        .code-block {
+            background: var(--gray-900);
+            color: #E5E7EB;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        .highlight {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🏨</div>
+                HotéisRio
+            </a>
+            <nav>
+                <a href="#inicio">Início</a>
+                <a href="#guia">Guia</a>
+                <a href="#funcionalidades">Funcionalidades</a>
+                <a href="#faq">FAQ</a>
+                <a href="#suporte">Suporte</a>
+            </nav>
+            <a href="https://associados.sindhoteisrj.com.br/" class="cta-button">Acessar Portal</a>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+        <div class="hero-container">
+            <h1>🏨 Portal do Associado</h1>
+            <p>Bem-vindo ao seu portal de benefícios, cursos e oportunidades comerciais. Tudo que você precisa em um só lugar.</p>
+            <div class="hero-buttons">
+                <a href="https://associados.sindhoteisrj.com.br/" class="btn-primary">Acessar Agora</a>
+                <a href="#guia" class="btn-secondary">Ver Documentação</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICKSTART -->
+    <div class="quickstart">
+        <div class="quickstart-grid">
+            <div class="quickstart-card">
+                <div class="quickstart-icon">🚀</div>
+                <h3>Acesso Rápido</h3>
+                <p>Faça login com suas credenciais e acesse todos os benefícios em segundos.</p>
+            </div>
+            <div class="quickstart-card">
+                <div class="quickstart-icon">📚</div>
+                <h3>Explore Benefícios</h3>
+                <p>Conheça as oportunidades exclusivas para associados SINDHOTÉIS.</p>
+            </div>
+            <div class="quickstart-card">
+                <div class="quickstart-icon">🎓</div>
+                <h3>Aprender & Crescer</h3>
+                <p>Acesse cursos, treinamentos e desenvolvimento profissional contínuo.</p>
+            </div>
+            <div class="quickstart-card">
+                <div class="quickstart-icon">🤝</div>
+                <h3>Networking</h3>
+                <p>Conecte-se com outros hoteleiros através de grupos e eventos.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO GUIA -->
+    <section id="guia">
+        <h2>Como Começar 🚀</h2>
+        <p>Siga estos passos simples para aproveitar ao máximo o Portal do Associado:</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <h4>Acesse o Portal</h4>
+                    <p>Visite o site do Portal do Associado usando seu navegador favorito.</p>
+                    <code>https://associados.sindhoteisrj.com.br/</code>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <h4>Faça Login</h4>
+                    <p>Digite seu email e senha para acessar sua conta. Se não tem acesso, solicite seu cadastro.</p>
+                    <p>💡 <strong>Dica:</strong> Use o mesmo email registrado na SINDHOTÉIS.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <h4>Explore o Dashboard</h4>
+                    <p>Bem-vindo! Você verá um dashboard com acesso rápido a todas as funcionalidades.</p>
+                    <p>📌 Está perdido? Clique nos botões do menu superior para navegar.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <h4>Personalize Seu Perfil</h4>
+                    <p>Vá em "Atualização Cadastral" para manter seus dados sempre atualizados.</p>
+                    <p>✅ Dados atualizados garantem melhor comunicação com você.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FUNCIONALIDADES -->
+    <section id="funcionalidades">
+        <h2>Funcionalidades Principais 🎯</h2>
+        <p>Explore tudo que o Portal oferece para sua hotelaria:</p>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>📋 Todos os Benefícios</h4>
+                <p>Descubra benefícios exclusivos entre desconto em fornecedores, promoções e parcerias estratégicas.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>🏪 Ações Comerciais</h4>
+                <p>Acesse oportunidades de negócios, fornecedores e programas de incentivo para sua hotelaria.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>🎓 Cursos & Treinamentos</h4>
+                <p>Capacite-se com programas de desenvolvimento contínuo e aprendizagem profissional.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>⚖️ Assessoria Jurídica</h4>
+                <p>Acesse consultoria legal e orientações sobre legislação e regulamentações.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>🏨 Banco de Talentos</h4>
+                <p>Encontre oportunidades de emprego e desenvolvimento de carreira no setor hoteleiro.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>📅 Calendário de Eventos</h4>
+                <p>Fique por dentro de eventos, seminários e oportunidades de networking.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>📢 Demandas de Ordem Pública</h4>
+                <p>Receba comunicações e informações importantes sobre segurança e protocolos.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>🌐 Fornecedores Hotelaria</h4>
+                <p>Acesse um catálogo completo de fornecedores confiáveis para sua hotelaria.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>💬 Grupos WhatsApp</h4>
+                <p>Conecte-se com outros hoteleiros através de grupos temáticos no WhatsApp.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>📊 Relatórios de Ocupação</h4>
+                <p>Consulte estatísticas e análises de mercado do setor hoteleiro do RJ.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>👥 Equipe & Contatos</h4>
+                <p>Encontre informações de contato para suporte e relacionamento com a SINDHOTÉIS.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>📝 Atualização Cadastral</h4>
+                <p>Mantenha seus dados pessoais e empresariais atualizados no portal.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <h2>Perguntas Frequentes ❓</h2>
+        <p>As dúvidas mais comuns respondidas:</p>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Como faço para recuperar minha senha?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Na página de login, clique em "Esqueceu a senha?". Digite seu email registrado e você receberá um link de recuperação. Clique no link e crie uma nova senha segura.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Ainda não tenho acesso. Como me cadastro?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Se ainda não tem acesso, clique em "Não tem acesso? Cadastre-se" na página de login. Ou entre em contato com nossa equipe em marketing@hoteisrio.com.br para solicitar seu cadastro.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Qual é a diferença entre os benefícios?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Todos os benefícios são exclusivos para associados SINDHOTÉIS. Acesse a seção "Todos os Benefícios" para ver a lista completa e detalhes de cada um. Os benefícios podem variar por categoria e tipo de hotelaria.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Como posso participar dos cursos?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Vá em "Cursos & Treinamentos" para ver a programação disponível. Clique no curso que deseja e siga as instruções para inscrição. Você pode assistir online ou presencialmente, conforme a modalidade do curso.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Posso atualizar meus dados pessoais?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Sim! Clique em "Atualização Cadastral" no menu principal. Lá você pode atualizar informações como email, telefone, endereço e dados empresariais. Suas alterações são salvas automaticamente.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>O portal funciona em dispositivos móveis?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Sim! O Portal do Associado é totalmente responsivo e funciona perfeitamente em smartphones e tablets. Acesse pelo navegador do seu celular.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Como entro em contato com suporte?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Você pode nos contatar através de: Email: marketing@hoteisrio.com.br | WhatsApp: [adicionar número] | Telefone: [adicionar telefone] | Ou clique em "Fale Conosco" no portal.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Meu dados estão seguros?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Sim! Utilizamos criptografia de ponta e protocolos de segurança avançados para proteger seus dados. Consulte nossa Política de Privacidade para mais detalhes sobre como protegemos suas informações.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUPORTE -->
+    <section id="suporte">
+        <h2>Precisa de Ajuda? 🆘</h2>
+        <div class="support-section">
+            <h3>Estamos Aqui Para Você</h3>
+            <p>Nossa equipe de suporte está disponível para ajudar com dúvidas, problemas técnicos ou sugestões.</p>
+
+            <div class="support-grid">
+                <div class="support-item">
+                    <strong>📧 Email</strong>
+                    <a href="mailto:marketing@hoteisrio.com.br">marketing@hoteisrio.com.br</a>
+                </div>
+                <div class="support-item">
+                    <strong>💬 WhatsApp</strong>
+                    <a href="https://wa.me/21988882525" target="_blank">Clique aqui</a>
+                </div>
+                <div class="support-item">
+                    <strong>📞 Telefone</strong>
+                    <a href="tel:+55212134445555">+55 (21) 2134-4455</a>
+                </div>
+                <div class="support-item">
+                    <strong>🌐 Web</strong>
+                    <a href="https://associados.sindhoteisrj.com.br/" target="_blank">Portal Online</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DICAS -->
+    <section>
+        <h2>💡 Dicas & Best Practices</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>✅ Mantenha seu perfil atualizado</h4>
+                <p>Atualize suas informações regularmente para receber comunicações e oportunidades relevantes.</p>
+            </div>
+            <div class="feature-item">
+                <h4>✅ Explore todos os benefícios</h4>
+                <p>Há muitos benefícios que você pode não conhecer. Dedique tempo para explorar tudo.</p>
+            </div>
+            <div class="feature-item">
+                <h4>✅ Participe dos eventos</h4>
+                <p>Os eventos e webinars são ótimas oportunidades de networking e aprendizado.</p>
+            </div>
+            <div class="feature-item">
+                <h4>✅ Ative notificações</h4>
+                <p>Assim você não perderá nenhuma oportunidade ou comunicação importante.</p>
+            </div>
+            <div class="feature-item">
+                <h4>✅ Use a visualização em modo escuro</h4>
+                <p>Se prefere, ative o modo escuro nas configurações para um melhor conforto visual.</p>
+            </div>
+            <div class="feature-item">
+                <h4>✅ Salve seus favoritos</h4>
+                <p>Marque benefícios e cursos como favoritos para acessá-los mais rapidamente.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Documentação</h4>
+                    <ul>
+                        <li><a href="#inicio">Início</a></li>
+                        <li><a href="#guia">Como Começar</a></li>
+                        <li><a href="#funcionalidades">Funcionalidades</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Portal</h4>
+                    <ul>
+                        <li><a href="https://associados.sindhoteisrj.com.br/">Acessar Portal</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>SINDHOTÉIS-RJ</h4>
+                    <ul>
+                        <li><a href="https://www.sindhoteisrj.com.br/">Site Principal</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Membros</a></li>
+                        <li><a href="#">Parceiros</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="mailto:marketing@hoteisrio.com.br">Email</a></li>
+                        <li><a href="https://wa.me/21988882525">WhatsApp</a></li>
+                        <li><a href="tel:+55212134445555">Telefone</a></li>
+                        <li><a href="#">Chat ao Vivo</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 SINDHOTÉIS-RJ. Todos os direitos reservados. | Portal do Associado v1.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Add hover effect to cards
+        document.querySelectorAll('.quickstart-card, .feature-item').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'all 0.3s ease';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoteisRio | Central de Ajuda Vanguard</title>
+    
+    <!-- Ultra-Refined Font Stack -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette: Deep Obsidian, Raw Platinum, Electric Gold */
+            --bg: #050505;
+            --surface-outer: #0a0a0a;
+            --surface-inner: #111111;
+            --accent: #d4af37;
+            --accent-soft: rgba(212, 175, 55, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --border-refined: rgba(255, 255, 255, 0.06);
+            --bezier-spring: cubic-bezier(0.32, 0.72, 0, 1);
+            --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- Global Reset & Art Gallery Atmosphere --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: 'Geist', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* Film Grain Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: var(--noise-url);
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Background Mesh Gradient (Floating Light) */
+        .ambient-light {
+            position: fixed;
+            top: -20%; right: -10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
+            animation: pulseLight 20s infinite alternate var(--bezier-spring);
+        }
+
+        @keyframes pulseLight {
+            from { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            to { transform: translate(-10%, 15%) scale(1.3); opacity: 0.5; }
+        }
+
+        /* --- Floating Island Navigation --- */
+        .nav-island {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(24px) saturate(1.8);
+            border: 1px solid var(--border-refined);
+            padding: 8px 32px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideInDown 1s var(--bezier-spring);
+        }
+
+        .nav-island a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            transition: color 0.4s var(--bezier-spring);
+        }
+
+        .nav-island a:hover { color: var(--text-primary); }
+        .nav-island .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin-right: 16px; }
+
+        /* --- Container & Content Layout --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 160px 40px 80px;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.5rem, 7vw, 6rem);
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 i { font-weight: 400; color: var(--accent); }
+        .hero p {
+            max-width: 700px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 48px;
+            font-weight: 300;
+        }
+
+        /* Search Bar */
+        .search-container {
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+            margin-bottom: 80px;
+            animation: fadeIn 1.5s var(--bezier-spring) 0.5s both;
+        }
+
+        .search-container input {
+            width: 100%;
+            background: var(--surface-inner);
+            border: 1px solid var(--border-refined);
+            padding: 24px 40px;
+            border-radius: 100px;
+            color: white;
+            font-family: inherit;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.4s var(--bezier-spring);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .search-container input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 50px var(--accent-soft);
+            transform: scale(1.02);
+        }
+
+        /* --- Bento Topics --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 300px;
+            gap: 32px;
+            margin-bottom: 120px;
+        }
+
+        .bento-card {
+            background: var(--surface-outer);
+            border-radius: 48px;
+            padding: 6px;
+            border: 1px solid var(--border-refined);
+            transition: all 0.6s var(--bezier-spring);
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card-inner {
+            background: var(--surface-inner);
+            height: 100%;
+            border-radius: 42px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .card-lg { grid-column: span 8; grid-row: span 2; }
+        .card-md { grid-column: span 4; grid-row: span 2; }
+        .card-sm { grid-column: span 6; grid-row: span 1; }
+
+        .bento-card:hover {
+            transform: translateY(-16px);
+            border-color: var(--accent);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+
+        .bento-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .bento-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 320px;
+            font-weight: 300;
+        }
+
+        .card-icon {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        /* Screenshots Previews inside cards */
+        .screenshot-mask {
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            width: 80%;
+            height: 70%;
+            border-radius: 32px;
+            background-size: cover;
+            background-position: top left;
+            opacity: 0.15;
+            transition: all 0.8s var(--bezier-spring);
+            transform: rotate(-8deg);
+            filter: grayscale(1) invert(0.2);
+            border: 1px solid var(--border-refined);
+        }
+
+        .bento-card:hover .screenshot-mask {
+            opacity: 1;
+            transform: rotate(0) scale(1.1) translateY(-20px);
+            filter: grayscale(0) invert(0);
+        }
+
+        /* --- Content Sections (Revealed on click) --- */
+        .help-article {
+            display: none;
+            margin-top: 40px;
+            padding: 100px;
+            background: var(--surface-inner);
+            border-radius: 80px;
+            border: 1px solid var(--border-refined);
+            animation: slideUp 1s var(--bezier-spring);
+            position: relative;
+            box-shadow: 0 50px 150px rgba(0,0,0,0.9);
+        }
+
+        .help-article.active {
+            display: block;
+        }
+
+        .help-article h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 32px;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .help-article p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+            max-width: 900px;
+            font-weight: 300;
+        }
+
+        .full-screenshot {
+            width: 100%;
+            border-radius: 48px;
+            border: 2px solid var(--border-refined);
+            margin-top: 40px;
+            box-shadow: 0 60px 120px rgba(0,0,0,1);
+            transition: transform 0.8s var(--bezier-spring);
+        }
+
+        .full-screenshot:hover {
+            transform: scale(1.02);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            cursor: pointer;
+            transition: all 0.4s var(--bezier-spring);
+        }
+
+        .back-btn:hover {
+            transform: translateX(-10px);
+            opacity: 0.8;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInDown { from { transform: translate(-50%, -100px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
+        footer {
+            margin-top: 140px;
+            border-top: 1px solid var(--border-refined);
+            padding-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+
+    <nav class="nav-island">
+        <div class="logo">H/R</div>
+        <a href="#">Main Portal</a>
+        <a href="javascript:hideArticle()" class="active">Help Center</a>
+        <a href="#">Support 24/7</a>
+        <div style="width: 1px; height: 16px; background: var(--border-refined);"></div>
+        <div style="font-size: 0.7rem; font-weight: 800; color: white;">GA</div>
+    </nav>
+
+    <div class="container">
+        
+        <div id="main-interface">
+            <header class="hero">
+                <h1>Master the <i>Experience.</i></h1>
+                <p>A biblioteca definitiva de conhecimento para o associado HoteisRio. Encontre tutoriais passo a passo, insights estratégicos e suporte técnico para dominar todas as ferramentas.</p>
+                
+                <div class="search-container">
+                    <input type="text" placeholder="Qual ferramenta você deseja aprender hoje?">
+                </div>
+            </header>
+
+            <section class="bento-grid" id="topics">
+                <!-- Introdução & Dashboard -->
+                <div onclick="showArticle('dashboard')" class="bento-card card-lg" style="animation: slideUp 0.8s var(--bezier-spring) 0.1s both;">
+                    <div class="card-inner">
+                        <div>
+                            <span class="metric">Module 01</span>
+                            <h3>Ecossistema Inteligente</h3>
+                            <p>Domine o painel principal, indicadores de mercado e a navegação fluida entre os serviços de elite.</p>
+                        </div>
+                        <div class="screenshot-mask" style="background-image: url('C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/dashboard_principal_1775505512762.png');"></div>
+                        <div style="font-size: 0.7rem; letter-spacing: 3px; color: var(--accent); font-weight: 800;">EXPLORAR MÓDULO →</div>
+                    </div>
+                </div>
+
+                <!-- Relatórios -->
+                <div onclick="showArticle('relatorios')" class="bento-card card-md" style="animation: slideUp 0.8s var(--bezier-spring) 0.2s both;">
+                    <div class="card-inner">
+                        <div>
+                            <span class="metric">Module 02</span>
+                            <h3>Revenue Intelligence</h3>
+                            <p>Transforme dados de ocupação e estatísticas em lucro líquido com ferramentas analíticas avançadas.</p>
+                        </div>
+                        <div class="screenshot-mask" style="background-image: url('C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/relatorios_ocupacao_1775505811052.png');"></div>
+                        <div style="font-size: 0.7rem; letter-spacing: 3px; color: var(--accent); font-weight: 800;">EXPLORAR MÓDULO →</div>
+                    </div>
+                </div>
+
+                <!-- Jurídico -->
+                <div onclick="showArticle('juridico')" class="bento-card card-sm" style="animation: slideUp 0.8s var(--bezier-spring) 0.3s both;">
+                    <div class="card-inner">
+                        <div>
+                            <span class="metric">Module 03</span>
+                            <h3>Legal Shield</h3>
+                            <p>Consulte leis, decretos atualizados e acione a assessoria jurídica dedicada do Rio de Janeiro.</p>
+                        </div>
+                        <div class="screenshot-mask" style="background-image: url('C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/assessoria_juridica_1775505564445.png');"></div>
+                        <div style="font-size: 0.7rem; letter-spacing: 3px; color: var(--accent); font-weight: 800;">VER GUIA →</div>
+                    </div>
+                </div>
+
+                <!-- Talentos -->
+                <div onclick="showArticle('talentos')" class="bento-card card-sm" style="animation: slideUp 0.8s var(--bezier-spring) 0.4s both;">
+                    <div class="card-inner">
+                        <div>
+                            <span class="metric">Module 04</span>
+                            <h3>Capital Humano</h3>
+                            <p>Recrute talentos de alta performance e inscreva sua equipe nos cursos de capacitação técnica.</p>
+                        </div>
+                        <div class="screenshot-mask" style="background-image: url('C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/banco_talentos_1775505592108.png');"></div>
+                        <div style="font-size: 0.7rem; letter-spacing: 3px; color: var(--accent); font-weight: 800;">VER GUIA →</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dynamic Article Display -->
+        <section id="article-view" style="display: none;">
+            <!-- Content for Dashboard -->
+            <article id="dashboard-art" class="help-article">
+                <div class="back-btn" onclick="hideArticle()">← BACK TO KNOWLEDGE BASE</div>
+                <h2>Painel Principal & Navegação</h2>
+                <p>O Dashboard Principal é o seu hub de comando. Desenhado para oferecer máxima visibilidade sobre os indicadores críticos da hotelaria carioca, ele permite uma transição fluida entre ferramentas táticas e estratégicas. Explore o menu lateral para acessar instantaneamente benefícios, convênios e calculadoras financeiras.</p>
+                <img src="C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/dashboard_principal_1775505512762.png" class="full-screenshot" alt="Dashboard Vanguard">
+            </article>
+
+            <!-- Content for Relatorios -->
+            <article id="relatorios-art" class="help-article">
+                <div class="back-btn" onclick="hideArticle()">← BACK TO KNOWLEDGE BASE</div>
+                <h2>Relatórios de Ocupação & Estatísticas</h2>
+                <p>A inteligência competitiva começa aqui. Este módulo fornece dados consolidados de ocupação histórica e futura, permitindo que os associados realizem benchmarks precisos. Utilize estas métricas para ajustar seu Revenue Management e prever movimentações de mercado antes da concorrência.</p>
+                <img src="C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/relatorios_ocupacao_1775505811052.png" class="full-screenshot" alt="Relatórios Estatísticos">
+            </article>
+
+            <!-- Content for Juridico -->
+            <article id="juridico-art" class="help-article">
+                <div class="back-btn" onclick="hideArticle()">← BACK TO KNOWLEDGE BASE</div>
+                <h2>Assessoria Jurídica e Base Legal</h2>
+                <p>Garanta a conformidade total da sua operação. Através do portal, você acessa uma biblioteca dinâmica de Leis e Decretos que impactam diretamente o setor hoteleiro. Além da consulta documental, o associado pode abrir solicitações diretas para a assessoria jurídica especializada do SindHotéis RJ.</p>
+                <img src="C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/assessoria_juridica_1775505564445.png" class="full-screenshot" alt="Assessoria Jurídica">
+            </article>
+
+            <!-- Content for Talentos -->
+            <article id="talentos-art" class="help-article">
+                <div class="back-btn" onclick="hideArticle()">← BACK TO KNOWLEDGE BASE</div>
+                <h2>Banco de Talentos & Capacitação</h2>
+                <p>Maximize a performance do seu staff. O Banco de Talentos conecta hotéis a currículos pré-selecionados e qualificados para o mercado de hospitalidade. Aproveite também o módulo de Cursos e Treinamentos para investir no desenvolvimento técnico contínuo dos seus colaboradores.</p>
+                <img src="C:/Users/marke/.gemini/antigravity/brain/1d075598-a06b-4a12-92e9-397c289b0bff/banco_talentos_1775505592108.png" class="full-screenshot" alt="Gestão de Talentos">
+            </article>
+        </section>
+
+        <footer>
+            <div>HoteisRio Help Platform &copy; 2026 // Vanguard Assistance</div>
+            <div>Associado Premium // Gabriel Araújo</div>
+        </footer>
+
+    </div>
+
+    <script>
+        function showArticle(slug) {
+            document.getElementById('main-interface').style.display = 'none';
+            document.getElementById('article-view').style.display = 'block';
+            
+            // Hide all articles
+            document.querySelectorAll('.help-article').forEach(art => art.style.display = 'none');
+            
+            // Show selected
+            document.getElementById(slug + '-art').style.display = 'block';
+            
+            window.scrollTo(0, 0);
+        }
+
+        function hideArticle() {
+            document.getElementById('main-interface').style.display = 'block';
+            document.getElementById('article-view').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+</html>

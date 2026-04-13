@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Associado HoteisRio — Inteligência, Benefícios e Gestão Hoteleira</title>
+    <meta name="description" content="Sua central exclusiva de inteligência, benefícios e gestão hoteleira. Tudo o que você precisa para fortalecer seu negócio em um só lugar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --rio-blue: #004aad;
+            --rio-blue-dark: #003888;
+            --rio-blue-light: #0056cc;
+            --rio-gold: #fbba00;
+            --rio-gold-dark: #e0a800;
+            --bg: #f3f6f9;
+            --bg-white: #ffffff;
+            --text: #0f1923;
+            --text-muted: #4a5568;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,.13), 0 4px 12px rgba(0,0,0,.08);
+            --shadow-xl: 0 24px 64px rgba(0,0,0,.15);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --radius-lg: 24px;
+            --radius-xl: 3rem;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── NAVBAR ─── */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 0 2rem;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background .3s, box-shadow .3s;
+        }
+        .navbar.scrolled {
+            background: rgba(0,74,173,.97);
+            box-shadow: 0 2px 24px rgba(0,0,0,.25);
+            backdrop-filter: blur(12px);
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            text-decoration: none;
+        }
+        .navbar-logo img {
+            height: 38px;
+            width: auto;
+        }
+        .navbar-actions { display: flex; align-items: center; gap: 1rem; }
+        .btn-nav {
+            padding: .5rem 1.25rem;
+            border-radius: 50px;
+            font-size: .875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .2s;
+            letter-spacing: .01em;
+        }
+        .btn-nav-outline {
+            color: rgba(255,255,255,.9);
+            border: 1.5px solid rgba(255,255,255,.35);
+            background: transparent;
+        }
+        .btn-nav-outline:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.6); }
+        .btn-nav-gold {
+            background: var(--rio-gold);
+            color: #1a2a4a;
+            border: 1.5px solid transparent;
+        }
+        .btn-nav-gold:hover { background: var(--rio-gold-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(251,186,0,.4); }
+
+        /* ─── HERO ─── */
+        .hero {
+            background: var(--rio-blue);
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            padding: 120px 2rem 90px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -120px; right: -120px;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.06);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -80px;
+            width: 380px; height: 380px;
+            border-radius: 50%;
+            background: rgba(251,186,0,.12);
+        }
+        .hero-inner { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; text-align: center; }
+        /* logo centrada acima do título */
+        .hero-headline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero-logo {
+            height: 88px;
+            width: auto;
+            filter: drop-shadow(0 4px 20px rgba(0,0,0,.3));
+        }
+        .hero-headline-text { width: 100%; }
+        .hero h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(2.1rem, 4.8vw, 3.8rem);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 0;
+            letter-spacing: -.02em;
+        }
+        .hero h1 em {
+            font-style: normal;
+            color: var(--rio-gold);
+        }
+        .hero p {
+            font-size: clamp(.95rem, 2vw, 1.15rem);
+            color: rgba(255,255,255,.82);
+            max-width: 640px;
+            margin: 0 auto 2.25rem;
+            font-weight: 400;
+            line-height: 1.65;
+        }
+        .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-gold {
+            padding: .875rem 2rem;
+            background: var(--rio-gold);
+            color: #0f2040;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all .2s;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 20px rgba(251,186,0,.35);
+        }
+        .btn-gold:hover { background: var(--rio-gold-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(251,186,0,.45); }
+        .btn-outline-white {
+            padding: .875rem 2rem;
+            background: transparent;
+            color: rgba(255,255,255,.92);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all .2s;
+            border: 2px solid rgba(255,255,255,.35);
+        }
+        .btn-outline-white:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.6); }
+        .hero-download { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .btn-store {
+            display: inline-flex; align-items: center; gap: .65rem;
+            background: rgba(255,255,255,.08);
+            border: 1.5px solid rgba(255,255,255,.28);
+            color: #fff; text-decoration: none;
+            padding: .6rem 1.25rem; border-radius: 10px;
+            font-size: .9rem; line-height: 1.3;
+            transition: all .2s; backdrop-filter: blur(8px);
+        }
+        .btn-store:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.55); transform: translateY(-1px); }
+        .btn-store svg { flex-shrink: 0; }
+        .btn-store span { display: flex; flex-direction: column; }
+        .btn-store small { font-size: .62rem; opacity: .7; text-transform: uppercase; letter-spacing: .06em; }
+        .coming-soon-badge {
+            font-size: .78rem; color: rgba(255,255,255,.5);
+            border: 1px dashed rgba(255,255,255,.22);
+            padding: .38rem .9rem; border-radius: 20px;
+        }
+        .coming-soon-badge b { color: rgba(255,255,255,.75); font-weight: 600; }
+
+        /* ─── STATS STRIP ─── */
+        .stats-strip {
+            max-width: 960px;
+            margin: -40px auto 3rem;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+        .stats-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            padding: 2rem 2.5rem;
+            display: flex;
+            align-items: stretch;
+            border: 1px solid var(--border);
+        }
+        .stat-item { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: .5rem 1rem; }
+        .stat-divider { flex: 0 0 1px; background: var(--border); align-self: stretch; }
+        .stat-number {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--rio-blue);
+            line-height: 1;
+            margin-bottom: .25rem;
+        }
+        .stat-label {
+            font-size: .8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        /* ─── SECTION COMMONS ─── */
+        section { padding: 5rem 1.5rem; }
+        .section-inner { max-width: 1100px; margin: 0 auto; }
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--rio-blue);
+            margin-bottom: 1rem;
+            padding: .3rem .85rem;
+            background: rgba(0,74,173,.08);
+            border-radius: 50px;
+            border: 1px solid rgba(0,74,173,.15);
+        }
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+            letter-spacing: -.02em;
+            margin-bottom: .875rem;
+        }
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.65;
+        }
+        .section-header { margin-bottom: 3rem; }
+
+        /* ─── PILLARS ─── */
+        .pillars-bg { background: var(--bg-white); }
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .pillar-card {
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all .25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rio-blue), var(--rio-blue-light));
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        .pillar-card:hover { border-color: rgba(0,74,173,.3); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+        .pillar-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--rio-blue), var(--rio-blue-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .pillar-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .6rem;
+            letter-spacing: -.01em;
+        }
+        .pillar-card p {
+            font-size: .9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ─── FEATURES GRID ─── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+        .feature-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all .25s;
+        }
+        .feature-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: rgba(0,74,173,.2); }
+        .feature-card.featured {
+            grid-column: span 2;
+        }
+        .feature-img-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: linear-gradient(135deg, #eef2ff, #dbeafe);
+        }
+        .feature-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top left;
+            transition: transform .4s ease;
+        }
+        .feature-card:hover .feature-img-wrap img { transform: scale(1.03); }
+        .feature-body { padding: 1.25rem 1.5rem; }
+        .feature-tag {
+            display: inline-block;
+            font-size: .7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--rio-blue);
+            background: rgba(0,74,173,.08);
+            padding: .2rem .6rem;
+            border-radius: 4px;
+            margin-bottom: .6rem;
+        }
+        .feature-body h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .4rem;
+            letter-spacing: -.01em;
+        }
+        .feature-body p {
+            font-size: .875rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ─── ACADEMY SECTION ─── */
+        .academy-bg {
+            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
+        }
+        .academy-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .academy-label {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--rio-gold);
+            margin-bottom: 1rem;
+            padding: .3rem .85rem;
+            background: rgba(251,186,0,.12);
+            border-radius: 50px;
+            border: 1px solid rgba(251,186,0,.25);
+        }
+        .academy-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -.02em;
+            margin-bottom: 1rem;
+        }
+        .academy-title span { color: var(--rio-gold); }
+        .academy-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,.65);
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+        }
+        .academy-pills { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+        .pill {
+            padding: .35rem 1rem;
+            border-radius: 50px;
+            font-size: .8rem;
+            font-weight: 600;
+            background: rgba(255,255,255,.08);
+            color: rgba(255,255,255,.8);
+            border: 1px solid rgba(255,255,255,.12);
+        }
+        .pill.gold { background: rgba(251,186,0,.15); color: var(--rio-gold); border-color: rgba(251,186,0,.25); }
+        .btn-academy {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .875rem 2rem;
+            background: var(--rio-gold);
+            color: #0f2040;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: .95rem;
+            text-decoration: none;
+            transition: all .2s;
+            box-shadow: 0 4px 20px rgba(251,186,0,.3);
+        }
+        .btn-academy:hover { background: var(--rio-gold-dark); transform: translateY(-2px); }
+        .academy-img-wrap {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0,0,0,.5);
+            border: 1px solid rgba(255,255,255,.08);
+            aspect-ratio: 4/3;
+        }
+        .academy-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top left;
+        }
+
+        /* ─── FORNECEDORES ─── */
+        .fornecedores-bg { background: var(--bg-white); }
+        .fornecedores-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .fornecedores-iframe-wrap {
+            display: flex;
+            justify-content: center;
+        }
+        .iframe-shell {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            width: 360px;
+        }
+        .iframe-header {
+            padding: .6rem 1rem;
+            background: var(--rio-blue);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .iframe-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.3); }
+        .iframe-header span { font-size: .75rem; color: rgba(255,255,255,.7); margin-left: auto; font-weight: 500; }
+        .iframe-shell iframe { display: block; border: 0; }
+        .benefit-list { list-style: none; display: flex; flex-direction: column; gap: .875rem; margin-top: 1.5rem; }
+        .benefit-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: .875rem;
+            font-size: .95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .benefit-list li::before {
+            content: '✓';
+            flex-shrink: 0;
+            width: 22px; height: 22px;
+            background: rgba(0,74,173,.1);
+            color: var(--rio-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        /* ─── MODULE CARDS ─── */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        .module-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: all .2s;
+            cursor: default;
+        }
+        .module-card:hover { box-shadow: var(--shadow-md); border-color: rgba(0,74,173,.2); transform: translateY(-2px); }
+        .module-icon {
+            font-size: 1.75rem;
+            margin-bottom: .875rem;
+        }
+        .module-card h4 {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: .35rem;
+            letter-spacing: -.01em;
+        }
+        .module-card p {
+            font-size: .78rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+        .module-tag {
+            display: inline-block;
+            font-size: .65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--rio-blue);
+            background: rgba(0,74,173,.08);
+            padding: .15rem .5rem;
+            border-radius: 4px;
+            margin-bottom: .5rem;
+        }
+        .module-tag.gold { color: #92680a; background: rgba(251,186,0,.18); }
+        .module-tag.purple { color: #5b21b6; background: rgba(91,33,182,.1); }
+        .module-tag.green { color: #065f46; background: rgba(6,95,70,.1); }
+
+        /* ─── CTA SECTION ─── */
+        .cta-section {
+            background: linear-gradient(135deg, var(--rio-blue) 0%, var(--rio-blue-dark) 100%);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -150px; right: -150px;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: rgba(251,186,0,.08);
+        }
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -100px; left: -100px;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.04);
+        }
+        .cta-section .section-inner { position: relative; z-index: 2; }
+        .cta-section h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            letter-spacing: -.02em;
+        }
+        .cta-section p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,.75);
+            max-width: 520px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.65;
+        }
+        .btn-white {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: 1rem 2.5rem;
+            background: #fff;
+            color: var(--rio-blue);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all .2s;
+            box-shadow: 0 8px 30px rgba(0,0,0,.2);
+        }
+        .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: #001233;
+            color: rgba(255,255,255,.6);
+            padding: 3.5rem 1.5rem 2rem;
+            border-top: 3px solid var(--rio-gold);
+        }
+        .footer-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+        .footer-brand img { height: 36px; width: auto; margin-bottom: 1rem; opacity: .9; }
+        .footer-brand p { font-size: .875rem; line-height: 1.65; max-width: 280px; }
+        .footer-col h5 {
+            font-size: .8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--rio-gold);
+            margin-bottom: 1rem;
+        }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+        .footer-col ul li a {
+            color: rgba(255,255,255,.55);
+            text-decoration: none;
+            font-size: .875rem;
+            transition: color .15s;
+        }
+        .footer-col ul li a:hover { color: var(--rio-gold); }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-bottom p { font-size: .8rem; }
+        .footer-socials { display: flex; gap: .75rem; }
+        .social-btn {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: rgba(255,255,255,.6);
+            font-size: .85rem;
+            transition: all .2s;
+        }
+        .social-btn:hover { background: rgba(251,186,0,.2); border-color: rgba(251,186,0,.4); color: var(--rio-gold); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .hero { padding: 100px 1.5rem 70px; }
+            .hero-logo { height: 72px; }
+            .stats-card { display: grid; grid-template-columns: repeat(2, 1fr); }
+            .stat-divider:nth-child(3) { display: none; }
+            .stat-divider:nth-child(5) { display: none; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
+            .feature-card.featured { grid-column: span 1; }
+            .academy-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+            .fornecedores-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+            .modules-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+        }
+        @media (max-width: 580px) {
+            .hero { padding: 80px 1.25rem 60px; }
+            .hero-logo { height: 60px; }
+            .hero p { margin-bottom: 1.75rem; }
+            .hero-ctas { flex-direction: column; align-items: center; }
+            .hero-ctas a { width: 100%; max-width: 320px; text-align: center; }
+            .hero-download { flex-direction: column; align-items: center; }
+            .btn-store { width: 100%; max-width: 240px; justify-content: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            .modules-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-card { display: grid; grid-template-columns: repeat(2, 1fr); padding: 1.5rem 1rem; }
+            .navbar-actions .btn-nav-outline { display: none; }
+            .iframe-shell { width: 100%; max-width: 340px; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="navbar-logo">
+        <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png"
+             alt="HoteisRio" onerror="this.style.display='none'">
+    </a>
+    <div class="navbar-actions">
+        <a href="#modulos" class="btn-nav btn-nav-outline">Explorar Módulos</a>
+        <a href="https://associados.sindhoteisrj.com.br" class="btn-nav btn-nav-gold" target="_blank">Entrar no Portal</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-headline">
+            <img class="hero-logo"
+                 src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png"
+                 alt="HoteisRio"
+                 onerror="this.style.display='none'">
+            <div class="hero-headline-text">
+                <h1>Todos os benefícios da hotelaria carioca<br><em>em suas mãos.</em></h1>
+            </div>
+        </div>
+        <p>Sua central exclusiva de inteligência, benefícios e gestão hoteleira. Tudo o que você precisa para fortalecer seu negócio em um só lugar.</p>
+        <div class="hero-ctas">
+            <a href="https://associados.sindhoteisrj.com.br" class="btn-gold" target="_blank">Acessar Portal do Associado →</a>
+            <a href="#beneficios" class="btn-outline-white">Explorar Benefícios</a>
+        </div>
+        <div class="hero-download">
+            <a href="https://apps.microsoft.com/detail/9nqq3jpfpftz?hl=pt-BR&amp;gl=BR" class="btn-store" target="_blank" rel="noopener">
+                <svg viewBox="0 0 21 21" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="0" y="0" width="10" height="10"/><rect x="11" y="0" width="10" height="10"/><rect x="0" y="11" width="10" height="10"/><rect x="11" y="11" width="10" height="10"/></svg>
+                <span><small>Disponível na</small>Microsoft Store</span>
+            </a>
+            <div class="coming-soon-badge">Em breve: <b>iOS</b> &amp; <b>Android</b></div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+    <div class="stats-card">
+        <div class="stat-item">
+            <div class="stat-number">200+</div>
+            <div class="stat-label">Hotéis Associados</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Módulos e Ferramentas</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Digital e Web</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Acesso Online</div>
+        </div>
+    </div>
+</div>
+
+<!-- THREE PILLARS -->
+<section class="pillars-bg" id="beneficios">
+    <div class="section-inner">
+        <div class="section-header">
+            <div class="section-label">Pilares do Portal</div>
+            <h2 class="section-title">Descubra todas as ferramentas,<br>parcerias e serviços exclusivos.</h2>
+            <p class="section-subtitle">O HoteisRio reúne em um único portal tudo o que o hoteleiro carioca precisa para crescer, proteger seu negócio e se conectar.</p>
+        </div>
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <div class="pillar-icon">⚖️</div>
+                <h3>Segurança Jurídica</h3>
+                <p>Suporte integral em questões trabalhistas, cíveis e tributárias, além de monitoramento legislativo constante para sua operação.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">📊</div>
+                <h3>Inteligência Comercial</h3>
+                <p>Acesso a dados de ocupação, calculadora de diárias e participação em feiras nacionais e internacionais para impulsionar sua receita.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon">🤝</div>
+                <h3>Networking & Eventos</h3>
+                <p>Fóruns mensais com os principais players do mercado e grupos exclusivos de WhatsApp para gestores do setor hoteleiro carioca.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SHOWCASE -->
+<section id="modulos">
+    <div class="section-inner">
+        <div class="section-header">
+            <div class="section-label">Screenshots Reais</div>
+            <h2 class="section-title">Ferramentas feitas para o<br>hoteleiro carioca.</h2>
+            <p class="section-subtitle">Desde relatórios de ocupação até o calendário de grandes eventos do Rio — tudo integrado em uma única plataforma.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card featured">
+                <div class="feature-img-wrap">
+                    <img src="public/screenshots/occupancy-reports.png" alt="Relatórios de Ocupação" onerror="this.parentElement.style.background='linear-gradient(135deg,#dbeafe,#bfdbfe)'">
+                </div>
+                <div class="feature-body">
+                    <div class="feature-tag">Inteligência</div>
+                    <h3>Relatórios de Ocupação e RevPAR</h3>
+                    <p>Dashboards completos com índices de ocupação, tarifa média diária (ADR) e RevPAR gerados em Power BI com dados reais do mercado carioca.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-img-wrap">
+                    <img src="public/screenshots/calendar-2026.png" alt="Calendário de Eventos 2026" onerror="this.parentElement.style.background='linear-gradient(135deg,#ede9fe,#ddd6fe)'">
+                </div>
+                <div class="feature-body">
+                    <div class="feature-tag">Eventos</div>
+                    <h3>Calendário de Eventos 2026</h3>
+                    <p>Todos os grandes eventos do Rio integrados em um power BI interativo para o seu planejamento de tarifas e ocupação.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-img-wrap">
+                    <img src="public/screenshots/leis-decretos-app.png" alt="Leis e Decretos" onerror="this.parentElement.style.background='linear-gradient(135deg,#dcfce7,#bbf7d0)'">
+                </div>
+                <div class="feature-body">
+                    <div class="feature-tag">Jurídico</div>
+                    <h3>Leis e Decretos</h3>
+                    <p>Acesso rápido às legislações que impactam a hotelaria carioca, organizadas e atualizadas pela equipe jurídica do sindicato.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-img-wrap">
+                    <img src="public/screenshots/portal-fornecedores-new.png" alt="Portal de Fornecedores" onerror="this.parentElement.style.background='linear-gradient(135deg,#fef3c7,#fde68a)'">
+                </div>
+                <div class="feature-body">
+                    <div class="feature-tag">Benefícios</div>
+                    <h3>Portal de Fornecedores</h3>
+                    <p>Parceiros homologados com condições especiais para associados. Produtos e serviços com preço e qualidade diferenciados.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-img-wrap">
+                    <img src="public/screenshots/planejador-feriados-2026.png" alt="Planejador de Feriados" onerror="this.parentElement.style.background='linear-gradient(135deg,#fce7f3,#fbcfe8)'">
+                </div>
+                <div class="feature-body">
+                    <div class="feature-tag">Planejamento</div>
+                    <h3>Planejador de Feriados 2026</h3>
+                    <p>Calendário de feriados nacionais e municipais do Rio para antecipar picos de demanda e planejar campanhas com antecedência.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ACADEMY SECTION -->
+<section class="academy-bg">
+    <div class="academy-inner">
+        <div>
+            <div class="academy-label">✦ Educação Continuada</div>
+            <h2 class="academy-title">HotéisRIO<br><span>Cursos</span></h2>
+            <p class="academy-desc">Plataforma de cursos e treinamentos online exclusivos para os profissionais dos hotéis associados. Capacite sua equipe sem sair do portal.</p>
+            <div class="academy-pills">
+                <span class="pill gold">Cursos Online</span>
+                <span class="pill">Certificados</span>
+                <span class="pill">Trilhas de Carreira</span>
+                <span class="pill">Conteúdo Exclusivo</span>
+            </div>
+            <a href="https://associados.sindhoteisrj.com.br" class="btn-academy" target="_blank">
+                Acessar os Cursos →
+            </a>
+        </div>
+        <div class="academy-img-wrap">
+            <img src="public/screenshots/online-courses.png" alt="HotéisRIO Cursos" onerror="this.parentElement.style.background='#0f172a'">
+        </div>
+    </div>
+</section>
+
+<!-- FORNECEDORES -->
+<section class="fornecedores-bg">
+    <div class="fornecedores-inner">
+        <div>
+            <div class="section-label">Parceiros Exclusivos</div>
+            <h2 class="section-title">Portal de<br>Fornecedores</h2>
+            <p class="section-subtitle" style="margin-bottom:1.75rem">Uma vitrine curada de parceiros homologados, com condições especiais negociadas pelo HoteisRio para os hotéis associados.</p>
+            <ul class="benefit-list">
+                <li>Parceiros pré-aprovados e verificados pelo sindicato</li>
+                <li>Condições comerciais exclusivas para associados HoteisRio</li>
+                <li>Contato direto com fornecedores estratégicos do setor</li>
+                <li>Atualização contínua com novos parceiros e ofertas</li>
+                <li>Categorias: alimentação, tecnologia, segurança, RH e mais</li>
+            </ul>
+        </div>
+        <div class="fornecedores-iframe-wrap">
+            <div class="iframe-shell">
+                <div class="iframe-header">
+                    <div class="iframe-dot"></div>
+                    <div class="iframe-dot"></div>
+                    <div class="iframe-dot"></div>
+                    <span>Portal de Fornecedores — Ao vivo</span>
+                </div>
+                <iframe
+                    src="https://sistema-divulgacao-fornecedores.vercel.app/#/embed?theme=light&color=004aad&speed=3000&desc=true"
+                    width="360"
+                    height="450"
+                    frameborder="0"
+                    scrolling="no"
+                    title="Portal de Fornecedores HoteisRio"
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ALL MODULES GRID -->
+<section style="background:var(--bg);">
+    <div class="section-inner">
+        <div class="section-header">
+            <div class="section-label">Plataforma Completa</div>
+            <h2 class="section-title">Mais de 20 módulos integrados<br>em uma só plataforma.</h2>
+            <p class="section-subtitle">Cada área do seu hotel, coberta por ferramentas digitais especializadas.</p>
+        </div>
+        <div class="modules-grid">
+            <div class="module-card">
+                <div class="module-tag">Dashboard</div>
+                <div class="module-icon">🏠</div>
+                <h4>Painel Principal</h4>
+                <p>Visão geral de desempenho e KPIs do seu hotel em tempo real.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag gold">Jurídico</div>
+                <div class="module-icon">⚖️</div>
+                <h4>Assessoria Jurídica</h4>
+                <p>Suporte trabalhista, cível e tributário com monitoramento legislativo.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag purple">Eventos</div>
+                <div class="module-icon">🎪</div>
+                <h4>Grandes Eventos do Rio</h4>
+                <p>Rock in Rio, Carnaval, Réveillon e todos os eventos de impacto hoteleiro.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag green">Educação</div>
+                <div class="module-icon">🎓</div>
+                <h4>HotéisRIO Cursos</h4>
+                <p>Cursos e treinamentos online para toda a equipe do hotel.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag">Inteligência</div>
+                <div class="module-icon">📈</div>
+                <h4>Calculadoras</h4>
+                <p>ADR, RevPAR e taxa de ocupação — calcule e compare o desempenho.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag gold">Comunidade</div>
+                <div class="module-icon">💬</div>
+                <h4>Fóruns & Comitês</h4>
+                <p>Participação online nos fóruns mensais com líderes do setor.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag purple">Comercial</div>
+                <div class="module-icon">✈️</div>
+                <h4>Ações Comerciais</h4>
+                <p>Feiras internacionais, roadshows e missões comerciais para associados.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag green">RH</div>
+                <div class="module-icon">👥</div>
+                <h4>Banco de Talentos</h4>
+                <p>Acesso a currículos qualificados para vagas no setor hoteleiro.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag">Segurança</div>
+                <div class="module-icon">🛡️</div>
+                <h4>Ordem Pública</h4>
+                <p>Contatos de segurança, cartilhas e demandas para órgãos municipais.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag gold">Networking</div>
+                <div class="module-icon">📱</div>
+                <h4>Grupos WhatsApp</h4>
+                <p>Grupos exclusivos para gestores com comunicados e networking direto.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag purple">Legislação</div>
+                <div class="module-icon">📋</div>
+                <h4>Leis e Decretos</h4>
+                <p>Biblioteca legislativa atualizada com todas as normas que afetam a hotelaria.</p>
+            </div>
+            <div class="module-card">
+                <div class="module-tag green">Benefícios</div>
+                <div class="module-icon">🎁</div>
+                <h4>Catálogo de Benefícios</h4>
+                <p>Clube de vantagens com descontos e serviços exclusivos para associados.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+    <div class="section-inner">
+        <h2>Pronto para aproveitar<br>esses benefícios?</h2>
+        <p>Junte-se aos hotéis mais prestigiados do Rio de Janeiro e eleve o nível da sua gestão hoteleira.</p>
+        <a href="https://associados.sindhoteisrj.com.br" class="btn-white" target="_blank">
+            Fazer Login no Portal →
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png"
+                     alt="HoteisRio" onerror="this.style.display='none'">
+                <p>O Sindicato dos Hotéis, Restaurantes, Bares e Similares do Município do Rio de Janeiro representa e fortalece o setor hoteleiro carioca desde 1939.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Portal</h5>
+                <ul>
+                    <li><a href="#beneficios">Benefícios</a></li>
+                    <li><a href="#modulos">Módulos</a></li>
+                    <li><a href="#">HotéisRIO Cursos</a></li>
+                    <li><a href="#">Portal de Fornecedores</a></li>
+                    <li><a href="#">Calendário de Eventos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Sindicato</h5>
+                <ul>
+                    <li><a href="https://sindhoteisrj.com.br" target="_blank">Site Institucional</a></li>
+                    <li><a href="#">Assessoria Jurídica</a></li>
+                    <li><a href="#">Filia-se</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Sindhoteisrj — Portal do Associado HoteisRio. Todos os direitos reservados.</p>
+            <div class="footer-socials">
+                <a href="https://instagram.com/hoteisrio" class="social-btn" target="_blank" title="Instagram">in</a>
+                <a href="https://linkedin.com/company/hoteisrio" class="social-btn" target="_blank" title="LinkedIn">Li</a>
+                <a href="https://youtube.com/@hoteisrio" class="social-btn" target="_blank" title="YouTube">Yt</a>
+                <a href="https://facebook.com/hoteisrio" class="social-btn" target="_blank" title="Facebook">Fb</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+    // Trigger on load
+    if (window.scrollY > 20) navbar.classList.add('scrolled');
+</script>
+</body>
+</html>

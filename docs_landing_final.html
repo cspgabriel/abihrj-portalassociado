@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Ajuda | HotéisRio</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* HotéisRio Official Palette - NO BLACK */
+            --rio-blue: #004aad;
+            --rio-blue-light: #eff6ff; 
+            --rio-blue-hover: #003380;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --sidebar-width: 320px; /* Alargado ligeiramente para caber títulos maiores */
+            --header-height: 70px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Classic Sidebar (Blue) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--rio-blue);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            box-shadow: 4px 0 15px rgba(0,74,173,0.1);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header img {
+            max-width: 80%;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .nav-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.6);
+            margin: 20px 0 10px 10px;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link i { width: 20px; text-align: center; font-size: 1rem; opacity: 0.8; }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: white;
+            color: var(--rio-blue);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-link.active i { opacity: 1; color: var(--rio-blue); }
+
+        /* --- Main Content --- */
+        .main-stage {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 60px;
+        }
+
+        .header-bar {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .header-bar h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--rio-blue);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* --- Individual Benefit Sections --- */
+        .section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            scroll-margin-top: 100px; /* Compensate for header */
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--rio-blue-light);
+            color: var(--rio-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.6rem;
+            color: var(--rio-blue);
+            font-weight: 800;
+        }
+
+        .section-body p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .image-preview {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .call-to-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--rio-blue-light);
+            color: var(--rio-blue);
+            font-weight: 700;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .call-to-action:hover {
+            background: var(--rio-blue);
+            color: white;
+        }
+
+        .video-container {
+            width: 100%;
+            background: black;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            margin-bottom: 20px;
+        }
+
+        .video-container video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Status & Badges */
+        .badges-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .badge-active { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
+        .badge-new { background: #fef08a; color: #854d0e; }
+        
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://hoteisrio.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-1.png" alt="Logo HotéisRio">
+        </div>
+        <div class="sidebar-nav">
+            <!-- FLAT LIST AS REQUESTED -->
+            <a href="#tour" class="nav-link active" onclick="navTo('tour', this)"><i class="fa-solid fa-play-circle"></i> Tour Oficial</a>
+            <a href="#acoes-comerciais" class="nav-link" onclick="navTo('acoes-comerciais', this)"><i class="fa-solid fa-bullhorn"></i> Ações Comerciais</a>
+            <a href="#assessoria-juridica" class="nav-link" onclick="navTo('assessoria-juridica', this)"><i class="fa-solid fa-scale-balanced"></i> Assessoria Jurídica</a>
+            <a href="#banco-talentos" class="nav-link" onclick="navTo('banco-talentos', this)"><i class="fa-solid fa-users-viewfinder"></i> Banco de Talentos</a>
+            <a href="#grandes-eventos" class="nav-link" onclick="navTo('grandes-eventos', this)"><i class="fa-solid fa-clipboard-list"></i> Cadastro Grandes Eventos</a>
+            <a href="#calendario-eventos" class="nav-link" onclick="navTo('calendario-eventos', this)"><i class="fa-regular fa-calendar"></i> Calendário de Eventos</a>
+            <a href="#calendario-feriados" class="nav-link" onclick="navTo('calendario-feriados', this)"><i class="fa-solid fa-umbrella-beach"></i> Calendário de Feriados</a>
+            <a href="#cursos" class="nav-link" onclick="navTo('cursos', this)"><i class="fa-solid fa-graduation-cap"></i> Cursos e Treinamentos</a>
+            <a href="#ordem-publica" class="nav-link" onclick="navTo('ordem-publica', this)"><i class="fa-solid fa-shield-halved"></i> Demandas Ordem Pública</a>
+            <a href="#sugestao-pauta" class="nav-link" onclick="navTo('sugestao-pauta', this)"><i class="fa-regular fa-newspaper"></i> Enviar Sugestão Pauta</a>
+            <a href="#fornecedores" class="nav-link" onclick="navTo('fornecedores', this)"><i class="fa-solid fa-truck-fast"></i> Fornecedores Hotelaria</a>
+            <a href="#influenciadores" class="nav-link" onclick="navTo('influenciadores', this)"><i class="fa-solid fa-camera-retro"></i> Influenciadores / UGC</a>
+            <a href="#leis-app" class="nav-link" onclick="navTo('leis-app', this)"><i class="fa-solid fa-gavel"></i> Leis e Decretos RJ</a>
+            <a href="#placas" class="nav-link" onclick="navTo('placas', this)"><i class="fa-solid fa-download"></i> Placas Obrigatórias (Recepção)</a>
+            <a href="#observatorio" class="nav-link" onclick="navTo('observatorio', this)"><i class="fa-solid fa-chart-line"></i> Relatórios de Ocupação</a>
+            <a href="#calculadoras" class="nav-link" onclick="navTo('calculadoras', this)"><i class="fa-solid fa-calculator"></i> Calculadoras Financeiras</a>
+            <a href="#rock-in-rio" class="nav-link" onclick="navTo('rock-in-rio', this)"><i class="fa-solid fa-music"></i> Viva o Rio - Rock in Rio</a>
+        </div>
+    </aside>
+
+    <main class="main-stage">
+        <nav class="header-bar">
+            <h1>MANUAL DO ASSOCIADO</h1>
+            <div style="font-weight: 700; font-size: 0.8rem; color: var(--text-secondary);">LISTA COMPLETA DE SERVIÇOS</div>
+        </nav>
+
+        <div class="container">
+            
+            <!-- TOUR -->
+            <section id="tour" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-film"></i></div>
+                    <div>
+                        <h2>Tour Completo do Portal</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Assista à demonstração em vídeo para entender a navegação raiz e descobrir como tirar o máximo proveito da plataforma.</p>
+                    <div class="video-container">
+                        <video controls poster="screenshots/authenticated-dashboard.png">
+                            <source src="screenshots/demo-portal-completo.webm" type="video/webm">
+                        </video>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AÇÕES COMERCIAIS -->
+            <section id="acoes-comerciais" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-bullhorn"></i></div>
+                    <div>
+                        <h2>Ações Comerciais Hub</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Central de inscrições unificada para Feiras nacionais e internacionais, PROCAP e Experiência Rio.</p>
+                    <img src="screenshots/benefits/acoes-comerciais.png" alt="Ações Comerciais" class="image-preview" onerror="this.onerror=null; this.src='screenshots/benefits/comercial-full.png';">
+                    <a href="javascript:void(0)" class="call-to-action">Acessar Hub <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- ASSESSORIA JURÍDICA -->
+            <section id="assessoria-juridica" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div>
+                        <h2>Assessoria Jurídica</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Solicite apoio e tire dúvidas legais operacionais através da assessoria jurídica dedicada para associados HotéisRio.</p>
+                    <img src="screenshots/benefits/assessoria-juridica.png" alt="Assessoria Jurídica" class="image-preview" onerror="this.onerror=null; this.src='screenshots/benefits/legal-full.png';">
+                    <a href="javascript:void(0)" class="call-to-action">Solicitar Atendimento <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- BANCO DE TALENTOS -->
+            <section id="banco-talentos" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-users-viewfinder"></i></div>
+                    <div>
+                        <h2>Banco de Talentos</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span> <span class="badge badge-new">NOVO</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Publique vagas direto no maior portal do turismo e acesse bancos de currículos com filtros por qualificação e certificados HotéisRio.</p>
+                    <img src="screenshots/benefits/banco-talentos.png" alt="Banco de Talentos" class="image-preview" onerror="this.onerror=null; this.src='screenshots/benefits/talentbank-viewport.png';">
+                    <a href="javascript:void(0)" class="call-to-action">Acessar Currículos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- GRANDES EVENTOS -->
+            <section id="grandes-eventos" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-clipboard-list"></i></div>
+                    <div>
+                        <h2>Cadastro de Grandes Eventos</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Canal oficial da TurisRio/SETUR para cadastro de eventos grandes hospedados em hotéis, garantindo suporte do policiamento local antecipado.</p>
+                    <img src="screenshots/benefits/cadastro_grandes_eventos.png" alt="Cadastro Grandes Eventos" class="image-preview" onerror="this.style.display='none';">
+                    <a href="javascript:void(0)" class="call-to-action">Preencher Formulário <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- CALENDÁRIO EVENTOS -->
+            <section id="calendario-eventos" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-regular fa-calendar"></i></div>
+                    <div>
+                        <h2>Calendário de Eventos</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Antecipe suas estratégias de vendas consultando todos os congressos, festivais e feiras que impactarão o destino no ano.</p>
+                    <img src="screenshots/benefits/calendario_eventos.png" alt="Calendário Eventos" class="image-preview" onerror="this.onerror=null; this.src='screenshots/benefits/eventos-full.png';">
+                    <a href="javascript:void(0)" class="call-to-action">Monitorar Eventos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- CALENDÁRIO FERIADOS -->
+            <section id="calendario-feriados" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-umbrella-beach"></i></div>
+                    <div>
+                        <h2>Calendário de Feriados 2026</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Mapeamento de feriados nacionais e prolongados de estados emissores estratégicos (SP, MG, RS) para auxiliar no Revenue Management.</p>
+                    <img src="screenshots/benefits/calendario_feriados.png" alt="Feriados" class="image-preview" onerror="this.style.display='none';">
+                    <a href="javascript:void(0)" class="call-to-action">Ver Tabela Completa <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- CURSOS -->
+            <section id="cursos" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div>
+                        <h2>Cursos e Treinamentos</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Treine seus funcionários gratuitamente nas soluções da HotéisRio, incluindo recepção, sustentabilidade e prevenção contra bebidas adulteradas.</p>
+                    <img src="screenshots/benefits/cursos-treinamentos.png" alt="Cursos" class="image-preview" onerror="this.style.display='none';">
+                    <a href="javascript:void(0)" class="call-to-action">Acessar Cursos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- DEMANDAS -->
+            <section id="ordem-publica" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div>
+                        <h2>Demandas de Ordem Pública</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Abertura de chamados para órgãos de zeladoria (Comlurb, Rioluz, Sec. Ordem Pública) visando corrigir falhas no entorno imediato do hotel.</p>
+                    <img src="screenshots/benefits/ordem_publica.png" alt="Ordem Pública" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Abrir Chamado <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- PAUTA -->
+            <section id="sugestao-pauta" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-regular fa-newspaper"></i></div>
+                    <div>
+                        <h2>Enviar Sugestão de Pauta</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Direcione ações, novidades e informações relevantes da sua operação para inclusão na base de divulgação da Assessoria Sindical / PR.</p>
+                    <img src="screenshots/benefits/sugestao_pauta.png" alt="Pauta" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Enviar <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- FORNECEDORES -->
+            <section id="fornecedores" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
+                    <div>
+                        <h2>Fornecedores Hotelaria</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Base homologada de parceiros com descontos institucionais (energia, insumos F&B, tech, lavanderia).</p>
+                    <img src="screenshots/benefits/fornecedores.png" alt="Fornecedores" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Consultar <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- INFLUS -->
+            <section id="influenciadores" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-camera-retro"></i></div>
+                    <div>
+                        <h2>Influenciadores e UGC</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Recrutamento de creators e formadores de opinião para ações em colaboração de permuta, garantindo qualidade editorial.</p>
+                    <img src="screenshots/benefits/influenciadores.png" alt="UGC" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Procurar Creators <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- LEIS -->
+            <section id="leis-app" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-gavel"></i></div>
+                    <div>
+                        <h2>Leis e Decretos RJ (App)</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Aplicação moderna contendo todo o histórico organizado de legislações estaduais e municipais ativas.</p>
+                    <img src="screenshots/benefits/leis-app.png" alt="Leis" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Acessar Jus<i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- PLACAS -->
+            <section id="placas" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-download"></i></div>
+                    <div>
+                        <h2>Placas Obrigatórias (Recepção)</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Faça download imediato do pacote compactado de placas obrigatórias de fiscalização, prontas para ir à gráfica.</p>
+                    <img src="screenshots/benefits/placas.png" alt="Placas Obrigatórias" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Baixar Pasta ZIP <i class="fa-solid fa-download"></i></a>
+                </div>
+            </section>
+
+            <!-- OBSERVATORIO -->
+            <section id="observatorio" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-chart-line"></i></div>
+                    <div>
+                        <h2>Relatórios de Ocupação (Observatório)</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Métricas precisas e atualizadas da ocupação da rede no RJ, geradas pelo Observatório Turístico.</p>
+                    <img src="screenshots/benefits/observatorio.png" alt="Relatorios" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Acessar <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <!-- CALCULADORAS -->
+            <section id="calculadoras" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-calculator"></i></div>
+                    <div>
+                        <h2>Calculadoras Financeiras</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Kit de quatro mini-aplicativos rápidos e otimizados: ADR (Diária Média), RevPAR, GOPPAR e % de Ocupação.</p>
+                    <img src="screenshots/benefits/calculadoras.png" alt="Calc" class="image-preview">
+                </div>
+            </section>
+
+            <!-- RIR -->
+            <section id="rock-in-rio" class="section">
+                <div class="section-header">
+                    <div class="icon-box"><i class="fa-solid fa-music"></i></div>
+                    <div>
+                        <h2>Viva o Rio com o Rock in Rio 2026</h2>
+                        <div class="badges-wrapper"><span class="badge badge-active">Ativo</span></div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <p>Pacote especial para credenciamento do seu hotel junto à Cidade do Rock, permitindo pacotes exclusivos que atraem milhares de turistas.</p>
+                    <img src="screenshots/benefits/rock_in_rio.png" alt="Rock in Rio" class="image-preview">
+                    <a href="javascript:void(0)" class="call-to-action">Inscrever Hotel <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Simple Smooth Scroll and active state management
+        function navTo(id, btn) {
+            const container = document.querySelector('.main-stage');
+            const target = document.getElementById(id);
+            if(target) {
+                container.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        }
+
+        const scrollStage = document.querySelector('.main-stage');
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        scrollStage.onscroll = () => {
+            let activeId = "";
+            sections.forEach(s => {
+                const rect = s.getBoundingClientRect();
+                if(rect.top <= 200 && rect.bottom >= 200) {
+                    activeId = s.id;
+                }
+            });
+            if(activeId) {
+                navLinks.forEach(l => {
+                    l.classList.remove('active');
+                    if(l.getAttribute('href') === `#${activeId}`) l.classList.add('active');
+                });
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal do Associado - Módulos e Funcionalidades</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 50px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .header h1 {
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .header p {
+      font-size: 1.15em;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+
+    .intro-section {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 14px;
+      padding: 35px;
+      margin-bottom: 45px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.6s ease-out 0.1s both;
+    }
+
+    .intro-section h2 {
+      color: #667eea;
+      font-size: 1.6em;
+      margin-bottom: 18px;
+      font-weight: 600;
+    }
+
+    .intro-section p {
+      color: #555;
+      line-height: 1.9;
+      font-size: 1.05em;
+      margin-bottom: 15px;
+    }
+
+    .modules-title {
+      color: white;
+      font-size: 2.2em;
+      text-align: center;
+      margin-bottom: 35px;
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-bottom: 50px;
+    }
+
+    .module-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideUp 0.6s ease-out forwards;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .module-card:nth-child(1) { animation-delay: 0.15s; }
+    .module-card:nth-child(2) { animation-delay: 0.25s; }
+    .module-card:nth-child(3) { animation-delay: 0.35s; }
+    .module-card:nth-child(4) { animation-delay: 0.45s; }
+    .module-card:nth-child(5) { animation-delay: 0.55s; }
+    .module-card:nth-child(6) { animation-delay: 0.65s; }
+    .module-card:nth-child(7) { animation-delay: 0.75s; }
+    .module-card:nth-child(8) { animation-delay: 0.85s; }
+
+    .module-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .module-icon {
+      font-size: 3.2em;
+      text-align: center;
+      padding: 32px 24px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .module-body {
+      padding: 28px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .module-body h3 {
+      color: #333;
+      font-size: 1.3em;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .module-body p {
+      color: #666;
+      font-size: 0.98em;
+      line-height: 1.65;
+      flex-grow: 1;
+      margin-bottom: 20px;
+    }
+
+    .module-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 13px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-size: 0.98em;
+      border: none;
+      cursor: pointer;
+    }
+
+    .module-link:hover {
+      transform: scale(1.06);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    }
+
+    .features-showcase {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 14px;
+      padding: 35px;
+      margin-bottom: 45px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.6s ease-out 0.2s both;
+    }
+
+    .features-showcase h2 {
+      color: #667eea;
+      font-size: 1.6em;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .feature-item {
+      background: #f8f9fa;
+      padding: 18px;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      background: #eef2ff;
+      transform: translateX(4px);
+    }
+
+    .feature-item strong {
+      color: #667eea;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.05em;
+    }
+
+    .feature-item small {
+      color: #888;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.85);
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeIn 0.6s ease-out 0.3s both;
+    }
+
+    .footer p {
+      font-size: 1em;
+      margin-bottom: 8px;
+      font-weight: 300;
+    }
+
+    .footer-links {
+      margin-top: 15px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(35px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .modules-title {
+        font-size: 1.6em;
+      }
+
+      .modules-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .module-icon {
+        font-size: 2.4em;
+        padding: 24px 18px 18px;
+      }
+
+      .intro-section,
+      .features-showcase {
+        padding: 24px;
+      }
+
+      .module-body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌟 Portal do Associado</h1>
+      <p>Descubra os módulos e funcionalidades exclusivas</p>
+    </div>
+
+    <div class="intro-section">
+      <h2>📱 Bem-vindo ao Portal</h2>
+      <p>
+        O Portal do Associado é uma plataforma completa que oferece acesso a diversos módulos e funcionalidades 
+        projetados especificamente para atender as necessidades de nossos associados. Explore cada módulo abaixo 
+        para descobrir como tirar o máximo de proveito de seus benefícios.
+      </p>
+      <p>
+        <strong>Quer explorar todos os módulos em detalhes?</strong> Clique em qualquer card abaixo para ver 
+        informações completas, screenshots, exemplos de uso e muito mais sobre cada funcionalidade.
+      </p>
+    </div>
+
+    <h2 class="modules-title">🎯 Módulos Disponíveis</h2>
+
+    <div class="modules-grid">
+      <div class="module-card">
+        <div class="module-icon">📊</div>
+        <div class="module-body">
+          <h3>Dashboard</h3>
+          <p>Painel central com acesso a todos os serviços, widgets informativos e atalhos rápidos para suas funcionalidades favoritas.</p>
+          <a href="module-dashboard.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🎁</div>
+        <div class="module-body">
+          <h3>Todos os Benefícios</h3>
+          <p>Catálogo completo de benefícios exclusivos, cupons, descontos e vantagens disponíveis para associados.</p>
+          <a href="module-all-benefits.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">💼</div>
+        <div class="module-body">
+          <h3>Ações Comerciais</h3>
+          <p>Plataforma de investimentos com análises em tempo real, cotações e ferramentas para gerenciar sua carteira.</p>
+          <a href="module-commercial.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">📚</div>
+        <div class="module-body">
+          <h3>Cursos e Treinamentos</h3>
+          <p>Biblioteca de cursos online, workshops com especialistas e programas de certificação profissional.</p>
+          <a href="module-cursos.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🎉</div>
+        <div class="module-body">
+          <h3>Eventos da Associação</h3>
+          <p>Calendário completo de eventos, conferências, encontros de networking e atividades exclusivas.</p>
+          <a href="module-events.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">💬</div>
+        <div class="module-body">
+          <h3>Fórum de Discussão</h3>
+          <p>Comunidade online vibrante para troca de ideias, resolução de dúvidas e compartilhamento de experiências.</p>
+          <a href="module-forum.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🎯</div>
+        <div class="module-body">
+          <h3>Talent Bank</h3>
+          <p>Oportunidades de carreira, conexão com recrutadores e desenvolvimento profissional contínuo.</p>
+          <a href="module-talentbank.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">📜</div>
+        <div class="module-body">
+          <h3>Legislação & Normas</h3>
+          <p>Documentação completa da associação, legislações atualizadas, normas regulatórias e guias oficiais.</p>
+          <a href="module-legal.html" class="module-link">Explorar Módulo →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-showcase">
+      <h2>✨ Destaques da Plataforma</h2>
+      <div class="features-list">
+        <div class="feature-item">
+          <strong>🔐 Segurança</strong>
+          <small>Sistema de autenticação seguro e proteção de dados</small>
+        </div>
+        <div class="feature-item">
+          <strong>📱 Responsivo</strong>
+          <small>Funciona perfeitamente em desktop, tablet e mobile</small>
+        </div>
+        <div class="feature-item">
+          <strong>⚡ Rápido</strong>
+          <small>Interface otimizada para melhor desempenho</small>
+        </div>
+        <div class="feature-item">
+          <strong>🎮 Gamificação</strong>
+          <small>Ganhe pontos, badges e desafie-se</small>
+        </div>
+        <div class="feature-item">
+          <strong>🔔 Notificações</strong>
+          <small>Fique atualizado com alertas personalizados</small>
+        </div>
+        <div class="feature-item">
+          <strong>🌐 Integrado</strong>
+          <small>Conectado com as principais plataformas</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>✨ Portal do Associado - Plataforma Completa de Benefícios</p>
+      <p style="font-size: 0.95em;">Desenvolvido para maximizar sua experiência como associado</p>
+      <div class="footer-links">
+        <a href="module-dashboard.html">Dashboard</a>
+        <a href="#top">Voltar ao Topo</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

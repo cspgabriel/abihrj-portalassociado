@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todos os Benefícios - Portal do Associado</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li {
+      margin-bottom: 8px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-weight: 500;
+    }
+
+    .main {
+      margin-left: 250px;
+      flex: 1;
+      padding: 30px;
+    }
+
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 1.5em;
+      color: #333;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .btn-prev, .btn-next {
+      background: #e0e7ff;
+      color: #667eea;
+    }
+
+    .btn-prev:hover, .btn-next:hover {
+      background: #c7d2fe;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .content {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .content h2 {
+      color: #667eea;
+      font-size: 1.3em;
+      margin-bottom: 15px;
+    }
+
+    .content p {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .screenshot {
+      width: 100%;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    .description-box {
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .feature-card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+      border-top: 3px solid #667eea;
+    }
+
+    .feature-card strong {
+      color: #333;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .feature-card p {
+      font-size: 0.9em;
+      color: #666;
+      margin: 0;
+    }
+
+    .how-to {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .how-to h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .steps {
+      list-style: none;
+    }
+
+    .steps li {
+      padding: 8px 0;
+      padding-left: 30px;
+      position: relative;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .steps li:before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .content,
+      .description-box {
+        padding: 15px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .screenshot {
+        max-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <h2>📱 Módulos</h2>
+      <ul>
+        <li><a href="module-dashboard.html" class="link">📊 Dashboard</a></li>
+        <li><a href="module-all-benefits.html" class="link active">🎁 Todos os Benefícios</a></li>
+        <li><a href="module-commercial.html" class="link">💼 Ações Comerciais</a></li>
+        <li><a href="module-cursos.html" class="link">📚 Cursos e Treinamentos</a></li>
+        <li><a href="module-events.html" class="link">🎉 Eventos da Associação</a></li>
+        <li><a href="module-forum.html" class="link">💬 Fórum de Discussão</a></li>
+        <li><a href="module-talentbank.html" class="link">🎯 Talent Bank</a></li>
+        <li><a href="module-legal.html" class="link">📜 Legislação & Normas</a></li>
+      </ul>
+    </div>
+
+    <div class="main">
+      <div class="header">
+        <div>
+          <h1>🎁 Todos os Benefícios</h1>
+        </div>
+        <div class="nav-buttons">
+          <a href="module-dashboard.html" class="btn btn-prev">← Anterior</a>
+          <a href="module-commercial.html" class="btn btn-next">Próximo →</a>
+        </div>
+      </div>
+
+      <div class="content">
+        <h2>Catálogo completo de benefícios exclusivos disponíveis para associados</h2>
+        <p>Descubra todos os benefícios, cupons, descontos e vantagens personalizadas do portal</p>
+
+        <div class="screenshot-placeholder" style="background: #e0e7ff; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #667eea; font-size: 1.2em; font-weight: 600;">
+          📸 Screenshot será adicionado após captura
+        </div>
+
+        <div class="description-box">
+          <h3>O que você encontra neste módulo</h3>
+          <p>Descubra todos os benefícios, cupons, descontos e vantagens personalizadas do portal</p>
+        </div>
+
+        <h3>✨ Features Principais</h3>
+        <div class="features">
+          <div class="feature-card">
+            <strong>✓ Visualizar todos os benefícios</strong>
+          </div>
+          <div class="feature-card">
+            <strong>✓ Filtrar por categoria</strong>
+          </div>
+          <div class="feature-card">
+            <strong>✓ Buscar benefícios específicos</strong>
+          </div>
+          <div class="feature-card">
+            <strong>✓ Ver detalhes completos</strong>
+          </div>
+          <div class="feature-card">
+            <strong>✓ Acessar cupons e códigos</strong>
+          </div>
+          <div class="feature-card">
+            <strong>✓ Salvar favoritos</strong>
+          </div>
+        </div>
+
+        <div class="how-to">
+          <h3>📖 Como Usar</h3>
+          <ol class="steps">
+            <li data-step="1">Navegue até a seção de benefícios</li>
+            <li data-step="2">Explore as categorias disponíveis</li>
+            <li data-step="3">Clique em um benefício para detalhes</li>
+            <li data-step="4">Use cupons disponíveis</li>
+            <li data-step="5">Aproveite as ofertas exclusivas</li>
+            <li data-step="6">Compartilhe com outros associados</li>
+          </ol>
+        </div>
+
+        <div style="background: #f0f4ff; padding: 15px; border-radius: 6px; margin-top: 20px;">
+          <strong>🔗 Rota do Portal:</strong>
+          <code style="background: white; padding: 5px 10px; border-radius: 3px; font-family: monospace;">/#/all-benefits</code>
+        </div>
+      </div>
+
+      <div class="header" style="justify-content: flex-end; gap: 10px;">
+        <a href="module-dashboard.html" class="btn btn-prev">← Dashboard</a>
+        <a href="module-commercial.html" class="btn btn-next">Ações Comerciais →</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
