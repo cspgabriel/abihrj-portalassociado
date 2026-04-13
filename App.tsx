@@ -110,20 +110,84 @@ export default function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
-    
+
+    // If a query param explicitly requests a view, honor it first
     if (viewParam) {
-        if (viewParam === 'MARKETING_KIT') {
-            setCurrentView('MARKETING_KIT');
-        } else if (viewParam === 'ALL_BENEFITS') {
-            setCurrentView('ALL_BENEFITS');
-        } else if (viewParam === 'CALCULATORS_PAGE') {
-            setCurrentView('CALCULATORS_PAGE');
-        } else if (viewParam === 'ASSOCIATION_EVENTS') {
-            setCurrentView('ASSOCIATION_EVENTS');
-        } else if (viewParam === 'BENEFITS_SHOWCASE') {
-            setCurrentView('BENEFITS_SHOWCASE');
-        }
+        if (viewParam === 'MARKETING_KIT') setCurrentView('MARKETING_KIT');
+        else if (viewParam === 'ALL_BENEFITS') setCurrentView('ALL_BENEFITS');
+        else if (viewParam === 'CALCULATORS_PAGE') setCurrentView('CALCULATORS_PAGE');
+        else if (viewParam === 'ASSOCIATION_EVENTS') setCurrentView('ASSOCIATION_EVENTS');
+        else if (viewParam === 'BENEFITS_SHOWCASE') setCurrentView('BENEFITS_SHOWCASE');
+        return;
     }
+
+    // Otherwise try to derive route from the pathname so direct links work
+    try {
+      const p = window.location.pathname || '/';
+      // Normalize trailing slash
+      const path = p.replace(/\/$/, '');
+
+      // Landing legacy path (some systems may link to this HTML file)
+      if (path === '/landing-portal-do-associado.html' || path === '/landing-portal-do-associado' || path === '/landing') {
+        setCurrentView('LANDING_PAGE');
+        // replace state to clean querystring but keep pathname
+        window.history.replaceState({}, '', '/landing-portal-do-associado.html');
+        return;
+      }
+
+      // All benefits listing
+      if (path === '/benefits' || path === '/beneficios' || path === '/todos-beneficios') {
+        setCurrentView('ALL_BENEFITS');
+        return;
+      }
+
+      // Single benefit route: /benefits/:id or /benefit/:id
+      const benefitMatch = path.match(/\/(?:benefits|beneficio|benefit)\/(.+)/i);
+      if (benefitMatch && benefitMatch[1]) {
+        const id = decodeURIComponent(benefitMatch[1]);
+        const b = BENEFITS_DATA.find(x => x.id === id);
+        if (b) {
+          setSelectedBenefit(b);
+          setCurrentView('BENEFIT_DETAILS');
+          return;
+        }
+      }
+
+      // Default: leave currentView as-is (LANDING_PAGE default)
+    } catch (e) {
+      // ignore parsing errors and fall back to default
+    }
+  }, []);
+
+  // Handle browser back/forward so direct navigation updates the app view
+  useEffect(() => {
+    const onPop = () => {
+      try {
+        const p = window.location.pathname || '/';
+        const path = p.replace(/\/$/, '');
+        if (path === '/landing-portal-do-associado.html' || path === '/landing-portal-do-associado' || path === '/landing') {
+          setCurrentView('LANDING_PAGE');
+          return;
+        }
+        if (path === '/benefits' || path === '/beneficios' || path === '/todos-beneficios') {
+          setCurrentView('ALL_BENEFITS');
+          return;
+        }
+        const benefitMatch = path.match(/\/(?:benefits|beneficio|benefit)\/(.+)/i);
+        if (benefitMatch && benefitMatch[1]) {
+          const id = decodeURIComponent(benefitMatch[1]);
+          const b = BENEFITS_DATA.find(x => x.id === id);
+          if (b) {
+            setSelectedBenefit(b);
+            setCurrentView('BENEFIT_DETAILS');
+            return;
+          }
+        }
+      } catch {}
+    };
+
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
   }, []);
 
   useEffect(() => {
@@ -154,6 +218,21 @@ export default function App() {
   const navigateTo = (view: string) => {
     setCurrentView(view);
     scrollToTop();
+    // Update browser URL for shareable routes
+    try {
+      if (view === 'ALL_BENEFITS') {
+        window.history.pushState({}, '', '/benefits');
+      } else if (view === 'LANDING_PAGE') {
+        window.history.pushState({}, '', '/landing-portal-do-associado.html');
+      } else if (view === 'BENEFITS_SHOWCASE') {
+        window.history.pushState({}, '', '/benefits/showcase');
+      } else if (view === 'BENEFIT_DETAILS') {
+        // benefit details route is managed by handleBenefitClick which sets the canonical URL
+      } else {
+        // for other app views we keep the landing root
+        window.history.pushState({}, '', '/');
+      }
+    } catch {}
   };
 
   const handleGlobalSearch = (term: string) => {
@@ -273,8 +352,12 @@ export default function App() {
        if (benefit.externalLink) window.open(benefit.externalLink, '_blank');
        else if (benefit.downloadUrl) window.open(benefit.downloadUrl, '_blank');
     } else {
-       setSelectedBenefit(benefit);
-       navigateTo('BENEFIT_DETAILS');
+         setSelectedBenefit(benefit);
+         // push canonical benefit URL so each benefit has a unique shareable link
+         try {
+           window.history.pushState({}, '', `/benefits/${encodeURIComponent(benefit.id)}`);
+         } catch {}
+         navigateTo('BENEFIT_DETAILS');
     }
   };
 
@@ -489,11 +572,11 @@ export default function App() {
     switch (currentView) {
       case 'LANDING_PAGE': return <LandingPage userName={user.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
       case 'WELCOME': return <WelcomeOnboarding onStartTutorial={() => { navigateTo('LANDING_PAGE'); setTimeout(() => setShowTutorial(true), 500); }} onSkip={() => navigateTo('LANDING_PAGE')} />;
-      case 'MODERN_DASHBOARD': return <ModernDashboard user={user} onUseBenefit={handleBenefitClick} onViewDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'ALL_BENEFITS': return <AllBenefitsPage initialSearchTerm={globalSearchTerm} onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
-      case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { setSelectedBenefit(b); navigateTo('BENEFIT_DETAILS'); }} />;
+      case 'MODERN_DASHBOARD': return <ModernDashboard user={user} onUseBenefit={handleBenefitClick} onViewDetails={(b) => { handleBenefitClick(b); }} />;
+      case 'ALL_BENEFITS': return <AllBenefitsPage initialSearchTerm={globalSearchTerm} onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
+      case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
+      case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
+      case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
       case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'FORUMS_OVERVIEW': return <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'FORUM_DETAILS': return selectedForum ? <ForumPage forum={selectedForum} onBack={() => navigateTo('FORUMS_OVERVIEW')} onRegisterUpdate={() => navigateTo('REGISTRATION_UPDATE')} /> : <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
