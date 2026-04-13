@@ -386,8 +386,8 @@ export default function App() {
       );
   }
 
-  // Allow certain pages to be publicly accessible without login
-  const publicViews = ['LANDING_PAGE', 'BENEFITS_SHOWCASE', 'ALL_BENEFITS', 'BENEFIT_DETAILS', 'SERVICE_VIEWER', 'MARKETING_KIT'];
+  // Keep only explicitly external showcase pages public.
+  const publicViews = ['BENEFITS_SHOWCASE', 'MARKETING_KIT'];
   if (!user && !publicViews.includes(currentView)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
