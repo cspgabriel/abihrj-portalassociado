@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABIH-RJ — Relatório Consolidado 2018–2026</title>
+  <meta name="description" content="Relatório consolidado da Associação Brasileira da Indústria de Hotéis do Estado do Rio de Janeiro — histórico completo 2018–2026." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-dark:  #003580;
+      --blue:       #004aad;
+      --blue-light: #1a6fc4;
+      --gold:       #c8a951;
+      --gold-light: #f0d078;
+      --bg:         #f0f4f8;
+      --surface:    #ffffff;
+      --text:       #1a202c;
+      --muted:      #64748b;
+      --border:     #e2e8f0;
+      --green:      #16a34a;
+      --red:        #dc2626;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ─────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 55%, var(--blue-light) 100%);
+      color: #fff;
+      padding: 80px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 6px 18px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 54px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--gold-light); }
+    .hero p {
+      font-size: clamp(15px, 2vw, 19px);
+      opacity: .85;
+      max-width: 640px;
+      margin: 0 auto 32px;
+    }
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      font-size: 14px;
+      opacity: .75;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── STATS BAR ─────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-item {
+      background: var(--surface);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .stat-item .num {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1;
+    }
+    .stat-item .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    /* ── CONTAINER ─────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    section { padding: 64px 0; }
+
+    h2.section-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+    .divider {
+      width: 48px; height: 4px;
+      background: var(--gold);
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    /* ── CARDS ─────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+
+    /* ── TIMELINE ──────────────────────────────── */
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--blue), var(--gold));
+      border-radius: 4px;
+    }
+    .tl-item {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .tl-dot {
+      flex-shrink: 0;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      z-index: 1;
+      box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--blue-light);
+      text-align: center;
+      line-height: 1.2;
+    }
+    .tl-dot.gold { background: var(--gold); box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--gold); }
+    .tl-card {
+      flex: 1;
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+      border-left: 4px solid var(--blue);
+    }
+    .tl-card.gold { border-left-color: var(--gold); }
+    .tl-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 4px;
+    }
+    .tl-card .president {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .president-badge {
+      background: var(--blue);
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+    .tl-card p { color: #4a5568; font-size: 14.5px; margin-bottom: 16px; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag {
+      background: #eff6ff;
+      color: var(--blue);
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-weight: 500;
+      border: 1px solid #bfdbfe;
+    }
+    .tag.gold { background: #fef9ee; color: #92650a; border-color: #fde68a; }
+    .tag.green { background: #f0fdf4; color: var(--green); border-color: #bbf7d0; }
+
+    /* ── METRICS GRID ──────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+      border-top: 4px solid var(--blue);
+      text-align: center;
+    }
+    .metric-card .big { font-size: 38px; font-weight: 800; color: var(--blue); line-height: 1; }
+    .metric-card .desc { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+    /* ── PEOPLE ─────────────────────────────────── */
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .person-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .person-card .role {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .person-card .name { font-size: 16px; font-weight: 700; color: var(--text); }
+    .person-card .hotel { font-size: 13px; color: var(--muted); }
+
+    /* ── TABLE ──────────────────────────────────── */
+    .table-wrap { overflow-x: auto; border-radius: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead { background: var(--blue-dark); color: #fff; }
+    th { padding: 14px 16px; text-align: left; font-weight: 600; font-size: 13px; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f8faff; }
+    tr:hover td { background: #eff6ff; }
+
+    /* ── ROADSHOW TABLE ──────────────────────────── */
+    .roadshow-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) { .roadshow-grid { grid-template-columns: 1fr; } }
+
+    /* ── PARTNERSHIPS ────────────────────────────── */
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .partner-item {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .partner-icon {
+      width: 36px; height: 36px;
+      background: #eff6ff;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .partner-item h4 { font-size: 14px; font-weight: 600; color: var(--text); }
+    .partner-item p { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+
+    /* ── MILESTONES ──────────────────────────────── */
+    .milestones-list { display: flex; flex-direction: column; gap: 16px; }
+    .milestone {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .milestone-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+      width: 48px; height: 48px;
+      background: #eff6ff;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .milestone h4 { font-size: 15px; font-weight: 700; color: var(--blue-dark); }
+    .milestone p { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+
+    /* ── LEADERSHIP HERO ─────────────────────────── */
+    .leadership-hero {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-light));
+      border-radius: 20px;
+      padding: 48px;
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    @media (max-width: 700px) { .leadership-hero { grid-template-columns: 1fr; padding: 32px 24px; } }
+    .leadership-hero h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .leadership-hero .sub { opacity: .8; font-size: 15px; margin-bottom: 24px; }
+    .lh-stat { margin-bottom: 16px; }
+    .lh-stat .key { font-size: 13px; opacity: .7; text-transform: uppercase; letter-spacing: .5px; }
+    .lh-stat .val { font-size: 20px; font-weight: 700; }
+
+    /* ── CURRENT STATUS ──────────────────────────── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .status-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+    }
+    .status-card .s-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .s-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .status-card h3 { font-size: 16px; font-weight: 700; }
+    .status-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .status-card li {
+      font-size: 13.5px;
+      color: #4a5568;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .status-card li::before { content: '→'; color: var(--blue); flex-shrink: 0; font-weight: 700; }
+
+    /* ── QUOTE ────────────────────────────────────── */
+    .quote-block {
+      background: linear-gradient(135deg, #fffbeb, #fef9ee);
+      border-left: 5px solid var(--gold);
+      border-radius: 0 16px 16px 0;
+      padding: 28px 32px;
+      margin: 32px 0;
+    }
+    .quote-block p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .quote-block cite { display: block; margin-top: 12px; font-size: 13px; color: var(--muted); font-style: normal; }
+
+    /* ── FOOTER ───────────────────────────────────── */
+    footer {
+      background: var(--blue-dark);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 40px 24px;
+      font-size: 13px;
+    }
+    footer strong { color: #fff; }
+
+    /* ── NAV ──────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      gap: 16px;
+    }
+    .nav-logo { font-weight: 800; color: var(--blue-dark); font-size: 16px; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all .2s;
+    }
+    .nav-links a:hover { background: #eff6ff; color: var(--blue); }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* ── RESPONSIVE ───────────────────────────────── */
+    @media (max-width: 768px) {
+      .timeline::before { left: 20px; }
+      .tl-dot { width: 42px; height: 42px; font-size: 11px; }
+      .tl-card { padding: 20px; }
+      .tl-item { gap: 16px; }
+      section { padding: 40px 0; }
+    }
+
+    .highlight { color: var(--gold); font-weight: 700; }
+    .text-blue { color: var(--blue); }
+    .text-green { color: var(--green); }
+
+    /* progress bar */
+    .prog-wrap { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .prog { height: 100%; background: linear-gradient(to right, var(--blue), var(--blue-light)); border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">ABIH-RJ · Relatório 2018–2026</span>
+    <div class="nav-links">
+      <a href="#historico">Histórico</a>
+      <a href="#diretoria">Diretoria</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#parceiros">Parcerias</a>
+      <a href="#status">Status 2026</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">📊 Relatório Consolidado Interno</div>
+  <h1>ABIH-RJ<br><span>2018 — 2026</span></h1>
+  <p>Histórico completo de atividades, liderança, projetos, associados e marcos institucionais da Associação Brasileira da Indústria de Hotéis do Estado do Rio de Janeiro.</p>
+  <div class="hero-meta">
+    <span>📍 Rua Maria Eugênia, 300 – Humaitá, Rio de Janeiro</span>
+    <span>📞 (21) 3410-5131</span>
+    <span>🌐 www.abihrj.com.br</span>
+    <span>🗓 Gerado em 16/04/2026</span>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="num">8</div><div class="label">Anos de histórico</div></div>
+  <div class="stat-item"><div class="num">4</div><div class="label">Biênios cobertos</div></div>
+  <div class="stat-item"><div class="num">29+</div><div class="label">Hotéis associados (biênio 22-24)</div></div>
+  <div class="stat-item"><div class="num">19</div><div class="label">Cidades no Roadshow</div></div>
+  <div class="stat-item"><div class="num">4,5M+</div><div class="label">Seguidores alcançados (PROCAP 2025)</div></div>
+  <div class="stat-item"><div class="num">7</div><div class="label">Capitais Experiência Rio (2025)</div></div>
+</div>
+
+
+<!-- DADOS INSTITUCIONAIS -->
+<section style="padding: 48px 0; background: #fff; border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
+      <div>
+        <div class="divider"></div>
+        <h2 class="section-title">Dados Institucionais</h2>
+        <p class="section-sub">Identificação e contatos da entidade</p>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:12px;">
+          <li><strong>Razão Social:</strong><br>Associação Brasileira da Indústria de Hotéis do Estado do Rio de Janeiro</li>
+          <li><strong>Sigla:</strong> ABIH-RJ</li>
+          <li><strong>CNPJ:</strong> 03.042.368/0001-00</li>
+          <li><strong>Natureza:</strong> Entidade privada sem fins lucrativos</li>
+          <li><strong>Endereço:</strong> Rua Maria Eugênia, 300, sala 15 – Humaitá, Rio de Janeiro, RJ – CEP 22261-080</li>
+          <li><strong>Telefone:</strong> (21) 3410-5131</li>
+          <li><strong>E-mail:</strong> alexandre.moraes@abihrj.com.br</li>
+          <li><strong>Site:</strong> www.abihrj.com.br</li>
+        </ul>
+      </div>
+      <div>
+        <div class="divider" style="background: var(--gold);"></div>
+        <h2 class="section-title">Equipe Operacional</h2>
+        <p class="section-sub">Profissionais identificados nos documentos</p>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="background:var(--bg); border-radius:12px; padding:16px;">
+            <div style="font-weight:700;">Alexandre Moraes</div>
+            <div style="font-size:13px; color:var(--muted);">Gerente Operacional / Superintendente</div>
+            <div style="font-size:12px; color:var(--blue); margin-top:4px;">alexandre.moraes@abihrj.com.br</div>
+          </div>
+          <div style="background:var(--bg); border-radius:12px; padding:16px;">
+            <div style="font-weight:700;">Julio Correa</div>
+            <div style="font-size:13px; color:var(--muted);">Coordenação Operacional</div>
+            <div style="font-size:12px; color:var(--blue); margin-top:4px;">julio.correa@abihrj.com.br</div>
+          </div>
+          <div style="background:var(--bg); border-radius:12px; padding:16px;">
+            <div style="font-weight:700;">Julie Souza · Theresa Jansen</div>
+            <div style="font-size:13px; color:var(--muted);">Eventos, Projetos & Representação institucional (ALERJ, CET, Fóruns)</div>
+          </div>
+          <div style="background:var(--bg); border-radius:12px; padding:16px;">
+            <div style="font-weight:700;">Carol Costa · Gabriel Coutinho</div>
+            <div style="font-size:13px; color:var(--muted);">Equipe de apoio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- TIMELINE ANO A ANO -->
+<section id="historico">
+  <div class="container">
+    <div class="divider"></div>
+    <h2 class="section-title">Linha do Tempo — Ano a Ano</h2>
+    <p class="section-sub">Histórico consolidado de biênios, presidências e marcos estratégicos</p>
+
+    <div class="timeline">
+
+      <!-- 2018-2020 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="font-size:12px;">2018<br>2020</div>
+        <div class="tl-card">
+          <h3>Biênio 2018–2020</h3>
+          <div class="president"><span>Presidente do período anterior</span></div>
+          <p>Relatório publicado em Junho/2020 como prestação de contas. O período foi encerrado com o impacto da pandemia COVID-19 a partir de março de 2020, que forçou a migração de todas as reuniões para o formato online.</p>
+          <div class="tags">
+            <span class="tag">Relatório publicado Jun/2020</span>
+            <span class="tag">COVID-19 — reuniões online a partir de março</span>
+            <span class="tag">Projetos em andamento documentados</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2020-2022 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="font-size:12px;">2020<br>2022</div>
+        <div class="tl-card">
+          <h3>Biênio 2020–2022</h3>
+          <div class="president">
+            <span class="president-badge">Presidente</span>
+            <strong>Paulo Michel</strong> — Louvre Hotéis / Rede Golden Tulip
+            <span style="color:var(--muted);">eleito 30/06/2020</span>
+          </div>
+          <p>Período de recuperação pós-COVID. Retomada gradual das atividades presenciais. Fortes números em comunicação e associações de novos hotéis.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:20px 0;">
+            <div style="text-align:center; padding:16px; background:var(--bg); border-radius:12px;">
+              <div style="font-size:28px; font-weight:800; color:var(--blue);">34</div>
+              <div style="font-size:12px; color:var(--muted);">Hotéis ingressantes</div>
+            </div>
+            <div style="text-align:center; padding:16px; background:var(--bg); border-radius:12px;">
+              <div style="font-size:28px; font-weight:800; color:var(--blue);">328</div>
+              <div style="font-size:12px; color:var(--muted);">Matérias impressas</div>
+            </div>
+            <div style="text-align:center; padding:16px; background:var(--bg); border-radius:12px;">
+              <div style="font-size:28px; font-weight:800; color:var(--blue);">2.840</div>
+              <div style="font-size:12px; color:var(--muted);">Resultados digitais</div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">4 edições PROCAP-RJ em 2021</span>
+            <span class="tag">8 edições "O Rio é de Vocês" em 2021</span>
+            <span class="tag">+40 reuniões com órgãos públicos</span>
+            <span class="tag">15+ convênios e parcerias</span>
+            <span class="tag green">+24 saldo líquido de associados</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2022 -->
+      <div class="tl-item">
+        <div class="tl-dot gold">2022</div>
+        <div class="tl-card gold">
+          <h3>Ano 2022 — Eleição e Retomada Presencial</h3>
+          <div class="president">
+            <span class="president-badge" style="background:var(--gold);">Reeleito</span>
+            <strong>Paulo Michel</strong> — eleito em 28/06/2022, posse 30/06/2022
+          </div>
+          <p>Chapa <em>"Hotelaria - Juntos Somos Mais Fortes!"</em> eleita no Windsor Flórida Hotel. Retomada plena das atividades presenciais no 2º semestre. Início do Roadshow nacional com 7 cidades.</p>
+
+          <div style="margin: 16px 0;">
+            <div style="font-weight:600; font-size:14px; margin-bottom:10px;">Roadshow "O Rio é de Vocês!" 2022 — 7 cidades:</div>
+            <div style="font-size:13px; display:flex; flex-wrap:wrap; gap:8px;">
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">Curitiba (20 exp / 94 ag)</span>
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">Florianópolis (14 / 40)</span>
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">Porto Alegre (24 / 78)</span>
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">Brasília (20 / 94)</span>
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">Goiânia (20 / 94)</span>
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">Ribeirão Preto (28 / 110)</span>
+              <span style="background:#eff6ff; padding:4px 12px; border-radius:8px; color:var(--blue);">São Paulo (40 / 180)</span>
+            </div>
+          </div>
+
+          <div class="tags">
+            <span class="tag">TOP HOTEL RJ 2022 — 17ª edição (30/11, Rio Othon Palace)</span>
+            <span class="tag">PROCAP-RJ Teresópolis/Nova Friburgo (+250 pessoas)</span>
+            <span class="tag">Rio Innovation Week — 2ª edição (50 mil m², 2.000 startups)</span>
+            <span class="tag">Reunião com candidato Marcelo Freixo</span>
+            <span class="tag gold">Posse Diretoria 2022-2024</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2023 -->
+      <div class="tl-item">
+        <div class="tl-dot">2023</div>
+        <div class="tl-card">
+          <h3>Ano 2023 — Expansão e Pico do Roadshow</h3>
+          <div class="president">
+            <span class="president-badge">Presidente</span>
+            <strong>Paulo Michel</strong>
+          </div>
+          <p>Ano de maior alcance do Roadshow com 10 cidades/eventos. Novas edições do PROENH-RJ, PROCAP-RJ Barra do Piraí, TOP HOTEL 18ª edição e ABAV Expo RioCentro.</p>
+
+          <div style="margin: 16px 0;">
+            <div style="font-weight:600; font-size:14px; margin-bottom:10px;">Roadshow 2023 — 10 cidades (maior edição):</div>
+            <div class="table-wrap" style="border-radius:10px; border:1px solid var(--border);">
+              <table>
+                <thead><tr><th>Cidade</th><th>Expositores</th><th>Agências</th></tr></thead>
+                <tbody>
+                  <tr><td>São Paulo</td><td>46</td><td>240</td></tr>
+                  <tr><td>Belo Horizonte</td><td>36</td><td>274</td></tr>
+                  <tr><td>Brasília</td><td>22</td><td>228</td></tr>
+                  <tr><td>Goiânia</td><td>18</td><td>175</td></tr>
+                  <tr><td>Salvador</td><td>18</td><td>167</td></tr>
+                  <tr><td>Fortaleza</td><td>22</td><td>125</td></tr>
+                  <tr><td>Curitiba</td><td>17</td><td>113</td></tr>
+                  <tr><td>Porto Alegre</td><td>17</td><td>133</td></tr>
+                  <tr><td>Juiz de Fora</td><td>27</td><td>88</td></tr>
+                  <tr><td>Rio de Janeiro (Expo)</td><td>50</td><td>46</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tags">
+            <span class="tag">PROENH-RJ: Nova Friburgo, Petrópolis, Paraty</span>
+            <span class="tag">PROCAP-RJ Barra do Piraí (1ª edição)</span>
+            <span class="tag">TOP HOTEL RJ 2023 — Fairmont Copacabana</span>
+            <span class="tag">ABAV Expo RioCentro (27-29/09)</span>
+            <span class="tag">Convenção ECAD (direitos autorais musicais)</span>
+            <span class="tag">Reforma Tributária — comitiva em Brasília (~50 hoteleiros)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2024 -->
+      <div class="tl-item">
+        <div class="tl-dot gold">2024</div>
+        <div class="tl-card gold">
+          <h3>Ano 2024 — Eleição + Marco Legislativo + G20</h3>
+          <div class="president">
+            <span class="president-badge" style="background:var(--gold);">Novo Presidente</span>
+            <strong>José Domingo Gonzalez Y Bouzon</strong> — eleito 17/06/2024 no Hilton Copacabana
+          </div>
+          <p>Ano histórico: eleição da nova diretoria, primeiro município do Estado com desconto de IPTU para hotéis (Cabo Frio), e o G20 no Rio de Janeiro como marco para a hotelaria fluminense.</p>
+
+          <div class="quote-block" style="margin: 16px 0 0;">
+            <p>"A partir de 2025 o benefício fiscal estará disponível para os hotéis de Cabo Frio."</p>
+            <cite>— Relatório Biênio ABIH-RJ 2022-2024, sobre aprovação do PL 0016/2024 em 05/02/2024</cite>
+          </div>
+
+          <div class="tags">
+            <span class="tag gold">Assembleia Geral + Eleição — 17/06/2024, Hilton Copacabana</span>
+            <span class="tag green">IPTU 40% desconto hotéis Cabo Frio — 1ª lei no Estado</span>
+            <span class="tag">G20 Líderes no Rio — recorde de visitantes estrangeiros</span>
+            <span class="tag">PROENH-RJ: Vale do Café, Agulhas Negras</span>
+            <span class="tag">Roadshow: Juiz de Fora (33 exp), BH (38 exp / 274 ag)</span>
+            <span class="tag">Saldo biênio 22-24: +18 hotéis, +939 UHs</span>
+            <span class="tag">Reajuste salarial SENALBA: 5,25%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2025 -->
+      <div class="tl-item">
+        <div class="tl-dot">2025</div>
+        <div class="tl-card">
+          <h3>Ano 2025 — Recorde de Turistas + Inovação Digital</h3>
+          <div class="president">
+            <span class="president-badge">Presidente</span>
+            <strong>José Domingo Bouzon</strong> — Arena Copacabana
+          </div>
+          <p>Rio de Janeiro bate recorde com <strong>+2 milhões de turistas estrangeiros</strong>. ABIH-RJ lidera programa Experiência Rio em 7 capitais e inova no PROCAP com influenciadores digitais de 4,5 milhões de seguidores combinados.</p>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:14px; margin:16px 0;">
+            <div style="background:var(--bg); border-radius:12px; padding:16px; text-align:center;">
+              <div style="font-size:26px; font-weight:800; color:var(--blue);">2M+</div>
+              <div style="font-size:12px; color:var(--muted);">Turistas estrangeiros</div>
+            </div>
+            <div style="background:var(--bg); border-radius:12px; padding:16px; text-align:center;">
+              <div style="font-size:26px; font-weight:800; color:var(--blue);">7</div>
+              <div style="font-size:12px; color:var(--muted);">Capitais Exp. Rio</div>
+            </div>
+            <div style="background:var(--bg); border-radius:12px; padding:16px; text-align:center;">
+              <div style="font-size:26px; font-weight:800; color:var(--blue);">15k</div>
+              <div style="font-size:12px; color:var(--muted);">Itens RS coletados</div>
+            </div>
+            <div style="background:var(--bg); border-radius:12px; padding:16px; text-align:center;">
+              <div style="font-size:26px; font-weight:800; color:var(--blue);">4,5M</div>
+              <div style="font-size:12px; color:var(--muted);">Seguidores PROCAP</div>
+            </div>
+          </div>
+
+          <div class="tags">
+            <span class="tag green">Parceria TurisRIO-ABIH-RJ formalizada (14/04/2025)</span>
+            <span class="tag">PROCAP Ipiabas/Conservatória — 30 dias digital</span>
+            <span class="tag">PROCAP Nova Friburgo — 28 dias digital</span>
+            <span class="tag">PROENH-RJ: Itatiaia + Paty do Alferes (2 etapas)</span>
+            <span class="tag">Programa Experiência Rio em 7 capitais</span>
+            <span class="tag">Fórum Meio Ambiente — lagoas Barra/Recreio</span>
+            <span class="tag">Comissão Câmara Municipal — regulação Airbnb</span>
+            <span class="tag">IPTU 40% Cabo Frio começa a vigorar</span>
+            <span class="tag">Expoturismo Paraná</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2026 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="background: var(--green); box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--green);">2026</div>
+        <div class="tl-card" style="border-left-color: var(--green);">
+          <h3>Ano 2026 — Status Atual (em curso) <span style="font-size:13px; background:#f0fdf4; color:var(--green); padding:2px 10px; border-radius:99px; font-weight:600; vertical-align:middle; margin-left:8px;">ATIVO</span></h3>
+          <div class="president">
+            <span class="president-badge" style="background: var(--green);">Presidente</span>
+            <strong>José Domingo Bouzon</strong> — mandato até 30/06/2026 · Nova eleição prevista Jun/2026
+          </div>
+          <p>1º semestre intenso. Participação no VEJA Fórum de Turismo, pesquisas de feriados, atualização do estatuto e consolidação da pauta de regulamentação de aluguéis de curta temporada.</p>
+
+          <div class="quote-block" style="margin:16px 0 0;">
+            <p>"Não se trata de proibir ou restringir o mercado, mas de estabelecer critérios que garantam controle e proteção. Sem regulamentação, os problemas tendem a crescer."</p>
+            <cite>— José Domingo Bouzon, VEJA Fórum de Turismo, 19/03/2026 — sobre regulamentação de aluguéis de curta temporada</cite>
+          </div>
+
+          <div class="tags">
+            <span class="tag green">VEJA Fórum de Turismo — 19/03/2026, Windsor Flórida</span>
+            <span class="tag green">Projeção 2026: 2,5 milhões turistas internacionais (SETUR)</span>
+            <span class="tag">Atualização Estatuto ABIH-RJ — v1 (01/04/2026)</span>
+            <span class="tag">Pesquisa Feriado Tiradentes (18-20/04/2026)</span>
+            <span class="tag">Calendário pesquisas 1º Sem — 10ª versão</span>
+            <span class="tag">CI-002/2026 emitido (Mar/2026)</span>
+            <span class="tag gold">Eleição diretoria prevista Jun/2026</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- DIRETORIA 2024-2026 -->
+<section id="diretoria" style="background: #fff;">
+  <div class="container">
+    <div class="divider" style="background:var(--gold);"></div>
+    <h2 class="section-title">Diretoria 2024–2026</h2>
+    <p class="section-sub">Eleita em 17/06/2024 — Chapa "Juntos Somos Mais Fortes!" — Mandato: 01/07/2024 a 30/06/2026</p>
+
+    <div class="leadership-hero" style="margin-bottom: 40px;">
+      <div>
+        <div style="font-size:13px; opacity:.7; letter-spacing:.5px; margin-bottom:8px;">PRESIDENTE DA DIRETORIA 2024–2026</div>
+        <h2>José Domingo<br>Gonzalez Y Bouzon</h2>
+        <div class="sub">Arena Copacabana Hotel · Engenheiro</div>
+        <div class="lh-stat"><div class="key">Eleito em</div><div class="val">17 de junho de 2024 · Hilton Copacabana</div></div>
+        <div class="lh-stat"><div class="key">Mandato</div><div class="val">01/07/2024 — 30/06/2026</div></div>
+        <div class="lh-stat"><div class="key">Carreira anterior</div><div class="val">Vice-Presidente da diretoria 2022-2024</div></div>
+      </div>
+      <div>
+        <div style="margin-bottom:20px;">
+          <div style="font-size:13px; opacity:.7; margin-bottom:6px;">PRESIDENTE DO CONSELHO DELIBERATIVO</div>
+          <div style="font-size:18px; font-weight:700;">Alfredo Lopes de Souza Júnior</div>
+          <div style="opacity:.7; font-size:14px;">Rede Protel · também Secretário e substituto do presidente</div>
+        </div>
+        <div>
+          <div style="font-size:13px; opacity:.7; margin-bottom:6px;">TESOUREIRO</div>
+          <div style="font-size:18px; font-weight:700;">José Manuel Caamaño Moreira</div>
+          <div style="opacity:.7; font-size:14px;">Hotel Riazor · também Vice-Presidente nº 1</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:700; margin-bottom:20px; color:var(--blue-dark);">Vice-Presidentes (7)</h3>
+    <div class="people-grid" style="margin-bottom:40px;">
+      <div class="person-card"><div class="role">Vice-Presidente 1 · Tesoureiro</div><div class="name">José Manuel Caamaño Moreira</div><div class="hotel">Hotel Riazor</div></div>
+      <div class="person-card"><div class="role">Vice-Presidente 2</div><div class="name">Jorge da Silva Chaves Neto</div><div class="hotel">Hotel Rio Othon Palace</div></div>
+      <div class="person-card"><div class="role">Vice-Presidente 3</div><div class="name">João Antônio Vieites Mouzo</div><div class="hotel">—</div></div>
+      <div class="person-card"><div class="role">Vice-Presidente 4 · Ex-Presidente</div><div class="name">Paulo Michel</div><div class="hotel">Louvre Hotéis / Golden Tulip</div></div>
+      <div class="person-card"><div class="role">Vice-Presidente 5</div><div class="name">Mônica Sertã Paixão Silveira Pinto</div><div class="hotel">Hotel Le Canton</div></div>
+      <div class="person-card"><div class="role">Vice-Presidente 6</div><div class="name">Rafael Wanderley de Andrade</div><div class="hotel">Accor Hotels</div></div>
+      <div class="person-card"><div class="role">Vice-Presidente 7</div><div class="name">Carlos Jardim Borges</div><div class="hotel">Pousada Porto Imperial (Paraty)</div></div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:700; margin-bottom:20px; color:var(--blue-dark);">Diretores (6)</h3>
+    <div class="people-grid" style="margin-bottom:40px;">
+      <div class="person-card"><div class="role">Diretor 1</div><div class="name">Alex Fernandez Turnes</div><div class="hotel">Arena Ipanema</div></div>
+      <div class="person-card"><div class="role">Diretor 2</div><div class="name">Sérvio de Araújo Consentino</div><div class="hotel">Hotel Fazenda Rochedo (Valença)</div></div>
+      <div class="person-card"><div class="role">Diretor 3</div><div class="name">Pollyanna Campos Mendes</div><div class="hotel">Barra da Tijuca</div></div>
+      <div class="person-card"><div class="role">Diretor 4</div><div class="name">Ulisses Amândio Dias Marreiros</div><div class="hotel">Copacabana</div></div>
+      <div class="person-card"><div class="role">Diretor 5</div><div class="name">Nerilaine Gonçalves Freixo de Medeiros</div><div class="hotel">Recreio dos Bandeirantes</div></div>
+      <div class="person-card"><div class="role">Diretor 6</div><div class="name">Renato Marcos Marins</div><div class="hotel">Cabo Frio</div></div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:700; margin-bottom:20px; color:var(--blue-dark);">Conselho Deliberativo Regional — 17 Regiões do Estado</h3>
+    <div class="table-wrap card">
+      <table>
+        <thead><tr><th>Região</th><th>Representante</th><th>Estabelecimento</th></tr></thead>
+        <tbody>
+          <tr><td><strong>R01</strong> Copacabana/Leme</td><td>Carlos Frederico Homem de Carvalho Coelho</td><td>Hotel Ritz Copacabana</td></tr>
+          <tr><td><strong>R02</strong> Ipanema/Leblon</td><td>Cristiana Kastrup de Oliveira Castro</td><td>Hotel Fasano Rio</td></tr>
+          <tr><td><strong>R03</strong> Barra/São Conrado</td><td>Marcos Antônio de Queiroz Bezerra</td><td>E-Suites Recreio Shopping</td></tr>
+          <tr><td><strong>R04</strong> Centro</td><td>José Paredes Gerpe</td><td>Hotel Viña del Mar</td></tr>
+          <tr><td><strong>R05</strong> Flamengo/Botafogo</td><td>Manoel Sanchino Maneiro</td><td>Hotel Scorial Rio</td></tr>
+          <tr><td><strong>R06</strong> Niterói</td><td>Rodrigo Alvite Garcia</td><td>Hotel H Niterói</td></tr>
+          <tr><td><strong>R07</strong> Costa Verde</td><td>Luis Carlos Lima</td><td>Hotel Nacional Inn Angra dos Reis</td></tr>
+          <tr><td><strong>R08</strong> Paraty</td><td>Carlos Jardim Borges</td><td>Pousada Porto Imperial</td></tr>
+          <tr><td><strong>R09</strong> Costa do Sol</td><td>Carlos Roberto Antunes</td><td>Hotel Porto Veleiro (Cabo Frio)</td></tr>
+          <tr><td><strong>R10</strong> Búzios</td><td>Sergio Fabian Rébora</td><td>Pousada dos Reis</td></tr>
+          <tr><td><strong>R11</strong> Serra e Mar</td><td>João Marinho de Mello Neto</td><td>Hotel Vilarejo Praia</td></tr>
+          <tr><td><strong>R12</strong> Serrana</td><td>Ricardo Augusto Rodrigues</td><td>Hotel Le Canton (Teresópolis)</td></tr>
+          <tr><td><strong>R13</strong> Petrópolis</td><td>Guilherme Lacombe de Góes de Vasconcellos</td><td>Pousada Alcobaça</td></tr>
+          <tr><td><strong>R14</strong> Vale do Café</td><td>Fernando Beltrão Montezano</td><td>Hotel Fazenda Cascatinha (Piraí)</td></tr>
+          <tr><td><strong>R15</strong> Costa Doce</td><td>Ana Valle da Costa</td><td>Hyatt Place Macaé</td></tr>
+          <tr><td><strong>R16</strong> Cantagalo</td><td style="color:var(--muted);font-style:italic;">Vacância</td><td>—</td></tr>
+          <tr><td><strong>R17</strong> Agulhas Negras</td><td>Francisco Nogueira de Santa Rita</td><td>Hotel da Cachoeira (Penedo/Itatiaia)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:28px; padding:20px 24px; background:#f0fdf4; border-radius:14px; border:1px solid #bbf7d0;">
+      <strong style="color:var(--green);">ℹ️ Conselho Fiscal Titulares:</strong>
+      Sintia Gomes Freire da Silva (Sheraton Grand Rio), José Ramiro Gândara Fernandez, Ronnie Arosa Carril ·
+      <strong>Suplentes:</strong> José Paredes Gerpe (Hotel Viña del Mar), Rodrigo Caamaño Rial (Hotel Rio Lancaster)
+    </div>
+  </div>
+</section>
+
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="container">
+    <div class="divider"></div>
+    <h2 class="section-title">Projetos Estratégicos</h2>
+    <p class="section-sub">Programas recorrentes e marcos operacionais da ABIH-RJ</p>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:24px; margin-bottom:48px;">
+
+      <div class="card" style="padding:28px;">
+        <div style="font-size:28px; margin-bottom:12px;">🗺</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">PROCAP-RJ</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Programa de Capacitação e Vendas para o destino Rio de Janeiro. Operadoras nacionais e internacionais visitam destinos do interior do Estado. A partir de 2025, inclui influenciadores digitais.</p>
+        <div style="font-size:13px; color:var(--text);">
+          <div style="font-weight:600; margin-bottom:8px;">Edições e alcance:</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">
+            <li>→ 2021: 4 edições (Vale do Café, Costa do Sol, Costa Verde, Petrópolis)</li>
+            <li>→ 2022: Teresópolis/Nova Friburgo (+250 pessoas, 10 operadoras)</li>
+            <li>→ 2023: Barra do Piraí (1ª edição)</li>
+            <li>→ 2025: Ipiabas/Conservatória (+2M seguidores, 30 dias)</li>
+            <li>→ 2025: Nova Friburgo (+2,5M seguidores, 28 dias)</li>
+          </ul>
+        </div>
+        <div class="tags" style="margin-top:16px;">
+          <span class="tag">Parceria: FECOMÉRCIO-RJ + SETUR</span>
+          <span class="tag green">+4,5M seguidores em 2025</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:28px;">
+        <div style="font-size:28px; margin-bottom:12px;">🏨</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">PROENH-RJ</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Programa de Capacitação para Hoteleiros em diferentes regiões do Estado, com especialistas do setor, foco em necessidades reais e sustentabilidade.</p>
+        <div style="font-size:13px; color:var(--text);">
+          <div style="font-weight:600; margin-bottom:8px;">Edições realizadas:</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">
+            <li>→ 2023: Nova Friburgo, Petrópolis, Paraty</li>
+            <li>→ 2024: Vale do Café/Miguel Pereira (~40 hotéis), Agulhas Negras (~38)</li>
+            <li>→ 2025: Itatiaia, Paty do Alferes (2 etapas)</li>
+          </ul>
+        </div>
+        <div class="tags" style="margin-top:16px;">
+          <span class="tag">Parceria: FECOMÉRCIO-RJ, TurisRIO</span>
+          <span class="tag">Interior do Estado</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:28px;">
+        <div style="font-size:28px; margin-bottom:12px;">✈</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">Roadshow / Experiência Rio</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Rodada de negócios itinerante em capitais brasileiras para promover a hotelaria fluminense junto a agências e operadoras de viagens.</p>
+        <div style="font-size:13px; color:var(--text);">
+          <div style="font-weight:600; margin-bottom:8px;">Alcance 2022-2025:</div>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">
+            <li>→ 2022: 7 cidades</li>
+            <li>→ 2023: 10 cidades (maior edição)</li>
+            <li>→ 2024: 2 cidades</li>
+            <li>→ 2025: Programa Experiência Rio — 7 capitais</li>
+          </ul>
+        </div>
+        <div class="tags" style="margin-top:16px;">
+          <span class="tag">Parceria: SETUR-RJ, TurisRIO, FECOMÉRCIO</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:28px;">
+        <div style="font-size:28px; margin-bottom:12px;">🏆</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">Prêmio TOP HOTEL RJ</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Premiação anual do setor hoteleiro fluminense realizada em parceria com HotéisRIO desde 2018. Categorias: Ação Social, Empreendedorismo, Sustentabilidade e Expansão Hoteleira.</p>
+        <div style="font-size:13px; color:var(--text);">
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">
+            <li>→ 2022 (17ª edição) — Rio Othon Palace (30/11)</li>
+            <li>→ 2023 (18ª edição) — Fairmont RJ Copacabana (29/11)</li>
+            <li>→ 2024 e 2025: edições continuadas</li>
+          </ul>
+        </div>
+        <div class="tags" style="margin-top:16px;">
+          <span class="tag">Parceria: HotéisRIO (desde 2018)</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:28px;">
+        <div style="font-size:28px; margin-bottom:12px;">💡</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">Fóruns Setoriais</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Reuniões mensais temáticas organizadas pela ABIH-RJ/HotéisRIO com presidência das principais redes hoteleiras.</p>
+        <div style="font-size:13px; color:var(--text);">
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">
+            <li>→ <strong>Comercial</strong> — Presidente: José Domingo Bouzon (13 reuniões 22-24)</li>
+            <li>→ <strong>RH</strong> — 8 reuniões (Othon, Grupo Arpoador, Hilton)</li>
+            <li>→ <strong>Segurança</strong> — Coord. Ricardo Barreiro (Rede Windsor)</li>
+            <li>→ <strong>Marketing/Comunicação</strong> — Coord. Rede Windsor + Arena</li>
+            <li>→ <strong>Meio Ambiente</strong> — (criado 2025)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="padding:28px;">
+        <div style="font-size:28px; margin-bottom:12px;">🏙</div>
+        <h3 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:8px;">APL — Rotas do Interior</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Arranjos Produtivos Locais: Rotas do Café, Cachaça e Queijo no interior do Estado. Geram turismo de experiência e aumentam diretamente a ocupação hoteleira das regiões.</p>
+        <div style="font-size:13px; color:var(--text);">
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">
+            <li>→ Parceria: SENAR, EMATER, Estado do RJ</li>
+            <li>→ 07/03/2024 — Fazenda Vilarejo — +300 pessoas</li>
+            <li>→ 29/04/2025 — Pinheiral — reunião com vereadores</li>
+          </ul>
+        </div>
+        <div class="tags" style="margin-top:16px;">
+          <span class="tag">Vale do Café · Costa Verde · Serrana</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- MARCOS LEGISLATIVOS -->
+<section style="background: #fff; padding: 60px 0;">
+  <div class="container">
+    <div class="divider" style="background:var(--green);"></div>
+    <h2 class="section-title">Marcos Legislativos e Institucionais</h2>
+    <p class="section-sub">Conquistas que impactam diretamente o setor hoteleiro fluminense</p>
+    <div class="milestones-list">
+      <div class="milestone">
+        <div class="milestone-icon" style="background:#f0fdf4;">🏛</div>
+        <div>
+          <h4>IPTU com Desconto de 40% para Hotéis — Cabo Frio (1ª lei no Estado)</h4>
+          <p>PL 0016/2024 aprovado unanimemente pela Câmara Municipal de Cabo Frio em 05/02/2024. Sancionado pela Prefeita Magdala Furtado em 25/04/2024. Vigência a partir de 2025. ABIH-RJ articula o mesmo benefício em Angra dos Reis, Vassouras, Itatiaia e outros municípios.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-icon" style="background:#eff6ff;">📜</div>
+        <div>
+          <h4>Convenção com ECAD — Direitos Autorais Musicais</h4>
+          <p>Acordo firmado em 2023 entre ABIH-RJ e ECAD, permitindo que hotéis associados regularizem suas obrigações de retribuição autoral em condições especiais. Todos os associados foram notificados via mala-direta.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-icon" style="background:#fef9ee;">🤝</div>
+        <div>
+          <h4>Integração SINDHOTÉIS-RJ / ABIH-RJ</h4>
+          <p>Com a associação do SINDHOTÉIS-RJ à ABIH-RJ, todos os hotéis membros do sindicato tornaram-se automaticamente associados da ABIH-RJ, com acesso a todos os benefícios e podendo compor a diretoria.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-icon" style="background:#f0fdf4;">🤲</div>
+        <div>
+          <h4>Parceria Formal ABIH-RJ × TurisRIO</h4>
+          <p>Documento assinado em 14/04/2025 formalizando a parceria para promoção turística, turismo rural e participação no Programa Experiência Rio. TurisRIO passa a atuar como palestrante do PROENH-RJ.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-icon" style="background:#eff6ff;">🏗</div>
+        <div>
+          <h4>Atualização do Estatuto da ABIH-RJ (em andamento)</h4>
+          <p>Processo iniciado em 2023, com versão v1 do novo estatuto disponibilizada em 01/04/2026. Prevê aprovação em assembleia extraordinária durante a gestão 2024-2026.</p>
+        </div>
+      </div>
+      <div class="milestone">
+        <div class="milestone-icon" style="background:#fef9ee;">🎮</div>
+        <div>
+          <h4>Regulamentação de Plataformas Digitais (pauta ativa)</h4>
+          <p>A partir de 2025, ABIH-RJ participa de comissão na Câmara Municipal do Rio de Janeiro sobre regulamentação de plataformas digitais de reservas (Airbnb). O presidente Bouzon defende regras de segurança sem proibição do mercado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PARCERIAS -->
+<section id="parceiros">
+  <div class="container">
+    <div class="divider"></div>
+    <h2 class="section-title">Parcerias e Convênios Ativos</h2>
+    <p class="section-sub">Rede de benefícios e colaborações institucionais da ABIH-RJ</p>
+    <div class="partners-grid">
+      <div class="partner-item"><div class="partner-icon">🏛</div><div><h4>FECOMÉRCIO-RJ / IFec RJ</h4><p>21+ anos de parceria. Pesquisas de mercado, PROENH-RJ e PROCAP-RJ</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🌍</div><div><h4>SETUR-RJ</h4><p>Secretaria Estadual de Turismo. Roadshow, feiras, promoção do destino Rio</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🗺</div><div><h4>TurisRIO</h4><p>Parceria formalizada em 04/2025. Programa Experiência Rio, turismo rural</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🏨</div><div><h4>HotéisRIO / SINDHOTÉIS-RJ</h4><p>Gestão conjunta de projetos. Associados SINDHOTÉIS = associados ABIH automaticamente</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🌿</div><div><h4>SENAR / EMATER</h4><p>Rotas APL: Café, Cachaça, Queijo — turismo de experiência no interior</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🎵</div><div><h4>ECAD</h4><p>Convenção para regularização de direitos autorais musicais em condições especiais</p></div></div>
+      <div class="partner-item"><div class="partner-icon">⚖</div><div><h4>CAARJ</h4><p>Advogados do Estado têm descontos a partir de 10% nas diárias dos hotéis associados</p></div></div>
+      <div class="partner-item"><div class="partner-icon">⚖</div><div><h4>PJERJ (Tribunal de Justiça)</h4><p>Magistrados e servidores têm descontos de diária nos hotéis associados</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🎓</div><div><h4>Senac Rio / UFF / UFRJ / IBMEC / Estácio</h4><p>Descontos em graduação, MBA, turismo, hospitalidade e revenue management</p></div></div>
+      <div class="partner-item"><div class="partner-icon">⚡</div><div><h4>E1 Energias / 499 Solar / Monex Energia</h4><p>Geração compartilhada de energia renovável e redução de custos energéticos</p></div></div>
+      <div class="partner-item"><div class="partner-icon">💻</div><div><h4>CLOUDBEDS</h4><p>Plataforma de gestão hoteleira digital — benefícios exclusivos para associados (2025)</p></div></div>
+      <div class="partner-item"><div class="partner-icon">📈</div><div><h4>SEBRAE</h4><p>Participação no Plano de Marketing Turístico — devolutiva em 21/05/2025</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🗺</div><div><h4>ABIH Nacional</h4><p>5 delegados titulares + suplentes representam o Estado nas assembleias nacionais</p></div></div>
+      <div class="partner-item"><div class="partner-icon">📦</div><div><h4>SHERMEE</h4><p>Plataforma de serviços hoteleiros: spa, day use, café, reuniões, academias</p></div></div>
+      <div class="partner-item"><div class="partner-icon">🇫🇷</div><div><h4>Aliança Francesa / IBEU / IBMR</h4><p>Descontos em idiomas e educação para funcionários dos hotéis associados</p></div></div>
+      <div class="partner-item"><div class="partner-icon">📊</div><div><h4>Oficina de Revenue / Mark Up</h4><p>Cursos de revenue management e gestão com condições especiais para associados</p></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- STATUS 2026 -->
+<section id="status" style="background: #fff;">
+  <div class="container">
+    <div class="divider" style="background:var(--green);"></div>
+    <h2 class="section-title">Status Atual — Abril 2026</h2>
+    <p class="section-sub">Panorama da ABIH-RJ no momento presente</p>
+
+    <div class="status-grid">
+      <div class="status-card">
+        <div class="s-header">
+          <div class="s-icon" style="background:#eff6ff;">👤</div>
+          <h3>Liderança Atual</h3>
+        </div>
+        <ul>
+          <li>Presidente: <strong>José Domingo Bouzon</strong></li>
+          <li>Mandato em curso até <strong>30/06/2026</strong></li>
+          <li>Nova eleição prevista para <strong>junho de 2026</strong></li>
+          <li>Conselho Deliberativo: <strong>Alfredo Lopes de Souza Júnior</strong></li>
+          <li>Tesoureiro: <strong>José Manuel Caamaño</strong></li>
+        </ul>
+      </div>
+
+      <div class="status-card">
+        <div class="s-header">
+          <div class="s-icon" style="background:#f0fdf4;">📈</div>
+          <h3>Cenário Turístico 2026</h3>
+        </div>
+        <ul>
+          <li>Rio atingiu <strong>+2 milhões de turistas</strong> estrangeiros em 2025</li>
+          <li>Meta SETUR: <strong>2,5 milhões</strong> de turistas internacionais em 2026</li>
+          <li>G20 2024 consolidou Rio como destino de grandes eventos</li>
+          <li>Crescimento 2022→2025: 650 mil → 2,2 milhões (+238%)</li>
+          <li>"Não existe baixa temporada no Rio" (Sec. Tutuca)</li>
+        </ul>
+      </div>
+
+      <div class="status-card">
+        <div class="s-header">
+          <div class="s-icon" style="background:#fef9ee;">⚡</div>
+          <h3>Atividades Recentes</h3>
+        </div>
+        <ul>
+          <li>VEJA Fórum de Turismo — 19/03/2026</li>
+          <li>Pesquisa Feriado Tiradentes — 18-20/04/2026</li>
+          <li>Lista de Associados atualizada — 16/04/2026</li>
+          <li>Estatuto ABIH-RJ v1 — 01/04/2026</li>
+          <li>Calendário Pesquisas 1º Sem (10ª versão) — Mar/2026</li>
+          <li>CI-002/2026 emitido — Mar/2026</li>
+        </ul>
+      </div>
+
+      <div class="status-card">
+        <div class="s-header">
+          <div class="s-icon" style="background:#eff6ff;">📋</div>
+          <h3>Pautas Estratégicas</h3>
+        </div>
+        <ul>
+          <li><strong>PERSE</strong> — defesa da manutenção do benefício federal</li>
+          <li><strong>IPTU hoteleiro</strong> — expansão para novos municípios</li>
+          <li><strong>Regulação plataformas</strong> (Airbnb) — pauta ativa na Câmara</li>
+          <li><strong>Segurança FNRH</strong> — uso dos dados da Polícia Federal</li>
+          <li><strong>Atualização do Estatuto</strong> — processo em andamento</li>
+          <li><strong>Eleição da nova diretoria</strong> — jun/2026</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-top:40px;">
+      <p>"A hotelaria não é contra o aluguel por temporada, entende como complementar, mas é fundamental que haja regras, especialmente do ponto de vista da segurança."</p>
+      <cite>— José Domingo Bouzon, Presidente da ABIH-RJ, VEJA Fórum de Turismo, março de 2026</cite>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p style="font-size:16px; font-weight:700; color:#fff; margin-bottom:12px;">ABIH-RJ</p>
+    <p>Associação Brasileira da Indústria de Hotéis do Estado do Rio de Janeiro</p>
+    <p style="margin-top:8px;">CNPJ 03.042.368/0001-00 · Rua Maria Eugênia, 300, sala 15 – Humaitá, Rio de Janeiro · (21) 3410-5131 · www.abihrj.com.br</p>
+    <p style="margin-top:20px; opacity:.5; font-size:12px;">Relatório consolidado gerado em 16 de abril de 2026 · Dados extraídos dos SharePoints ABIHRJ2024, ABIHRJ2025 e ABIHRJ2026</p>
+  </div>
+</footer>
+
+</body>
+</html>
