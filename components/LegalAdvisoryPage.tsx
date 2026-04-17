@@ -1,32 +1,9 @@
 import React from 'react';
-import { ArrowLeft, ClipboardList, ExternalLink, Gavel, Send } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Gavel, Send } from 'lucide-react';
 
 interface LegalAdvisoryPageProps {
   onBack: () => void;
 }
-
-const cards = [
-  {
-    title: 'Envio de Nova Assessoria',
-    description: 'Encaminhe uma nova demanda jurídica à assessoria com os detalhes necessários para o atendimento.',
-    href: 'https://assessoriajuridica.sindhoteisrj.com.br/enviar',
-    cta: 'Enviar Demanda',
-    icon: Send,
-    accent: 'bg-emerald-600',
-    iconWrap: 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white',
-    button: 'border-2 border-emerald-600 text-emerald-600 bg-white group-hover:bg-emerald-600 group-hover:text-white'
-  },
-  {
-    title: 'Consulta de Assessoria',
-    description: 'Acompanhe o status de uma demanda jurídica já enviada e consulte os registros de forma rápida.',
-    href: 'https://assessoriajuridica.sindhoteisrj.com.br/consultar',
-    cta: 'Consultar Agora',
-    icon: ClipboardList,
-    accent: 'bg-rio-blue',
-    iconWrap: 'bg-blue-50 text-rio-blue group-hover:bg-rio-blue group-hover:text-white',
-    button: 'bg-rio-blue text-white group-hover:bg-blue-700'
-  }
-];
 
 const LegalAdvisoryPage: React.FC<LegalAdvisoryPageProps> = ({ onBack }) => {
   return (
@@ -51,51 +28,43 @@ const LegalAdvisoryPage: React.FC<LegalAdvisoryPageProps> = ({ onBack }) => {
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Assessoria Jurídica</h1>
               <p className="text-blue-50 text-lg md:text-xl max-w-2xl leading-relaxed">
-                Escolha entre consultar uma demanda existente ou encaminhar uma nova solicitação para a assessoria jurídica.
+                Encaminhe sua demanda jurídica à nossa assessoria para um atendimento ágil, organizado e eficiente.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {cards.map((card) => {
-            const Icon = card.icon;
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
+        {/* MUDANÇA: apenas o card de novo atendimento, card de consulta removido */}
+        <a
+          href="https://assessoriajuridica.sindhoteisrj.com.br/enviar"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <div className="h-2 w-full bg-emerald-600"></div>
+          <div className="p-10 flex flex-col items-center text-center">
+            <div className="w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center mb-8 transition-colors group-hover:bg-emerald-600 group-hover:text-white text-emerald-600">
+              <Send className="w-12 h-12" />
+            </div>
 
-            return (
-              <a
-                key={card.title}
-                href={card.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className={`h-2 w-full ${card.accent}`}></div>
-                <div className="p-8 flex flex-col items-center text-center h-full">
-                  <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-colors ${card.iconWrap}`}>
-                    <Icon className="w-10 h-10" />
-                  </div>
+            <h3 className="text-3xl font-bold text-gray-800 mb-4 group-hover:text-emerald-700 transition-colors">
+              Envio de Nova Assessoria
+            </h3>
+            <p className="text-gray-500 mb-10 leading-relaxed max-w-lg text-lg">
+              Encaminhe uma nova demanda jurídica à assessoria com os detalhes necessários para o atendimento.
+            </p>
 
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3">{card.title}</h3>
-                  <p className="text-gray-500 mb-8 leading-relaxed">
-                    {card.description}
-                  </p>
+            <span className="inline-flex items-center gap-2 border-2 border-emerald-600 text-emerald-600 bg-white group-hover:bg-emerald-600 group-hover:text-white font-bold px-8 py-4 rounded-xl transition-all text-lg">
+              Solicitar Atendimento
+              <ExternalLink className="w-5 h-5" />
+            </span>
+          </div>
+        </a>
 
-                  <div className="mt-auto w-full">
-                    <span className={`w-full block py-4 px-6 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${card.button}`}>
-                      {card.cta}
-                      <ExternalLink className="w-4 h-4" />
-                    </span>
-                  </div>
-                </div>
-              </a>
-            );
-          })}
-        </div>
-
-        <div className="mt-12 text-center text-gray-500 text-sm">
-          <p>Os links abrem em nova aba para manter o portal principal estável e sem impacto no fluxo atual do deploy.</p>
+        <div className="mt-10 text-center text-gray-500 text-sm">
+          <p>O link abre em nova aba para manter o portal principal estável.</p>
         </div>
       </div>
     </div>

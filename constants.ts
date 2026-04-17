@@ -166,7 +166,7 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'Gavel',
     imageUrl: '',
     isService: true,
-    dashboardUrl: 'https://forms.zohopublic.com/hoteisrio/form/AssessoriaJuridicaHotisRIO/formperma/fu39bcu4m02hW1cSina-onTXjx9GomFvznNKYqkP0j8',
+    // MUDANÇA: removido dashboardUrl (gerava 2 botões); agora só 1 botão via LegalAdvisoryPage
     customCta: 'Solicitar Atendimento'
   },
 
