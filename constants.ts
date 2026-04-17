@@ -44,6 +44,41 @@ export const COMMERCIAL_SUB_ACTIONS = [
 
 export const GALLERY_EVENTS = [];
 
+export const SUPER_CATEGORIES = [
+  {
+    id: 'estrategico',
+    title: 'Estratégico',
+    description: 'Serviços para gestão, crescimento comercial e tomada de decisão.',
+    iconName: 'TrendingUp',
+    gradient: 'from-blue-600 to-indigo-600',
+    categories: [BenefitCategory.COMMERCIAL, BenefitCategory.STATISTICS, BenefitCategory.MANAGEMENT]
+  },
+  {
+    id: 'operacao',
+    title: 'Operação',
+    description: 'Recursos para rotinas operacionais e eficiência do dia a dia.',
+    iconName: 'Cog',
+    gradient: 'from-emerald-600 to-teal-600',
+    categories: [BenefitCategory.OPERATIONAL, BenefitCategory.SUPPORT, BenefitCategory.TOOLS]
+  },
+  {
+    id: 'pessoas',
+    title: 'Pessoas',
+    description: 'Capacitação, RH e suporte para equipes de alta performance.',
+    iconName: 'Users',
+    gradient: 'from-purple-600 to-pink-600',
+    categories: [BenefitCategory.HR, BenefitCategory.TRAINING, BenefitCategory.LEGAL]
+  },
+  {
+    id: 'conexao',
+    title: 'Conexão & Mercado',
+    description: 'Eventos, parcerias e comunicação para fortalecer o networking.',
+    iconName: 'Globe',
+    gradient: 'from-amber-500 to-orange-600',
+    categories: [BenefitCategory.EVENTS, BenefitCategory.PARTNERS, BenefitCategory.COMMUNICATION, BenefitCategory.INSTITUTIONAL]
+  }
+];
+
 export const BENEFITS_DATA: Benefit[] = [
   {
     id: 'commercial-actions-hub',
