@@ -135,11 +135,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center text-xs text-blue-300 gap-4">
-          <p>&copy; {currentYear} {FOOTER_DATA.razaoSocial}. Todos os direitos reservados. (v2.0)</p>
+          <p>&copy; {currentYear} HotéisRIO. Todos os direitos reservados. (v2.0)</p>
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2">
-              CNPJ: {FOOTER_DATA.cnpj}
-            </span>
             <a href="#" className="hover:text-white">Política de Privacidade</a>
             <a href="#" className="hover:text-white">Termos de Uso</a>
           </div>
