@@ -155,7 +155,7 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     isNew: true,
     downloadUrl: 'https://drive.google.com/file/d/1ps8dpidzYS0PxR6-PQIQT5gmNsJexZOb/view?usp=sharing',
-    customCta: 'Baixar Placas (Drive)'
+    customCta: 'Acessar'
   },
   {
     id: 'juridico-01',
@@ -239,7 +239,9 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'UserCog',
     imageUrl: '',
     isService: true,
-    externalLink: 'https://u2s0o.share.hsforms.com/2rFHWMzfmTfiLNOmWU7uUvg'
+    embedUrl: 'https://u2s0o.share.hsforms.com/2rFHWMzfmTfiLNOmWU7uUvg',
+    externalLink: 'https://u2s0o.share.hsforms.com/2rFHWMzfmTfiLNOmWU7uUvg',
+    customCta: 'Acessar'
   },
   {
     id: 'occupancy-reports',
@@ -302,7 +304,7 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     isNew: true,
     embedUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdm5ehKWYpU3e70FTKUWUnaRget8l9l3d-Y-xU7qEnCABcCZA/viewform',
-    customCta: 'Acessar Formulário',
+    customCta: 'Acessar',
     fullDetails: `O HotéisRIO vem comunicar aos hotéis associados que a Secretaria de Estado de Turismo – SETUR e a Companhia de Turismo do Estado do Rio de Janeiro – TurisRio criaram um Grupo de Trabalho de Apoio aos Eventos e Negócios Corporativos e uma das ações implementadas por ele foi disponibilizar um formulário para que os organizadores de eventos, meios de hospedagens e Centro de convenções informem detalhes do seus eventos ao Governo do Estado.
 
 O formulário somente deverá ser preenchido para eventos de negócios corporativos que promovam concentração a partir de 500 pessoas.
