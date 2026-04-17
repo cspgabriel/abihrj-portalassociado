@@ -70,58 +70,13 @@ export const BENEFITS_DATA: Benefit[] = [
     embedUrl: 'https://calendarioeventos.sindhoteisrj.com.br',
     externalLink: 'https://calendariodeeventos.sindhoteisrj.com.br/',
     customCta: 'Acessar Calendário 2026'
-  },
-  {
-    id: 'planejador-feriados-2026',
-    title: 'Calendário de Feriados 2026',
-    description: 'Datas de feriados nacionais, estaduais e principais emissores.',
-    category: BenefitCategory.COMMERCIAL,
-    targetSectors: ['SALES', 'RECEPTION'],
-    iconName: 'CalendarCheck',
-    imageUrl: '',
-    isService: true,
-    embedUrl: 'https://planejadordeferiados.sindhoteisrj.com.br/',
-    externalLink: 'https://planejadordeferiados.sindhoteisrj.com.br/'
-  },
-  {
-    id: 'sugestao-pauta',
-    title: 'Enviar Sugestão de Pauta',
-    description: 'Contribua com temas relevantes para os próximos fóruns e reuniões da hotelaria.',
-    category: BenefitCategory.COMMUNICATION,
-    targetSectors: ['MANAGEMENT', 'SALES', 'HR', 'SECURITY'],
-    iconName: 'MessageSquarePlus',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    embedUrl: 'https://forms.zohopublic.com/hoteisrio/form/FORMULRIOESCOLHAOFRUMEMQUEDESEJASUGERIRTEMAS/formperma/uljenH3hU8MRUodJ40hZh_b7rG1vRqgWhxs6MJdJOis?_sc=NTI0ODkzNiM4NTQy',
-    customCta: 'Enviar Sugestão'
-  },
-  {
-    id: 'rio-international-press',
-    title: 'Rio International Press',
-    description: 'Acesse o Press Center com releases e contato de imprensa.',
-    category: BenefitCategory.COMMUNICATION,
-    targetSectors: ['MANAGEMENT', 'COMMUNICATION'],
-    iconName: 'Newspaper',
-    imageUrl: '',
-    isService: true,
-    isNew: false,
-    embedUrl: 'https://presscenter.abihrj.com.br',
-    customCta: 'Acessar Press Center'
-  },
-  {
-    id: 'influencers-hub',
-    title: 'Influenciadores / Parceiros',
-    description: 'Conheça nossos parceiros e criadores de conteúdo para divulgar sua marca com conteúdo autêntico.',
-    category: BenefitCategory.COMMUNICATION,
-    targetSectors: ['SALES', 'MANAGEMENT'],
-    iconName: 'Camera',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    embedUrl: 'https://influenciadoresdigitais.abihrj.com.br/#/influenciadores',
-    externalLink: 'https://influenciadoresdigitais.abihrj.com.br/#/influenciadores',
-    customCta: 'Acessar Plataforma'
   }
-  // restante mantido sem o sustentabilidade
+];
+
+// 🔴 RESTAURADO (ERRO DE BUILD)
+export const LEVEL_THRESHOLDS = { BRONZE: 0, SILVER: 1000, GOLD: 3000, DIAMOND: 6000, MASTER: 10000 };
+export const LEVEL_NAMES = { BRONZE: 'Bronze', SILVER: 'Prata', GOLD: 'Ouro', DIAMOND: 'Diamante', MASTER: 'Lenda' };
+export const GAMIFICATION_BADGES: GamificationBadge[] = [
+  { id: 'pioneiro', name: 'Pioneiro', description: 'Primeiro acesso', iconName: 'Star', requiredXP: 0 },
+  { id: 'social', name: 'Social', description: 'Conectou redes sociais', iconName: 'Share2', requiredXP: 100 }
 ];
