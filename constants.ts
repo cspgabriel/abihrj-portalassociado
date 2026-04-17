@@ -166,7 +166,8 @@ export const BENEFITS_DATA: Benefit[] = [
     iconName: 'Gavel',
     imageUrl: '',
     isService: true,
-    // MUDANÇA: removido dashboardUrl (gerava 2 botões); agora só 1 botão via LegalAdvisoryPage
+    embedUrl: 'https://assessoriajuridica.sindhoteisrj.com.br/enviar',
+    externalLink: 'https://assessoriajuridica.sindhoteisrj.com.br/enviar',
     customCta: 'Solicitar Atendimento'
   },
 
