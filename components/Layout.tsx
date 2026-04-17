@@ -9,9 +9,9 @@ import {
   Menu, X, LogOut, User as UserIcon, Bell, 
   Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
-  MessageCircle, Phone, Shield, UserCog, Camera, FileSearch, ArrowLeft,
-    Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Image, BookOpen, Newspaper,
-  LayoutDashboard, Book
+  MessageCircle, Phone, Shield, UserCog, ArrowLeft,
+  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Newspaper,
+  Rocket
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import Breadcrumb from './Breadcrumb';
@@ -58,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({
   const handleSearchSubmit = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && onSearch && localSearch.trim()) {
       onSearch(localSearch);
-      setLocalSearch(''); // Optional: clear after search or keep it
+      setLocalSearch('');
     }
   };
 
@@ -87,8 +87,6 @@ const Layout: React.FC<LayoutProps> = ({
                 <Home className="w-5 h-5 shrink-0" />
                 Início
                 </button>
-
-                {/* Removed: 'Como Funciona' tutorial per request */}
 
                 <button 
                 id="sidebar-all-benefits"
@@ -135,8 +133,6 @@ const Layout: React.FC<LayoutProps> = ({
                 <button id="sidebar-holidays" onClick={() => handleOpenBenefit('planejador-feriados-2026')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Calendar className="w-4 h-4 shrink-0" /> <span className="truncate">Calendário de Feriados 2026</span>
                 </button>
-                
-                {/* Rio International Press will appear in alphabetical order below (after Rock in Rio) */}
 
                 <button id="sidebar-courses" onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
@@ -154,14 +150,13 @@ const Layout: React.FC<LayoutProps> = ({
                     <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
                 </button>
 
-                {/* Fóruns da Hotelaria hidden per request */}
-
-                <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores / UGC</span>
-                </button>
-
                 <button id="sidebar-laws" onClick={() => handleOpenBenefit('leis-decretos-app')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Leis e Decretos RJ</span>
+                </button>
+
+                {/* MUDANÇA: Kit de Marketing adicionado ao sidebar conforme solicitado */}
+                <button id="sidebar-marketing" onClick={() => { onNavigate('MARKETING_KIT'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'MARKETING_KIT' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <Rocket className="w-4 h-4 shrink-0" /> <span className="truncate">Kit de Marketing</span>
                 </button>
 
                 <button id="sidebar-security" onClick={() => { onNavigate('SECURITY_PAGE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
@@ -175,9 +170,12 @@ const Layout: React.FC<LayoutProps> = ({
                 <button id="sidebar-rir" onClick={() => { onNavigate('ROCK_IN_RIO'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'ROCK_IN_RIO' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Music className="w-4 h-4 shrink-0" /> <span className="truncate">Rock in Rio 2026</span>
                 </button>
+
                 <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
                 </button>
+
+                {/* MUDANÇA: Galeria de Fotos removida do sidebar conforme solicitado */}
             </div>
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
@@ -251,8 +249,8 @@ const Layout: React.FC<LayoutProps> = ({
                     <img 
                         src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
                         alt="HoteisRio" 
-                        className="h-8 w-auto filter invert brightness-0" // Using black version for white header or blue version if available
-                        style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }} // Rio Blue Filter
+                        className="h-8 w-auto filter invert brightness-0"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }}
                     />
                 </div>
                 <div className="flex items-center gap-3">
@@ -281,8 +279,6 @@ const Layout: React.FC<LayoutProps> = ({
                     </div>
 
                     <div className="flex items-center gap-4">
-                        {/* 'Como Funciona' removed from header */}
-
                         <div className="h-8 w-px bg-gray-200 mx-2"></div>
                         <div className="flex items-center gap-3">
                             <div className="text-right">
@@ -311,8 +307,6 @@ const Layout: React.FC<LayoutProps> = ({
                     <Home className={`w-6 h-6 ${currentView === 'LANDING_PAGE' ? 'fill-current' : ''}`} strokeWidth={currentView === 'LANDING_PAGE' ? 2 : 1.5} />
                     <span className="text-[10px] font-medium">Início</span>
                 </button>
-
-                {/* 'Como Funciona' / tutorial removed per request */}
 
                 <button 
                     onClick={() => onNavigate('ALL_BENEFITS')}

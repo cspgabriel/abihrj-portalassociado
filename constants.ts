@@ -42,9 +42,8 @@ export const COMMERCIAL_SUB_ACTIONS = [
   }
 ];
 
-export const GALLERY_EVENTS = [
-  // Galeria removida conforme solicitação
-];
+// MUDANÇA: Galeria removida conforme solicitação
+export const GALLERY_EVENTS = [];
 
 export const BENEFITS_DATA: Benefit[] = [
   // --- AÇÕES COMERCIAIS (HUB UNIFICADO) ---
@@ -118,8 +117,8 @@ export const BENEFITS_DATA: Benefit[] = [
   },
   {
     id: 'influencers-hub',
-    title: 'Influenciadores / UGC',
-    description: 'Conecte-se com criadores e parceiros para divulgar sua marca com conteudo autentico.',
+    title: 'Influenciadores / Parceiros',
+    description: 'Conheça nossos parceiros e criadores de conteúdo para divulgar sua marca com conteúdo autêntico.',
     category: BenefitCategory.COMMUNICATION,
     targetSectors: ['SALES', 'MANAGEMENT'],
     iconName: 'Camera',
@@ -207,8 +206,6 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     externalLink: 'https://cursos.hoteisrio.com.br/'
   },
-  // Shuttle Service Removido
-  // Central IA Removido
   {
     id: 'sustainability-raiox',
     title: 'Raio-X de Sustentabilidade',
@@ -221,7 +218,6 @@ export const BENEFITS_DATA: Benefit[] = [
     fullDetails: 'Elaborado pela IA.',
     externalLink: 'https://sustetanbilidade-hoteisrio.figma.site/'
   },
-  // Central RH Removido
   {
     id: 'public-order-01',
     title: 'Demandas de Ordem Pública',
@@ -329,19 +325,7 @@ Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado
     externalLink: 'https://sindhoteisrj.com.br/noticias',
     customCta: 'Ler Notícias'
   },
-  {
-    id: 'natal-concurso',
-    title: 'Concurso de Decoração Natalina',
-    description: 'Participe do concurso de decoração natalina dos hotéis associados HoteisRio.',
-    category: BenefitCategory.EVENTS,
-    targetSectors: ['MANAGEMENT', 'SALES', 'MAINTENANCE'],
-    iconName: 'TreePine',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    externalLink: 'https://decoracaonatalina.sindhoteisrj.com.br',
-    customCta: 'Participar do Concurso'
-  },
+  // MUDANÇA: natal-concurso removido (projeto acabou)
   {
     id: 'natal-2025',
     title: 'Vencedores: Decoração Natalina',
@@ -352,7 +336,8 @@ Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado
     imageUrl: '',
     isService: true,
     isNew: true,
-    externalLink: 'https://hoteisrio.com.br/natal-2025-vencedores', // Link corrigido
+    // MUDANÇA: link corrigido - link estava partido
+    externalLink: 'https://sindhoteisrj.com.br/natal-2025-vencedores',
     customCta: 'Ver Galeria'
   },
   
@@ -458,7 +443,8 @@ export const TEAM_CONTACTS = [
   { sector: 'Gerência Operacional', manager: 'Julio Correa', email: 'julio.correa@hoteisrio.com.br', whatsapp: '21970186447' },
   { sector: 'Eventos', manager: 'Julie Souza', email: 'julie.souza@hoteisrio.com.br', whatsapp: '21970179949' },
   { sector: 'Financeiro', manager: 'Mauricio Ferreira', email: 'mauricio.ferreira@hoteisrio.com.br', whatsapp: '21994979099' },
-  { sector: 'Marketing', manager: 'Equipe Marketing', email: 'marketing@hoteisrio.com.br', whatsapp: '21988888888' }
+  // MUDANÇA: WhatsApp removido do contato de Marketing conforme solicitado
+  { sector: 'Marketing', manager: 'Equipe Marketing', email: 'marketing@hoteisrio.com.br' }
 ];
 
 export const WHATSAPP_GROUPS = [
@@ -469,9 +455,10 @@ export const WHATSAPP_GROUPS = [
     link: 'https://chat.whatsapp.com/Geb55xwOXUxFR7laa6pK0N'
   },
   {
-    id: 'group-seg-barra',
-    name: 'F. Hotéis - Segurança Barra',
-    description: 'Alertas e informações de segurança para hotéis da Barra.',
+    // MUDANÇA: "Barra" alterado para "Recreio" conforme solicitado
+    id: 'group-seg-recreio',
+    name: 'F. Hotéis - Segurança Recreio',
+    description: 'Alertas e informações de segurança para hotéis do Recreio.',
     link: 'https://chat.whatsapp.com/IP2MxB4ljuGCwyjwefy1qk'
   },
   {
@@ -516,6 +503,8 @@ export const ASSOCIATION_EVENTS = [
   { id: 'evt-01', title: 'Reunião Geral', date: '15 de Maio, 09:00', location: 'Hotel Othon', description: 'Alinhamento estratégico', status: 'Confirmado', type: 'Reunião', imageUrl: '' }
 ];
 
+// MUDANÇA: Leis e Decretos - removido campo observacao e mantendo somente Leis e Decretos (sem PLs)
+// Os PLs são filtrados em LawsRegulationPage via activeLaws = RJ_LAWS_DATA.filter(l => !l.number.toLowerCase().includes('pl')...)
 export const RJ_LAWS_DATA = [
   { id: 'law-01', number: 'Lei 1234', description: 'Lei do Silêncio', category: 'Operacional', link: '#', date: '2023' }
 ];
@@ -585,6 +574,7 @@ export const CALCULATOR_TOOLS = BENEFITS_DATA.filter(b => b.category === Benefit
 export const FOOTER_DATA = {
   razaoSocial: 'Associação de Hotéis do Rio de Janeiro',
   cnpj: '33.333.333/0001-00',
+  // MUDANÇA: endereço correto conforme solicitado
   address: 'Maria Eugenia 300 – sala 13 – Humaitá',
   cep: '22261-000',
   phone: '(21) 2226-2520',

@@ -8,19 +8,16 @@ interface SecurityPageProps {
 
 const SecurityPage: React.FC<SecurityPageProps> = ({ onBack }) => {
   
+  // MUDANÇA: Mantido somente o manual SETUR/DEAT conforme solicitado (removido o Guia Operação Verão)
   const downloads = [
     {
-      label: "Guia Oficial: Operação Verão (Parceria SETUR/DEAT)",
-      url: null
-    },
-    {
-      label: "Cartilha de Conscientização de Segurança Turística – SETUR/RJ",
+      label: "Cartilha de Conscientização de Segurança Turística – SETUR/RJ (Parceria DEAT)",
       url: "https://www.turismo.rj.gov.br/cartilha-de-conscientizacao-de-seguranca-turistica/"
     }
   ];
 
   const whatsappGroups = [
-    { name: 'F. Hoteis - Segurança Barra', link: 'https://chat.whatsapp.com/IP2MxB4ljuGCwyjwefy1qk' },
+    { name: 'F. Hotéis - Segurança Recreio', link: 'https://chat.whatsapp.com/IP2MxB4ljuGCwyjwefy1qk' },
     { name: 'F. Segurança - Hoteis', link: 'https://chat.whatsapp.com/Fo8LZwLyFka0uAlQNlta33' }
   ];
 
@@ -91,10 +88,10 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack }) => {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
               <h2 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-rio-blue" />
-                Cartilhas e Manuais Operacionais
+                Cartilha Oficial de Segurança Turística
               </h2>
               <p className="text-gray-500 text-sm mb-6">
-                  Material oficial desenvolvido em parceria com as forças de segurança para orientação das equipes hoteleiras.
+                Material oficial desenvolvido em parceria com a SETUR e a Delegacia Especializada de Apoio ao Turismo (DEAT) para orientação das equipes hoteleiras.
               </p>
               <div className="grid grid-cols-1 gap-4">
                   {downloads.map((doc, idx) => (

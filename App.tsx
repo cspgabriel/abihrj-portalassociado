@@ -32,10 +32,10 @@ import BenefitCategorizerPage from './components/BenefitCategorizerPage';
 import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
-import PhotoGalleryPage from './components/PhotoGalleryPage';
+// MUDANÇA: PhotoGalleryPage removida conforme solicitado
 import TalentBankPage from './components/TalentBankPage';
 import MarketingLaunchKit from './components/MarketingLaunchKit';
-import BenefitsShowcase from './components/BenefitsShowcase'; // NEW IMPORT
+import BenefitsShowcase from './components/BenefitsShowcase';
 import PublicOrderPage from './components/PublicOrderPage';
 import LegalAdvisoryPage from './components/LegalAdvisoryPage';
 
@@ -133,7 +133,6 @@ export default function App() {
       // Landing legacy path (some systems may link to this HTML file)
       if (path === '/landing-portal-do-associado.html' || path === '/landing-portal-do-associado' || path === '/landing') {
         setCurrentView('LANDING_PAGE');
-        // replace state to clean querystring but keep pathname
         window.history.replaceState({}, '', '/landing-portal-do-associado.html');
         return;
       }
@@ -589,7 +588,6 @@ export default function App() {
       case 'WHATSAPP_GROUPS': return <WhatsAppGroupsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'CONTACTS': return <ContactsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LAWS_REGULATION': return <LawsRegulationPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      // PLATFORM_TUTORIAL removed
       case 'ROCK_IN_RIO': return <RockInRioPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'CALCULATORS_PAGE': return <CalculatorsPage onBack={() => navigateTo('LANDING_PAGE')} onOpenCalculator={(b) => { setSelectedBenefit(b); setShowCalculatorModal(true); }} />;
       case 'REGISTRATION_UPDATE': return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;
@@ -597,18 +595,19 @@ export default function App() {
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'PHOTO_GALLERY': return <PhotoGalleryPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      // MUDANÇA: PHOTO_GALLERY removido conforme solicitado
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LEGAL_ADVISORY_PAGE': return <LegalAdvisoryPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'MARKETING_KIT': return <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />; 
-      case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />; // ROUTE HANDLER
+      case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
       default: return <LandingPage userName={safeUser.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'PHOTO_GALLERY', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
+    // MUDANÇA: Removido 'PHOTO_GALLERY' da lista isFullPage pois foi removido do app
+    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer onNavigate={navigateTo} onBenefitClick={(id) => { const b = BENEFITS_DATA.find(x => x.id === id); if (b) handleBenefitClick(b); }} />
        <QuickAccessMenu onUse={(id)=>{

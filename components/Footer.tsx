@@ -86,6 +86,12 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
                   <ArrowUpRight className="w-3 h-3" /> Leis e Decretos
                 </button>
               </li>
+              {/* MUDANÇA: Kit de Marketing adicionado ao rodapé */}
+              <li>
+                <button onClick={() => handleNav('MARKETING_KIT')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Kit de Marketing
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -116,6 +122,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
             <div className="space-y-4 text-sm text-blue-50">
               <div className="flex items-start gap-3">
                  <MapPin className="w-5 h-5 text-rio-gold shrink-0 mt-0.5" />
+                 {/* MUDANÇA: Endereço correto conforme solicitado */}
                  <p>{FOOTER_DATA.address}<br/>CEP: {FOOTER_DATA.cep}</p>
               </div>
               <div className="flex items-center gap-3">
