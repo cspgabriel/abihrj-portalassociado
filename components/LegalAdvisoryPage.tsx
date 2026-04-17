@@ -36,11 +36,8 @@ const LegalAdvisoryPage: React.FC<LegalAdvisoryPageProps> = ({ onBack }) => {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
-        {/* MUDANÇA: apenas o card de novo atendimento, card de consulta removido */}
         <a
           href="https://assessoriajuridica.sindhoteisrj.com.br/enviar"
-          target="_blank"
-          rel="noopener noreferrer"
           className="block bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
         >
           <div className="h-2 w-full bg-emerald-600"></div>
@@ -64,7 +61,7 @@ const LegalAdvisoryPage: React.FC<LegalAdvisoryPageProps> = ({ onBack }) => {
         </a>
 
         <div className="mt-10 text-center text-gray-500 text-sm">
-          <p>O link abre em nova aba para manter o portal principal estável.</p>
+          <p>O atendimento será aberto na mesma aba, preservando a navegação do portal dentro da iframe.</p>
         </div>
       </div>
     </div>
