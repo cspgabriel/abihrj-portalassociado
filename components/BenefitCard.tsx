@@ -2,7 +2,7 @@
 import React from 'react';
 import { Benefit } from '../types';
 import * as Icons from 'lucide-react';
-import { Sparkles, ArrowRight, CheckCircle2, Download, LayoutDashboard, ExternalLink } from 'lucide-react';
+import { CheckCircle2, ExternalLink, ArrowRight } from 'lucide-react';
 
 interface BenefitCardProps {
   benefit: Benefit;
@@ -11,25 +11,20 @@ interface BenefitCardProps {
   layout?: 'grid' | 'list';
 }
 
-const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, layout = 'grid' }) => {
+const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onUse, layout = 'grid' }) => {
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
-  const isReceptionMandatorySigns = benefit.id === 'placas-recepcao';
+  const isList = layout === 'list';
 
-  const handleDashboardClick = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (benefit.dashboardUrl) {
-      window.open(benefit.dashboardUrl, '_blank');
-    }
-  };
 
-  const handleReceptionMandatorySignsClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
     if (benefit.downloadUrl) {
       window.open(benefit.downloadUrl, '_blank');
+      return;
     }
-  };
 
-  const isList = layout === 'list';
+    onUse(benefit);
+  };
 
   return (
     <div 
@@ -42,140 +37,53 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
       `}
     >
       
-      {/* Content Wrapper */}
       {isList ? (
-        // LIST LAYOUT (Responsive: Stacked on mobile, Row on desktop)
-        <div className="flex items-center gap-4 w-full sm:w-auto flex-1">
-            {/* Icon */}
-            <div className="shrink-0">
-                <div className={`
-                w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center 
-                group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300
-                `}>
-                <IconComponent className="w-6 h-6" strokeWidth={1.5} />
-                </div>
+        <div className="flex items-center gap-4 w-full flex-1">
+            <div className="w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center group-hover:bg-rio-blue group-hover:text-white">
+                <IconComponent className="w-6 h-6" />
             </div>
-            
-            {/* Text */}
-            <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-bold text-gray-800 leading-tight group-hover:text-rio-blue transition-colors line-clamp-2">
-                        {benefit.title}
-                    </h3>
-                    {benefit.isNew && (
-                        <span className="bg-rio-gold text-blue-900 text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm shrink-0">NOVO</span>
-                    )}
-                </div>
-                <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+            <div className="flex-1">
+                <h3 className="text-sm font-bold text-gray-800 group-hover:text-rio-blue">
+                    {benefit.title}
+                </h3>
+                <p className="text-gray-500 text-xs">
                     {benefit.description}
                 </p>
             </div>
         </div>
       ) : (
-        // GRID LAYOUT (Default vertical card)
         <>
-            <div className="flex justify-between items-start mb-4">
-                <div className={`
-                w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center 
-                group-hover:bg-rio-blue group-hover:text-white transition-colors duration-300
-                `}>
-                <IconComponent className="w-6 h-6" strokeWidth={1.5} />
+            <div className="flex justify-between mb-4">
+                <div className="w-12 h-12 rounded-lg bg-blue-50 text-rio-blue flex items-center justify-center group-hover:bg-rio-blue group-hover:text-white">
+                    <IconComponent className="w-6 h-6" />
                 </div>
-                
-                <div className="flex flex-col items-end gap-2">
-                    <div className="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-green-100">
-                        <CheckCircle2 className="w-3 h-3" />
-                        Ativo
-                    </div>
-                    {benefit.isNew && (
-                        <div className="bg-rio-gold text-blue-900 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
-                        NOVO
-                        </div>
-                    )}
+                <div className="bg-green-50 text-green-700 text-[10px] px-2 py-1 rounded-md flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Ativo
                 </div>
             </div>
-            
             <div className="mb-6 flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-lg font-bold text-gray-800 leading-tight group-hover:text-rio-blue transition-colors">
+                <h3 className="text-lg font-bold text-gray-800 group-hover:text-rio-blue">
                     {benefit.title}
                 </h3>
-                </div>
-                <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
-                {benefit.description}
+                <p className="text-gray-500 text-xs">
+                    {benefit.description}
                 </p>
             </div>
         </>
       )}
-      
-      {/* Actions Section */}
-      <div className={`${isList ? 'w-full sm:w-auto sm:shrink-0 mt-0' : 'mt-auto'}`}>
-        {benefit.dashboardUrl ? (
-          // Dashboard Buttons
-          <div className={`grid ${isList ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-2'}`}>
-            <button 
-              onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-              className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm whitespace-nowrap"
-              title={benefit.externalLink ? "Abrir Link Externo" : "Utilizar Serviço"}
-            >
-              {benefit.customCta || (benefit.externalLink ? 'Acessar' : 'Utilizar')}
-              <ArrowRight className="w-3 h-3" />
-            </button>
-            <button 
-              onClick={handleDashboardClick}
-              className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 border border-transparent text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-sm whitespace-nowrap"
-              title="Ver Dashboard de Dados"
-            >
-              Dashboard
-              <LayoutDashboard className="w-3 h-3" />
-            </button>
-          </div>
-        ) : isReceptionMandatorySigns ? (
-          <div className="grid grid-cols-1 gap-3">
-            <button
-              onClick={handleReceptionMandatorySignsClick}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
-              title="Abrir arquivo no Google Drive"
-            >
-              Acessar
-              <ExternalLink className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
-            </button>
-          </div>
-        ) : (
-          // Standard Buttons
-          <div className={`grid ${isList ? 'grid-cols-2 gap-2 w-full sm:w-auto' : 'grid-cols-2 gap-3'}`}>
-            <button 
-              onClick={(e) => { e.stopPropagation(); onDetails(benefit); }}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 text-xs font-semibold hover:bg-gray-50 hover:text-rio-blue hover:border-rio-blue transition-colors group/btn1 whitespace-nowrap"
-              title="Ver resumo inteligente"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-rio-gold" />
-              Detalhes
-            </button>
 
-            {benefit.downloadUrl ? (
-              <button 
-                onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
-              >
-                Baixar
-                <Download className="w-3.5 h-3.5 group-hover/btn2:translate-y-0.5 transition-transform" />
-              </button>
-            ) : (
-              <button 
-                onClick={(e) => { e.stopPropagation(); onUse(benefit); }}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
-              >
-                {benefit.customCta || (benefit.externalLink ? 'Acessar' : 'Utilizar')}
-                {benefit.externalLink ? (
-                    <ExternalLink className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
-                ) : (
-                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
-                )}
-              </button>
-            )}
-          </div>
-        )}
+      <div className={`${isList ? 'w-full' : 'mt-auto'}`}>
+        <button
+          onClick={handleClick}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue font-bold text-xs hover:bg-rio-blue hover:text-white"
+        >
+          {benefit.customCta || 'Acessar'}
+          {(benefit.externalLink || benefit.downloadUrl) ? (
+            <ExternalLink className="w-3.5 h-3.5" />
+          ) : (
+            <ArrowRight className="w-3.5 h-3.5" />
+          )}
+        </button>
       </div>
     </div>
   );
