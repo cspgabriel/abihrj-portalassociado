@@ -79,11 +79,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
                      Serviço Online
                    </span>
                 )}
-                {benefit.id === 'sustainability-raiox' && (
-                    <span className="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide flex items-center gap-1">
-                        <Bot className="w-3 h-3" /> Elaborado pela IA
-                    </span>
-                )}
+
               </div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{benefit.title}</h1>
               <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">

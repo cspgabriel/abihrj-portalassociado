@@ -86,12 +86,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
                   <ArrowUpRight className="w-3 h-3" /> Leis e Decretos
                 </button>
               </li>
-              {/* MUDANÇA: Kit de Marketing adicionado ao rodapé */}
-              <li>
-                <button onClick={() => handleNav('MARKETING_KIT')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
-                  <ArrowUpRight className="w-3 h-3" /> Kit de Marketing
-                </button>
-              </li>
+
             </ul>
           </div>
 

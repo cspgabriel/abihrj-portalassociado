@@ -36,6 +36,7 @@ import TalentBankPage from './components/TalentBankPage';
 import BenefitsShowcase from './components/BenefitsShowcase';
 import PublicOrderPage from './components/PublicOrderPage';
 import LegalAdvisoryPage from './components/LegalAdvisoryPage';
+import InfluencersPage from './components/InfluencersPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -559,13 +560,14 @@ export default function App() {
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LEGAL_ADVISORY_PAGE': return <LegalAdvisoryPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'INFLUENCERS_PAGE': return <InfluencersPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
       default: return <LandingPage userName={safeUser.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'BENEFITS_SHOWCASE'].includes(currentView)}>
+    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'INFLUENCERS_PAGE', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer onNavigate={navigateTo} onBenefitClick={(id) => { const b = BENEFITS_DATA.find(x => x.id === id); if (b) handleBenefitClick(b); }} />
        <QuickAccessMenu onUse={(id)=>{

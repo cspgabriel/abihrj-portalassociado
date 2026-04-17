@@ -143,7 +143,7 @@ const Layout: React.FC<LayoutProps> = ({
                     <MessageSquarePlus className="w-4 h-4 shrink-0" /> <span className="truncate">Enviar Sugestão de Pauta</span>
                 </button>
 
-                <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                <button id="sidebar-influencers" onClick={() => { onNavigate('INFLUENCERS_PAGE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'INFLUENCERS_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores / UGC</span>
                 </button>
 
