@@ -313,11 +313,6 @@ export default function App() {
       return;
     }
 
-    if (benefit.id === 'juridico-01') {
-      navigateTo('LEGAL_ADVISORY_PAGE');
-      return;
-    }
-
     const forceInternalIds = ['calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'highlight-events-reg', 'sugestao-pauta'];
 
     if (forceInternalIds.includes(benefit.id)) {
