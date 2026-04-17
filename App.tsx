@@ -32,9 +32,7 @@ import BenefitCategorizerPage from './components/BenefitCategorizerPage';
 import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
-// MUDANÇA: PhotoGalleryPage removida conforme solicitado
 import TalentBankPage from './components/TalentBankPage';
-import MarketingLaunchKit from './components/MarketingLaunchKit';
 import BenefitsShowcase from './components/BenefitsShowcase';
 import PublicOrderPage from './components/PublicOrderPage';
 import LegalAdvisoryPage from './components/LegalAdvisoryPage';
@@ -91,7 +89,6 @@ export default function App() {
     }
   };
 
-  // Provide a non-null user object to downstream components to avoid runtime null dereferences
   const safeUser: User = user || { id: 'guest', name: 'Visitante', email: '', hotel: '', role: '' };
 
   const getPasswordStrength = (pwd: string): { label: string; color: string; width: string } => {
@@ -109,41 +106,33 @@ export default function App() {
     return { label: 'Forte', color: 'bg-green-500', width: '100%' };
   };
 
-  // Initial Route Check
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
 
-    // If a query param explicitly requests a view, honor it first
     if (viewParam) {
-        if (viewParam === 'MARKETING_KIT') setCurrentView('MARKETING_KIT');
-        else if (viewParam === 'ALL_BENEFITS') setCurrentView('ALL_BENEFITS');
+        if (viewParam === 'ALL_BENEFITS') setCurrentView('ALL_BENEFITS');
         else if (viewParam === 'CALCULATORS_PAGE') setCurrentView('CALCULATORS_PAGE');
         else if (viewParam === 'ASSOCIATION_EVENTS') setCurrentView('ASSOCIATION_EVENTS');
         else if (viewParam === 'BENEFITS_SHOWCASE') setCurrentView('BENEFITS_SHOWCASE');
         return;
     }
 
-    // Otherwise try to derive route from the pathname so direct links work
     try {
       const p = window.location.pathname || '/';
-      // Normalize trailing slash
       const path = p.replace(/\/$/, '');
 
-      // Landing legacy path (some systems may link to this HTML file)
       if (path === '/landing-portal-do-associado.html' || path === '/landing-portal-do-associado' || path === '/landing') {
         setCurrentView('LANDING_PAGE');
         window.history.replaceState({}, '', '/landing-portal-do-associado.html');
         return;
       }
 
-      // All benefits listing
       if (path === '/benefits' || path === '/beneficios' || path === '/todos-beneficios') {
         setCurrentView('ALL_BENEFITS');
         return;
       }
 
-      // Single benefit route: /benefits/:id or /benefit/:id
       const benefitMatch = path.match(/\/(?:benefits|beneficio|benefit)\/(.+)/i);
       if (benefitMatch && benefitMatch[1]) {
         const id = decodeURIComponent(benefitMatch[1]);
@@ -154,14 +143,9 @@ export default function App() {
           return;
         }
       }
-
-      // Default: leave currentView as-is (LANDING_PAGE default)
-    } catch (e) {
-      // ignore parsing errors and fall back to default
-    }
+    } catch (e) {}
   }, []);
 
-  // Handle browser back/forward so direct navigation updates the app view
   useEffect(() => {
     const onPop = () => {
       try {
@@ -193,7 +177,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // Ensure new static benefits exist in Firestore (one-time sync on app start)
     try {
       const b = BENEFITS_DATA.find(b => b.id === 'rio-international-press');
       if (b) {
@@ -220,7 +203,6 @@ export default function App() {
   const navigateTo = (view: string) => {
     setCurrentView(view);
     scrollToTop();
-    // Update browser URL for shareable routes
     try {
       if (view === 'ALL_BENEFITS') {
         window.history.pushState({}, '', '/benefits');
@@ -228,10 +210,7 @@ export default function App() {
         window.history.pushState({}, '', '/landing-portal-do-associado.html');
       } else if (view === 'BENEFITS_SHOWCASE') {
         window.history.pushState({}, '', '/benefits/showcase');
-      } else if (view === 'BENEFIT_DETAILS') {
-        // benefit details route is managed by handleBenefitClick which sets the canonical URL
       } else {
-        // for other app views we keep the landing root
         window.history.pushState({}, '', '/');
       }
     } catch {}
@@ -292,7 +271,6 @@ export default function App() {
 
   const handleBenefitClick = (benefit: Benefit) => {
     scrollToTop();
-    // enviar evento analítico de interação
     analyticsService.logEvent({
       type: 'USE_BENEFIT',
       details: { benefitId: benefit.id, title: benefit.title }
@@ -322,7 +300,6 @@ export default function App() {
     }
 
     if (benefit.isService) {
-       // Check for temp benefits from Talent Bank that are services
        if (benefit.id === 'job-post-zoho' || benefit.id === 'portal-rh-future') {
            setSelectedBenefit(benefit);
            navigateTo('SERVICE_VIEWER');
@@ -350,7 +327,6 @@ export default function App() {
        else if (benefit.downloadUrl) window.open(benefit.downloadUrl, '_blank');
     } else {
          setSelectedBenefit(benefit);
-         // push canonical benefit URL so each benefit has a unique shareable link
          try {
            window.history.pushState({}, '', `/benefits/${encodeURIComponent(benefit.id)}`);
          } catch {}
@@ -367,20 +343,10 @@ export default function App() {
     );
   }
 
-  // PUBLIC ROUTES (No Login Required)
   if (currentView === 'BENEFITS_SHOWCASE') {
       return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
   }
 
-  if (currentView === 'MARKETING_KIT') {
-      return (
-          <Layout user={user || { id: 'guest', name: 'Visitante', email: '', hotel: '', role: '' }} onLogout={handleLogout} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={true}>
-              <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />
-          </Layout>
-      );
-  }
-
-  // Apenas BENEFITS_SHOWCASE é público (vitrine); tudo mais exige login
   const publicViews = ['BENEFITS_SHOWCASE'];
   if (!user && !publicViews.includes(currentView)) {
     return (
@@ -590,19 +556,16 @@ export default function App() {
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
-      // MUDANÇA: PHOTO_GALLERY removido conforme solicitado
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LEGAL_ADVISORY_PAGE': return <LegalAdvisoryPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'MARKETING_KIT': return <MarketingLaunchKit onBack={() => navigateTo('LANDING_PAGE')} />; 
       case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
       default: return <LandingPage userName={safeUser.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }
   };
 
   return (
-    // MUDANÇA: Removido 'PHOTO_GALLERY' da lista isFullPage pois foi removido do app
-    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'MARKETING_KIT', 'BENEFITS_SHOWCASE'].includes(currentView)}>
+    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer onNavigate={navigateTo} onBenefitClick={(id) => { const b = BENEFITS_DATA.find(x => x.id === id); if (b) handleBenefitClick(b); }} />
        <QuickAccessMenu onUse={(id)=>{
