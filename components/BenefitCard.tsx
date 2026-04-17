@@ -13,11 +13,19 @@ interface BenefitCardProps {
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, layout = 'grid' }) => {
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
+  const isReceptionMandatorySigns = benefit.id === 'placas-recepcao';
 
   const handleDashboardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (benefit.dashboardUrl) {
       window.open(benefit.dashboardUrl, '_blank');
+    }
+  };
+
+  const handleReceptionMandatorySignsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (benefit.downloadUrl) {
+      window.open(benefit.downloadUrl, '_blank');
     }
   };
 
@@ -120,6 +128,17 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, onDetails, onUse, la
             >
               Dashboard
               <LayoutDashboard className="w-3 h-3" />
+            </button>
+          </div>
+        ) : isReceptionMandatorySigns ? (
+          <div className="grid grid-cols-1 gap-3">
+            <button
+              onClick={handleReceptionMandatorySignsClick}
+              className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-rio-blue border border-transparent text-xs font-bold hover:bg-rio-blue hover:text-white transition-all shadow-sm group/btn2 whitespace-nowrap"
+              title="Abrir arquivo no Google Drive"
+            >
+              Acessar
+              <ExternalLink className="w-3.5 h-3.5 group-hover/btn2:translate-x-0.5 transition-transform" />
             </button>
           </div>
         ) : (
