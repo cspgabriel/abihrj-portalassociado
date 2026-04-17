@@ -3,7 +3,7 @@
 // Suporte do SO: Windows11
 // Descrição: Constantes e dados estáticos da aplicação
 
-import { Benefit, BenefitCategory, Forum, GamificationBadge, RioEvent } from './types';
+import { Benefit, BenefitCategory, Course, Forum, GamificationBadge, HotelSector, RioEvent } from './types';
 import * as Icons from 'lucide-react';
 
 export const COMMERCIAL_SUB_ACTIONS = [
@@ -43,6 +43,84 @@ export const COMMERCIAL_SUB_ACTIONS = [
 ];
 
 export const GALLERY_EVENTS = [];
+
+export const FORUMS_DATA: Forum[] = [];
+
+export const COURSES_DATA: Course[] = [
+  {
+    id: 'curso-boas-vindas',
+    youtubeId: 'dQw4w9WgXcQ',
+    title: 'Boas-vindas ao Portal do Associado',
+    description: 'Conheça os principais recursos do portal e como aproveitar os benefícios.',
+    category: 'Introdução',
+    duration: '10 min',
+    thumbnailUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+    isNew: true
+  }
+];
+
+export const CALCULATOR_TOOLS: Benefit[] = [];
+
+export const RJ_LAWS_DATA: Array<{
+  id: string;
+  number: string;
+  description: string;
+  category: string;
+  date: string;
+  link?: string;
+}> = [];
+
+export const CRM_LINK = 'https://sindhoteisrj.com.br';
+
+export const ASSOCIATION_EVENTS: Array<{
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  status: string;
+}> = [];
+
+export const TEAM_CONTACTS: Array<{
+  sector: string;
+  manager: string;
+  email: string;
+  whatsapp?: string;
+}> = [];
+
+export const WHATSAPP_GROUPS: Array<{
+  id: string;
+  name: string;
+  description: string;
+  link: string;
+}> = [];
+
+export const HOTEL_SECTORS: Array<{ id: HotelSector; label: string }> = [
+  { id: 'MANAGEMENT', label: 'Gestão' },
+  { id: 'RECEPTION', label: 'Recepção' },
+  { id: 'HOUSEKEEPING', label: 'Governança' },
+  { id: 'MAINTENANCE', label: 'Manutenção' },
+  { id: 'SALES', label: 'Comercial' },
+  { id: 'HR', label: 'RH' },
+  { id: 'LEGAL_DEPT', label: 'Jurídico' },
+  { id: 'FB', label: 'A&B' },
+  { id: 'SECURITY', label: 'Segurança' }
+];
+
+export const FOOTER_DATA = {
+  socials: {
+    instagram: 'https://instagram.com',
+    linkedin: 'https://linkedin.com',
+    youtube: 'https://youtube.com',
+    facebook: 'https://facebook.com'
+  },
+  address: 'Rua Exemplo, 100 - Rio de Janeiro/RJ',
+  cep: '20000-000',
+  phone: '(21) 0000-0000',
+  email: 'contato@sindhoteisrj.com.br',
+  razaoSocial: 'Sindicato de Hotéis e Meios de Hospedagem do Município do Rio de Janeiro',
+  cnpj: '00.000.000/0001-00'
+};
 
 export const SUPER_CATEGORIES = [
   {
