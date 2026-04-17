@@ -6,12 +6,11 @@
 import React, { useState, useEffect } from 'react';
 import { User, Benefit } from '../types';
 import { 
-  Menu, X, LogOut, User as UserIcon, Bell, 
-  Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
+  Menu, X, LogOut, Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar,
   MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
-  MessageCircle, Phone, Shield, UserCog, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Newspaper,
-  Rocket
+  MessageCircle, Phone, Shield, UserCog,
+  Users, Search, MessageSquarePlus, ShoppingBag, Newspaper,
+  Camera
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import Breadcrumb from './Breadcrumb';
@@ -73,7 +72,6 @@ const Layout: React.FC<LayoutProps> = ({
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4 space-y-4 custom-scrollbar pb-24 md:pb-4">
-            {/* PRINCIPAL SECTION */}
             <div className="mb-2 px-1">
                 <button 
                 id="sidebar-home"
@@ -104,7 +102,6 @@ const Layout: React.FC<LayoutProps> = ({
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
 
-            {/* PRINCIPAIS BENEFÍCIOS (Ordered A-Z) */}
             <div className="px-1 space-y-1">
                 <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-2 mt-2">
                     Principais Benefícios
@@ -146,17 +143,16 @@ const Layout: React.FC<LayoutProps> = ({
                     <MessageSquarePlus className="w-4 h-4 shrink-0" /> <span className="truncate">Enviar Sugestão de Pauta</span>
                 </button>
 
+                <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores / UGC</span>
+                </button>
+
                 <button id="sidebar-suppliers" onClick={() => handleOpenBenefit('portal-fornecedores-new')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
                 </button>
 
                 <button id="sidebar-laws" onClick={() => handleOpenBenefit('leis-decretos-app')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Leis e Decretos RJ</span>
-                </button>
-
-                {/* MUDANÇA: Kit de Marketing adicionado ao sidebar conforme solicitado */}
-                <button id="sidebar-marketing" onClick={() => { onNavigate('MARKETING_KIT'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'MARKETING_KIT' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
-                    <Rocket className="w-4 h-4 shrink-0" /> <span className="truncate">Kit de Marketing</span>
                 </button>
 
                 <button id="sidebar-security" onClick={() => { onNavigate('SECURITY_PAGE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
@@ -174,13 +170,10 @@ const Layout: React.FC<LayoutProps> = ({
                 <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
                 </button>
-
-                {/* MUDANÇA: Galeria de Fotos removida do sidebar conforme solicitado */}
             </div>
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
 
-            {/* CONEXÃO */}
             <div className="px-1 space-y-1">
                 <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-2 mt-2">
                     CONEXÃO
@@ -214,7 +207,6 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-        {/* Mobile Overlay for Sidebar */}
         {isMobileMenuOpen && (
             <div 
                 className="fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity" 
@@ -222,13 +214,11 @@ const Layout: React.FC<LayoutProps> = ({
             />
         )}
 
-        {/* Sidebar Mobile & Desktop */}
         <aside className={`
             fixed inset-y-0 left-0 z-50 w-72 bg-rio-blue transform transition-transform duration-300 ease-in-out shadow-2xl
             md:translate-x-0 md:static md:inset-auto md:shadow-none
             ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
-            {/* Close button inside drawer for easier mobile exit */}
             {isMobileMenuOpen && (
                 <button 
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -240,10 +230,7 @@ const Layout: React.FC<LayoutProps> = ({
             <SidebarContent />
         </aside>
 
-        {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative" id="main-content">
-            
-            {/* Mobile Top Bar (Simplified) */}
             <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between text-rio-blue shadow-sm z-30 shrink-0 h-16">
                 <div className="flex items-center gap-2">
                     <img 
@@ -260,12 +247,10 @@ const Layout: React.FC<LayoutProps> = ({
                 </div>
             </div>
 
-            {/* Desktop Header */}
             {!isFullPage && (
                 <header className="hidden md:flex bg-white h-16 border-b border-gray-200 justify-between items-center px-8 shrink-0 z-20 gap-4">
                     <Breadcrumb currentView={currentView} />
 
-                    {/* Search Bar */}
                     <div className="flex-1 max-w-md mx-4 relative">
                         <input 
                             type="text"
@@ -293,12 +278,10 @@ const Layout: React.FC<LayoutProps> = ({
                 </header>
             )}
 
-            {/* Scrollable Main Content - Padding bottom added for mobile nav */}
             <main id="scrollable-content" className="flex-1 overflow-y-auto bg-gray-50 relative scroll-smooth w-full pb-20 md:pb-0">
                 {children}
             </main>
 
-            {/* Mobile Bottom Navigation Bar */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-between items-center px-6 py-2 pb-safe z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
                 <button 
                     onClick={() => onNavigate('LANDING_PAGE')}
