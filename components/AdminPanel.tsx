@@ -5,9 +5,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
-import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, Filter, ArrowDownAZ, ArrowUpAZ, Calendar } from 'lucide-react';
+import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, ArrowDownAZ, ArrowUpAZ, Calendar, Inbox, Mail, Phone } from 'lucide-react';
 import { authService } from '../services/authService';
 import { analyticsService } from '../services/analyticsService';
+import { conexDemandasService, ConexDemanda } from '../services/conexDemandasService';
 
 
 interface AdminPanelProps {
@@ -18,10 +19,11 @@ interface AdminPanelProps {
 type SortOption = 'NEWEST' | 'OLDEST' | 'AZ' | 'ZA';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
-  const [activeTab, setActiveTab] = useState<'LOGS' | 'USERS' | 'EVENTS'>('LOGS');
+  const [activeTab, setActiveTab] = useState<'LOGS' | 'USERS' | 'EVENTS' | 'DEMANDAS'>('DEMANDAS');
   const [logs, setLogs] = useState<any[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
   const [eventsList, setEventsList] = useState<any[]>([]);
+  const [demandasList, setDemandasList] = useState<ConexDemanda[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState<SortOption>('NEWEST');
 
@@ -50,21 +52,30 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
     } else if (activeTab === 'EVENTS') {
         const data = await analyticsService.getEvents();
         setEventsList(data);
+    } else if (activeTab === 'DEMANDAS') {
+        const data = await conexDemandasService.getAll();
+        setDemandasList(data);
     }
     setLoading(false);
   };
 
   const getSortedData = () => {
-    const data = activeTab === 'LOGS' ? logs : activeTab === 'USERS' ? usersList : eventsList;
+    const data = activeTab === 'LOGS' ? logs : activeTab === 'USERS' ? usersList : activeTab === 'EVENTS' ? eventsList : demandasList;
     
     return [...data].sort((a, b) => {
-        // Logica para Data (Logs e Events usam 'timestamp', Users usa 'createdAt')
-        const dateA = new Date(activeTab === 'USERS' ? (a.createdAt || 0) : (a.timestamp || 0)).getTime();
-        const dateB = new Date(activeTab === 'USERS' ? (b.createdAt || 0) : (b.timestamp || 0)).getTime();
+        const dateA = new Date(
+          activeTab === 'USERS' ? (a.createdAt || 0)
+          : activeTab === 'DEMANDAS' ? (a.createdAt?.toDate?.() || a.createdAt || 0)
+          : (a.timestamp || 0)
+        ).getTime();
+        const dateB = new Date(
+          activeTab === 'USERS' ? (b.createdAt || 0)
+          : activeTab === 'DEMANDAS' ? (b.createdAt?.toDate?.() || b.createdAt || 0)
+          : (b.timestamp || 0)
+        ).getTime();
 
-        // Logica para Nome (Logs usa 'userName', Users usa 'name', Events não usa)
-        const nameA = activeTab === 'LOGS' ? (a.userName || '') : activeTab === 'USERS' ? (a.name || '') : '';
-        const nameB = activeTab === 'LOGS' ? (b.userName || '') : activeTab === 'USERS' ? (b.name || '') : '';
+        const nameA = activeTab === 'LOGS' ? (a.userName || '') : activeTab === 'USERS' ? (a.name || '') : activeTab === 'DEMANDAS' ? (a.nome || '') : '';
+        const nameB = activeTab === 'LOGS' ? (b.userName || '') : activeTab === 'USERS' ? (b.name || '') : activeTab === 'DEMANDAS' ? (b.nome || '') : '';
 
         switch (sortOrder) {
             case 'NEWEST':
@@ -203,12 +214,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                     <Users className="w-4 h-4" />
                     Usuários Cadastrados
                 </button>
-                <button 
+                <button
                 onClick={() => setActiveTab('EVENTS')}
                 className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'EVENTS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
                 >
                     <FileText className="w-4 h-4" />
                     Eventos
+                </button>
+                <button
+                onClick={() => setActiveTab('DEMANDAS')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${activeTab === 'DEMANDAS' ? 'bg-white text-slate-900 shadow-sm translate-y-1' : 'bg-emerald-800 text-emerald-300 hover:bg-emerald-700'}`}
+                >
+                    <Inbox className="w-4 h-4" />
+                    Demandas Conex
                 </button>
             </div>
 
@@ -242,8 +260,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
         <div className="bg-white rounded-b-xl rounded-tr-xl shadow-lg border border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
             <h3 className="font-bold text-gray-700 flex items-center gap-2">
-              {activeTab === 'LOGS' ? <FileText className="w-5 h-5 text-gray-500" /> : <UserCheck className="w-5 h-5 text-gray-500" />}
-              {activeTab === 'LOGS' ? 'Registros Recentes' : 'Base de Usuários'}
+              {activeTab === 'LOGS' ? <FileText className="w-5 h-5 text-gray-500" /> : activeTab === 'DEMANDAS' ? <Inbox className="w-5 h-5 text-emerald-600" /> : <UserCheck className="w-5 h-5 text-gray-500" />}
+              {activeTab === 'LOGS' ? 'Registros Recentes' : activeTab === 'DEMANDAS' ? 'Demandas Conex (CONEX_DEMANDAS)' : 'Base de Usuários'}
             </h3>
             <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">
               Total: {sortedData.length}
@@ -268,6 +286,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         <th classthan="px-6 py-4">Hotel</th>
                         <th className="px-6 py-4">Cargo</th>
                         <th className="px-6 py-4">Data Cadastro</th>
+                    </tr>
+                ) : activeTab === 'DEMANDAS' ? (
+                    <tr>
+                        <th className="px-6 py-4">Data</th>
+                        <th className="px-6 py-4">Solicitante</th>
+                        <th className="px-6 py-4">Hotel / Empresa</th>
+                        <th className="px-6 py-4">Tipo</th>
+                        <th className="px-6 py-4">Assunto</th>
+                        <th className="px-6 py-4">Status</th>
                     </tr>
                 ) : (
                     <tr>
@@ -324,6 +351,52 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
                         <tr>
                             <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
                             Nenhum usuário encontrado na base.
+                            </td>
+                        </tr>
+                    )
+                ) : activeTab === 'DEMANDAS' ? (
+                    sortedData.length > 0 ? (
+                        sortedData.map((d: any, idx: number) => {
+                          const ts = d.createdAt?.toDate?.() ? d.createdAt.toDate() : d.createdAt ? new Date(d.createdAt) : null;
+                          const statusColor = d.status === 'CONCLUIDO' ? 'bg-green-100 text-green-700' : d.status === 'EM_ANALISE' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700';
+                          return (
+                            <tr key={idx} className="hover:bg-emerald-50/50 transition-colors">
+                              <td className="px-6 py-4 text-gray-500 text-xs whitespace-nowrap">
+                                {ts ? ts.toLocaleString('pt-BR') : '-'}
+                              </td>
+                              <td className="px-6 py-4">
+                                <p className="font-bold text-gray-800 text-sm">{d.nome}</p>
+                                <p className="text-gray-500 text-xs font-mono flex items-center gap-1 mt-0.5">
+                                  <Mail className="w-3 h-3" />{d.email}
+                                </p>
+                                {d.telefone && (
+                                  <p className="text-gray-400 text-xs flex items-center gap-1 mt-0.5">
+                                    <Phone className="w-3 h-3" />{d.telefone}
+                                  </p>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 text-gray-600 text-sm">
+                                <span className="flex items-center gap-1"><Building className="w-3 h-3 text-gray-400" />{d.hotel}</span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded text-xs font-semibold">
+                                  {d.tipoDemanda}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <p className="text-gray-800 font-semibold text-sm">{d.assunto}</p>
+                                <p className="text-gray-400 text-xs mt-1 line-clamp-2 max-w-xs">{d.descricao}</p>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className={`${statusColor} px-2 py-1 rounded text-xs font-bold`}>{d.status}</span>
+                              </td>
+                            </tr>
+                          );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
+                              Nenhuma demanda recebida ainda.
                             </td>
                         </tr>
                     )

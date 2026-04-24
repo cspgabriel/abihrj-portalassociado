@@ -31,6 +31,7 @@ import CoursesPage from './components/CoursesPage';
 import BenefitCategorizerPage from './components/BenefitCategorizerPage';
 import CommercialActionsPage from './components/CommercialActionsPage';
 import AdminPanel from './components/AdminPanel';
+import ConexDemandaForm from './components/ConexDemandaForm';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
 import TalentBankPage from './components/TalentBankPage';
 import BenefitsShowcase from './components/BenefitsShowcase';
@@ -128,6 +129,16 @@ export default function App() {
         return;
       }
 
+      if (path === '/admin' || path === '/admin/') {
+        setCurrentView('ADMIN_PANEL');
+        return;
+      }
+
+      if (path === '/conex' || path === '/conex/' || path === '/demanda' || path === '/demanda/') {
+        setCurrentView('CONEX_DEMANDAS_FORM');
+        return;
+      }
+
       if (path === '/benefits' || path === '/beneficios' || path === '/todos-beneficios') {
         setCurrentView('ALL_BENEFITS');
         return;
@@ -155,6 +166,8 @@ export default function App() {
           setCurrentView('LANDING_PAGE');
           return;
         }
+        if (path === '/admin') { setCurrentView('ADMIN_PANEL'); return; }
+        if (path === '/conex' || path === '/demanda') { setCurrentView('CONEX_DEMANDAS_FORM'); return; }
         if (path === '/benefits' || path === '/beneficios' || path === '/todos-beneficios') {
           setCurrentView('ALL_BENEFITS');
           return;
@@ -210,6 +223,10 @@ export default function App() {
         window.history.pushState({}, '', '/landing-portal-do-associado.html');
       } else if (view === 'BENEFITS_SHOWCASE') {
         window.history.pushState({}, '', '/benefits/showcase');
+      } else if (view === 'ADMIN_PANEL') {
+        window.history.pushState({}, '', '/admin');
+      } else if (view === 'CONEX_DEMANDAS_FORM') {
+        window.history.pushState({}, '', '/conex');
       } else {
         window.history.pushState({}, '', '/');
       }
@@ -347,7 +364,11 @@ export default function App() {
       return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
   }
 
-  const publicViews = ['BENEFITS_SHOWCASE'];
+  if (currentView === 'CONEX_DEMANDAS_FORM') {
+      return <ConexDemandaForm />;
+  }
+
+  const publicViews = ['BENEFITS_SHOWCASE', 'CONEX_DEMANDAS_FORM'];
   if (!user && !publicViews.includes(currentView)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
@@ -556,6 +577,7 @@ export default function App() {
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'CONEX_DEMANDAS_FORM': return <ConexDemandaForm />;
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LEGAL_ADVISORY_PAGE': return <LegalAdvisoryPage onBack={() => navigateTo('LANDING_PAGE')} />;
