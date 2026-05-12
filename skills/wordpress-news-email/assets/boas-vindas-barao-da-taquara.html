@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Bem-vindo ao HoteisRio, Hotel Barão da Taquara!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+    body { margin: 0; padding: 0; background-color: #f0f4f8; font-family: 'Inter', Arial, sans-serif; }
+
+    .email-wrapper  { width: 100%; background-color: #f0f4f8; padding: 32px 0; }
+    .email-card     { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 32px rgba(0,0,0,0.12); }
+
+    /* HEADER */
+    .header         { background: linear-gradient(135deg, #003d96 0%, #004aad 60%, #0062e6 100%); padding: 36px 40px 32px; text-align: center; position: relative; }
+    .header::after  { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #fbba00 0%, #ffd447 100%); }
+    .header img     { height: 56px; display: block; margin: 0 auto; }
+
+    /* HERO */
+    .hero           { background: linear-gradient(160deg, #003d96 0%, #004aad 40%, #0a5cc7 100%); padding: 48px 40px 44px; text-align: center; }
+    .hero-icon      { width: 80px; height: 80px; background: rgba(255,255,255,0.12); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 36px; }
+    .hero-eyebrow   { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #fbba00; margin-bottom: 12px; }
+    .hero-title     { font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.25; margin: 0 auto 12px; max-width: 460px; }
+    .hero-sub       { font-size: 15px; color: #bfdbfe; line-height: 1.6; max-width: 400px; margin: 0 auto; }
+
+    /* GOLD BAR */
+    .gold-bar       { height: 5px; background: linear-gradient(90deg, #fbba00 0%, #ffd447 100%); }
+
+    /* CONTENT */
+    .content        { padding: 36px 40px 24px; }
+    .section-label  { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #004aad; margin-bottom: 6px; }
+    .excerpt        { font-size: 16px; color: #1f2937; line-height: 1.75; margin: 0 0 20px; font-weight: 400; }
+    .paragraph      { font-size: 15px; color: #4b5563; line-height: 1.8; margin: 0 0 16px; }
+    .divider        { border: none; border-top: 1px solid #e5e7eb; margin: 28px 0; }
+
+    /* BENEFITS GRID */
+    .benefits-title { font-size: 17px; font-weight: 700; color: #0d1f40; margin: 0 0 18px; }
+    .benefit-item   { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .benefit-icon   { width: 36px; height: 36px; min-width: 36px; background: #eff6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .benefit-text   { }
+    .benefit-name   { font-size: 14px; font-weight: 700; color: #1e3a5f; margin: 0 0 2px; }
+    .benefit-desc   { font-size: 13px; color: #6b7280; margin: 0; line-height: 1.5; }
+
+    /* INFO BOX */
+    .info-box       { background: #f8faff; border: 1px solid #dbeafe; border-left: 4px solid #004aad; border-radius: 10px; padding: 20px 24px; margin: 24px 0; }
+    .info-box p     { margin: 0 0 6px; font-size: 14px; color: #374151; line-height: 1.6; }
+    .info-box p:last-child { margin: 0; }
+    .info-box strong { color: #004aad; }
+
+    /* CTA */
+    .cta-wrap       { text-align: center; margin: 28px 0 8px; }
+    .cta-copy       { font-size: 16px; font-weight: 600; color: #0d1f40; margin-bottom: 20px; line-height: 1.5; }
+    .btn-primary    { display: inline-block; background: linear-gradient(135deg, #004aad 0%, #0062e6 100%); color: #ffffff !important; text-decoration: none; font-size: 16px; font-weight: 700; padding: 16px 40px; border-radius: 12px; letter-spacing: 0.3px; box-shadow: 0 4px 14px rgba(0,74,173,0.35); }
+    .btn-secondary  { display: inline-block; background: #ffffff; color: #004aad !important; text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 10px; border: 2px solid #004aad; margin-top: 12px; }
+
+    /* FOOTER */
+    .footer         { background: #0d1f40; padding: 32px 40px 28px; text-align: center; }
+    .footer img     { height: 38px; display: block; margin: 0 auto 18px; opacity: 0.80; }
+    .footer-links   { margin-bottom: 14px; }
+    .footer-links a { color: #93c5fd; font-size: 12px; text-decoration: none; margin: 0 10px; }
+    .footer-text    { font-size: 11px; color: #6b7280; line-height: 1.7; }
+    .footer-text a  { color: #9ca3af; text-decoration: underline; }
+
+    @media only screen and (max-width: 620px) {
+      .email-card    { border-radius: 0 !important; }
+      .content,
+      .header,
+      .hero,
+      .footer        { padding-left: 20px !important; padding-right: 20px !important; }
+      .hero-title    { font-size: 22px !important; }
+      .btn-primary,
+      .btn-secondary { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="email-wrapper">
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+<tr><td align="center">
+<div class="email-card">
+
+  <!-- ───── HEADER ───── -->
+  <div class="header">
+    <img
+      src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png"
+      alt="HoteisRio" />
+  </div>
+
+  <!-- ───── HERO ───── -->
+  <div class="hero">
+    <div class="hero-icon">🏨</div>
+    <p class="hero-eyebrow">Novo Associado · 2026</p>
+    <h1 class="hero-title">Bem-vindo ao HoteisRio,<br/>Hotel Barão da Taquara!</h1>
+    <p class="hero-sub">Você acaba de entrar para a maior rede de apoio ao setor hoteleiro do Rio de Janeiro.</p>
+  </div>
+
+  <!-- ───── GOLD BAR ───── -->
+  <div class="gold-bar"></div>
+
+  <!-- ───── CONTENT ───── -->
+  <div class="content">
+
+    <p class="excerpt">
+      É com muito prazer que damos as boas-vindas ao <strong>Hotel Barão da Taquara</strong> (Praça Seca – Rio de Janeiro) à família HoteisRio. A partir de hoje, seu hotel tem acesso ao <strong>Portal do Associado</strong> — a plataforma exclusiva criada para fortalecer o setor hoteleiro carioca com inteligência, benefícios e suporte especializado.
+    </p>
+
+    <p class="paragraph">
+      O cadastro no portal é simples e leva menos de dois minutos. Basta acessar o endereço abaixo, criar sua conta com o e-mail corporativo e você já estará dentro — com acesso imediato a todos os recursos disponíveis para associados.
+    </p>
+
+    <!-- INFO BOX: Dados da associação -->
+    <div class="info-box">
+      <p>🏷️ <strong>Mensalidade:</strong> R$ 150,48</p>
+      <p>📅 <strong>Primeira parcela:</strong> 22 de maio de 2026</p>
+      <p>📍 <strong>Hotel:</strong> Hotel Barão da Taquara — Praça Seca, Rio de Janeiro/RJ</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- BENEFITS -->
+    <p class="benefits-title">O que você acessa no Portal do Associado:</p>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">🌐</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Ações Comerciais</p>
+        <p class="benefit-desc">Inscrições em feiras nacionais e internacionais: WTM, ABAV, FIT, e muito mais.</p>
+      </div>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">🗓️</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Calendário de Eventos 2026</p>
+        <p class="benefit-desc">Planejamento antecipado com feriados, congressos e grandes eventos do Rio.</p>
+      </div>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">🎓</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Cursos e Capacitações</p>
+        <p class="benefit-desc">Treinamentos exclusivos para sua equipe diretamente na plataforma.</p>
+      </div>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">⚖️</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Assessoria Jurídica</p>
+        <p class="benefit-desc">Abertura de chamados para dúvidas trabalhistas, cíveis e tributárias.</p>
+      </div>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">🤝</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Fornecedores Parceiros</p>
+        <p class="benefit-desc">Condições especiais negociadas exclusivamente para associados HoteisRio.</p>
+      </div>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">💬</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Fórum & Banco de Talentos</p>
+        <p class="benefit-desc">Troca de experiências com hoteleiros e acesso a profissionais qualificados do setor.</p>
+      </div>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">📚</div>
+      <div class="benefit-text">
+        <p class="benefit-name">Legislação Hoteleira</p>
+        <p class="benefit-desc">Biblioteca atualizada com normas, regulamentos e circulares do setor.</p>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <p class="cta-copy">
+        Tudo isso está a um clique de distância — acesse agora e explore os benefícios que sua associação oferece desde o primeiro dia.
+      </p>
+      <a href="https://portal.hoteisrio.com.br" class="btn-primary">
+        Acessar o Portal do Associado &rarr;
+      </a>
+      <br/>
+      <a href="https://sindhoteisrj.com.br" class="btn-secondary">
+        Conheça o SINDHotéisRIO
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ───── GOLD BAR ───── -->
+  <div class="gold-bar"></div>
+
+  <!-- ───── FOOTER ───── -->
+  <div class="footer">
+    <img
+      src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png"
+      alt="HoteisRio" />
+    <div class="footer-links">
+      <a href="https://sindhoteisrj.com.br">sindhoteisrj.com.br</a>
+      <a href="https://portal.hoteisrio.com.br">Portal do Associado</a>
+      <a href="https://abihrj.com.br">abihrj.com.br</a>
+    </div>
+    <p class="footer-text">
+      Sindicato de Hotéis, Restaurantes, Bares e Similares do Rio de Janeiro<br />
+      Rua da Assembleia, 10 – sala 2405 – Centro – Rio de Janeiro/RJ<br />
+      <a href="mailto:marketing@hoteisrio.com.br">marketing@hoteisrio.com.br</a>
+    </p>
+  </div>
+
+</div>
+</td></tr>
+</table>
+</div>
+</body>
+</html>
