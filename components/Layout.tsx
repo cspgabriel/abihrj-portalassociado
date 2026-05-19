@@ -151,9 +151,10 @@ const Layout: React.FC<LayoutProps> = ({
                     <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
                 </button>
 
-                <button id="sidebar-laws" onClick={() => handleOpenBenefit('leis-decretos-app')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                <div id="sidebar-laws" className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/40 cursor-not-allowed overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Leis e Decretos RJ</span>
-                </button>
+                    <span className="ml-auto shrink-0 text-xs bg-white/10 text-white/50 px-1.5 py-0.5 rounded-full">Em breve</span>
+                </div>
 
                 <button id="sidebar-security" onClick={() => { onNavigate('SECURITY_PAGE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'SECURITY_PAGE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Shield className="w-4 h-4 shrink-0" /> <span className="truncate">Órgãos de Segurança</span>

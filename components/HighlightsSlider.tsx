@@ -21,7 +21,6 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
       'highlight-rir', 
       'highlight-events-reg',
       'portal-fornecedores-new',
-      'leis-decretos-app'
   ];
   
   const highlightSlides = highlightIds
