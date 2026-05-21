@@ -8,6 +8,8 @@ import { User } from '../types';
 import { ShieldAlert, ArrowLeft, RefreshCw, UserCheck, Clock, Building, Download, Users, FileText, Filter, ArrowDownAZ, ArrowUpAZ, Calendar } from 'lucide-react';
 import { authService } from '../services/authService';
 import { analyticsService } from '../services/analyticsService';
+import { auth } from '../firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 
 interface AdminPanelProps {
@@ -24,9 +26,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
   const [eventsList, setEventsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState<SortOption>('NEWEST');
+  const [firebaseVerified, setFirebaseVerified] = useState(false);
 
-  // Verificação de segurança (Case Insensitive)
-  const isAdmin = user.email.toLowerCase() === 'marketing@hoteisrio.com.br';
+  // Verificação via Firebase Auth (não depende de localStorage)
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
+      setFirebaseVerified(fbUser?.email?.toLowerCase() === 'marketing@hoteisrio.com.br');
+    });
+    return unsubscribe;
+  }, []);
+
+  const isAdmin = firebaseVerified;
 
   useEffect(() => {
     if (isAdmin) {
@@ -89,19 +99,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ user, onBack }) => {
     // Obter headers dinamicamente
     const headers = Object.keys(sortedData[0]);
     
-    // Criar conteúdo CSV
+    const sanitizeCsvCell = (raw: any): string => {
+      let value = raw == null ? '' : typeof raw === 'object' ? JSON.stringify(raw) : String(raw);
+      // Prefixar com apóstrofo para neutralizar fórmulas do Excel (CSV injection)
+      if (value.length > 0 && ['=', '+', '-', '@', '\t', '\r'].includes(value[0])) {
+        value = "'" + value;
+      }
+      return `"${value.replace(/"/g, '""')}"`;
+    };
+
     const csvContent = [
-      headers.join(','), // Header row
-      ...sortedData.map(row => 
-        headers.map(fieldName => {
-          let value = row[fieldName] || '';
-          // Escapar aspas e vírgulas para CSV válido
-          if (typeof value === 'string') {
-             value = `"${value.replace(/"/g, '""')}"`;
-          }
-          return value;
-        }).join(',')
-      )
+      headers.map(h => `"${h}"`).join(','),
+      ...sortedData.map(row => headers.map(f => sanitizeCsvCell(row[f])).join(','))
     ].join('\n');
 
     // Adiciona BOM para o Excel abrir corretamente com acentos

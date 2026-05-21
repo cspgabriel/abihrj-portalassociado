@@ -24,10 +24,9 @@ export const requestService = {
           ...data,
           createdAt: serverTimestamp()
         });
-        console.log("Documento salvo no Firebase: ", docRef.id);
         return docRef.id;
       } catch (e: any) {
-        console.warn("Falha ao salvar no Firebase (Erro de permissão ou chave). Salvando localmente.", e.message);
+        // Fallback para localStorage se Firebase indisponível
         // Se der erro (ex: permissão negada no Firestore), cai pro fallback
       }
     }
@@ -47,7 +46,6 @@ export const requestService = {
       
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      console.log("Documento salvo localmente (Fallback): ", newRequest.id);
       return newRequest.id;
     } catch (e) {
       throw new Error("Não foi possível salvar a solicitação.");
