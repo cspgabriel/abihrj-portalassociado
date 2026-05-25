@@ -36,7 +36,7 @@ const WhatsAppGroupsPage: React.FC<WhatsAppGroupsPageProps> = ({ onBack }) => {
         <div className="inline-block p-4 bg-green-100 rounded-full text-green-600 mb-4">
           <MessageCircle className="w-10 h-10" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Comunidade HoteisRio</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Comunidade ABIH-RJ</h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
           Conecte-se com outros profissionais do setor. Participe dos grupos oficiais e receba informações, alertas de segurança e oportunidades em tempo real.
         </p>

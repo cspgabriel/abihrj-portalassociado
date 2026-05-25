@@ -35,7 +35,7 @@ const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onBack, onOpenCalcula
               <Calculator className="w-16 h-16 text-yellow-300" strokeWidth={1.5} />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">Calculadoras HoteisRio</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">Calculadoras ABIH-RJ</h1>
               <p className="text-emerald-50 text-lg md:text-xl max-w-2xl leading-relaxed">
                 Ferramentas essenciais para Revenue Management. Calcule ADR, RevPAR, GOPPAR e analise a saúde financeira do seu hotel em segundos.
               </p>

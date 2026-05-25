@@ -21,8 +21,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
         
         <div className="max-w-7xl mx-auto px-6 pt-16 pb-24 relative z-10 text-center">
           <img 
-             src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-             alt="HoteisRio" 
+             src="/logo-abih-rj-branca.png" 
+             alt="ABIH-RJ" 
              className="h-16 mx-auto mb-8 opacity-90"
           />
           <h1 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
@@ -60,7 +60,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
                 Fornecedores em Destaque
               </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Banners dos parceiros oficiais com condições especiais para associados HoteisRio.
+                Banners dos parceiros oficiais com condições especiais para associados ABIH-RJ.
               </p>
             </div>
           </div>

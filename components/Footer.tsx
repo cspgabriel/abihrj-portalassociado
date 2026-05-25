@@ -23,8 +23,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
           {/* Coluna 1: Sobre */}
           <div className="space-y-6">
             <img 
-              src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-              alt="HoteisRio" 
+              src="/logo-abih-rj-branca.png" 
+              alt="ABIH-RJ" 
               className="h-12 brightness-0 invert opacity-90"
             />
             <p className="text-sm leading-relaxed text-blue-100">

@@ -69,7 +69,7 @@ const ADVANCED_STEPS: Step[] = [
   {
     targetId: 'sidebar-commercial',
     title: 'Ações Comerciais',
-    description: 'Inscreva-se em feiras, workshops e roadshows organizados pelo HoteisRio.',
+    description: 'Inscreva-se em feiras, workshops e roadshows organizados pelo ABIH-RJ.',
     position: 'right'
   },
   {
@@ -104,7 +104,7 @@ const ADVANCED_STEPS: Step[] = [
   },
   {
     targetId: 'sidebar-courses',
-    title: 'HoteisRio Academy',
+    title: 'ABIH-RJ Academy',
     description: 'Plataforma de cursos e treinamentos online para capacitar sua equipe.',
     position: 'right'
   },

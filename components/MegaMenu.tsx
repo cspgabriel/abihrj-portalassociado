@@ -92,7 +92,7 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ isOpen, mode = 'BENEFITS', onClose,
           <div className="space-y-4 bg-blue-50/50 p-4 rounded-xl -mt-4 -mb-4">
              <h3 className="text-sm font-bold text-rio-blue uppercase tracking-wider border-b border-blue-100 pb-2 flex items-center gap-2">
                <Users className="w-4 h-4" />
-               Fóruns HoteisRio
+               Fóruns ABIH-RJ
              </h3>
              <ul className="space-y-3">
                {FORUMS_DATA.map((forum) => {

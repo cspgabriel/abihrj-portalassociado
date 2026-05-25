@@ -355,7 +355,7 @@ export default function App() {
            <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
                 <div className="bg-rio-blue p-4 rounded-xl shadow-lg shadow-blue-100">
-                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-12 w-auto" />
+                    <img src="/logo-abih-rj-branca.png" alt="ABIH-RJ" className="h-12 w-auto" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-gray-800">

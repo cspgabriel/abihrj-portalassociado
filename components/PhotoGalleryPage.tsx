@@ -54,7 +54,7 @@ const PhotoGalleryPage: React.FC<PhotoGalleryPageProps> = ({ onBack }) => {
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Galeria de Fotos</h1>
               <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">
-                Reviva os melhores momentos dos eventos, fóruns e celebrações do HoteisRio. Baixe fotos oficiais em alta qualidade.
+                Reviva os melhores momentos dos eventos, fóruns e celebrações do ABIH-RJ. Baixe fotos oficiais em alta qualidade.
               </p>
             </div>
           </div>
@@ -157,7 +157,7 @@ const PhotoGalleryPage: React.FC<PhotoGalleryPageProps> = ({ onBack }) => {
                  </button>
                  <div className="flex flex-col">
                     <h1 className="font-bold text-gray-800 text-sm md:text-base leading-tight line-clamp-1">{selectedEvent.title}</h1>
-                    <span className="text-xs text-gray-500 hidden md:block">Visualizador de Fotos HoteisRio</span>
+                    <span className="text-xs text-gray-500 hidden md:block">Visualizador de Fotos ABIH-RJ</span>
                  </div>
               </div>
 

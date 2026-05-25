@@ -1,4 +1,4 @@
-# Microsoft Store Listing Template for Portal do Associado HoteisRio
+# Microsoft Store Listing Template for Portal do Associado ABIH-RJ
 
 This document serves as a quick reference and template that you can copy/paste into the Microsoft
 Partner Center when creating or updating the store listing for the PWA.  It also includes a sample
@@ -21,7 +21,7 @@ For a **new** app, sign in and start the "Create a new app" workflow, then repla
 URL while the page is displayed.  Example placeholders below:
 
 ```
-https://partner.microsoft.com/en-us/dashboard/apps/new?appName=Portal%20do%20Associado%20HoteisRio&appType=Progressive%20Web%20App&packageFamilyName=com.hoteisrio.portal&description=Portal%20de%20adic%...&shortDescription=Portal%20de%20associa%C3%A7%C3%B5es&publisherName=SindhoteisRJ
+https://partner.microsoft.com/en-us/dashboard/apps/new?appName=Portal%20do%20Associado%20ABIH-RJ&appType=Progressive%20Web%20App&packageFamilyName=com.hoteisrio.portal&description=Portal%20de%20adic%...&shortDescription=Portal%20de%20associa%C3%A7%C3%B5es&publisherName=SindhoteisRJ
 ```
 
 > **Note:** the exact parameters and their names are not officially advertised and may change; use
@@ -29,7 +29,7 @@ your browser's developer tools to inspect form field names after initiating a ne
 append them to the URL.
 
 The idea is: start with the URL above, then manually edit query parameters such as:
-- `appName` = **Portal do Associado HoteisRio**
+- `appName` = **Portal do Associado ABIH-RJ**
 - `publisherName` = **SindhoteisRJ**
 - `description` = long description (URL‑encoded)
 - `shortDescription` = short blurb
@@ -43,7 +43,7 @@ republish or update the listing.
 
 ## Listing information checklist
 
-- **App name:** Portal do Associado HoteisRio
+- **App name:** Portal do Associado ABIH-RJ
 - **Subtitle/short description:** Catálogo de benefícios e serviços para associados da rede
 - **Long description:** (use marketing text from README or website) \* Provide full features list,
   gamification, CRM, integração com Gemini AI, etc.
@@ -63,9 +63,9 @@ Below is an example URL you can start from; replace the placeholder values with 
 
 ```
 https://partner.microsoft.com/en-us/dashboard/apps/{appId}/properties/general?
-  appName=Portal%20do%20Associado%20HoteisRio&
+  appName=Portal%20do%20Associado%20ABIH-RJ&
   shortDescription=Benef%C3%ADcios%20para%20associados&
-  description=O%20Portal%20do%20Associado%20HoteisRio%20%3A%20acesso%20%C3%A0%20benef%C3%ADcios%2C%20eventos%2C%20servi%C3%A7os%20e%20mais.&
+  description=O%20Portal%20do%20Associado%20ABIH-RJ%20%3A%20acesso%20%C3%A0%20benef%C3%ADcios%2C%20eventos%2C%20servi%C3%A7os%20e%20mais.&
   packageFamilyName=com.hoteisrio.portal&
   publisherName=SindhoteisRJ&
   websiteUrl=https%3A%2F%2Fsindhoteisrj.com.br

@@ -53,7 +53,7 @@ const ForumsOverviewPage: React.FC<ForumsOverviewPageProps> = ({ onBack, onForum
                     Por que participar?
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                    Os fóruns são espaços exclusivos para associados HoteisRio. Aqui, gestores de diferentes áreas (RH, Comercial, Segurança, etc.) se reúnem periodicamente para trocar experiências, resolver problemas comuns e definir estratégias unificadas para o destino Rio de Janeiro.
+                    Os fóruns são espaços exclusivos para associados ABIH-RJ. Aqui, gestores de diferentes áreas (RH, Comercial, Segurança, etc.) se reúnem periodicamente para trocar experiências, resolver problemas comuns e definir estratégias unificadas para o destino Rio de Janeiro.
                 </p>
             </div>
             <div className="flex gap-4">

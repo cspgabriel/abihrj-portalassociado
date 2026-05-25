@@ -9,7 +9,7 @@ export const COMMERCIAL_SUB_ACTIONS = [
   {
     id: 'commercial-fairs',
     title: 'Inscrições em Feiras',
-    description: 'Garanta sua participação nos estandes da HoteisRio em feiras nacionais e internacionais (WTM, ABAV, FIT, etc).',
+    description: 'Garanta sua participação nos estandes da ABIH-RJ em feiras nacionais e internacionais (WTM, ABAV, FIT, etc).',
     iconName: 'Globe',
     buttonText: 'Inscrições em Breve!',
     link: null,
@@ -99,21 +99,25 @@ export const GAMIFICATION_BADGES: GamificationBadge[] = [
 ];
 
 // ─── CRM / Cadastro ───────────────────────────────────────────────────────────
+// TODO(abih-rj): trocar pelo formulário oficial ABIH-RJ
 export const CRM_LINK = 'https://forms.gle/hoteisrio-cadastro';
 
 // ─── Rodapé ──────────────────────────────────────────────────────────────────
+// TODO(abih-rj): validar TODOS os campos institucionais abaixo com a ABIH-RJ
+// (CNPJ, endereço, CEP, telefone, e-mail, redes sociais).
+// Valores atuais herdados do portal HoteisRio.
 export const FOOTER_DATA = {
-  razaoSocial: 'HoteisRio – Associação de Hotéis do Rio de Janeiro',
-  cnpj: '29.757.975/0001-55',
-  address: 'Av. Rio Branco, 156 – Sala 1408, Centro',
-  cep: '20040-901',
-  phone: '(21) 2533-2848',
-  email: 'contato@hoteisrio.com.br',
+  razaoSocial: 'ABIH-RJ – Associação Brasileira da Indústria de Hotéis - Seção Rio de Janeiro',
+  cnpj: '29.757.975/0001-55', // TODO(abih-rj): substituir pelo CNPJ da ABIH-RJ
+  address: 'Av. Rio Branco, 156 – Sala 1408, Centro', // TODO(abih-rj)
+  cep: '20040-901', // TODO(abih-rj)
+  phone: '(21) 2533-2848', // TODO(abih-rj)
+  email: 'contato@hoteisrio.com.br', // TODO(abih-rj): substituir por e-mail @abihrj.com.br
   socials: {
-    instagram: 'https://instagram.com/hoteisrio',
-    linkedin: 'https://linkedin.com/company/hoteisrio',
+    instagram: 'https://instagram.com/hoteisrio', // TODO(abih-rj)
+    linkedin: 'https://linkedin.com/company/hoteisrio', // TODO(abih-rj)
     youtube: '',
-    facebook: 'https://facebook.com/hoteisrio',
+    facebook: 'https://facebook.com/hoteisrio', // TODO(abih-rj)
   },
 };
 
@@ -130,6 +134,8 @@ export const WHATSAPP_GROUPS: { id: string; name: string; description: string; l
 ];
 
 // ─── Contatos da Equipe ───────────────────────────────────────────────────────
+// TODO(abih-rj): substituir TODOS os contatos abaixo pelos da equipe ABIH-RJ
+// (nomes, e-mails @abihrj.com.br e WhatsApps reais).
 export const TEAM_CONTACTS: { sector: string; manager: string; email: string; whatsapp?: string }[] = [
   { sector: 'Presidência',              manager: 'Fernando Haddad',       email: 'presidencia@hoteisrio.com.br' },
   { sector: 'Jurídico & Compliance',   manager: 'Dra. Ana Beatriz Lima',  email: 'juridico@hoteisrio.com.br',   whatsapp: '5521999990001' },
@@ -154,10 +160,10 @@ export const HOTEL_SECTORS: { id: HotelSector; label: string }[] = [
 
 // ─── Eventos da Associação ────────────────────────────────────────────────────
 export const ASSOCIATION_EVENTS: { id: string; title: string; date: string; description: string; location: string; status: string }[] = [
-  { id: 'evt-01', title: 'Assembleia Geral Ordinária 2025',      date: '10 de Junho, 14:00',    description: 'Apresentação de resultados, votação de diretrizes e eleição de conselho.',      location: 'HoteisRio – Sala de Reuniões', status: 'Confirmado' },
+  { id: 'evt-01', title: 'Assembleia Geral Ordinária 2025',      date: '10 de Junho, 14:00',    description: 'Apresentação de resultados, votação de diretrizes e eleição de conselho.',      location: 'ABIH-RJ – Sala de Reuniões', status: 'Confirmado' },
   { id: 'evt-02', title: 'Workshop Revenue Management',          date: '25 de Junho, 09:00',    description: 'Técnicas avançadas de precificação dinâmica e gestão de receita.',               location: 'Hotel Windsor Barra – Auditório', status: 'Confirmado' },
   { id: 'evt-03', title: 'Fórum de Segurança Hoteleira',        date: '08 de Julho, 10:00',    description: 'Análise de incidentes recentes, novas tecnologias e procedimentos de segurança.',location: 'Online – Zoom', status: 'Confirmado' },
-  { id: 'evt-04', title: 'Café com o Presidente',               date: '22 de Julho, 08:30',    description: 'Encontro informal para debater pautas do setor com a presidência da associação.', location: 'HoteisRio – Sede', status: 'Confirmado' },
+  { id: 'evt-04', title: 'Café com o Presidente',               date: '22 de Julho, 08:30',    description: 'Encontro informal para debater pautas do setor com a presidência da associação.', location: 'ABIH-RJ – Sede', status: 'Confirmado' },
   { id: 'evt-05', title: 'Treinamento Atendimento ao Cliente',  date: '05 de Agosto, 09:00',   description: 'Capacitação em hospitalidade e gestão de reclamações para equipes de frente.',    location: 'Online – Google Meet', status: 'Em breve' },
 ];
 
@@ -178,7 +184,7 @@ export const FORUMS_DATA: Forum[] = [
     description: 'Gestão de pessoas, recrutamento, treinamento e retenção de talentos no setor hoteleiro.',
     iconName: 'Users',
     imageUrl: '',
-    nextEdition: { date: '25 de Junho de 2025', location: 'HoteisRio – Sede', topic: 'Planos de cargos e salários 2025-2026' },
+    nextEdition: { date: '25 de Junho de 2025', location: 'ABIH-RJ – Sede', topic: 'Planos de cargos e salários 2025-2026' },
     lastEditions: [{ date: 'Maio/2025', summary: 'Mapeamento de competências e trilhas de desenvolvimento.' }],
   },
   {

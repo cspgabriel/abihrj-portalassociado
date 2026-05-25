@@ -73,7 +73,7 @@ const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }
             </button>
             <div className="flex flex-col">
                <h1 className="font-bold text-gray-800 text-sm md:text-base leading-tight">{benefit.title}</h1>
-               <span className="text-xs text-gray-500 hidden md:block">Navegador Seguro HoteisRio</span>
+               <span className="text-xs text-gray-500 hidden md:block">Navegador Seguro ABIH-RJ</span>
             </div>
          </div>
 

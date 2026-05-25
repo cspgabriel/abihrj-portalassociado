@@ -42,7 +42,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800">Olá, {user.name.split(' ')[0]} 👋</h1>
-                    <p className="text-gray-500">Bem-vindo ao seu painel exclusivo HoteisRio.</p>
+                    <p className="text-gray-500">Bem-vindo ao seu painel exclusivo ABIH-RJ.</p>
                 </div>
                 <div className="flex gap-2">
                     <button 
@@ -123,7 +123,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                               Fornecedores em Destaque
                             </h3>
                             <p className="text-xs text-gray-500 mb-4">
-                              Ofertas e condições especiais dos parceiros oficiais HoteisRio.
+                              Ofertas e condições especiais dos parceiros oficiais ABIH-RJ.
                             </p>
                             <div className="flex justify-center">
                               <iframe
@@ -133,7 +133,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                                 frameBorder="0"
                                 scrolling="no"
                                 style={{ border: 'none', overflow: 'hidden', maxWidth: '100%', borderRadius: 8, display: 'block', margin: '0 auto' }}
-                                title="Fornecedores HoteisRio"
+                                title="Fornecedores ABIH-RJ"
                                 loading="lazy"
                               />
                             </div>

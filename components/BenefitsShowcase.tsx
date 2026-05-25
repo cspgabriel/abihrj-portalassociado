@@ -31,8 +31,8 @@ const BenefitsShowcase: React.FC<BenefitsShowcaseProps> = ({ onBack }) => {
       {/* Navbar Minimalista */}
       <nav className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 z-50 px-6 py-4 flex justify-between items-center">
          <img 
-            src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-            alt="HoteisRio" 
+            src="/logo-abih-rj-branca.png" 
+            alt="ABIH-RJ" 
             className="h-8 filter invert brightness-0" 
             style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }}
          />
@@ -58,7 +58,7 @@ const BenefitsShowcase: React.FC<BenefitsShowcaseProps> = ({ onBack }) => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-rio-blue to-blue-600">em suas mãos.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Descubra todas as ferramentas, parcerias e serviços exclusivos que o HoteisRio oferece para fortalecer o seu negócio.
+                Descubra todas as ferramentas, parcerias e serviços exclusivos que o ABIH-RJ oferece para fortalecer o seu negócio.
             </p>
             <button 
                 onClick={onBack}
