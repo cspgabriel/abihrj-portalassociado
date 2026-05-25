@@ -30,11 +30,10 @@ const BenefitsShowcase: React.FC<BenefitsShowcaseProps> = ({ onBack }) => {
       
       {/* Navbar Minimalista */}
       <nav className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 z-50 px-6 py-4 flex justify-between items-center">
-         <img 
-            src="/logo-abih-rj-branca.png" 
-            alt="ABIH-RJ" 
-            className="h-8 filter invert brightness-0" 
-            style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }}
+         <img
+            src="/logo-abih-rj-azul.webp"
+            alt="ABIH-RJ"
+            className="h-10"
          />
          <button 
             onClick={onBack}

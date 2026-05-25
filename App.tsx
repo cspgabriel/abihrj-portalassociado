@@ -368,9 +368,7 @@ export default function App() {
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in-up">
            <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
-                <div className="bg-rio-blue p-4 rounded-xl shadow-lg shadow-blue-100">
-                    <img src="/logo-abih-rj-branca.png" alt="ABIH-RJ" className="h-12 w-auto" />
-                </div>
+                <img src="/logo-abih-rj-azul.webp" alt="ABIH-RJ — Associação Brasileira da Indústria de Hotéis - Rio de Janeiro" className="h-20 w-auto" />
               </div>
               <h1 className="text-2xl font-bold text-gray-800">
                 {isForgotPassword ? 'Recuperar Senha' : 'Portal do Associado'}
