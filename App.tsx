@@ -45,7 +45,7 @@ import InteractiveTutorial from './components/InteractiveTutorial';
 import QuickAccessMenu from './components/QuickAccessMenu';
 import Footer from './components/Footer';
 
-import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid, Phone, Briefcase, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid, Phone, Briefcase, Eye, EyeOff, ShieldCheck, Hotel } from 'lucide-react';
 import { firestoreBenefitsService } from './services/firestoreBenefitsService';
 
 export default function App() {
@@ -76,6 +76,12 @@ export default function App() {
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Onboarding pós-login com Google (coleta hotel/cargo/whatsapp para usuários novos)
+  const [googleOnboardingUser, setGoogleOnboardingUser] = useState<User | null>(null);
+  const [onboardingHotel, setOnboardingHotel] = useState('');
+  const [onboardingCargo, setOnboardingCargo] = useState('');
+  const [onboardingWhatsapp, setOnboardingWhatsapp] = useState('');
 
   const scrollToTop = () => {
     try {
@@ -274,8 +280,36 @@ export default function App() {
     setAuthSuccess('');
     setLoading(true);
     try {
-      const loggedUser = await authService.loginWithGoogle();
-      if (loggedUser) setUser(loggedUser);
+      const { user: loggedUser, needsOnboarding } = await authService.loginWithGoogle();
+      if (needsOnboarding) {
+        // Mostra etapa 2 — coleta de hotel/cargo/whatsapp
+        setGoogleOnboardingUser(loggedUser);
+        setOnboardingHotel('');
+        setOnboardingCargo('');
+        setOnboardingWhatsapp('');
+      } else if (loggedUser) {
+        setUser(loggedUser);
+      }
+    } catch (err: any) {
+      setAuthError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCompleteGoogleOnboarding = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!googleOnboardingUser) return;
+    setAuthError('');
+    setLoading(true);
+    try {
+      const completed = await authService.completeGoogleOnboarding(googleOnboardingUser.id, {
+        hotel: onboardingHotel,
+        cargo: onboardingCargo,
+        whatsapp: onboardingWhatsapp,
+      });
+      setGoogleOnboardingUser(null);
+      setUser(completed);
     } catch (err: any) {
       setAuthError(err.message);
     } finally {
@@ -359,6 +393,112 @@ export default function App() {
 
   if (currentView === 'BENEFITS_SHOWCASE') {
       return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
+  }
+
+  // Etapa 2 do cadastro via Google — coleta hotel/cargo/whatsapp
+  if (googleOnboardingUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in-up">
+          <div className="text-center mb-6">
+            <div className="flex justify-center mb-4">
+              <img src="/logo-abih-rj-azul.webp" alt="ABIH-RJ" className="h-16 w-auto" />
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              {googleOnboardingUser.avatarUrl && (
+                <img src={googleOnboardingUser.avatarUrl} alt="" className="w-8 h-8 rounded-full" />
+              )}
+              <span className="text-sm text-gray-600">
+                Olá, <strong className="text-gray-900">{googleOnboardingUser.name.split(' ')[0]}</strong>
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800">Complete seu cadastro</h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Precisamos de mais alguns dados para liberar seu acesso ao Portal.
+            </p>
+          </div>
+
+          <form onSubmit={handleCompleteGoogleOnboarding} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nome do Hotel <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <Hotel className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  required
+                  autoFocus
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                  value={onboardingHotel}
+                  onChange={e => setOnboardingHotel(e.target.value)}
+                  placeholder="Ex: Hotel Copacabana Palace"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Cargo <span className="text-gray-400 font-normal">(opcional)</span>
+              </label>
+              <div className="relative">
+                <Briefcase className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                  value={onboardingCargo}
+                  onChange={e => setOnboardingCargo(e.target.value)}
+                  placeholder="Ex: Gerente Geral, Recepcionista..."
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                WhatsApp <span className="text-gray-400 font-normal">(opcional)</span>
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                  value={onboardingWhatsapp}
+                  onChange={e => setOnboardingWhatsapp(e.target.value)}
+                  placeholder="(21) 99999-9999"
+                />
+              </div>
+            </div>
+
+            {authError && (
+              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+                {authError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading || !onboardingHotel.trim()}
+              className="w-full bg-gradient-to-r from-rio-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+            >
+              <CheckCircle className="w-5 h-5" />
+              {loading ? 'Salvando...' : 'Concluir e Acessar Portal'}
+            </button>
+
+            <button
+              type="button"
+              onClick={async () => {
+                await authService.logout();
+                setGoogleOnboardingUser(null);
+              }}
+              className="w-full text-xs text-gray-500 hover:text-rio-blue hover:underline"
+            >
+              Cancelar e sair
+            </button>
+          </form>
+        </div>
+      </div>
+    );
   }
 
   const publicViews = ['BENEFITS_SHOWCASE'];
