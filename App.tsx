@@ -45,7 +45,7 @@ import InteractiveTutorial from './components/InteractiveTutorial';
 import QuickAccessMenu from './components/QuickAccessMenu';
 import Footer from './components/Footer';
 
-import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid, Phone, Briefcase, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid, Phone, Briefcase, Eye, EyeOff, ShieldCheck, Hotel } from 'lucide-react';
 import { firestoreBenefitsService } from './services/firestoreBenefitsService';
 
 export default function App() {
@@ -76,6 +76,12 @@ export default function App() {
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Onboarding pós-login com Google (coleta hotel/cargo/whatsapp para usuários novos)
+  const [googleOnboardingUser, setGoogleOnboardingUser] = useState<User | null>(null);
+  const [onboardingHotel, setOnboardingHotel] = useState('');
+  const [onboardingCargo, setOnboardingCargo] = useState('');
+  const [onboardingWhatsapp, setOnboardingWhatsapp] = useState('');
 
   const scrollToTop = () => {
     try {
@@ -269,6 +275,48 @@ export default function App() {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setAuthError('');
+    setAuthSuccess('');
+    setLoading(true);
+    try {
+      const { user: loggedUser, needsOnboarding } = await authService.loginWithGoogle();
+      if (needsOnboarding) {
+        // Mostra etapa 2 — coleta de hotel/cargo/whatsapp
+        setGoogleOnboardingUser(loggedUser);
+        setOnboardingHotel('');
+        setOnboardingCargo('');
+        setOnboardingWhatsapp('');
+      } else if (loggedUser) {
+        setUser(loggedUser);
+      }
+    } catch (err: any) {
+      setAuthError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCompleteGoogleOnboarding = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!googleOnboardingUser) return;
+    setAuthError('');
+    setLoading(true);
+    try {
+      const completed = await authService.completeGoogleOnboarding(googleOnboardingUser.id, {
+        hotel: onboardingHotel,
+        cargo: onboardingCargo,
+        whatsapp: onboardingWhatsapp,
+      });
+      setGoogleOnboardingUser(null);
+      setUser(completed);
+    } catch (err: any) {
+      setAuthError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleBenefitClick = (benefit: Benefit) => {
     scrollToTop();
     analyticsService.logEvent({
@@ -347,6 +395,112 @@ export default function App() {
       return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
   }
 
+  // Etapa 2 do cadastro via Google — coleta hotel/cargo/whatsapp
+  if (googleOnboardingUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rio-blue to-blue-900 p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in-up">
+          <div className="text-center mb-6">
+            <div className="flex justify-center mb-4">
+              <img src="/logo-abih-rj-azul.webp" alt="ABIH-RJ" className="h-16 w-auto" />
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              {googleOnboardingUser.avatarUrl && (
+                <img src={googleOnboardingUser.avatarUrl} alt="" className="w-8 h-8 rounded-full" />
+              )}
+              <span className="text-sm text-gray-600">
+                Olá, <strong className="text-gray-900">{googleOnboardingUser.name.split(' ')[0]}</strong>
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800">Complete seu cadastro</h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Precisamos de mais alguns dados para liberar seu acesso ao Portal.
+            </p>
+          </div>
+
+          <form onSubmit={handleCompleteGoogleOnboarding} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nome do Hotel <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <Hotel className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  required
+                  autoFocus
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                  value={onboardingHotel}
+                  onChange={e => setOnboardingHotel(e.target.value)}
+                  placeholder="Ex: Hotel Copacabana Palace"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Cargo <span className="text-gray-400 font-normal">(opcional)</span>
+              </label>
+              <div className="relative">
+                <Briefcase className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                  value={onboardingCargo}
+                  onChange={e => setOnboardingCargo(e.target.value)}
+                  placeholder="Ex: Gerente Geral, Recepcionista..."
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                WhatsApp <span className="text-gray-400 font-normal">(opcional)</span>
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                  value={onboardingWhatsapp}
+                  onChange={e => setOnboardingWhatsapp(e.target.value)}
+                  placeholder="(21) 99999-9999"
+                />
+              </div>
+            </div>
+
+            {authError && (
+              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+                {authError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading || !onboardingHotel.trim()}
+              className="w-full bg-gradient-to-r from-rio-blue to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+            >
+              <CheckCircle className="w-5 h-5" />
+              {loading ? 'Salvando...' : 'Concluir e Acessar Portal'}
+            </button>
+
+            <button
+              type="button"
+              onClick={async () => {
+                await authService.logout();
+                setGoogleOnboardingUser(null);
+              }}
+              className="w-full text-xs text-gray-500 hover:text-rio-blue hover:underline"
+            >
+              Cancelar e sair
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   const publicViews = ['BENEFITS_SHOWCASE'];
   if (!user && !publicViews.includes(currentView)) {
     return (
@@ -354,9 +508,7 @@ export default function App() {
         <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full animate-fade-in-up">
            <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
-                <div className="bg-rio-blue p-4 rounded-xl shadow-lg shadow-blue-100">
-                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-12 w-auto" />
-                </div>
+                <img src="/logo-abih-rj-azul.webp" alt="ABIH-RJ — Associação Brasileira da Indústria de Hotéis - Rio de Janeiro" className="h-20 w-auto" />
               </div>
               <h1 className="text-2xl font-bold text-gray-800">
                 {isForgotPassword ? 'Recuperar Senha' : 'Portal do Associado'}
@@ -503,7 +655,32 @@ export default function App() {
                 {isForgotPassword ? 'Enviar Link de Recuperação' : isRegistering ? 'Criar Conta' : 'Entrar'}
               </button>
            </form>
-           
+
+           {!isForgotPassword && (
+             <>
+               <div className="my-5 flex items-center gap-3">
+                 <div className="flex-1 h-px bg-gray-200" />
+                 <span className="text-xs text-gray-400 uppercase tracking-wider">ou</span>
+                 <div className="flex-1 h-px bg-gray-200" />
+               </div>
+               <button
+                 type="button"
+                 onClick={handleGoogleLogin}
+                 disabled={loading}
+                 className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:border-gray-400 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                 aria-label="Continuar com Google"
+               >
+                 <svg className="w-5 h-5" viewBox="0 0 48 48" aria-hidden="true">
+                   <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+                   <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+                   <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+                   <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571.001-.001.002-.001.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+                 </svg>
+                 Continuar com Google
+               </button>
+             </>
+           )}
+
            <div className="mt-6 text-center space-y-4">
              {!isForgotPassword && (
                 <button 

@@ -65,8 +65,8 @@ const Layout: React.FC<LayoutProps> = ({
     <div className="flex flex-col h-full bg-rio-blue text-white">
       <div className="p-6 flex justify-center shrink-0">
         <img 
-           src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-           alt="HoteisRio" 
+           src="/logo-abih-rj-branca.png" 
+           alt="ABIH-RJ" 
            className="h-16 w-auto object-contain brightness-0 invert"
         />
       </div>
@@ -234,11 +234,10 @@ const Layout: React.FC<LayoutProps> = ({
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative" id="main-content">
             <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between text-rio-blue shadow-sm z-30 shrink-0 h-16">
                 <div className="flex items-center gap-2">
-                    <img 
-                        src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-                        alt="HoteisRio" 
-                        className="h-8 w-auto filter invert brightness-0"
-                        style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }}
+                    <img
+                        src="/logo-abih-rj-azul.webp"
+                        alt="ABIH-RJ"
+                        className="h-8 w-auto"
                     />
                 </div>
                 <div className="flex items-center gap-3">

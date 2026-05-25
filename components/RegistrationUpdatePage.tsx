@@ -15,7 +15,7 @@ const RegistrationUpdatePage: React.FC<RegistrationUpdatePageProps> = ({ onBack 
   const [isWhatsappCopied, setIsWhatsappCopied] = useState(false);
   const [inviteSent, setInviteSent] = useState(false);
 
-  const whatsappMessage = `Olá! 👋\n\nEstou atualizando o cadastro da nossa equipe junto ao HoteisRio.\n\nÉ super importante que todos se cadastrem para receber o Informativo Mensal, convites para eventos exclusivos e alertas de segurança. 🛡️\n\nCadastre-se rapidinho aqui: ${CRM_LINK}\n\nAssim ninguém perde nada importante do setor! 🚀`;
+  const whatsappMessage = `Olá! 👋\n\nEstou atualizando o cadastro da nossa equipe junto ao ABIH-RJ.\n\nÉ super importante que todos se cadastrem para receber o Informativo Mensal, convites para eventos exclusivos e alertas de segurança. 🛡️\n\nCadastre-se rapidinho aqui: ${CRM_LINK}\n\nAssim ninguém perde nada importante do setor! 🚀`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(CRM_LINK);
@@ -42,8 +42,8 @@ const RegistrationUpdatePage: React.FC<RegistrationUpdatePageProps> = ({ onBack 
   };
 
   const openMailClient = () => {
-    const subject = encodeURIComponent("Convite Oficial: Acesso ao Informativo e Benefícios HoteisRio");
-    const body = encodeURIComponent(`Olá equipe,\n\nEstou atualizando os contatos do nosso hotel junto à Associação HoteisRio.\n\nPara garantir que todos tenham acesso aos benefícios, alertas de segurança e ao calendário de eventos e treinamentos, é fundamental que cada um realize seu cadastro no link abaixo:\n\n${CRM_LINK}\n\nO cadastro é rápido e garante o recebimento do Informativo Mensal com todas as novidades do setor.\n\nConto com a colaboração de todos.\n\nAtenciosamente,`);
+    const subject = encodeURIComponent("Convite Oficial: Acesso ao Informativo e Benefícios ABIH-RJ");
+    const body = encodeURIComponent(`Olá equipe,\n\nEstou atualizando os contatos do nosso hotel junto à Associação ABIH-RJ.\n\nPara garantir que todos tenham acesso aos benefícios, alertas de segurança e ao calendário de eventos e treinamentos, é fundamental que cada um realize seu cadastro no link abaixo:\n\n${CRM_LINK}\n\nO cadastro é rápido e garante o recebimento do Informativo Mensal com todas as novidades do setor.\n\nConto com a colaboração de todos.\n\nAtenciosamente,`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
@@ -113,7 +113,7 @@ const RegistrationUpdatePage: React.FC<RegistrationUpdatePageProps> = ({ onBack 
                
                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 md:w-72 shrink-0">
                   <Mail className="w-8 h-8 text-rio-blue mb-3" />
-                  <h3 className="font-bold text-gray-800 text-sm mb-1">Informativo HoteisRio</h3>
+                  <h3 className="font-bold text-gray-800 text-sm mb-1">Informativo ABIH-RJ</h3>
                   <p className="text-xs text-gray-500">
                     Ao atualizar seu cadastro, você garante o recebimento do nosso informativo oficial com todas as novidades do setor.
                   </p>
@@ -165,7 +165,7 @@ const RegistrationUpdatePage: React.FC<RegistrationUpdatePageProps> = ({ onBack 
                     </p>
                     
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 text-xs text-gray-500 italic mb-2">
-                      "Assunto: Convite Oficial: Acesso ao Informativo e Benefícios HoteisRio..."
+                      "Assunto: Convite Oficial: Acesso ao Informativo e Benefícios ABIH-RJ..."
                     </div>
 
                     <button 

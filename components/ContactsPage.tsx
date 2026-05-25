@@ -20,7 +20,7 @@ const ContactsPage: React.FC<ContactsPageProps> = ({ onBack }) => {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
         <div className="bg-gradient-to-r from-rio-blue to-blue-800 p-8 text-white">
           <h1 className="text-3xl font-bold mb-2">Equipe e Contatos</h1>
-          <p className="text-blue-100">Canais diretos de comunicação com os departamentos do HoteisRio.</p>
+          <p className="text-blue-100">Canais diretos de comunicação com os departamentos do ABIH-RJ.</p>
         </div>
 
         <div className="p-8">

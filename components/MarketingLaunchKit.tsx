@@ -10,12 +10,12 @@ const MarketingLaunchKit: React.FC<MarketingLaunchKitProps> = ({ onBack }) => {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [emailViewMode, setEmailViewMode] = useState<'PREVIEW' | 'CODE'>('PREVIEW');
 
-  const emailSubject = "🚀 Chegou! O Novo Portal do Associado HoteisRio está no ar";
+  const emailSubject = "🚀 Chegou! O Novo Portal do Associado ABIH-RJ está no ar";
   
   // Texto puro para cópia
   const emailBodyText = `Prezado(a) Associado(a),
 
-É com grande satisfação que apresentamos a sua nova central de inteligência e gestão: o **Novo Portal do Associado HoteisRio**.
+É com grande satisfação que apresentamos a sua nova central de inteligência e gestão: o **Novo Portal do Associado ABIH-RJ**.
 
 Desenvolvemos uma plataforma moderna, rápida e integrada para facilitar o seu dia a dia. Agora, em um único lugar, você tem acesso a:
 
@@ -23,28 +23,28 @@ Desenvolvemos uma plataforma moderna, rápida e integrada para facilitar o seu d
 ✅ Serviços Online: Solicitações jurídicas e demandas de ordem pública com um clique.
 ✅ Calendário Integrado: Todos os eventos da cidade e do setor hoteleiro.
 ✅ Comunidade: Acesso direto aos grupos de WhatsApp oficiais.
-✅ HoteisRio Academy: Treinamentos e cursos exclusivos para sua equipe.
+✅ ABIH-RJ Academy: Treinamentos e cursos exclusivos para sua equipe.
 
 Acesse agora mesmo:
-https://portal.hoteisrio.com.br
+https://associados.abihrj.com.br
 
 Dúvidas? Nossa nova Inteligência Artificial está pronta para te ajudar no canto da tela!
 
 Atenciosamente,
-Equipe HoteisRio`;
+Equipe ABIH-RJ`;
 
   const whatsappText = `Olá! 👋
 
 Grandes novidades para a hotelaria carioca! 🏨🚀
 
-Acabamos de lançar o *Novo Portal do Associado HoteisRio*. Tudo o que você precisa para gerir seu hotel e se conectar com o setor, agora em um só lugar.
+Acabamos de lançar o *Novo Portal do Associado ABIH-RJ*. Tudo o que você precisa para gerir seu hotel e se conectar com o setor, agora em um só lugar.
 
 🔹 Jurídico e Ordem Pública
 🔹 Calendário de Eventos 2026
 🔹 Clube de Benefícios
 🔹 Assistente Virtual Inteligente 🤖
 
-Acesse agora e confira: https://portal.hoteisrio.com.br
+Acesse agora e confira: https://associados.abihrj.com.br
 
 Contamos com você!`;
 
@@ -95,7 +95,7 @@ Contamos com você!`;
                         <h1 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
                             Novo Portal do <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-rio-gold to-yellow-200">
-                                Associado HoteisRio
+                                Associado ABIH-RJ
                             </span>
                         </h1>
                         <p className="text-blue-100 text-lg mb-8 leading-relaxed max-w-lg">
@@ -177,11 +177,11 @@ Contamos com você!`;
                             // HTML EMAIL PREVIEW SIMULATION
                             <div className="max-w-md mx-auto bg-white shadow-xl rounded-none border-t-4 border-rio-blue">
                                 <div className="p-6 text-center border-b border-gray-100 bg-gray-50">
-                                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-8 mx-auto filter invert brightness-0" style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }} />
+                                    <img src="/logo-abih-rj-azul.webp" alt="ABIH-RJ" className="h-10 mx-auto" />
                                 </div>
                                 <div className="p-8 text-gray-700 font-sans text-sm leading-relaxed">
                                     <p className="mb-4">Prezado(a) Associado(a),</p>
-                                    <p className="mb-6">É com grande satisfação que apresentamos a sua nova central de inteligência e gestão: o <strong>Novo Portal do Associado HoteisRio</strong>.</p>
+                                    <p className="mb-6">É com grande satisfação que apresentamos a sua nova central de inteligência e gestão: o <strong>Novo Portal do Associado ABIH-RJ</strong>.</p>
                                     
                                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6 text-left">
                                         <ul className="space-y-2">
@@ -199,7 +199,7 @@ Contamos com você!`;
 
                                     <p className="text-xs text-gray-500 text-center border-t border-gray-100 pt-4">
                                         Dúvidas? Nossa IA está pronta para ajudar no canto da tela!<br/>
-                                        Equipe HoteisRio
+                                        Equipe ABIH-RJ
                                     </p>
                                 </div>
                             </div>

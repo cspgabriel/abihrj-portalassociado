@@ -112,7 +112,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
               ) : (
                 <>
                   <p>
-                    O benefício <strong>{benefit.title}</strong> é uma das iniciativas da HoteisRio para fortalecer 
+                    O benefício <strong>{benefit.title}</strong> é uma das iniciativas da ABIH-RJ para fortalecer 
                     a hotelaria carioca. Este serviço foi desenhado para atender às necessidades específicas 
                     da categoria {benefit.category.toLowerCase()}, oferecendo suporte prático e estratégico.
                   </p>

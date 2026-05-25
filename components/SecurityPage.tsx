@@ -42,7 +42,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack }) => {
                  <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
                    <Shield className="w-6 h-6 text-white" />
                  </div>
-                 <span className="text-rio-gold font-bold tracking-wider text-sm uppercase">Segurança HoteisRio</span>
+                 <span className="text-rio-gold font-bold tracking-wider text-sm uppercase">Segurança ABIH-RJ</span>
                </div>
                <h1 className="text-3xl md:text-4xl font-bold mb-2">Órgãos de Segurança</h1>
                <p className="text-blue-100 max-w-2xl text-lg">
@@ -206,7 +206,7 @@ const SecurityPage: React.FC<SecurityPageProps> = ({ onBack }) => {
         <div className="text-center text-gray-400 text-sm pb-8">
            <p className="flex items-center justify-center gap-2">
              <Shield className="w-4 h-4" />
-             O HotéisRIO trabalha constantemente com as autoridades para garantir um ambiente seguro.
+             O ABIH-RJ trabalha constantemente com as autoridades para garantir um ambiente seguro.
            </p>
         </div>
 

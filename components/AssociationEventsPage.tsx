@@ -61,7 +61,7 @@ const AssociationEventsPage: React.FC<AssociationEventsPageProps> = ({ onBack })
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-8 overflow-hidden">
         <div className="bg-rio-blue p-8 text-white relative overflow-hidden">
           <div className="relative z-10">
-            <h1 className="text-3xl font-bold mb-2">Agenda HoteisRio</h1>
+            <h1 className="text-3xl font-bold mb-2">Agenda ABIH-RJ</h1>
             <p className="text-blue-100">Fóruns, reuniões setoriais e workshops exclusivos para associados.</p>
           </div>
           <Calendar className="absolute right-8 top-1/2 -translate-y-1/2 w-32 h-32 text-white/10" />

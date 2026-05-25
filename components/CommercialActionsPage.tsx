@@ -66,7 +66,7 @@ const CommercialActionsPage: React.FC<CommercialActionsPageProps> = ({ onBack })
     // Construct mailto link
     const recipient = "julie.souza@hoteisrio.com.br";
     const subject = encodeURIComponent("Sugestão de Nova Ação Comercial - Portal do Associado");
-    const body = encodeURIComponent(`Olá,\n\nGostaria de sugerir a seguinte ação comercial:\n\n${suggestion}\n\nAtenciosamente,\nAssociado HoteisRio`);
+    const body = encodeURIComponent(`Olá,\n\nGostaria de sugerir a seguinte ação comercial:\n\n${suggestion}\n\nAtenciosamente,\nAssociado ABIH-RJ`);
 
     // Open email client
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;

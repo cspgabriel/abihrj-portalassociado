@@ -85,7 +85,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
          <div className="flex items-center gap-3 pointer-events-auto">
             <span className="text-rio-blue font-bold tracking-wider uppercase text-[10px] border border-rio-blue px-2 py-0.5 rounded bg-rio-blue/10 backdrop-blur-sm">BETA</span>
             <div className="flex flex-col items-end leading-none">
-                <span className="font-bold text-lg tracking-tight">HoteisRio</span>
+                <span className="font-bold text-lg tracking-tight">ABIH-RJ</span>
                 <span className="text-rio-gold text-xs font-bold tracking-widest uppercase">Academy</span>
             </div>
          </div>

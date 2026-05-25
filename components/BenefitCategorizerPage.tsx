@@ -171,7 +171,7 @@ const BenefitCategorizerPage: React.FC<BenefitCategorizerPageProps> = ({ onBack 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 min-h-[500px] print:shadow-none print:border-0">
            {/* Print Header (Only shows on print) */}
            <div className="hidden print:block p-8 border-b border-gray-200">
-              <h1 className="text-2xl font-bold text-gray-900">Relatório de Benefícios - HoteisRio</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Relatório de Benefícios - ABIH-RJ</h1>
               <p className="text-sm text-gray-500">Documento gerado em {new Date().toLocaleDateString()}</p>
            </div>
 
@@ -251,7 +251,7 @@ const BenefitCategorizerPage: React.FC<BenefitCategorizerPageProps> = ({ onBack 
               })}
               
               <div className="mt-12 text-center text-xs text-gray-400 border-t pt-4">
-                 <p>Gerado pela Central do Associado HoteisRio</p>
+                 <p>Gerado pela Central do Associado ABIH-RJ</p>
               </div>
            </div>
         </div>

@@ -15,7 +15,7 @@ export const generateBenefitDetails = async (benefitTitle: string): Promise<stri
     const ai = getAiClient();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: `Você é um assistente virtual do HoteisRio (Associação de Hotéis do Rio de Janeiro).
+      contents: `Você é um assistente virtual do ABIH-RJ (Associação de Hotéis do Rio de Janeiro).
       
       Para o benefício "${benefitTitle}", forneça uma resposta curta e direta seguindo estritamente este formato:
       
@@ -42,7 +42,7 @@ export const sendChatMessage = async (history: string[], message: string): Promi
       
       Usuário: ${message}
       
-      Instrução do Sistema: Você é o assistente virtual do Portal do Associado HoteisRio. Ajude os hoteleiros com dúvidas sobre benefícios, legislação local (básica) e turismo no Rio. Seja breve, polido e prestativo.`,
+      Instrução do Sistema: Você é o assistente virtual do Portal do Associado ABIH-RJ. Ajude os hoteleiros com dúvidas sobre benefícios, legislação local (básica) e turismo no Rio. Seja breve, polido e prestativo.`,
     });
 
     return response.text || "Desculpe, não entendi.";

@@ -87,7 +87,7 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Todos os Benefícios</h1>
               <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">
-                Explore o catálogo completo de vantagens, serviços e ferramentas exclusivas para associados HoteisRio.
+                Explore o catálogo completo de vantagens, serviços e ferramentas exclusivas para associados ABIH-RJ.
               </p>
             </div>
           </div>
