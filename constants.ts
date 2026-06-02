@@ -69,6 +69,20 @@ export const BENEFITS_DATA: Benefit[] = [
     embedUrl: 'https://calendarioeventos.sindhoteisrj.com.br',
     externalLink: 'https://calendariodeeventos.sindhoteisrj.com.br/',
     customCta: 'Acessar Calendário 2026'
+  },
+  {
+    id: 'leis-decretos-app',
+    title: 'Leis e Decretos RJ',
+    description: 'Portal incorporado para consulta de leis, decretos e normas relevantes para a hotelaria carioca.',
+    category: BenefitCategory.LEGAL,
+    targetSectors: ['MANAGEMENT', 'LEGAL_DEPT'],
+    iconName: 'Gavel',
+    imageUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://leisedecretos.sindhoteisrj.com.br/portal-do-associado',
+    externalLink: 'https://leisedecretos.sindhoteisrj.com.br/portal-do-associado',
+    customCta: 'Acessar Leis e Decretos'
   }
 ];
 
