@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Perfil do usuário: cada usuário lê e escreve apenas o próprio documento
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null
+                  && request.auth.token.email == 'marketing@hoteisrio.com.br';
+    }
+
+    // Logs de acesso: qualquer autenticado pode criar; somente admin pode ler
+    match /access_logs/{logId} {
+      allow create: if request.auth != null;
+      allow read:   if request.auth != null
+                    && request.auth.token.email == 'marketing@hoteisrio.com.br';
+    }
+
+    // Logs de analytics: mesma política dos access_logs
+    match /analytics_logs/{logId} {
+      allow create: if request.auth != null;
+      allow read:   if request.auth != null
+                    && request.auth.token.email == 'marketing@hoteisrio.com.br';
+    }
+
+    // Chamados (solicitações de serviço): criador e admin podem ler o próprio documento
+    match /chamados/{requestId} {
+      allow create: if request.auth != null;
+      allow read:   if request.auth != null && (
+                      request.auth.uid == resource.data.userId ||
+                      request.auth.token.email == 'marketing@hoteisrio.com.br'
+                    );
+    }
+
+    // Benefícios: leitura para autenticados; escrita somente admin
+    match /benefits/{benefitId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null
+                   && request.auth.token.email == 'marketing@hoteisrio.com.br';
+    }
+  }
+}
