@@ -16,11 +16,12 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
   const highlightIds = [
       'calendar-2026',
       'highlight-top-hotel-25',
-      'natal-2025', 
-      'highlight-drinks', 
+      'rio-international-press',
+      'influencers-hub',
       'highlight-rir', 
       'highlight-events-reg',
       'portal-fornecedores-new',
+      'leis-decretos-app'
   ];
   
   const highlightSlides = highlightIds
@@ -63,15 +64,36 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
 
   const getSlideGradient = (id: string) => {
       switch (id) {
-          case 'calendar-2026': return 'from-indigo-600 to-purple-800';
-          case 'highlight-top-hotel-25': return 'from-yellow-500 to-amber-600';
-          case 'natal-2025': return 'from-red-700 to-red-900';
-          case 'highlight-drinks': return 'from-blue-700 to-slate-800';
-          case 'highlight-rir': return 'from-purple-900 to-black';
-          case 'highlight-job-fair': return 'from-green-700 to-teal-900';
-          case 'portal-fornecedores-new': return 'from-orange-600 to-amber-700';
-          case 'leis-decretos-app': return 'from-slate-700 to-slate-900';
-          default: return 'from-gray-700 to-gray-900';
+          case 'calendar-2026': return 'from-blue-950/95 via-blue-900/75 to-blue-700/35';
+          case 'highlight-top-hotel-25': return 'from-slate-950/95 via-slate-900/75 to-amber-700/30';
+          case 'rio-international-press': return 'from-slate-950/95 via-blue-950/75 to-cyan-700/30';
+          case 'influencers-hub': return 'from-slate-950/95 via-slate-900/70 to-pink-700/30';
+          case 'highlight-rir': return 'from-slate-950/95 via-purple-950/70 to-blue-700/25';
+          case 'highlight-job-fair': return 'from-slate-950/95 via-emerald-900/70 to-teal-700/30';
+          case 'portal-fornecedores-new': return 'from-slate-950/95 via-slate-900/75 to-orange-700/35';
+          case 'leis-decretos-app': return 'from-slate-950/95 via-slate-900/80 to-slate-600/35';
+          default: return 'from-slate-950/95 via-slate-900/75 to-blue-700/25';
+      }
+  };
+
+  const getSlideImage = (id: string, imageUrl?: string) => {
+      if (imageUrl) return imageUrl;
+
+      switch (id) {
+          case 'calendar-2026':
+            return 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=900&q=85';
+          case 'highlight-top-hotel-25':
+            return 'https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?auto=format&fit=crop&w=900&q=85';
+          case 'rio-international-press':
+            return 'https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=900&q=85';
+          case 'influencers-hub':
+            return 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=85';
+          case 'highlight-rir':
+            return 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=85';
+          case 'portal-fornecedores-new':
+            return 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85';
+          default:
+            return 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=85';
       }
   };
 
@@ -96,27 +118,34 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
                     <div 
                         key={`${slide.id}-${idx}`}
                         className={`
-                            relative overflow-hidden rounded-2xl p-6 h-64 cursor-pointer transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl
-                            bg-gradient-to-br ${gradientClass} text-white flex flex-col justify-between
+                            relative overflow-hidden rounded-2xl h-56 cursor-pointer transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl
+                            bg-slate-950 text-white flex flex-col justify-between
                         `}
                         onClick={() => onUseBenefit(slide)}
                     >
-                       {/* Background decoration */}
-                       <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 pointer-events-none" />
+                       <img
+                          src={getSlideImage(slide.id, slide.imageUrl)}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                       />
+                       <div className={`absolute inset-0 bg-gradient-to-r ${gradientClass}`} />
+                       <div className="absolute inset-y-0 right-0 w-1/3 border-l border-amber-300/30 opacity-70">
+                         <div className="absolute right-8 top-8 h-24 w-24 rounded-full border border-amber-300/50" />
+                       </div>
                        
-                       <div>
+                       <div className="relative z-10 p-5">
                            <div className="flex items-start justify-between mb-4 relative z-10">
-                                <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
-                                    <IconComponent className="w-6 h-6 text-white" />
+                                <div className="bg-white/15 p-3 rounded-xl backdrop-blur-md ring-1 ring-white/20">
+                                    <IconComponent className="w-5 h-5 text-white" />
                                 </div>
                                 {slide.isNew && (
-                                    <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                                    <span className="bg-white/15 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm ring-1 ring-white/20">
                                         Novo
                                     </span>
                                 )}
                            </div>
 
-                           <h3 className="text-xl font-bold mb-2 leading-tight line-clamp-2 relative z-10">
+                           <h3 className="text-xl font-black mb-2 leading-tight line-clamp-2 relative z-10">
                                {slide.title}
                            </h3>
                            <p className="text-sm text-white/80 line-clamp-2 relative z-10">
@@ -124,7 +153,7 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
                            </p>
                        </div>
 
-                       <div className="mt-4 flex items-center text-sm font-bold gap-2 group/btn relative z-10">
+                       <div className="relative z-10 m-5 mt-0 flex items-center text-sm font-black gap-2 group/btn">
                            {slide.customCta || "Acessar"}
                            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                        </div>

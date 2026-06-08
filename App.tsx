@@ -35,7 +35,6 @@ import WelcomeOnboarding from './components/WelcomeOnboarding';
 import TalentBankPage from './components/TalentBankPage';
 import BenefitsShowcase from './components/BenefitsShowcase';
 import PublicOrderPage from './components/PublicOrderPage';
-import LegalAdvisoryPage from './components/LegalAdvisoryPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -281,11 +280,6 @@ export default function App() {
         return;
     }
 
-    if (benefit.id === 'banco-talentos') {
-        navigateTo('TALENT_BANK');
-        return;
-    }
-
     if (benefit.id === 'public-order-01') {
       navigateTo('PUBLIC_ORDER_PAGE');
       return;
@@ -355,7 +349,7 @@ export default function App() {
            <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
                 <div className="bg-rio-blue p-4 rounded-xl shadow-lg shadow-blue-100">
-                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-12 w-auto" />
+                    <img src="https://abihrj.com.br/wp-content/uploads/2024/08/Logo-ABIH-RJ-BRANCA-1.webp" alt="ABIH-RJ" className="h-12 w-auto" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-gray-800">
@@ -558,7 +552,10 @@ export default function App() {
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'LEGAL_ADVISORY_PAGE': return <LegalAdvisoryPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'LEGAL_ADVISORY_PAGE': {
+        const legalBenefit = BENEFITS_DATA.find(b => b.id === 'juridico-01');
+        return legalBenefit ? <ServiceViewerPage benefit={legalBenefit} onBack={() => navigateTo('LANDING_PAGE')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
+      }
       case 'BENEFITS_SHOWCASE': return <BenefitsShowcase onBack={() => navigateTo('LANDING_PAGE')} />;
       default: return <LandingPage userName={safeUser.name} onNavigate={navigateTo} onBenefitClick={handleBenefitClick} />;
     }

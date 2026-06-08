@@ -15,39 +15,39 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
   const handleBenefit = (id: string) => onBenefitClick?.(id);
 
   return (
-    <footer className="bg-rio-blue text-blue-100 pt-16 pb-8 border-t border-blue-800">
+    <footer className="bg-[#002b64] text-blue-100 pt-16 pb-8 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-blue-800 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-white/10 pb-12">
           
           {/* Coluna 1: Sobre */}
           <div className="space-y-6">
             <img 
-              src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" 
-              alt="HoteisRio" 
-              className="h-12 brightness-0 invert opacity-90"
+              src="https://abihrj.com.br/wp-content/uploads/2024/08/Logo-ABIH-RJ-BRANCA-1.webp" 
+              alt="ABIH-RJ" 
+              className="h-12 opacity-90"
             />
             <p className="text-sm leading-relaxed text-blue-100">
               Fortalecendo a hotelaria carioca há décadas. Defendemos os interesses do setor, promovemos o turismo e oferecemos soluções estratégicas para nossos associados.
             </p>
             <div className="flex gap-4">
                {FOOTER_DATA.socials.instagram && (
-                 <a href={FOOTER_DATA.socials.instagram} target="_blank" rel="noreferrer" className="bg-blue-800 p-2 rounded-lg hover:bg-rio-gold hover:text-rio-blue transition-colors text-white">
+                 <a href={FOOTER_DATA.socials.instagram} target="_blank" rel="noreferrer" className="bg-white/10 p-2 rounded-lg hover:bg-rio-gold hover:text-[#002b64] transition-colors text-white">
                    <Instagram className="w-5 h-5" />
                  </a>
                )}
                {FOOTER_DATA.socials.linkedin && (
-                 <a href={FOOTER_DATA.socials.linkedin} target="_blank" rel="noreferrer" className="bg-blue-800 p-2 rounded-lg hover:bg-rio-gold hover:text-rio-blue transition-colors text-white">
+                 <a href={FOOTER_DATA.socials.linkedin} target="_blank" rel="noreferrer" className="bg-white/10 p-2 rounded-lg hover:bg-rio-gold hover:text-[#002b64] transition-colors text-white">
                    <Linkedin className="w-5 h-5" />
                  </a>
                )}
                {FOOTER_DATA.socials.youtube && (
-                 <a href={FOOTER_DATA.socials.youtube} target="_blank" rel="noreferrer" className="bg-blue-800 p-2 rounded-lg hover:bg-rio-gold hover:text-rio-blue transition-colors text-white">
+                 <a href={FOOTER_DATA.socials.youtube} target="_blank" rel="noreferrer" className="bg-white/10 p-2 rounded-lg hover:bg-rio-gold hover:text-[#002b64] transition-colors text-white">
                    <Youtube className="w-5 h-5" />
                  </a>
                )}
                {FOOTER_DATA.socials.facebook && (
-                 <a href={FOOTER_DATA.socials.facebook} target="_blank" rel="noreferrer" className="bg-blue-800 p-2 rounded-lg hover:bg-rio-gold hover:text-rio-blue transition-colors text-white">
+                 <a href={FOOTER_DATA.socials.facebook} target="_blank" rel="noreferrer" className="bg-white/10 p-2 rounded-lg hover:bg-rio-gold hover:text-[#002b64] transition-colors text-white">
                    <Facebook className="w-5 h-5" />
                  </a>
                )}
@@ -82,14 +82,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
                 </button>
               </li>
               <li>
-                <span className="flex items-center gap-2 text-sm text-white/30 cursor-not-allowed">
-                  <ArrowUpRight className="w-3 h-3" /> Leis e Decretos <span className="text-xs bg-white/10 px-1.5 py-0.5 rounded-full">Em breve</span>
-                </span>
-              </li>
-              {/* MUDANÇA: Kit de Marketing adicionado ao rodapé */}
-              <li>
-                <button onClick={() => handleNav('MARKETING_KIT')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
-                  <ArrowUpRight className="w-3 h-3" /> Kit de Marketing
+                <button onClick={() => handleBenefit('leis-decretos-app')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Leis e Decretos
                 </button>
               </li>
             </ul>

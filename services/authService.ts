@@ -188,9 +188,9 @@ export const authService = {
       try {
         await sendPasswordResetEmail(auth, email);
       } catch (error: any) {
+        if (error.code === 'auth/user-not-found') throw new Error('Usuário não encontrado.');
         if (error.code === 'auth/invalid-email') throw new Error('E-mail inválido.');
-        // Não revelar se o e-mail está ou não cadastrado (enumeração de usuários)
-        throw new Error('Se este e-mail estiver cadastrado, você receberá o link em breve.');
+        throw new Error('Erro ao enviar e-mail de recuperação. Tente novamente.');
       }
     } else {
       console.log("Mock: E-mail de recuperação enviado para " + email);
@@ -229,9 +229,7 @@ export const authService = {
             localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(userObj));
             callback(userObj);
           } else {
-            // Firebase confirmou que não há sessão ativa — limpa localStorage e desloga
-            localStorage.removeItem(LOCAL_STORAGE_SESSION_KEY);
-            callback(null);
+            callback(getStoredSessionUser());
           }
         });
         return () => {

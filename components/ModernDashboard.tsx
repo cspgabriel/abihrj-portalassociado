@@ -19,6 +19,7 @@ interface ModernDashboardProps {
 
 const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, onViewDetails }) => {
   const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'SERVICES'>('OVERVIEW');
+  const hiddenServiceIds = new Set(['sustainability-raiox', 'news-portal']);
 
   // Filter some quick tools for the dashboard
   const quickTools = BENEFITS_DATA.filter(b => 
@@ -49,7 +50,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                        onClick={() => setActiveTab('OVERVIEW')}
                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'OVERVIEW' ? 'bg-rio-blue text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                     >
-                        Visão Geral
+                        Todos os Benefícios
                     </button>
                     <button 
                        onClick={() => setActiveTab('SERVICES')}
@@ -146,7 +147,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
                  <div>
                     <h2 className="text-xl font-bold text-gray-800 mb-6">Todos os Serviços Online</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {BENEFITS_DATA.filter(b => b.isService).map(benefit => (
+                        {BENEFITS_DATA.filter(b => b.isService && !hiddenServiceIds.has(b.id)).map(benefit => (
                             <BenefitCard 
                                 key={benefit.id} 
                                 benefit={benefit} 

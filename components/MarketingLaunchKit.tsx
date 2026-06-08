@@ -177,7 +177,7 @@ Contamos com você!`;
                             // HTML EMAIL PREVIEW SIMULATION
                             <div className="max-w-md mx-auto bg-white shadow-xl rounded-none border-t-4 border-rio-blue">
                                 <div className="p-6 text-center border-b border-gray-100 bg-gray-50">
-                                    <img src="https://sindhoteisrj.com.br/wp-content/uploads/2023/04/Logo-HoteisRIO-Branca-Fundo-Transparente.png" alt="HoteisRio" className="h-8 mx-auto filter invert brightness-0" style={{ filter: 'brightness(0) saturate(100%) invert(18%) sepia(87%) saturate(2227%) hue-rotate(205deg) brightness(91%) contrast(105%)' }} />
+                                    <img src="https://abihrj.com.br/wp-content/uploads/2026/03/Logo-ABIH-RJ-azul-fundo-transparente-5.webp" alt="ABIH-RJ" className="h-8 mx-auto" />
                                 </div>
                                 <div className="p-8 text-gray-700 font-sans text-sm leading-relaxed">
                                     <p className="mb-4">Prezado(a) Associado(a),</p>

@@ -146,7 +146,7 @@ const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }
             </div>
          )}
          
-         <iframe
+         <iframe 
             id="service-frame"
             src={url}
             title={benefit.title}
@@ -154,7 +154,6 @@ const ServiceViewerPage: React.FC<ServiceViewerPageProps> = ({ benefit, onBack }
             onLoad={() => setLoading(false)}
             onError={() => setLoadError(true)}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation"
             allowFullScreen
          />
       </div>
