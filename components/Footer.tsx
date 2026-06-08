@@ -62,9 +62,9 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <button onClick={() => handleBenefit('calendar-2026')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
-                  <ArrowUpRight className="w-3 h-3" /> Calendário de Eventos
-                </button>
+                <span className="flex items-center gap-2 text-sm text-white/30 cursor-not-allowed">
+                  <ArrowUpRight className="w-3 h-3" /> Calendário de Eventos <span className="text-xs bg-white/10 px-1.5 py-0.5 rounded-full">Em breve</span>
+                </span>
               </li>
               <li>
                 <button onClick={() => handleBenefit('portal-fornecedores-new')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
@@ -74,11 +74,6 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
               <li>
                 <button onClick={() => handleNav('COURSES_V2')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
                   <ArrowUpRight className="w-3 h-3" /> Cursos &amp; Treinamentos
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleBenefit('public-order-01')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
-                  <ArrowUpRight className="w-3 h-3" /> Demandas de Ordem Pública
                 </button>
               </li>
               <li>

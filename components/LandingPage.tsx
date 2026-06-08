@@ -75,7 +75,7 @@ const quickLinks = [
   { label: 'Assessoria Juridica', icon: Gavel, benefitId: 'juridico-01' },
   { label: 'Banco de Talentos', icon: Users, benefitId: 'banco-talentos' },
   { label: 'Influenciadores / UGC', icon: Camera, benefitId: 'influencers-hub' },
-  { label: 'Demandas e Pautas', icon: MessageSquareText, view: 'PUBLIC_ORDER_PAGE' },
+  { label: 'Leis e Decretos RJ', icon: Gavel, benefitId: 'leis-decretos-app' },
 ];
 
 const suppliers = ['SEBRAE', 'stone', 'ASSAI', 'TOTVS', 'Senac RJ', 'omni', 'CVC'];

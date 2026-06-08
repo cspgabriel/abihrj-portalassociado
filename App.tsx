@@ -17,7 +17,6 @@ import AllBenefitsPage from './components/AllBenefitsPage';
 import BenefitPage from './components/BenefitPage';
 import ServiceViewerPage from './components/ServiceViewerPage';
 import CategoryListingPage from './components/CategoryListingPage';
-import SecurityPage from './components/SecurityPage';
 import ForumsOverviewPage from './components/ForumsOverviewPage';
 import ForumPage from './components/ForumPage';
 import AssociationEventsPage from './components/AssociationEventsPage';
@@ -34,7 +33,6 @@ import AdminPanel from './components/AdminPanel';
 import WelcomeOnboarding from './components/WelcomeOnboarding';
 import TalentBankPage from './components/TalentBankPage';
 import BenefitsShowcase from './components/BenefitsShowcase';
-import PublicOrderPage from './components/PublicOrderPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -280,12 +278,7 @@ export default function App() {
         return;
     }
 
-    if (benefit.id === 'public-order-01') {
-      navigateTo('PUBLIC_ORDER_PAGE');
-      return;
-    }
-
-    const forceInternalIds = ['calendar-2026', 'occupancy-reports', 'registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new', 'highlight-events-reg', 'sugestao-pauta'];
+    const forceInternalIds = ['registration-update', 'leis-decretos-app', 'planejador-feriados-2026', 'portal-fornecedores-new'];
 
     if (forceInternalIds.includes(benefit.id)) {
         setSelectedBenefit(benefit);
@@ -536,7 +529,6 @@ export default function App() {
       case 'BENEFIT_DETAILS': return selectedBenefit ? <BenefitPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} onUse={handleBenefitClick} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
       case 'SERVICE_VIEWER': return selectedBenefit ? <ServiceViewerPage benefit={selectedBenefit} onBack={() => navigateTo('ALL_BENEFITS')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
       case 'CATEGORY_LISTING': return <CategoryListingPage categoryId={selectedCategory} onBack={() => navigateTo('MODERN_DASHBOARD')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
-      case 'SECURITY_PAGE': return <SecurityPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'FORUMS_OVERVIEW': return <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'FORUM_DETAILS': return selectedForum ? <ForumPage forum={selectedForum} onBack={() => navigateTo('FORUMS_OVERVIEW')} onRegisterUpdate={() => navigateTo('REGISTRATION_UPDATE')} /> : <ForumsOverviewPage onBack={() => navigateTo('LANDING_PAGE')} onForumClick={(f) => { setSelectedForum(f); navigateTo('FORUM_DETAILS'); }} />;
       case 'ASSOCIATION_EVENTS': return <AssociationEventsPage onBack={() => navigateTo('LANDING_PAGE')} />;
@@ -551,7 +543,6 @@ export default function App() {
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
-      case 'PUBLIC_ORDER_PAGE': return <PublicOrderPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LEGAL_ADVISORY_PAGE': {
         const legalBenefit = BENEFITS_DATA.find(b => b.id === 'juridico-01');
         return legalBenefit ? <ServiceViewerPage benefit={legalBenefit} onBack={() => navigateTo('LANDING_PAGE')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
@@ -562,7 +553,7 @@ export default function App() {
   };
 
   return (
-    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'PUBLIC_ORDER_PAGE', 'LEGAL_ADVISORY_PAGE', 'BENEFITS_SHOWCASE'].includes(currentView)}>
+    <Layout user={safeUser} onLogout={handleLogout} onNavigate={navigateTo} onSearch={handleGlobalSearch} onBenefitClick={handleBenefitClick} currentView={currentView} isFullPage={['COURSES_V2', 'BENEFIT_CATEGORIZER', 'COMMERCIAL_ACTIONS_PAGE', 'WELCOME', 'TALENT_BANK', 'LEGAL_ADVISORY_PAGE', 'BENEFITS_SHOWCASE'].includes(currentView)}>
        {renderContent()}
        <Footer onNavigate={navigateTo} onBenefitClick={(id) => { const b = BENEFITS_DATA.find(x => x.id === id); if (b) handleBenefitClick(b); }} />
        <QuickAccessMenu onUse={(id)=>{
