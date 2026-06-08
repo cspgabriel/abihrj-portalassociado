@@ -46,7 +46,6 @@ import QuickAccessMenu from './components/QuickAccessMenu';
 import Footer from './components/Footer';
 
 import { Loader2, LogIn, Key, Mail, ArrowLeft, CheckCircle, Unlock, LayoutGrid, Phone, Briefcase, Eye, EyeOff, ShieldCheck } from 'lucide-react';
-import { firestoreBenefitsService } from './services/firestoreBenefitsService';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -177,13 +176,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    try {
-      const b = BENEFITS_DATA.find(b => b.id === 'rio-international-press');
-      if (b) {
-        firestoreBenefitsService.upsert(b).catch(() => {});
-      }
-    } catch (e) {}
-
     const safetyTimer = setTimeout(() => {
       if (loading) setLoading(false);
     }, 5000);
