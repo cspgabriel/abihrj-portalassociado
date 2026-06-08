@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Portal do Associado HoteisRio</string>
+    <string name="title_activity_main">Portal do Associado HoteisRio</string>
+    <string name="package_name">com.hoteisrio.portal</string>
+    <string name="custom_url_scheme">com.hoteisrio.portal</string>
+</resources>

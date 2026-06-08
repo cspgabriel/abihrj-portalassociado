@@ -1,9 +1,8 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Benefit } from '../types';
-import { ArrowLeft, Sparkles, CheckCircle2, FileText, Info, Loader2, ExternalLink, ChevronDown, Bot } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, FileText, Info, ExternalLink, Bot } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { generateBenefitDetails } from '../services/geminiService';
 
 interface BenefitPageProps {
   benefit: Benefit;
@@ -12,9 +11,6 @@ interface BenefitPageProps {
 }
 
 const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => {
-  const [aiAnalysis, setAiAnalysis] = useState('');
-  const [loadingAi, setLoadingAi] = useState(false);
-  const [showAi, setShowAi] = useState(false);
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
 
   useEffect(() => {
@@ -23,28 +19,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
     if (mainContent) {
         mainContent.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
-    
-    // Reset state on benefit change
-    setAiAnalysis('');
-    setShowAi(false);
   }, [benefit]);
-
-  const handleGenerateAi = async () => {
-    if (aiAnalysis) {
-        setShowAi(true);
-        return;
-    }
-    setLoadingAi(true);
-    setShowAi(true);
-    try {
-        const text = await generateBenefitDetails(benefit.title);
-        setAiAnalysis(text);
-    } catch (e) {
-        setAiAnalysis("Não foi possível gerar o insight no momento.");
-    } finally {
-        setLoadingAi(false);
-    }
-  };
 
   return (
     <div className="bg-white min-h-screen pb-20 animate-fade-in">
@@ -148,7 +123,7 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
           )}
         </div>
 
-        {/* Right Column (Actions & Info & AI) */}
+        {/* Right Column (Actions & Info) */}
         <div className="space-y-6">
           
           {/* Actions Card (Removed Sticky to prevent overlap with AI section) */}
@@ -183,46 +158,6 @@ const BenefitPage: React.FC<BenefitPageProps> = ({ benefit, onBack, onUse }) => 
               </li>
             </ul>
           </div>
-
-          {/* Manual AI Trigger Button & Content (Now in Right Column) */}
-           {!showAi && (
-               <button 
-                 onClick={handleGenerateAi}
-                 className="w-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border border-blue-200 text-rio-blue font-bold py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 group"
-               >
-                 <Sparkles className="w-5 h-5 text-rio-gold group-hover:scale-110 transition-transform" />
-                 Gerar Insight com IA
-                 <ChevronDown className="w-4 h-4" />
-               </button>
-           )}
-
-           {/* Section: AI Insight (Expandable) */}
-           {showAi && (
-             <div className="bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-xl p-6 relative overflow-hidden animate-fade-in-up">
-                <div className="absolute top-0 right-0 opacity-10">
-                    <Sparkles className="w-24 h-24 text-rio-blue" />
-                </div>
-                
-                <div className="flex items-center gap-2 mb-3 relative z-10">
-                    <div className="bg-white p-1.5 rounded-lg shadow-sm">
-                        <Sparkles className="w-4 h-4 text-rio-gold" />
-                    </div>
-                    <h2 className="text-base font-bold text-gray-800">Vantagens & Insights</h2>
-                </div>
-
-                {loadingAi ? (
-                    <div className="flex flex-col items-center justify-center py-4 gap-2 text-gray-500">
-                        <Loader2 className="w-6 h-6 animate-spin text-rio-blue" />
-                        <span className="text-xs font-medium">Analisando...</span>
-                    </div>
-                ) : (
-                    <div className="text-gray-700 leading-relaxed whitespace-pre-line relative z-10 text-sm bg-white/60 p-4 rounded-lg border border-white/50 shadow-sm animate-fade-in">
-                        {aiAnalysis}
-                    </div>
-                )}
-                {!loadingAi && <p className="text-[10px] text-gray-400 mt-2 text-right">Powered by Gemini AI</p>}
-             </div>
-           )}
 
         </div>
 

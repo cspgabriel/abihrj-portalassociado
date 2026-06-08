@@ -24,6 +24,9 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
   const [benefits, setBenefits] = useState<Benefit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const hiddenBenefitIds = new Set(['highlight-drinks', 'sustainability-raiox', 'news-portal']);
+  const hiddenTitlePattern = /documentos?\s+e\s+modelos?|modelos?\s+e\s+documentos?|galeria\s+de\s+fotos?/i;
+
 
   useEffect(() => {
     if (initialSearchTerm) {
@@ -50,10 +53,10 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
   }, []);
 
 
-  const categories = ['Todos', ...Array.from(new Set(benefits.map(b => b.category)))];
+  const visibleBenefits = benefits.filter(b => !hiddenBenefitIds.has(b.id) && !hiddenTitlePattern.test(b.title));
+  const categories = ['Todos', ...Array.from(new Set(visibleBenefits.map(b => b.category)))];
 
-  const filteredBenefits = benefits.filter(b => {
-    if (b.id === 'highlight-drinks') return false;
+  const filteredBenefits = visibleBenefits.filter(b => {
     const matchesSearch = b.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           b.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || b.category === selectedCategory;
@@ -66,28 +69,38 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
   });
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-12 animate-fade-in">
+    <div className="bg-[#f6f8fc] min-h-screen pb-12 animate-fade-in">
       {/* Header */}
-      <div className="bg-gradient-to-r from-rio-blue to-blue-800 text-white pt-8 pb-20 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -mr-20 -mt-20 blur-2xl" />
+      <div className="relative overflow-hidden bg-blue-950 text-white pt-8 pb-24 px-6">
+        <img
+          src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1800&q=85"
+          alt="Vista aérea do Rio de Janeiro"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#022b66] via-[#073b86]/92 to-[#073b86]/45" />
+        <div className="absolute inset-y-0 right-0 hidden w-1/3 border-l border-amber-300/30 md:block">
+          <div className="absolute right-12 top-12 h-44 w-44 rounded-full border border-amber-300/60" />
+          <div className="absolute right-24 top-24 h-24 w-24 rounded-full border border-white/30" />
+        </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <button 
             onClick={onBack}
-            className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors mb-8"
+            className="flex items-center gap-2 text-blue-100 hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
             Voltar para Dashboard
           </button>
 
-          <div className="flex flex-col md:flex-row gap-6 items-center">
-            <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl">
-              <LayoutGrid className="w-16 h-16 text-rio-gold" strokeWidth={1.5} />
+          <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
+            <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 shadow-xl">
+              <LayoutGrid className="w-14 h-14 text-rio-gold" strokeWidth={1.5} />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">Todos os Benefícios</h1>
-              <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">
-                Explore o catálogo completo de vantagens, serviços e ferramentas exclusivas para associados HoteisRio.
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-amber-300 mb-3">Portal do Associado</p>
+              <h1 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">Todos os Benefícios</h1>
+              <p className="text-blue-50 text-base md:text-xl max-w-3xl leading-relaxed">
+                Um catálogo executivo de serviços, ferramentas e canais estratégicos para operação, comercial, comunicação e gestão hoteleira.
               </p>
             </div>
           </div>
@@ -98,12 +111,12 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
       <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
         
         {/* Slider */}
-        <div className="mb-10">
+        <div className="mb-8">
             <HighlightsSlider onUseBenefit={onUse} />
         </div>
 
         {/* Filters Bar */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 mb-8">
+        <div className="bg-white/95 backdrop-blur rounded-2xl shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] border border-slate-200 p-4 mb-8">
            <div className="flex flex-col lg:flex-row gap-4 justify-between items-center">
               
               {/* Search */}
@@ -111,7 +124,7 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
                  <input 
                    type="text" 
                    placeholder="Buscar benefício..." 
-                   className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-rio-blue outline-none"
+                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rio-blue outline-none"
                    value={searchTerm}
                    onChange={(e) => setSearchTerm(e.target.value)}
                  />
@@ -124,7 +137,7 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
                     <select 
                        value={selectedCategory}
                        onChange={(e) => setSelectedCategory(e.target.value)}
-                       className="w-full lg:w-auto appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 pl-4 pr-10 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
+                       className="w-full lg:w-auto appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2.5 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-rio-blue cursor-pointer"
                     >
                        {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                     </select>
@@ -133,14 +146,14 @@ const AllBenefitsPage: React.FC<AllBenefitsPageProps> = ({ onBack, onUse, onDeta
 
                  <button 
                     onClick={() => setSortOrder(prev => prev === 'az' ? 'za' : 'az')}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors"
                  >
                      {sortOrder === 'az' ? <ArrowDownAZ className="w-5 h-5" /> : <ArrowUpAZ className="w-5 h-5" />}
                  </button>
 
                  <button 
                     onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')} 
-                    className="p-2.5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 text-gray-600"
+                    className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600"
                  >
                     {viewMode === 'grid' ? <List className="w-5 h-5" /> : <Grid className="w-5 h-5" />}
                  </button>

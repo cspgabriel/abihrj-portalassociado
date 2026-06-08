@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Benefit } from '../types';
-import { X, Sparkles, Loader2, ArrowRight } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { generateBenefitDetails } from '../services/geminiService';
 
 interface BenefitModalProps {
   benefit: Benefit | null;
@@ -10,21 +9,6 @@ interface BenefitModalProps {
 }
 
 const BenefitModal: React.FC<BenefitModalProps> = ({ benefit, onClose }) => {
-  const [aiDescription, setAiDescription] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (benefit) {
-      setLoading(true);
-      // Call Gemini to generate a tailored description
-      generateBenefitDetails(benefit.title)
-        .then(text => setAiDescription(text))
-        .finally(() => setLoading(false));
-    } else {
-      setAiDescription('');
-    }
-  }, [benefit]);
-
   if (!benefit) return null;
 
   const IconComponent = (Icons as any)[benefit.iconName] || Icons.HelpCircle;
@@ -67,31 +51,6 @@ const BenefitModal: React.FC<BenefitModalProps> = ({ benefit, onClose }) => {
           <div className="mb-8">
              <h3 className="text-sm font-bold text-gray-400 uppercase mb-2 tracking-wider">Sobre o Benefício</h3>
              <p className="text-gray-700 text-lg leading-relaxed">{benefit.description}</p>
-          </div>
-
-          {/* AI Section */}
-          <div className="bg-blue-50 rounded-xl p-6 border border-blue-100 relative overflow-hidden">
-             <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Sparkles className="w-24 h-24 text-rio-blue" />
-             </div>
-             
-             <div className="flex items-center gap-2 mb-4">
-               <div className="bg-white p-1.5 rounded-lg shadow-sm">
-                  <Sparkles className="w-5 h-5 text-rio-blue" />
-               </div>
-               <h3 className="text-lg font-bold text-rio-blue">Detalhes Inteligentes</h3>
-             </div>
-
-             {loading ? (
-               <div className="flex flex-col items-center justify-center py-8 text-blue-400">
-                 <Loader2 className="w-8 h-8 animate-spin mb-2" />
-                 <p className="text-sm">Gerando explicação personalizada...</p>
-               </div>
-             ) : (
-               <div className="prose prose-blue text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                 {aiDescription}
-               </div>
-             )}
           </div>
 
           <div className="mt-8 flex justify-end gap-3 pt-6 border-t border-gray-100">

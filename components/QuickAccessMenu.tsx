@@ -6,7 +6,7 @@ interface QuickAccessMenuProps {
   onUse: (id: string) => void;
 }
 
-const QUICK_IDS = ['juridico-01', 'calendar-2026', 'occupancy-reports', 'portal-fornecedores-new', 'rio-international-press'];
+const QUICK_IDS = ['juridico-01', 'portal-fornecedores-new', 'rio-international-press'];
 
 const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({ onUse }) => {
   const [open, setOpen] = useState(false);

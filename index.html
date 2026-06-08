@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="theme-color" content="#004aad" />
-    <meta name="description" content="Portal exclusivo para associados HoteisRio acessarem benefícios, notícias e suporte." />
+    <meta name="description" content="Portal exclusivo para associados ABIH-RJ acessarem benefícios, notícias e suporte." />
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>HoteisRio - Portal do Associado</title>
+    <title>ABIH-RJ - Portal do Associado</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
       body {
@@ -39,7 +39,7 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <p class="loading-text font-semibold">Carregando Portal HoteisRio...</p>
+        <p class="loading-text font-semibold">Carregando Portal ABIH-RJ...</p>
       </div>
     </div>
     <!-- Script essencial para iniciar a aplicação -->
@@ -47,12 +47,20 @@
     
     <!-- PWA Service Worker Registration Fallback -->
     <script>
-      if ('serviceWorker' in navigator) {
+      const isLocalDev =
+        ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname) ||
+        window.location.hostname.startsWith('127.');
+
+      if ('serviceWorker' in navigator && !isLocalDev) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js')
             .then((reg) => console.log('SW registered: ', reg))
             .catch((err) => console.log('SW registration failed: ', err));
         });
+      } else if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations()
+          .then((registrations) => registrations.forEach((registration) => registration.unregister()))
+          .catch(() => {});
       }
     </script>
   </body>
