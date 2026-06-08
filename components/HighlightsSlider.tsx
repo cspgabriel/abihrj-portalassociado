@@ -14,12 +14,10 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
   const [itemsPerPage, setItemsPerPage] = useState(3);
 
   const highlightIds = [
-      'calendar-2026',
       'highlight-top-hotel-25',
-      'natal-2025', 
-      'highlight-drinks', 
-      'highlight-rir', 
-      'highlight-events-reg',
+      'natal-2025',
+      'highlight-drinks',
+      'highlight-rir',
       'portal-fornecedores-new',
   ];
   

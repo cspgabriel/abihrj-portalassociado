@@ -22,7 +22,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({ user, onUseBenefit, o
 
   // Filter some quick tools for the dashboard
   const quickTools = BENEFITS_DATA.filter(b => 
-    ['calendar-2026', 'juridico-01', 'public-order-01', 'planejador-feriados-2026'].includes(b.id)
+    ['juridico-01', 'planejador-feriados-2026'].includes(b.id)
   );
   
   // Default gamification profile if missing
