@@ -130,6 +130,22 @@ export const BENEFITS_DATA: Benefit[] = [
     customCta: 'Acessar Plataforma'
   },
 
+  // --- ROTA DO VINHO RJ ---
+  {
+    id: 'rota-do-vinho-rj',
+    title: 'Rota do Vinho RJ',
+    description: 'Plataforma oficial da Rota do Vinho do Rio de Janeiro. Conheca vinicolas, roteiros e parcerias para o trade hoteleiro.',
+    category: BenefitCategory.PARTNERS,
+    targetSectors: ['SALES', 'MANAGEMENT', 'RECEPTION'],
+    iconName: 'Wine',
+    imageUrl: '',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://rotadovinho.abihrj.com.br/',
+    externalLink: 'https://rotadovinho.abihrj.com.br/',
+    customCta: 'Acessar Rota do Vinho'
+  },
+
   {
     id: 'placas-recepcao',
     title: 'Placas Obrigatórias da Recepção',
@@ -427,55 +443,21 @@ export const TEAM_CONTACTS = [
 ];
 
 export const WHATSAPP_GROUPS = [
-  {
-    id: 'group-compras',
-    name: 'Forum Compras HOTEISRIO',
-    description: 'Fórum de compras e fornecedores do setor hoteleiro.',
-    link: 'https://chat.whatsapp.com/Geb55xwOXUxFR7laa6pK0N'
-  },
-  {
-    // MUDANÇA: "Barra" alterado para "Recreio" conforme solicitado
-    id: 'group-seg-recreio',
-    name: 'F. Hotéis - Segurança Recreio',
-    description: 'Alertas e informações de segurança para hotéis do Recreio.',
-    link: 'https://chat.whatsapp.com/IP2MxB4ljuGCwyjwefy1qk'
-  },
-  {
-    id: 'group-controller',
-    name: '💰F. Controller | HOTEISRIO',
-    description: 'Fórum de controllers e financeiro dos hotéis associados.',
-    link: 'https://chat.whatsapp.com/DgIxUo3lbW7KiCT5YL7K89'
-  },
-  {
-    id: 'group-manutencao-forum',
-    name: 'F. Manutenção/Engenharia | HoteisRio',
-    description: 'Soluções técnicas, engenharia e manutenção predial.',
-    link: 'https://chat.whatsapp.com/HLObcAQFDn45WapkZl7OSH'
-  },
-  {
-    id: 'group-recepcao-forum',
-    name: 'F. Recepção | HotéisRio',
-    description: 'Fórum de recepcionistas e front office dos hotéis associados.',
-    link: 'https://chat.whatsapp.com/CWjHitKt4vPKn0iYq9xP6r'
-  },
-  {
-    id: 'group-comercial-r1',
-    name: 'Comercial Região 1',
-    description: 'Grupo comercial e de vendas da Região 1.',
-    link: 'https://chat.whatsapp.com/GTElKW0OZWK2VFd3v2JLoi'
-  },
-  {
-    id: 'group-comercial-r3',
-    name: 'Comercial Região 3',
-    description: 'Grupo comercial e de vendas da Região 3.',
-    link: 'https://chat.whatsapp.com/F4DSnACJbhc2n2e2eiVQcg'
-  },
-  {
-    id: 'group-rh-dp',
-    name: 'RH e DP | HOTEISRIO',
-    description: 'Recursos Humanos e Departamento Pessoal dos hotéis associados.',
-    link: 'https://chat.whatsapp.com/KoGzWYWY6fwGL5pO9hJfc5'
-  }
+  { id: 'grupo-01', name: 'Grupo HoteisRio 01', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/GLBN6SipLJa53SET5iu3Az' },
+  { id: 'grupo-02', name: 'Grupo HoteisRio 02', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/HDWSpMh5i4A3evfuFae9ee' },
+  { id: 'grupo-03', name: 'Grupo HoteisRio 03', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LGCPQnGKNsN8FMVtVP2Nx9' },
+  { id: 'grupo-04', name: 'Grupo HoteisRio 04', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LYbTk5WmsAP09eUJGg1ykc' },
+  { id: 'grupo-05', name: 'Grupo HoteisRio 05', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/H51hiL8LKO57saNiSXfuwV' },
+  { id: 'grupo-06', name: 'Grupo HoteisRio 06', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/CxTSUAFseZ8KrjstxtYpWp' },
+  { id: 'grupo-07', name: 'Grupo HoteisRio 07', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/JRs28cGpNOEHWL7Ao4mnwz' },
+  { id: 'grupo-08', name: 'Grupo HoteisRio 08', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/CwZnNICjROREiTLScorQNS' },
+  { id: 'grupo-09', name: 'Grupo HoteisRio 09', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/EpFqo1Wp9UUFHQqrtDkD23' },
+  { id: 'grupo-10', name: 'Grupo HoteisRio 10', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LIUx9xwjNjeAnsiHhFirTu' },
+  { id: 'grupo-11', name: 'Grupo HoteisRio 11', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/KGhGL2Xp1GSBmuEzDa4Onx' },
+  { id: 'grupo-12', name: 'Grupo HoteisRio 12', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/Hoj0XWoAbfA8HzXs4IbKBR' },
+  { id: 'grupo-13', name: 'Grupo HoteisRio 13', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LDQ96AlFYB38H0NGCTQqlu' },
+  { id: 'grupo-14', name: 'Grupo HoteisRio 14', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/KTkHIwqKGVB78Su3PLgj7Q' },
+  { id: 'grupo-15', name: 'Grupo HoteisRio 15', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/GPSe932zboL5THzeTeZUgt' }
 ];
 
 export const ASSOCIATION_EVENTS = [

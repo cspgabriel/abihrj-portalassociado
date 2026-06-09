@@ -94,6 +94,11 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
                    </a>
                  </li>
               ))}
+              <li>
+                <button onClick={() => handleNav('WHATSAPP_GROUPS')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
+                  <ArrowUpRight className="w-3 h-3" /> Ver todos os grupos
+                </button>
+              </li>
             </ul>
           </div>
 

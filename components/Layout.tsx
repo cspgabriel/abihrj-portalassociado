@@ -5,13 +5,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { User, Benefit } from '../types';
-import { 
-  Menu, X, LogOut, User as UserIcon, Bell, 
-  Home, LayoutGrid, Gavel, FileText, Sparkles, Calendar, 
-  MonitorPlay, Megaphone, Briefcase, BarChart3, Music,
-  MessageCircle, Phone, Shield, UserCog, ArrowLeft,
-  Users, Search, MessageSquarePlus, ShoppingBag, HelpCircle, Newspaper, Camera,
-  Star
+import {
+  Menu, X, LogOut,
+  Home, LayoutGrid, Gavel, Calendar,
+  MonitorPlay, Briefcase, Music, Wine,
+  MessageCircle, Phone, UserCog,
+  Users, Search, ShoppingBag, Newspaper, Camera,
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import Breadcrumb from './Breadcrumb';
@@ -104,12 +103,8 @@ const Layout: React.FC<LayoutProps> = ({
 
             <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
 
-            {/* PRINCIPAIS BENEFÍCIOS (Ordered A-Z) */}
+            {/* MENU (Ordem alfabética) */}
             <div className="px-1 space-y-1">
-                <div className="text-[10px] font-bold text-blue-200/70 uppercase tracking-widest px-3 mb-2 mt-5">
-                    GESTÃO E SUPORTE
-                </div>
-
                 <button id="sidebar-commercial-actions" onClick={() => handleOpenBenefit('commercial-actions-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <ShoppingBag className="w-4 h-4 shrink-0" /> <span className="truncate">Ações Comerciais</span>
                 </button>
@@ -117,18 +112,14 @@ const Layout: React.FC<LayoutProps> = ({
                 <button id="sidebar-juridico" onClick={() => handleOpenBenefit('juridico-01')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Gavel className="w-4 h-4 shrink-0" /> <span className="truncate">Assessoria Jurídica</span>
                 </button>
-                
+
+                <button id="sidebar-registration" onClick={() => { onNavigate('REGISTRATION_UPDATE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'REGISTRATION_UPDATE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <UserCog className="w-4 h-4 shrink-0" /> <span className="truncate">Atualização Cadastral</span>
+                </button>
+
                 <button id="sidebar-talentos" onClick={() => handleOpenBenefit('banco-talentos')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Banco de Talentos</span>
                 </button>
-
-<button id="sidebar-suppliers" onClick={() => handleOpenBenefit('portal-fornecedores-new')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
-                </button>
-
-<div className="text-[10px] font-bold text-blue-200/70 uppercase tracking-widest px-3 mb-2 mt-5">
-                    EVENTOS E CONTEÚDO
-                </div>
 
                 <div id="sidebar-calendar" className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/40 cursor-not-allowed overflow-hidden">
                     <Calendar className="w-4 h-4 shrink-0" /> <span className="truncate">Calendário de Eventos</span>
@@ -139,41 +130,36 @@ const Layout: React.FC<LayoutProps> = ({
                     <Calendar className="w-4 h-4 shrink-0" /> <span className="truncate">Calendário de Feriados 2026</span>
                 </button>
 
-<button id="sidebar-courses" onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                <button id="sidebar-courses" onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
-                </button>
-
-<button id="sidebar-rir" onClick={() => { onNavigate('ROCK_IN_RIO'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'ROCK_IN_RIO' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
-                    <Music className="w-4 h-4 shrink-0" /> <span className="truncate">Rock in Rio 2026</span>
-                </button>
-
-                <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
-                </button>
-
-                <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores / UGC</span>
-                </button>
-            </div>
-
-            <div className="w-full h-px bg-white/10 my-4 mx-2 w-[calc(100%-16px)]" />
-
-            {/* CONEXÃO */}
-            <div className="px-1 space-y-1">
-                <div className="text-[10px] font-bold text-blue-200 uppercase tracking-widest px-3 mb-2 mt-2">
-                    CONEXÃO
-                </div>
-                
-                <button id="sidebar-community" onClick={() => { onNavigate('WHATSAPP_GROUPS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'WHATSAPP_GROUPS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
-                    <MessageCircle className="w-4 h-4 shrink-0" /> <span className="truncate">Grupos WhatsApp</span>
                 </button>
 
                 <button id="sidebar-contacts" onClick={() => { onNavigate('CONTACTS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'CONTACTS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Phone className="w-4 h-4 shrink-0" /> <span className="truncate">Equipe & Contatos</span>
                 </button>
 
-                <button id="sidebar-registration" onClick={() => { onNavigate('REGISTRATION_UPDATE'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'REGISTRATION_UPDATE' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
-                    <UserCog className="w-4 h-4 shrink-0" /> <span className="truncate">Atualização Cadastral</span>
+                <button id="sidebar-suppliers" onClick={() => handleOpenBenefit('portal-fornecedores-new')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
+                </button>
+
+                <button id="sidebar-community" onClick={() => { onNavigate('WHATSAPP_GROUPS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'WHATSAPP_GROUPS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <MessageCircle className="w-4 h-4 shrink-0" /> <span className="truncate">Grupos WhatsApp</span>
+                </button>
+
+                <button id="sidebar-influencers" onClick={() => handleOpenBenefit('influencers-hub')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Camera className="w-4 h-4 shrink-0" /> <span className="truncate">Influenciadores / UGC</span>
+                </button>
+
+                <button id="sidebar-rio-press" onClick={() => handleOpenBenefit('rio-international-press')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Newspaper className="w-4 h-4 shrink-0" /> <span className="truncate">Rio International Press</span>
+                </button>
+
+                <button id="sidebar-rota-vinho" onClick={() => handleOpenBenefit('rota-do-vinho-rj')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Wine className="w-4 h-4 shrink-0" /> <span className="truncate">Rota do Vinho RJ</span>
+                </button>
+
+                <button id="sidebar-rir" onClick={() => { onNavigate('ROCK_IN_RIO'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'ROCK_IN_RIO' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <Music className="w-4 h-4 shrink-0" /> <span className="truncate">Rock in Rio 2026</span>
                 </button>
             </div>
       </nav>
@@ -261,18 +247,6 @@ const Layout: React.FC<LayoutProps> = ({
                     </div>
 
                     <div className="flex items-center gap-5 text-sm font-black text-slate-700">
-                        <button className="flex items-center gap-2 hover:text-rio-blue">
-                            <LayoutGrid className="h-5 w-5" /> Atalhos
-                        </button>
-                        <div className="h-8 w-px bg-slate-200"></div>
-                        <button className="flex items-center gap-2 hover:text-rio-blue">
-                            <Star className="h-5 w-5" /> Favoritos
-                        </button>
-                        <button className="relative flex items-center gap-2 hover:text-rio-blue">
-                            <Bell className="h-5 w-5" /> Notificações
-                            <span className="absolute -right-3 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-900 text-[10px] font-black text-white">3</span>
-                        </button>
-                        <div className="h-8 w-px bg-slate-200 mx-1"></div>
                         <div className="flex items-center gap-3">
                             <div className="text-right">
                                 <p className="text-sm font-black text-slate-900 leading-none">{user.name.split(' ')[0]}</p>

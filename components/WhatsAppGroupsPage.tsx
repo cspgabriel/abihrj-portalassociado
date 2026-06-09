@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ArrowLeft, MessageCircle, ExternalLink, ShieldCheck, Users, Briefcase, Wrench, Bed, TrendingUp, Bell, Utensils, ShoppingCart, DollarSign } from 'lucide-react';
+import { ArrowLeft, MessageCircle, ExternalLink } from 'lucide-react';
 import { WHATSAPP_GROUPS } from '../constants';
 
 interface WhatsAppGroupsPageProps {
@@ -8,70 +7,48 @@ interface WhatsAppGroupsPageProps {
 }
 
 const WhatsAppGroupsPage: React.FC<WhatsAppGroupsPageProps> = ({ onBack }) => {
-  const getIcon = (id: string) => {
-      if (id.includes('seg')) return <ShieldCheck className="w-6 h-6" />;
-      if (id.includes('comercial')) return <TrendingUp className="w-6 h-6" />;
-      if (id.includes('rh')) return <Users className="w-6 h-6" />;
-      if (id.includes('manutencao')) return <Wrench className="w-6 h-6" />;
-      if (id.includes('gov')) return <Bed className="w-6 h-6" />;
-      if (id.includes('gms')) return <Briefcase className="w-6 h-6" />;
-      if (id.includes('recepcao')) return <Bell className="w-6 h-6" />;
-      if (id.includes('ab')) return <Utensils className="w-6 h-6" />;
-      if (id.includes('compras')) return <ShoppingCart className="w-6 h-6" />;
-      if (id.includes('controller')) return <DollarSign className="w-6 h-6" />;
-      return <Users className="w-6 h-6" />;
-  };
-
   return (
-    <div className="animate-fade-in">
-      <button 
+    <div className="p-4 md:p-8 max-w-6xl mx-auto animate-fade-in">
+      <button
         onClick={onBack}
-        className="flex items-center gap-2 text-gray-500 hover:text-rio-blue transition mb-6"
+        className="flex items-center gap-2 text-sm font-bold text-rio-blue hover:underline mb-6"
       >
-        <ArrowLeft className="w-5 h-5" />
-        Voltar para o Dashboard
+        <ArrowLeft className="w-4 h-4" /> Voltar
       </button>
 
-      <div className="text-center mb-10">
-        <div className="inline-block p-4 bg-green-100 rounded-full text-green-600 mb-4">
-          <MessageCircle className="w-10 h-10" />
+      <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-6 md:p-8 text-white shadow-lg mb-8">
+        <div className="flex items-center gap-4 mb-3">
+          <div className="bg-white/15 p-3 rounded-xl backdrop-blur">
+            <MessageCircle className="w-7 h-7" />
+          </div>
+          <h1 className="text-3xl font-bold">Grupos WhatsApp</h1>
         </div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Comunidade HoteisRio</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Conecte-se com outros profissionais do setor. Participe dos grupos oficiais e receba informações, alertas de segurança e oportunidades em tempo real.
+        <p className="text-white/90 max-w-2xl text-sm md:text-base">
+          Conecte-se aos grupos oficiais da HoteisRio. Networking, alertas e debate entre associados.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {WHATSAPP_GROUPS.map((group) => (
-          <div key={group.id} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all border border-green-100 overflow-hidden flex flex-col">
-            <div className="p-6 flex-1">
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-2 bg-green-50 text-green-600 rounded-lg">
-                  {getIcon(group.id)}
-                </div>
-                <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">Oficial</span>
+          <a
+            key={group.id}
+            href={group.link}
+            target="_blank"
+            rel="noreferrer"
+            className="group bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-lg hover:border-emerald-300 transition-all flex flex-col"
+          >
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+                <MessageCircle className="w-5 h-5" />
               </div>
-              
-              <h3 className="text-lg font-bold text-gray-800 mb-2">{group.name}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{group.description}</p>
+              <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 transition-colors" />
             </div>
-
-            <div className="p-4 bg-gray-50 border-t border-gray-100">
-              <a 
-                href={group.link}
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg transition-colors"
-              >
-                Entrar no Grupo
-                <ExternalLink className="w-4 h-4" />
-              </a>
-              <p className="text-[10px] text-gray-400 text-center mt-2">
-                Sujeito à aprovação do administrador
-              </p>
-            </div>
-          </div>
+            <h2 className="text-base font-bold text-slate-900 mb-1">{group.name}</h2>
+            <p className="text-xs text-slate-500 leading-5">{group.description}</p>
+            <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-emerald-700">
+              Entrar no grupo
+            </span>
+          </a>
         ))}
       </div>
     </div>

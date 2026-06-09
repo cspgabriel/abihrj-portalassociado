@@ -156,13 +156,13 @@ const ADVANCED_STEPS: Step[] = [
     description: 'Área exclusiva para adesão ao clube de benefícios do festival.',
     position: 'right'
   },
-  // --- Connection Section ---
   {
     targetId: 'sidebar-community',
     title: 'Grupos WhatsApp',
     description: 'Links diretos para entrar nos grupos oficiais de debate e networking.',
     position: 'right'
   },
+  // --- Connection Section ---
   {
     targetId: 'sidebar-contacts',
     title: 'Contatos da Equipe',
