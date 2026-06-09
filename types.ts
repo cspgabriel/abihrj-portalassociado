@@ -47,7 +47,8 @@ export enum BenefitCategory {
   HR = 'Recursos Humanos',
   SUPPORT = 'Suporte',
   TOOLS = 'Ferramentas & Calculadoras',
-  MANAGEMENT = 'Gestão'
+  MANAGEMENT = 'Gestão',
+  FNRH = 'FNRH Digital'
 }
 
 export type HotelSector = 'MANAGEMENT' | 'RECEPTION' | 'HOUSEKEEPING' | 'MAINTENANCE' | 'SALES' | 'HR' | 'LEGAL_DEPT' | 'FB' | 'SECURITY';

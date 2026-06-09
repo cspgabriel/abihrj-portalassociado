@@ -11,6 +11,7 @@ import {
   MonitorPlay, Briefcase, Music, Wine,
   MessageCircle, Phone, UserCog,
   Users, Search, ShoppingBag, Newspaper, Camera,
+  ClipboardCheck, Compass,
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import Breadcrumb from './Breadcrumb';
@@ -134,8 +135,16 @@ const Layout: React.FC<LayoutProps> = ({
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
                 </button>
 
+                <button id="sidebar-procap" onClick={() => handleOpenBenefit('descubra-rj-procap')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <Compass className="w-4 h-4 shrink-0" /> <span className="truncate">Descubra RJ (Procap RJ)</span>
+                </button>
+
                 <button id="sidebar-contacts" onClick={() => { onNavigate('CONTACTS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'CONTACTS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <Phone className="w-4 h-4 shrink-0" /> <span className="truncate">Equipe & Contatos</span>
+                </button>
+
+                <button id="sidebar-fnrh" onClick={() => handleOpenBenefit('fnrh-digital')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-yellow-300 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <ClipboardCheck className="w-4 h-4 shrink-0" /> <span className="truncate">FNRH Digital</span>
                 </button>
 
                 <button id="sidebar-suppliers" onClick={() => handleOpenBenefit('portal-fornecedores-new')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">

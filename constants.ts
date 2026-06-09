@@ -20,11 +20,11 @@ export const COMMERCIAL_SUB_ACTIONS = [
   },
   {
     id: 'commercial-procap',
-    title: 'Descubra RJ (Projeto Procap)',
-    description: 'Programa de capacitação de venda do destino – confira as edições',
+    title: 'Descubra RJ (Procap RJ)',
+    description: 'Programa de capacitação de venda do destino. Próxima edição: Teresópolis 2026.',
     iconName: 'Presentation',
     buttonText: 'Conheça o projeto',
-    link: 'https://procaprj.com.br',
+    link: 'https://procap.abihrj.com.br/',
     color: 'bg-indigo-600',
     textClass: 'text-indigo-600',
     iconColor: 'text-indigo-200'
@@ -58,6 +58,37 @@ export const BENEFITS_DATA: Benefit[] = [
     isService: true,
     isNew: true,
     customCta: 'Acessar Ações'
+  },
+
+  // --- DESCUBRA RJ (PROCAP RJ) ---
+  {
+    id: 'descubra-rj-procap',
+    title: 'Descubra RJ (Procap RJ)',
+    description: 'Programa de capacitação de venda do destino do Rio de Janeiro. Próxima edição: Teresópolis 2026.',
+    category: BenefitCategory.COMMERCIAL,
+    targetSectors: ['SALES', 'MANAGEMENT'],
+    iconName: 'Compass',
+    imageUrl: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    embedUrl: 'https://procap.abihrj.com.br/',
+    externalLink: 'https://procap.abihrj.com.br/',
+    customCta: 'Acessar Descubra RJ',
+    fullDetails: 'O Descubra RJ (Procap RJ) é o programa de capacitação de venda do destino promovido pela ABIH-RJ, que leva profissionais da hotelaria a imersões em destinos do estado para conhecer de perto a infraestrutura e os atrativos turísticos.\n\nObjetivo: "oxigenar o destino turístico através da capacitação". A próxima edição acontece em Teresópolis, capital nacional do montanhismo, com foco em ecoturismo e gastronomia de montanha.'
+  },
+
+  // --- FNRH DIGITAL ---
+  {
+    id: 'fnrh-digital',
+    title: 'FNRH Digital',
+    description: 'Tudo sobre a Ficha Nacional de Registro de Hóspedes Digital: treinamento e conteúdos oficiais (com fontes) para hotéis.',
+    category: BenefitCategory.FNRH,
+    targetSectors: ['RECEPTION', 'MANAGEMENT'],
+    iconName: 'ClipboardCheck',
+    imageUrl: 'https://images.unsplash.com/photo-1551836022-deb4988cc6c0?auto=format&fit=crop&q=80&w=400',
+    isService: true,
+    isNew: true,
+    customCta: 'Acessar FNRH Digital'
   },
 
   // --- CALENDÁRIOS ---
