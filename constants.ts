@@ -392,8 +392,58 @@ Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado
 ];
 
 export const COURSES_DATA: any[] = [
-  { 
-    id: 'course-future', 
+  {
+    id: 'course-trab-nr15',
+    youtubeId: 'j0lyPPS7PV0',
+    title: 'NR 15 — Insalubridade e Critérios Técnicos na Hotelaria',
+    description: 'Palestra 1 do 1º Seminário do Ciclo de Relações do Trabalho na Hotelaria. Ana Luiza Horcades explica a NR 15 e os critérios técnicos de caracterização de insalubridade aplicados à hotelaria.',
+    category: 'Trabalhista & RH',
+    duration: 'Palestra',
+    thumbnailUrl: 'https://img.youtube.com/vi/j0lyPPS7PV0/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-trab-nr1',
+    youtubeId: 'd-V8COwKEt4',
+    title: 'NR 1 — Gerenciamento de Riscos Ocupacionais na Hotelaria',
+    description: 'Palestra 2 do 1º Seminário do Ciclo de Relações do Trabalho na Hotelaria. Ana Luiza Horcades aborda o GRO e o PGR à luz da NR 1 para meios de hospedagem.',
+    category: 'Trabalhista & RH',
+    duration: 'Palestra',
+    thumbnailUrl: 'https://img.youtube.com/vi/d-V8COwKEt4/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-trab-jornada',
+    youtubeId: '5a12xEFi8ck',
+    title: 'Jornada de Trabalho e Banco de Horas',
+    description: 'Palestra 3 do 1º Seminário do Ciclo de Relações do Trabalho na Hotelaria. Rosemary Villanueva detalha regimes de jornada, compensação e banco de horas no setor hoteleiro.',
+    category: 'Trabalhista & RH',
+    duration: 'Palestra',
+    thumbnailUrl: 'https://img.youtube.com/vi/5a12xEFi8ck/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-trab-pcd',
+    youtubeId: 'ikriXX8SIGM',
+    title: 'Inclusão de PCDs — Cotas e Obrigações Legais na Hotelaria',
+    description: 'Palestra 4 do 1º Seminário do Ciclo de Relações do Trabalho na Hotelaria. Marcelo de Freitas trata da cota legal, contratação, acessibilidade e fiscalização de PCDs.',
+    category: 'Trabalhista & RH',
+    duration: 'Palestra',
+    thumbnailUrl: 'https://img.youtube.com/vi/ikriXX8SIGM/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-trab-aprendiz',
+    youtubeId: 'pryxxgBE6RE',
+    title: 'Inclusão de Jovens Aprendizes — Programa e Obrigações na Hotelaria',
+    description: 'Palestra 5 do 1º Seminário do Ciclo de Relações do Trabalho na Hotelaria. Ramon Santos apresenta o Programa Jovem Aprendiz, cotas e boas práticas no setor.',
+    category: 'Trabalhista & RH',
+    duration: 'Palestra',
+    thumbnailUrl: 'https://img.youtube.com/vi/pryxxgBE6RE/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-future',
     youtubeId: '_q2a96-cgFE', 
     title: 'O Futuro dos Meios de Hospedagem', 
     description: 'Simpósio completo (HD) discutindo tendências, inovação e o futuro da hotelaria no cenário global e local.', 
