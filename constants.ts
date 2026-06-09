@@ -130,21 +130,6 @@ export const BENEFITS_DATA: Benefit[] = [
     customCta: 'Acessar Plataforma'
   },
 
-  // --- LEGISLAÇÃO ---
-  {
-    id: 'leis-decretos-app',
-    title: 'Leis e Decretos RJ',
-    description: 'Sistema inteligente de busca e consulta de legislação hoteleira atualizada.',
-    category: BenefitCategory.LEGAL,
-    targetSectors: ['LEGAL_DEPT', 'MANAGEMENT', 'HR'],
-    iconName: 'Gavel',
-    imageUrl: '',
-    isService: true,
-    isNew: true,
-    embedUrl: 'https://leisedecretos.sindhoteisrj.com.br/portal-do-associado',
-    externalLink: 'https://leisedecretos.sindhoteisrj.com.br/portal-do-associado',
-    customCta: 'Acessar Sistema Legal'
-  },
   {
     id: 'placas-recepcao',
     title: 'Placas Obrigatórias da Recepção',
@@ -495,12 +480,6 @@ export const WHATSAPP_GROUPS = [
 
 export const ASSOCIATION_EVENTS = [
   { id: 'evt-01', title: 'Reunião Geral', date: '15 de Maio, 09:00', location: 'Hotel Othon', description: 'Alinhamento estratégico', status: 'Confirmado', type: 'Reunião', imageUrl: '' }
-];
-
-// MUDANÇA: Leis e Decretos - removido campo observacao e mantendo somente Leis e Decretos (sem PLs)
-// Os PLs são filtrados em LawsRegulationPage via activeLaws = RJ_LAWS_DATA.filter(l => !l.number.toLowerCase().includes('pl')...)
-export const RJ_LAWS_DATA = [
-  { id: 'law-01', number: 'Lei 1234', description: 'Lei do Silêncio', category: 'Operacional', link: '#', date: '2023' }
 ];
 
 export const FORUMS_DATA: Forum[] = [

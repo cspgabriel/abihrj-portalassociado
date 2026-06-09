@@ -139,12 +139,6 @@ const ADVANCED_STEPS: Step[] = [
     position: 'right'
   },
   {
-    targetId: 'sidebar-laws',
-    title: 'Leis e Decretos',
-    description: 'Biblioteca digital com toda a legislação pertinente ao setor hoteleiro.',
-    position: 'right'
-  },
-  {
     targetId: 'sidebar-security',
     title: 'Segurança',
     description: 'Telefones úteis, cartilhas de prevenção e contato com a polícia turística.',

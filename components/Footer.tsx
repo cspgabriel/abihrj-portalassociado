@@ -76,11 +76,6 @@ const Footer: React.FC<FooterProps> = ({ onNavigate, onBenefitClick }) => {
                   <ArrowUpRight className="w-3 h-3" /> Cursos &amp; Treinamentos
                 </button>
               </li>
-              <li>
-                <button onClick={() => handleBenefit('leis-decretos-app')} className="hover:text-rio-gold transition-colors flex items-center gap-2 text-sm">
-                  <ArrowUpRight className="w-3 h-3" /> Leis e Decretos
-                </button>
-              </li>
             </ul>
           </div>
 
