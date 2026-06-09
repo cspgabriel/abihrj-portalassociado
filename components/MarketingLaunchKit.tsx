@@ -23,7 +23,7 @@ Desenvolvemos uma plataforma moderna, rápida e integrada para facilitar o seu d
 ✅ Serviços Online: Solicitações jurídicas e demandas de ordem pública com um clique.
 ✅ Calendário Integrado: Todos os eventos da cidade e do setor hoteleiro.
 ✅ Comunidade: Acesso direto aos grupos de WhatsApp oficiais.
-✅ HoteisRio Academy: Treinamentos e cursos exclusivos para sua equipe.
+✅ ABIHRJ Academy: Treinamentos e cursos exclusivos para sua equipe.
 
 Acesse agora mesmo:
 https://portal.hoteisrio.com.br
