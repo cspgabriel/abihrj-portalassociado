@@ -18,8 +18,7 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
       'rio-international-press',
       'influencers-hub',
       'highlight-rir',
-      'portal-fornecedores-new',
-      'leis-decretos-app'
+      'portal-fornecedores-new'
   ];
   
   const highlightSlides = highlightIds
@@ -69,7 +68,6 @@ const HighlightsSlider: React.FC<HighlightsSliderProps> = ({ onUseBenefit }) => 
           case 'highlight-rir': return 'from-slate-950/95 via-purple-950/70 to-blue-700/25';
           case 'highlight-job-fair': return 'from-slate-950/95 via-emerald-900/70 to-teal-700/30';
           case 'portal-fornecedores-new': return 'from-slate-950/95 via-slate-900/75 to-orange-700/35';
-          case 'leis-decretos-app': return 'from-slate-950/95 via-slate-900/80 to-slate-600/35';
           default: return 'from-slate-950/95 via-slate-900/75 to-blue-700/25';
       }
   };

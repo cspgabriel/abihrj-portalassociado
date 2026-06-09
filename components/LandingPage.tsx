@@ -15,6 +15,9 @@ import {
   Bell,
   ChartPie,
   Camera,
+  Music,
+  Building2,
+  CalendarCheck,
 } from 'lucide-react';
 import { Benefit } from '../types';
 import { BENEFITS_DATA } from '../constants';
@@ -25,35 +28,45 @@ interface LandingPageProps {
   onBenefitClick?: (benefit: Benefit) => void;
 }
 
-const featuredCards = [
+const featuredCards: Array<{
+  title: string;
+  body: string;
+  action: string;
+  icon: React.ComponentType<{ className?: string }>;
+  view?: string;
+  benefitId?: string;
+  image: string;
+  tone: string;
+  badge: string;
+}> = [
   {
-    title: 'Calendario de Eventos 2026',
-    body: 'Planejamento antecipado! Confira feriados, congressos e grandes eventos confirmados.',
-    action: 'Acessar calendario',
-    icon: CalendarDays,
-    view: 'ASSOCIATION_EVENTS',
+    title: 'Rock in Rio 2026',
+    body: 'Saiba tudo sobre o maior festival do mundo e o impacto na hotelaria carioca.',
+    action: 'Acessar pagina',
+    icon: Music,
+    view: 'ROCK_IN_RIO',
+    image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=85',
+    tone: 'from-slate-950/95 via-purple-950/70 to-blue-700/25',
+    badge: 'Novo',
+  },
+  {
+    title: 'Fornecedores Hotelaria',
+    body: 'Conheca o portal de fornecedores parceiros com condicoes exclusivas para o setor.',
+    action: 'Acessar portal',
+    icon: Building2,
+    benefitId: 'portal-fornecedores-new',
+    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=900&q=85',
+    tone: 'from-slate-950/95 via-slate-900/75 to-orange-700/35',
+    badge: 'Novo',
+  },
+  {
+    title: 'Calendario de Feriados 2026',
+    body: 'Planeje sua operacao com o planejador completo de feriados nacionais e do RJ.',
+    action: 'Acessar planejador',
+    icon: CalendarCheck,
+    benefitId: 'planejador-feriados-2026',
     image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=900&q=85',
     tone: 'from-blue-950/95 via-blue-900/75 to-blue-700/35',
-    badge: 'Novo',
-  },
-  {
-    title: 'Premio Top Hotel RJ 2025',
-    body: 'Confira os vencedores e as melhores praticas do setor.',
-    action: 'Acessar site oficial',
-    icon: Trophy,
-    view: 'ALL_BENEFITS',
-    image: 'https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?auto=format&fit=crop&w=900&q=85',
-    tone: 'from-slate-950/95 via-slate-900/75 to-amber-700/30',
-    badge: 'Novo',
-  },
-  {
-    title: 'Vencedores: Decoracao Natalina',
-    body: 'Confira os vencedores e destaques do concurso de 2025.',
-    action: 'Ver galeria',
-    icon: GalleryHorizontalEnd,
-    view: 'ALL_BENEFITS',
-    image: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=900&q=85',
-    tone: 'from-emerald-950/95 via-emerald-900/75 to-amber-500/25',
     badge: 'Novo',
   },
 ];
@@ -75,7 +88,6 @@ const quickLinks = [
   { label: 'Assessoria Juridica', icon: Gavel, benefitId: 'juridico-01' },
   { label: 'Banco de Talentos', icon: Users, benefitId: 'banco-talentos' },
   { label: 'Influenciadores / UGC', icon: Camera, benefitId: 'influencers-hub' },
-  { label: 'Leis e Decretos RJ', icon: Gavel, benefitId: 'leis-decretos-app' },
 ];
 
 const suppliers = ['SEBRAE', 'stone', 'ASSAI', 'TOTVS', 'Senac RJ', 'omni', 'CVC'];
@@ -152,7 +164,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
               return (
                 <button
                   key={card.title}
-                  onClick={() => onNavigate(card.view)}
+                  onClick={() => {
+                    if (card.benefitId && onBenefitClick) {
+                      const benefit = BENEFITS_DATA.find(item => item.id === card.benefitId);
+                      if (benefit) { onBenefitClick(benefit); return; }
+                    }
+                    if (card.view) onNavigate(card.view);
+                  }}
                   className="group relative min-h-[190px] overflow-hidden rounded-xl text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl"
                 >
                   <img src={card.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105" />

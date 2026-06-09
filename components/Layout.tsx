@@ -126,10 +126,6 @@ const Layout: React.FC<LayoutProps> = ({
                     <Briefcase className="w-4 h-4 shrink-0" /> <span className="truncate">Fornecedores Hotelaria</span>
                 </button>
 
-                <button id="sidebar-laws" onClick={() => handleOpenBenefit('leis-decretos-app')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
-                    <FileText className="w-4 h-4 shrink-0" /> <span className="truncate">Leis e Decretos RJ</span>
-                </button>
-
 <div className="text-[10px] font-bold text-blue-200/70 uppercase tracking-widest px-3 mb-2 mt-5">
                     EVENTOS E CONTEÚDO
                 </div>
