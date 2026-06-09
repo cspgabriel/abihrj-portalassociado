@@ -394,8 +394,8 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
   return (
     <div className="min-h-screen bg-slate-50 animate-fade-in pb-24 md:pb-0">
       <div className="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-8 md:pb-12">
-          <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1 text-sm mb-5 md:mb-8">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 pt-3 md:pt-4 pb-6 md:pb-8">
+          <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1 text-sm mb-3 md:mb-4">
             <ArrowLeft className="w-4 h-4" /> Voltar ao Painel
           </button>
 
@@ -404,7 +404,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
               <span className="inline-flex items-center gap-2 text-[11px] md:text-xs font-bold uppercase tracking-widest text-amber-300 mb-2 md:mb-3">
                 <Sparkles className="w-4 h-4" /> ABIHRJ Academy
               </span>
-              <h1 className="text-2xl md:text-5xl font-black leading-tight mb-3 md:mb-4">
+              <h1 className="text-2xl md:text-4xl font-black leading-tight mb-2 md:mb-3">
                 Capacitação contínua para a hotelaria carioca.
               </h1>
               <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-2xl">
@@ -412,7 +412,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
                 Aprenda no seu ritmo, com conteúdos selecionados para gestores, RH, operação e atendimento.
               </p>
 
-              <div className="grid grid-cols-3 gap-2 md:gap-3 mt-6 md:mt-8 max-w-md">
+              <div className="grid grid-cols-3 gap-2 md:gap-3 mt-4 md:mt-6 max-w-md">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-3 border border-white/15">
                   <p className="text-xl md:text-2xl font-black">{COURSES_DATA.length}</p>
                   <p className="text-[11px] md:text-xs text-blue-100 mt-1">Cursos</p>
