@@ -264,8 +264,8 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
     return (
       <div className="min-h-screen bg-slate-50 animate-fade-in pb-24 md:pb-0">
         <div className="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-8 md:pb-10">
-            <div className="flex items-center gap-2 text-xs md:text-sm mb-4 md:mb-6 overflow-x-auto whitespace-nowrap no-scrollbar">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-3 md:pt-4 pb-5 md:pb-6">
+            <div className="flex items-center gap-2 text-xs md:text-sm mb-3 md:mb-4 overflow-x-auto whitespace-nowrap no-scrollbar">
               <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1 shrink-0">
                 <ArrowLeft className="w-4 h-4" /> Voltar ao Painel
               </button>
@@ -275,9 +275,9 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
               <span className="text-white/80 truncate">{selectedCourse.title}</span>
             </div>
 
-            <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8 items-start">
+            <div className="grid lg:grid-cols-[1fr_320px] gap-4 lg:gap-6 items-start">
               <div>
-                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <span className="text-[11px] font-bold uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
                     <Tag className="w-3 h-3" /> {selectedCourse.category}
                   </span>
@@ -285,9 +285,9 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
                     <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">NOVO</span>
                   )}
                 </div>
-                <h1 className="text-2xl md:text-4xl font-black leading-tight mb-3">{selectedCourse.title}</h1>
-                <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-2xl">{selectedCourse.description}</p>
-                <div className="flex flex-wrap items-center gap-3 md:gap-5 mt-4 md:mt-5 text-xs md:text-sm text-blue-100">
+                <h1 className="text-xl md:text-3xl font-black leading-tight mb-2">{selectedCourse.title}</h1>
+                <p className="text-blue-100/90 text-sm leading-relaxed max-w-2xl line-clamp-2">{selectedCourse.description}</p>
+                <div className="flex flex-wrap items-center gap-3 md:gap-5 mt-3 md:mt-4 text-xs md:text-sm text-blue-100">
                   <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4" /> {selectedCourse.duration}</span>
                   <span className="inline-flex items-center gap-1.5"><Calendar className="w-4 h-4" /> 2026</span>
                   <span className="inline-flex items-center gap-1.5"><GraduationCap className="w-4 h-4" /> Certificado de participação</span>
@@ -321,7 +321,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 md:px-8 -mt-4 md:-mt-6 pb-10 md:pb-16">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 -mt-3 md:-mt-10 pb-10 md:pb-16">
           <div className="bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-slate-200">
             <div className="aspect-video">
               <iframe
@@ -336,7 +336,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8 mt-8 md:mt-10">
+          <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8 mt-6 md:mt-8">
             <div className="space-y-5 md:space-y-8">
               <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
                 <h2 className="text-base md:text-lg font-black text-slate-900 mb-3 flex items-center gap-2">
