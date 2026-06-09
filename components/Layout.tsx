@@ -11,7 +11,7 @@ import {
   MonitorPlay, Briefcase, Music, Wine,
   MessageCircle, Phone, UserCog,
   Users, Search, ShoppingBag, Newspaper, Camera,
-  ClipboardCheck, Compass,
+  ClipboardCheck, Compass, BadgeCheck,
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import Breadcrumb from './Breadcrumb';
@@ -120,6 +120,10 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button id="sidebar-talentos" onClick={() => handleOpenBenefit('banco-talentos')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
                     <Users className="w-4 h-4 shrink-0" /> <span className="truncate">Banco de Talentos</span>
+                </button>
+
+                <button id="sidebar-cadastur" onClick={() => handleOpenBenefit('cadastur')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-yellow-300 hover:bg-white/10 hover:text-white transition-all overflow-hidden">
+                    <BadgeCheck className="w-4 h-4 shrink-0" /> <span className="truncate">Cadastur</span>
                 </button>
 
                 <div id="sidebar-calendar" className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/40 cursor-not-allowed overflow-hidden">

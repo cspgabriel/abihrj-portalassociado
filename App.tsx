@@ -33,6 +33,7 @@ import WelcomeOnboarding from './components/WelcomeOnboarding';
 import TalentBankPage from './components/TalentBankPage';
 import BenefitsShowcase from './components/BenefitsShowcase';
 import FNRHDigitalPage from './components/FNRHDigitalPage';
+import CadasturPage from './components/CadasturPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -320,6 +321,11 @@ export default function App() {
 
     if (benefit.id === 'fnrh-digital') {
         navigateTo('FNRH_DIGITAL');
+        return;
+    }
+
+    if (benefit.id === 'cadastur') {
+        navigateTo('CADASTUR');
         return;
     }
 
@@ -721,6 +727,7 @@ export default function App() {
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'TALENT_BANK': return <TalentBankPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} />;
       case 'FNRH_DIGITAL': return <FNRHDigitalPage onBack={() => navigateTo('LANDING_PAGE')} />;
+      case 'CADASTUR': return <CadasturPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'LEGAL_ADVISORY_PAGE': {
         const legalBenefit = BENEFITS_DATA.find(b => b.id === 'juridico-01');
         return legalBenefit ? <ServiceViewerPage benefit={legalBenefit} onBack={() => navigateTo('LANDING_PAGE')} /> : <AllBenefitsPage onBack={() => navigateTo('LANDING_PAGE')} onUse={handleBenefitClick} onDetails={(b) => { handleBenefitClick(b); }} />;
