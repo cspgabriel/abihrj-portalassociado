@@ -384,52 +384,12 @@ Foi encaminhado a todos os associados no dia 15 de dezembro de 2023 o comunicado
 ];
 
 export const COURSES_DATA: any[] = [
-  { 
-    id: 'course-future', 
-    youtubeId: '_q2a96-cgFE', 
-    title: 'O Futuro dos Meios de Hospedagem', 
-    description: 'Simpósio completo (HD) discutindo tendências, inovação e o futuro da hotelaria no cenário global e local.', 
-    category: 'Estratégia', 
-    duration: '3h 30m', 
-    thumbnailUrl: 'https://img.youtube.com/vi/_q2a96-cgFE/maxresdefault.jpg', 
-    isNew: false 
-  },
-  { 
-    id: 'course-drinks', 
-    youtubeId: 'KNtlsV3ad2I', 
-    title: 'Identificação de Bebidas Falsificadas', 
-    description: 'Treinamento técnico sobre segurança de alimentos e bebidas, focado na identificação de fraudes.', 
-    category: 'Operacional & Segurança', 
-    duration: '2h 15m', 
-    thumbnailUrl: 'https://img.youtube.com/vi/KNtlsV3ad2I/maxresdefault.jpg', 
-    isNew: true 
-  },
-  { 
-    id: 'course-shuttle', 
-    youtubeId: '0GcOpWXiQDI', 
-    title: 'Treinamento Shuttle e Recepção', 
-    description: 'Melhores práticas para o serviço de transfer e acolhimento na recepção do hotel.', 
-    category: 'Recepção', 
-    duration: '45m', 
-    thumbnailUrl: 'https://img.youtube.com/vi/0GcOpWXiQDI/maxresdefault.jpg', 
-    isNew: false 
-  },
-  {
-    id: 'course-fnhr',
-    youtubeId: 'YeSKeFOy52Y',
-    title: 'Treinamento FNHR Digital',
-    description: 'Capacitação sobre o preenchimento correto e a gestão da Ficha Nacional de Registro de Hóspedes.',
-    category: 'Gestão & Tecnologia',
-    duration: '1h 10m',
-    thumbnailUrl: 'https://img.youtube.com/vi/YeSKeFOy52Y/maxresdefault.jpg',
-    isNew: false
-  },
   // --- Ciclo de Seminários sobre Relações do Trabalho na Hotelaria ---
   {
     id: 'course-nr15',
     youtubeId: 'j0lyPPS7PV0',
     title: 'NR 15 — Insalubridade e Critérios Técnicos na Hotelaria',
-    description: '1ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ana Luiza Horcades. Aborda critérios técnicos da NR 15, identificação e gestão de atividades insalubres, integração do GRO com a NR-01 e boas práticas de DP e RH para evitar passivos trabalhistas.',
+    description: '1ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ana Luiza Horcades. Critérios técnicos da NR 15, identificação e gestão de atividades insalubres no ambiente hoteleiro, integração do GRO com a NR-01 e boas práticas de DP e RH para evitar passivos trabalhistas.',
     category: 'Relações do Trabalho',
     duration: '1h',
     thumbnailUrl: 'https://img.youtube.com/vi/j0lyPPS7PV0/maxresdefault.jpg',
@@ -439,7 +399,7 @@ export const COURSES_DATA: any[] = [
     id: 'course-nr1',
     youtubeId: 'd-V8COwKEt4',
     title: 'NR 1 — Gerenciamento de Riscos Ocupacionais na Hotelaria',
-    description: '2ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ana Luiza Horcades (Auditora-Fiscal do Trabalho — MTE). Estrutura da NR-01, GRO, mapeamento de riscos no ambiente hoteleiro, documentação e conformidade legal.',
+    description: '2ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ana Luiza Horcades (Auditora-Fiscal do Trabalho — MTE). Estrutura da NR-01, GRO aplicado à rotina hoteleira, mapeamento de riscos, documentação correta e conformidade legal.',
     category: 'Relações do Trabalho',
     duration: '1h',
     thumbnailUrl: 'https://img.youtube.com/vi/d-V8COwKEt4/maxresdefault.jpg',
@@ -449,7 +409,7 @@ export const COURSES_DATA: any[] = [
     id: 'course-jornada',
     youtubeId: '5a12xEFi8ck',
     title: 'Jornada de Trabalho e Banco de Horas',
-    description: '3ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Rosemary Villanueva (Auditora-Fiscal do Trabalho — MTE). Conceitos de jornada e banco de horas na CLT, diferença para horas extras, implementação sem passivos, registros e erros mais comuns.',
+    description: '3ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Rosemary Villanueva (Auditora-Fiscal do Trabalho — MTE). Conceito de jornada e banco de horas na CLT, diferença para horas extras, implementação sem passivos, registros exigidos e erros mais comuns que geram processos trabalhistas.',
     category: 'Relações do Trabalho',
     duration: '1h',
     thumbnailUrl: 'https://img.youtube.com/vi/5a12xEFi8ck/maxresdefault.jpg',
@@ -459,7 +419,7 @@ export const COURSES_DATA: any[] = [
     id: 'course-pcd',
     youtubeId: 'ikriXX8SIGM',
     title: 'Inclusão de PCDs — Cotas e Obrigações Legais na Hotelaria',
-    description: '4ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Marcelo José Rodrigues de Freitas (Auditor-Fiscal do Trabalho — MTE) e presença de Claudio Secchin (Superintendente Regional do Trabalho e Emprego no RJ). Lei de Cotas, cálculo, diferença entre PCD e Beneficiário Reabilitado, integração e acessibilidade.',
+    description: '4ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Marcelo José Rodrigues de Freitas (Auditor-Fiscal do Trabalho — MTE) e presença de Cláudio Secchin (Superintendente Regional do Trabalho e Emprego no RJ). Lei de Cotas, cálculo de cota de PCDs, diferença entre PCD e Beneficiário Reabilitado, obrigações legais, integração e acessibilidade.',
     category: 'Relações do Trabalho',
     duration: '1h',
     thumbnailUrl: 'https://img.youtube.com/vi/ikriXX8SIGM/maxresdefault.jpg',
@@ -469,11 +429,52 @@ export const COURSES_DATA: any[] = [
     id: 'course-aprendiz',
     youtubeId: 'pryxxgBE6RE',
     title: 'Inclusão de Jovens Aprendizes — Programa e Obrigações na Hotelaria',
-    description: '5ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ramon de Faria Santos (Auditor-Fiscal do Trabalho — MTE e Coordenador de Aprendizagem do RJ). Programa de jovem aprendiz, Lei da Aprendizagem, cota, contratação, incentivos fiscais e integração na rotina hoteleira.',
+    description: '5ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ramon de Faria Santos (Auditor-Fiscal do Trabalho — MTE e Coordenador de Aprendizagem do RJ). Programa de jovem aprendiz, Lei da Aprendizagem, cálculo da cota, contratação e capacitação, incentivos fiscais e integração na rotina hoteleira.',
     category: 'Relações do Trabalho',
     duration: '1h',
     thumbnailUrl: 'https://img.youtube.com/vi/pryxxgBE6RE/maxresdefault.jpg',
     isNew: true
+  },
+  // --- Catálogo permanente ---
+  {
+    id: 'course-future',
+    youtubeId: '_q2a96-cgFE',
+    title: 'O Futuro dos Meios de Hospedagem',
+    description: 'Simpósio completo (HD) com líderes do setor sobre tendências, inovação tecnológica, sustentabilidade e o futuro da hotelaria no cenário global e local.',
+    category: 'Estratégia',
+    duration: '3h 30m',
+    thumbnailUrl: 'https://img.youtube.com/vi/_q2a96-cgFE/maxresdefault.jpg',
+    isNew: false
+  },
+  {
+    id: 'course-drinks',
+    youtubeId: 'KNtlsV3ad2I',
+    title: 'Identificação de Bebidas Falsificadas',
+    description: 'Treinamento técnico sobre segurança de alimentos e bebidas, com foco na identificação de fraudes, selos fiscais, lacres e procedimentos de inspeção em pontos de venda do hotel.',
+    category: 'Operacional & Segurança',
+    duration: '2h 15m',
+    thumbnailUrl: 'https://img.youtube.com/vi/KNtlsV3ad2I/maxresdefault.jpg',
+    isNew: false
+  },
+  {
+    id: 'course-shuttle',
+    youtubeId: '0GcOpWXiQDI',
+    title: 'Treinamento de Shuttle e Recepção',
+    description: 'Melhores práticas para o serviço de transfer aeroportuário e acolhimento na recepção, incluindo protocolo de chegada, comunicação com o hóspede e procedimentos de bagagem.',
+    category: 'Recepção',
+    duration: '45m',
+    thumbnailUrl: 'https://img.youtube.com/vi/0GcOpWXiQDI/maxresdefault.jpg',
+    isNew: false
+  },
+  {
+    id: 'course-fnhr',
+    youtubeId: 'YeSKeFOy52Y',
+    title: 'Treinamento FNHR Digital',
+    description: 'Capacitação sobre o preenchimento correto e a gestão da Ficha Nacional de Registro de Hóspedes (FNRH/FNHR Digital), exigências da Embratur, integração com o PMS e prevenção de inconsistências.',
+    category: 'Gestão & Tecnologia',
+    duration: '1h 10m',
+    thumbnailUrl: 'https://img.youtube.com/vi/YeSKeFOy52Y/maxresdefault.jpg',
+    isNew: false
   }
 ];
 

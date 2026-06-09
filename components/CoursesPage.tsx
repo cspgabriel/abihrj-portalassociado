@@ -11,7 +11,7 @@ interface CoursesPageProps {
   onBack: () => void;
 }
 
-const formatDuration = (durations: string[]): string => {
+const formatTotalDuration = (durations: string[]): string => {
   let totalMinutes = 0;
   durations.forEach(d => {
     const hours = /(\d+)\s*h/.exec(d);
@@ -24,11 +24,75 @@ const formatDuration = (durations: string[]): string => {
   return h > 0 ? `${h}h${m ? ` ${m}m` : ''}` : `${m}m`;
 };
 
+const ytThumb = (id: string, quality: 'maxres' | 'hq' | 'mq' = 'maxres') => {
+  const q = quality === 'maxres' ? 'maxresdefault' : quality === 'hq' ? 'hqdefault' : 'mqdefault';
+  return `https://img.youtube.com/vi/${id}/${q}.jpg`;
+};
+
+interface CourseThumbProps {
+  course: Course;
+  className?: string;
+  onBroken?: (id: string) => void;
+}
+
+const CourseThumb: React.FC<CourseThumbProps> = ({ course, className, onBroken }) => {
+  const [src, setSrc] = useState(ytThumb(course.youtubeId, 'maxres'));
+  const [step, setStep] = useState<'maxres' | 'hq' | 'mq' | 'placeholder'>('maxres');
+
+  const handleError = () => {
+    if (step === 'maxres') {
+      setStep('hq');
+      setSrc(ytThumb(course.youtubeId, 'hq'));
+    } else if (step === 'hq') {
+      setStep('mq');
+      setSrc(ytThumb(course.youtubeId, 'mq'));
+    } else {
+      setStep('placeholder');
+      onBroken?.(course.id);
+    }
+  };
+
+  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // YouTube fallback default image is 120x90; treat as broken so it goes to the end.
+    const img = e.currentTarget;
+    if (step === 'maxres' && img.naturalWidth <= 120) {
+      setStep('hq');
+      setSrc(ytThumb(course.youtubeId, 'hq'));
+    } else if (step === 'hq' && img.naturalWidth <= 120) {
+      setStep('mq');
+      setSrc(ytThumb(course.youtubeId, 'mq'));
+    } else if (img.naturalWidth <= 120) {
+      setStep('placeholder');
+      onBroken?.(course.id);
+    }
+  };
+
+  if (step === 'placeholder') {
+    return (
+      <div className={`${className ?? ''} bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center text-white`}>
+        <GraduationCap className="w-10 h-10 opacity-80" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={course.title}
+      className={className}
+      onError={handleError}
+      onLoad={handleLoad}
+      loading="lazy"
+    />
+  );
+};
+
 const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
   const [searchTerm, setSearchTerm] = useState('');
   const [copied, setCopied] = useState(false);
+  const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -40,8 +104,19 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
   }, []);
 
   useEffect(() => {
+    const scrollable = document.getElementById('scrollable-content');
+    if (scrollable) scrollable.scrollTo({ top: 0, behavior: 'auto' });
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [selectedCourse]);
+
+  const markBroken = (id: string) => {
+    setBrokenThumbs(prev => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  };
 
   const categories = useMemo(() => {
     const set = new Set<string>(COURSES_DATA.map(c => c.category));
@@ -49,12 +124,12 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
   }, []);
 
   const totalDuration = useMemo(
-    () => formatDuration(COURSES_DATA.map(c => c.duration)),
+    () => formatTotalDuration(COURSES_DATA.map(c => c.duration)),
     []
   );
 
   const filteredCourses = useMemo(() => {
-    return COURSES_DATA.filter(c => {
+    const list = COURSES_DATA.filter(c => {
       const matchCategory = activeCategory === 'Todos' || c.category === activeCategory;
       const term = searchTerm.trim().toLowerCase();
       const matchSearch = !term ||
@@ -63,9 +138,20 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
         c.category.toLowerCase().includes(term);
       return matchCategory && matchSearch;
     });
-  }, [activeCategory, searchTerm]);
+    // Cursos com thumb quebrada vao para o fim sem perder a ordem relativa.
+    return [...list].sort((a, b) => {
+      const ab = brokenThumbs.has(a.id) ? 1 : 0;
+      const bb = brokenThumbs.has(b.id) ? 1 : 0;
+      return ab - bb;
+    });
+  }, [activeCategory, searchTerm, brokenThumbs]);
 
-  const featuredCourse = useMemo(() => COURSES_DATA.find(c => c.isNew) ?? COURSES_DATA[0], []);
+  const featuredCourse = useMemo(() => {
+    const newOnes = COURSES_DATA.filter(c => c.isNew && !brokenThumbs.has(c.id));
+    if (newOnes.length > 0) return newOnes[0];
+    const okOnes = COURSES_DATA.filter(c => !brokenThumbs.has(c.id));
+    return okOnes[0] ?? COURSES_DATA[0];
+  }, [brokenThumbs]);
 
   const openCourse = (course: Course) => {
     setSelectedCourse(course);
@@ -92,42 +178,45 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
   };
 
   if (selectedCourse) {
-    const related = COURSES_DATA.filter(c => c.category === selectedCourse.category && c.id !== selectedCourse.id).slice(0, 4);
+    const related = COURSES_DATA
+      .filter(c => c.category === selectedCourse.category && c.id !== selectedCourse.id)
+      .sort((a, b) => (brokenThumbs.has(a.id) ? 1 : 0) - (brokenThumbs.has(b.id) ? 1 : 0))
+      .slice(0, 4);
 
     return (
-      <div className="min-h-screen bg-slate-50 animate-fade-in">
+      <div className="min-h-screen bg-slate-50 animate-fade-in pb-24 md:pb-0">
         <div className="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-6 pb-10">
-            <div className="flex items-center gap-3 text-sm mb-6">
-              <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1">
-                <ArrowLeft className="w-4 h-4" /> Voltar ao Dashboard
+          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-8 md:pb-10">
+            <div className="flex items-center gap-2 text-xs md:text-sm mb-4 md:mb-6 overflow-x-auto whitespace-nowrap no-scrollbar">
+              <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1 shrink-0">
+                <ArrowLeft className="w-4 h-4" /> Voltar ao Painel
               </button>
               <span className="text-blue-300">/</span>
-              <button onClick={closeCourse} className="text-blue-200 hover:text-white">HoteisRio Academy</button>
+              <button onClick={closeCourse} className="text-blue-200 hover:text-white shrink-0">ABIHRJ Academy</button>
               <span className="text-blue-300">/</span>
               <span className="text-white/80 truncate">{selectedCourse.title}</span>
             </div>
 
-            <div className="grid lg:grid-cols-[1fr_320px] gap-8 items-start">
+            <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8 items-start">
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
                     <Tag className="w-3 h-3" /> {selectedCourse.category}
                   </span>
                   {selectedCourse.isNew && (
                     <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">NOVO</span>
                   )}
                 </div>
-                <h1 className="text-3xl md:text-4xl font-black leading-tight mb-3">{selectedCourse.title}</h1>
+                <h1 className="text-2xl md:text-4xl font-black leading-tight mb-3">{selectedCourse.title}</h1>
                 <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-2xl">{selectedCourse.description}</p>
-                <div className="flex flex-wrap items-center gap-5 mt-5 text-sm text-blue-100">
+                <div className="flex flex-wrap items-center gap-3 md:gap-5 mt-4 md:mt-5 text-xs md:text-sm text-blue-100">
                   <span className="inline-flex items-center gap-1.5"><Clock className="w-4 h-4" /> {selectedCourse.duration}</span>
                   <span className="inline-flex items-center gap-1.5"><Calendar className="w-4 h-4" /> 2026</span>
                   <span className="inline-flex items-center gap-1.5"><GraduationCap className="w-4 h-4" /> Certificado de participação</span>
                 </div>
               </div>
-              <div className="bg-white/10 backdrop-blur rounded-xl p-5 border border-white/15 w-full">
-                <p className="text-xs uppercase tracking-widest text-blue-200 font-bold mb-3">Acoes</p>
+              <div className="bg-white/10 backdrop-blur rounded-xl p-4 md:p-5 border border-white/15 w-full">
+                <p className="text-[11px] uppercase tracking-widest text-blue-200 font-bold mb-3">Ações</p>
                 <button
                   onClick={() => shareLink(selectedCourse)}
                   className="w-full flex items-center justify-center gap-2 bg-white text-blue-900 font-bold rounded-lg py-2.5 text-sm hover:bg-blue-50 transition-colors"
@@ -148,7 +237,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 md:px-8 -mt-6 pb-16">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 -mt-4 md:-mt-6 pb-10 md:pb-16">
           <div className="bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-slate-200">
             <div className="aspect-video">
               <iframe
@@ -163,21 +252,21 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_320px] gap-8 mt-10">
-            <div className="space-y-8">
-              <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                <h2 className="text-lg font-black text-slate-900 mb-3 flex items-center gap-2">
+          <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8 mt-8 md:mt-10">
+            <div className="space-y-5 md:space-y-8">
+              <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
+                <h2 className="text-base md:text-lg font-black text-slate-900 mb-3 flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-blue-700" /> Sobre este curso
                 </h2>
                 <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{selectedCourse.description}</p>
               </section>
 
-              <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                <h2 className="text-lg font-black text-slate-900 mb-3 flex items-center gap-2">
+              <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
+                <h2 className="text-base md:text-lg font-black text-slate-900 mb-3 flex items-center gap-2">
                   <Users className="w-5 h-5 text-blue-700" /> Indicado para
                 </h2>
                 <ul className="text-sm text-slate-700 grid sm:grid-cols-2 gap-2">
-                  {['Gestores e diretores hoteleiros', 'Profissionais de RH e DP', 'Liderancas operacionais', 'Equipes de governanca e recepcao'].map(item => (
+                  {['Gestores e diretores hoteleiros', 'Profissionais de RH e DP', 'Lideranças operacionais', 'Equipes de governança e recepção'].map(item => (
                     <li key={item} className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" /> {item}
                     </li>
@@ -196,7 +285,11 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                     {related.map(c => (
                       <li key={c.id}>
                         <button onClick={() => openCourse(c)} className="w-full flex gap-3 text-left group">
-                          <img src={c.thumbnailUrl} alt="" className="w-20 h-12 object-cover rounded-md shrink-0 ring-1 ring-slate-200" />
+                          <CourseThumb
+                            course={c}
+                            onBroken={markBroken}
+                            className="w-20 h-12 object-cover rounded-md shrink-0 ring-1 ring-slate-200"
+                          />
                           <div className="min-w-0">
                             <p className="text-xs font-bold text-slate-900 leading-4 line-clamp-2 group-hover:text-blue-700">{c.title}</p>
                             <p className="text-[11px] text-slate-500 mt-1 inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {c.duration}</p>
@@ -215,38 +308,38 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 animate-fade-in">
+    <div className="min-h-screen bg-slate-50 animate-fade-in pb-24 md:pb-0">
       <div className="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 pt-6 pb-12">
-          <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1 text-sm mb-8">
-            <ArrowLeft className="w-4 h-4" /> Voltar ao Dashboard
+        <div className="max-w-6xl mx-auto px-4 md:px-8 pt-4 md:pt-6 pb-8 md:pb-12">
+          <button onClick={onBack} className="text-blue-200 hover:text-white inline-flex items-center gap-1 text-sm mb-5 md:mb-8">
+            <ArrowLeft className="w-4 h-4" /> Voltar ao Painel
           </button>
 
-          <div className="grid lg:grid-cols-[1fr_360px] gap-8 items-start">
+          <div className="grid lg:grid-cols-[1fr_360px] gap-6 lg:gap-8 items-start">
             <div>
-              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-300 mb-3">
-                <Sparkles className="w-4 h-4" /> HoteisRio Academy
+              <span className="inline-flex items-center gap-2 text-[11px] md:text-xs font-bold uppercase tracking-widest text-amber-300 mb-2 md:mb-3">
+                <Sparkles className="w-4 h-4" /> ABIHRJ Academy
               </span>
-              <h1 className="text-3xl md:text-5xl font-black leading-tight mb-4">
-                Capacitacao continua para a hotelaria carioca.
+              <h1 className="text-2xl md:text-5xl font-black leading-tight mb-3 md:mb-4">
+                Capacitação contínua para a hotelaria carioca.
               </h1>
               <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-2xl">
                 Cursos, palestras e treinamentos com especialistas do setor.
-                Aprenda no seu ritmo, com conteudos selecionados para gestores, RH, operacao e atendimento.
+                Aprenda no seu ritmo, com conteúdos selecionados para gestores, RH, operação e atendimento.
               </p>
 
-              <div className="grid grid-cols-3 gap-3 mt-8 max-w-md">
+              <div className="grid grid-cols-3 gap-2 md:gap-3 mt-6 md:mt-8 max-w-md">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-3 border border-white/15">
-                  <p className="text-2xl font-black">{COURSES_DATA.length}</p>
-                  <p className="text-xs text-blue-100 mt-1">Cursos</p>
+                  <p className="text-xl md:text-2xl font-black">{COURSES_DATA.length}</p>
+                  <p className="text-[11px] md:text-xs text-blue-100 mt-1">Cursos</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-3 border border-white/15">
-                  <p className="text-2xl font-black">{categories.length - 1}</p>
-                  <p className="text-xs text-blue-100 mt-1">Categorias</p>
+                  <p className="text-xl md:text-2xl font-black">{categories.length - 1}</p>
+                  <p className="text-[11px] md:text-xs text-blue-100 mt-1">Categorias</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-3 border border-white/15">
-                  <p className="text-2xl font-black">{totalDuration}</p>
-                  <p className="text-xs text-blue-100 mt-1">de conteudo</p>
+                  <p className="text-xl md:text-2xl font-black">{totalDuration}</p>
+                  <p className="text-[11px] md:text-xs text-blue-100 mt-1">de conteúdo</p>
                 </div>
               </div>
             </div>
@@ -256,13 +349,17 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                 onClick={() => openCourse(featuredCourse)}
                 className="group relative w-full overflow-hidden rounded-xl text-left ring-1 ring-white/15 shadow-2xl"
               >
-                <img src={featuredCourse.thumbnailUrl} alt={featuredCourse.title} className="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-105" />
+                <CourseThumb
+                  course={featuredCourse}
+                  onBroken={markBroken}
+                  className="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-950/95 via-blue-950/40 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 text-white">
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-amber-300 mb-2">
                     <Award className="w-3 h-3" /> Destaque
                   </span>
-                  <h3 className="text-base font-black leading-5 mb-2 line-clamp-2">{featuredCourse.title}</h3>
+                  <h3 className="text-sm md:text-base font-black leading-5 mb-2 line-clamp-2">{featuredCourse.title}</h3>
                   <div className="flex items-center gap-3 text-xs text-blue-100">
                     <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {featuredCourse.duration}</span>
                     <span className="inline-flex items-center gap-1.5 text-white font-bold"><Play className="w-3 h-3 fill-white" /> Assistir</span>
@@ -274,16 +371,16 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-8 py-10">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5 md:mb-6">
           <div>
-            <h2 className="text-xl font-black text-slate-900">Catalogo de cursos</h2>
-            <p className="text-sm text-slate-500 mt-1">Explore por categoria ou busque por tema, instrutor ou palavra-chave.</p>
+            <h2 className="text-lg md:text-xl font-black text-slate-900">Catálogo de cursos</h2>
+            <p className="text-xs md:text-sm text-slate-500 mt-1">Explore por categoria ou busque por tema, instrutor ou palavra-chave.</p>
           </div>
           <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
-              type="text"
+              type="search"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Buscar cursos..."
@@ -292,12 +389,12 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex gap-2 mb-6 md:mb-8 overflow-x-auto no-scrollbar -mx-4 md:mx-0 px-4 md:px-0 pb-1">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors border ${
+              className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-colors border ${
                 activeCategory === cat
                   ? 'bg-blue-900 text-white border-blue-900'
                   : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300'
@@ -313,17 +410,17 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
             Nenhum curso encontrado para a busca atual.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             {filteredCourses.map(course => (
               <button
                 key={course.id}
                 onClick={() => openCourse(course)}
-                className="group bg-white rounded-xl border border-slate-200 overflow-hidden text-left shadow-sm hover:shadow-lg hover:border-blue-300 transition-all flex flex-col"
+                className="group bg-white rounded-xl border border-slate-200 overflow-hidden text-left shadow-sm hover:shadow-lg hover:border-blue-300 transition-all flex flex-col active:scale-[0.99]"
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-100">
-                  <img
-                    src={course.thumbnailUrl}
-                    alt={course.title}
+                  <CourseThumb
+                    course={course}
+                    onBroken={markBroken}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">

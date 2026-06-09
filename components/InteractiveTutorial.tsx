@@ -104,7 +104,7 @@ const ADVANCED_STEPS: Step[] = [
   },
   {
     targetId: 'sidebar-courses',
-    title: 'HoteisRio Academy',
+    title: 'ABIHRJ Academy',
     description: 'Plataforma de cursos e treinamentos online para capacitar sua equipe.',
     position: 'right'
   },
