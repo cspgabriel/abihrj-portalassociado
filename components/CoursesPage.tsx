@@ -9,6 +9,7 @@ import { Course } from '../types';
 
 interface CoursesPageProps {
   onBack: () => void;
+  userName?: string;
 }
 
 const formatTotalDuration = (durations: string[]): string => {
@@ -87,7 +88,7 @@ const CourseThumb: React.FC<CourseThumbProps> = ({ course, className, onBroken }
   );
 };
 
-const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
+const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
   const [searchTerm, setSearchTerm] = useState('');
@@ -177,6 +178,83 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Emite um certificado de participação (abre uma janela imprimível / salvável em PDF)
+  const emitCertificate = (course: Course) => {
+    const name = userName && userName.trim() && userName !== 'Visitante' ? userName.trim() : 'Associado(a)';
+    const date = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const code = `ABIHRJ-${course.id.toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+    const win = window.open('', '_blank', 'width=1100,height=800');
+    if (!win) {
+      alert('Não foi possível abrir o certificado. Permita pop-ups para este site e tente novamente.');
+      return;
+    }
+    const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const html = `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Certificado — ${esc(course.title)}</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: #e9eef6; color: #0f1b33; }
+  .toolbar { text-align: center; padding: 16px; }
+  .toolbar button { font-family: Arial, sans-serif; background: #002b64; color: #fff; border: 0; padding: 10px 22px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
+  .cert { width: 297mm; height: 210mm; margin: 0 auto; background: #fff; position: relative; padding: 22mm 24mm; }
+  .frame { position: absolute; inset: 10mm; border: 2px solid #002b64; }
+  .frame::after { content: ''; position: absolute; inset: 4mm; border: 1px solid #f5c64b; }
+  .content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .brand { font-family: Arial, sans-serif; letter-spacing: .28em; text-transform: uppercase; font-weight: 800; color: #002b64; font-size: 15px; margin-top: 6mm; }
+  .brand span { color: #c79a2b; }
+  .sub { font-family: Arial, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #6b7890; font-size: 10px; margin-top: 4px; }
+  .title { font-size: 40px; color: #002b64; margin: 14mm 0 2mm; letter-spacing: .02em; }
+  .rule { width: 70px; height: 3px; background: #f5c64b; border-radius: 3px; }
+  .lead { font-size: 15px; color: #44506a; margin-top: 8mm; }
+  .name { font-size: 34px; color: #0f1b33; margin: 5mm 0; font-weight: bold; }
+  .name-line { width: 60%; border-bottom: 1px solid #c9d2e3; }
+  .course { font-size: 18px; color: #002b64; max-width: 80%; margin: 7mm 0 2mm; font-weight: bold; }
+  .meta { font-family: Arial, sans-serif; font-size: 12px; color: #6b7890; }
+  .footer { margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; font-family: Arial, sans-serif; }
+  .sign { text-align: center; width: 42%; }
+  .sign .ln { border-top: 1px solid #0f1b33; padding-top: 6px; font-size: 12px; color: #0f1b33; font-weight: bold; }
+  .sign .role { font-size: 10px; color: #6b7890; }
+  .code { font-size: 9px; color: #9aa6bd; }
+  @media print { .toolbar { display: none; } body { background: #fff; } .cert { margin: 0; } }
+</style>
+</head>
+<body>
+  <div class="toolbar"><button onclick="window.print()">Imprimir / Salvar como PDF</button></div>
+  <div class="cert">
+    <div class="frame"></div>
+    <div class="content">
+      <div class="brand">ABIH-RJ <span>•</span> HoteisRIO Academy</div>
+      <div class="sub">Associação Brasileira da Indústria de Hotéis — Rio de Janeiro</div>
+      <div class="title">Certificado de Participação</div>
+      <div class="rule"></div>
+      <div class="lead">Certificamos que</div>
+      <div class="name">${esc(name)}</div>
+      <div class="name-line"></div>
+      <div class="lead">concluiu o curso/treinamento</div>
+      <div class="course">${esc(course.title)}</div>
+      <div class="meta">Categoria: ${esc(course.category)} &nbsp;•&nbsp; Carga: ${esc(course.duration)} &nbsp;•&nbsp; Emitido em ${esc(date)}</div>
+      <div class="footer">
+        <div class="code">Código de verificação: ${esc(code)}</div>
+        <div class="sign">
+          <div class="ln">ABIH-RJ / HoteisRIO</div>
+          <div class="role">Portal do Associado — ABIHRJ Academy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>window.onload=function(){setTimeout(function(){try{window.print();}catch(e){}},500);};</script>
+</body>
+</html>`;
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  };
+
   if (selectedCourse) {
     const related = COURSES_DATA
       .filter(c => c.category === selectedCourse.category && c.id !== selectedCourse.id)
@@ -223,6 +301,12 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack }) => {
                 >
                   {copied ? <CheckCircle2 className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4" />}
                   {copied ? 'Link copiado' : 'Compartilhar curso'}
+                </button>
+                <button
+                  onClick={() => emitCertificate(selectedCourse)}
+                  className="mt-2 w-full flex items-center justify-center gap-2 bg-amber-400 text-blue-950 font-bold rounded-lg py-2.5 text-sm hover:bg-amber-300 transition-colors"
+                >
+                  <Award className="w-4 h-4" /> Emitir Certificado
                 </button>
                 <a
                   href={`https://youtu.be/${selectedCourse.youtubeId}`}

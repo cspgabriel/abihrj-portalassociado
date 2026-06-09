@@ -3,12 +3,14 @@ import { User } from '../types';
 import { auth, db } from '../firebaseConfig';
 import { analyticsService } from './analyticsService';
 import { 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  updateProfile, 
-  signOut, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signOut,
   onAuthStateChanged,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, addDoc, collection, serverTimestamp, query, limit, getDocs } from 'firebase/firestore';
 
@@ -150,6 +152,127 @@ export const authService = {
     await logAccess(mockUser);
     if (mockObserver) mockObserver(mockUser);
     return mockUser;
+  },
+
+  loginWithGoogle: async (): Promise<{ user: User; needsOnboarding: boolean }> => {
+    if (!isFirebaseConfigured) {
+      throw new Error('Login com Google requer Firebase configurado.');
+    }
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const firebaseUser = result.user;
+
+      let hotel = '';
+      let role = 'Associado';
+      let cargo = '';
+      let whatsapp = '';
+      let needsOnboarding = false;
+
+      try {
+        const userRef = doc(db, 'users', firebaseUser.uid);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          hotel = data.hotel || '';
+          role = data.role || role;
+          cargo = data.cargo || '';
+          whatsapp = data.whatsapp || '';
+          // Se o documento existe mas falta o hotel, ainda precisa completar
+          needsOnboarding = !hotel;
+        } else {
+          // Primeira vez logando via Google — usuário precisa completar perfil
+          needsOnboarding = true;
+        }
+      } catch (e) {
+        // Erro lendo Firestore — assume que precisa onboarding pra coletar dados
+        needsOnboarding = true;
+      }
+
+      const user: User = {
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuario',
+        email: firebaseUser.email || '',
+        hotel,
+        role,
+        cargo,
+        whatsapp,
+        avatarUrl: firebaseUser.photoURL || undefined
+      };
+
+      localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(user));
+      if (!needsOnboarding) await logAccess(user);
+      return { user, needsOnboarding };
+    } catch (error: any) {
+      const code = error?.code || '';
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        throw new Error('Login cancelado.');
+      }
+      if (code === 'auth/popup-blocked') {
+        throw new Error('O navegador bloqueou o popup. Permita popups para este site e tente novamente.');
+      }
+      if (code === 'auth/unauthorized-domain') {
+        throw new Error('Domínio não autorizado no Firebase. Adicione em Authentication → Settings → Authorized domains.');
+      }
+      if (code === 'auth/account-exists-with-different-credential') {
+        throw new Error('Este e-mail já está cadastrado com outro método de login.');
+      }
+      throw new Error('Falha ao entrar com Google: ' + (error?.message || code || 'erro desconhecido'));
+    }
+  },
+
+  completeGoogleOnboarding: async (
+    uid: string,
+    data: { hotel: string; cargo?: string; whatsapp?: string; role?: string }
+  ): Promise<User> => {
+    if (!isFirebaseConfigured) {
+      throw new Error('Firebase não configurado.');
+    }
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser || firebaseUser.uid !== uid) {
+      throw new Error('Sessão inválida. Faça login novamente.');
+    }
+
+    const hotel = data.hotel.trim();
+    const cargo = (data.cargo || '').trim();
+    const whatsapp = (data.whatsapp || '').trim();
+    const role = data.role || 'Associado';
+
+    if (!hotel) throw new Error('Nome do hotel é obrigatório.');
+
+    const userRef = doc(db, 'users', uid);
+    const existing = await getDoc(userRef).catch(() => null);
+
+    const payload: any = {
+      name: firebaseUser.displayName || '',
+      email: firebaseUser.email || '',
+      hotel,
+      role,
+      cargo,
+      whatsapp,
+      provider: 'google',
+      updatedAt: serverTimestamp(),
+    };
+    if (!existing?.exists()) payload.createdAt = serverTimestamp();
+
+    await setDoc(userRef, payload, { merge: true });
+
+    const user: User = {
+      id: uid,
+      name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuario',
+      email: firebaseUser.email || '',
+      hotel,
+      role,
+      cargo,
+      whatsapp,
+      avatarUrl: firebaseUser.photoURL || undefined,
+    };
+
+    localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, JSON.stringify(user));
+    await logAccess(user);
+    return user;
   },
 
   register: async (email: string, password: string, name: string, hotel: string, role: string, cargo: string = '', whatsapp: string = ''): Promise<User> => {

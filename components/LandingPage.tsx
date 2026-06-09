@@ -2,8 +2,6 @@ import React from 'react';
 import {
   ArrowRight,
   BriefcaseBusiness,
-  ChevronLeft,
-  ChevronRight,
   Gavel,
   LayoutGrid,
   Users,
@@ -15,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Benefit } from '../types';
 import { BENEFITS_DATA } from '../constants';
+import SuppliersBanner from './SuppliersBanner';
 
 interface LandingPageProps {
   onNavigate: (view: any) => void;
@@ -70,8 +69,6 @@ const quickLinks = [
   { label: 'Banco de Talentos', icon: Users, benefitId: 'banco-talentos' },
   { label: 'Influenciadores / UGC', icon: Camera, benefitId: 'influencers-hub' },
 ];
-
-const suppliers = ['SEBRAE', 'stone', 'ASSAI', 'TOTVS', 'Senac RJ', 'omni', 'CVC'];
 
 const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenefitClick }) => {
   const firstName = userName.split(' ')[0] || 'Associado';
@@ -188,21 +185,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
                 Ver todos os fornecedores <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
-            <div className="flex items-center gap-3">
-              <button className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm md:flex">
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-7">
-                {suppliers.map((name) => (
-                  <div key={name} className="flex h-16 items-center justify-center rounded-lg border border-slate-100 bg-white px-3 text-center text-lg font-black text-blue-900 shadow-sm">
-                    {name}
-                  </div>
-                ))}
-              </div>
-              <button className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm md:flex">
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
+            <SuppliersBanner />
           </section>
         </main>
 
