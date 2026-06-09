@@ -414,15 +414,66 @@ export const COURSES_DATA: any[] = [
     thumbnailUrl: 'https://img.youtube.com/vi/0GcOpWXiQDI/maxresdefault.jpg', 
     isNew: false 
   },
-  { 
-    id: 'course-fnhr', 
-    youtubeId: 'YeSKeFOy52Y', 
-    title: 'Treinamento FNHR Digital', 
-    description: 'Capacitação sobre o preenchimento correto e a gestão da Ficha Nacional de Registro de Hóspedes.', 
-    category: 'Gestão & Tecnologia', 
-    duration: '1h 10m', 
-    thumbnailUrl: 'https://img.youtube.com/vi/YeSKeFOy52Y/maxresdefault.jpg', 
-    isNew: false 
+  {
+    id: 'course-fnhr',
+    youtubeId: 'YeSKeFOy52Y',
+    title: 'Treinamento FNHR Digital',
+    description: 'Capacitação sobre o preenchimento correto e a gestão da Ficha Nacional de Registro de Hóspedes.',
+    category: 'Gestão & Tecnologia',
+    duration: '1h 10m',
+    thumbnailUrl: 'https://img.youtube.com/vi/YeSKeFOy52Y/maxresdefault.jpg',
+    isNew: false
+  },
+  // --- Ciclo de Seminários sobre Relações do Trabalho na Hotelaria ---
+  {
+    id: 'course-nr15',
+    youtubeId: 'j0lyPPS7PV0',
+    title: 'NR 15 — Insalubridade e Critérios Técnicos na Hotelaria',
+    description: '1ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ana Luiza Horcades. Aborda critérios técnicos da NR 15, identificação e gestão de atividades insalubres, integração do GRO com a NR-01 e boas práticas de DP e RH para evitar passivos trabalhistas.',
+    category: 'Relações do Trabalho',
+    duration: '1h',
+    thumbnailUrl: 'https://img.youtube.com/vi/j0lyPPS7PV0/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-nr1',
+    youtubeId: 'd-V8COwKEt4',
+    title: 'NR 1 — Gerenciamento de Riscos Ocupacionais na Hotelaria',
+    description: '2ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ana Luiza Horcades (Auditora-Fiscal do Trabalho — MTE). Estrutura da NR-01, GRO, mapeamento de riscos no ambiente hoteleiro, documentação e conformidade legal.',
+    category: 'Relações do Trabalho',
+    duration: '1h',
+    thumbnailUrl: 'https://img.youtube.com/vi/d-V8COwKEt4/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-jornada',
+    youtubeId: '5a12xEFi8ck',
+    title: 'Jornada de Trabalho e Banco de Horas',
+    description: '3ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Rosemary Villanueva (Auditora-Fiscal do Trabalho — MTE). Conceitos de jornada e banco de horas na CLT, diferença para horas extras, implementação sem passivos, registros e erros mais comuns.',
+    category: 'Relações do Trabalho',
+    duration: '1h',
+    thumbnailUrl: 'https://img.youtube.com/vi/5a12xEFi8ck/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-pcd',
+    youtubeId: 'ikriXX8SIGM',
+    title: 'Inclusão de PCDs — Cotas e Obrigações Legais na Hotelaria',
+    description: '4ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Marcelo José Rodrigues de Freitas (Auditor-Fiscal do Trabalho — MTE) e presença de Claudio Secchin (Superintendente Regional do Trabalho e Emprego no RJ). Lei de Cotas, cálculo, diferença entre PCD e Beneficiário Reabilitado, integração e acessibilidade.',
+    category: 'Relações do Trabalho',
+    duration: '1h',
+    thumbnailUrl: 'https://img.youtube.com/vi/ikriXX8SIGM/maxresdefault.jpg',
+    isNew: true
+  },
+  {
+    id: 'course-aprendiz',
+    youtubeId: 'pryxxgBE6RE',
+    title: 'Inclusão de Jovens Aprendizes — Programa e Obrigações na Hotelaria',
+    description: '5ª palestra do Ciclo de Seminários sobre Relações do Trabalho na Hotelaria, com Ramon de Faria Santos (Auditor-Fiscal do Trabalho — MTE e Coordenador de Aprendizagem do RJ). Programa de jovem aprendiz, Lei da Aprendizagem, cota, contratação, incentivos fiscais e integração na rotina hoteleira.',
+    category: 'Relações do Trabalho',
+    duration: '1h',
+    thumbnailUrl: 'https://img.youtube.com/vi/pryxxgBE6RE/maxresdefault.jpg',
+    isNew: true
   }
 ];
 
