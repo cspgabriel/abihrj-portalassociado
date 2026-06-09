@@ -723,7 +723,7 @@ export default function App() {
       case 'ROCK_IN_RIO': return <RockInRioPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'CALCULATORS_PAGE': return <CalculatorsPage onBack={() => navigateTo('LANDING_PAGE')} onOpenCalculator={(b) => { setSelectedBenefit(b); setShowCalculatorModal(true); }} />;
       case 'REGISTRATION_UPDATE': return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'COURSES_V2': return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} userName={safeUser.name} />;
+      case 'COURSES_V2': return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} userName={safeUser.name} userId={safeUser.id} />;
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;

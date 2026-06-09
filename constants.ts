@@ -3,7 +3,7 @@
 // Suporte do SO: Windows11
 // Descrição: Constantes e dados estáticos da aplicação
 
-import { Benefit, BenefitCategory, Forum, GamificationBadge, RioEvent } from './types';
+import { Benefit, BenefitCategory, Forum, GamificationBadge, RioEvent, QuizQuestion } from './types';
 import * as Icons from 'lucide-react';
 
 export const COMMERCIAL_SUB_ACTIONS = [
@@ -508,6 +508,66 @@ export const COURSES_DATA: any[] = [
     isNew: false
   }
 ];
+
+// Avaliações por curso (10 perguntas). Aprovação: 70% (7/10).
+// As perguntas da FNRH foram elaboradas a partir do conteúdo oficial do treinamento
+// e da página FNRH Digital (Lei 11.771/2008, Decreto 7.381/2010, Portaria MTur nº 4/2026, MTur/SERPRO).
+export const QUIZ_PASS_RATIO = 0.7;
+
+export const COURSE_QUIZZES: Record<string, QuizQuestion[]> = {
+  'course-fnhr': [
+    {
+      q: 'A partir de qual data a FNRH em meio digital passou a ser obrigatória para os meios de hospedagem?',
+      options: ['1º de janeiro de 2026', '20 de abril de 2026', '20 de fevereiro de 2026', '1º de julho de 2026'],
+      correct: 1,
+    },
+    {
+      q: 'Qual lei estabelece as obrigações dos meios de hospedagem (Lei Geral do Turismo)?',
+      options: ['Lei nº 8.078/1990', 'Lei nº 11.771/2008', 'Lei nº 13.709/2018', 'Lei nº 12.846/2013'],
+      correct: 1,
+    },
+    {
+      q: 'Qual decreto determina que a movimentação diária de hóspedes seja declarada por meio da FNRH?',
+      options: ['Decreto nº 7.381/2010', 'Decreto nº 9.203/2017', 'Decreto nº 6.514/2008', 'Decreto nº 8.539/2015'],
+      correct: 0,
+    },
+    {
+      q: 'Qual norma prorrogou por 60 dias o início da FNRH em meio digital?',
+      options: ['Portaria MTur nº 41', 'Portaria MTur nº 4, de 18/02/2026', 'Resolução CNT nº 12', 'Instrução Normativa nº 7'],
+      correct: 1,
+    },
+    {
+      q: 'A plataforma da FNRH Digital foi desenvolvida pelo Ministério do Turismo em parceria com qual órgão?',
+      options: ['Receita Federal', 'SERPRO', 'Polícia Federal', 'IBGE'],
+      correct: 1,
+    },
+    {
+      q: 'Por quanto tempo os dados da FNRH devem ser arquivados eletronicamente?',
+      options: ['1 ano', '2 anos', '5 anos', '10 anos'],
+      correct: 2,
+    },
+    {
+      q: 'Na nova versão digital, como o hóspede acessa/preenche a FNRH?',
+      options: ['Por e-mail', 'Por login na conta gov.br', 'Por aplicativo do hotel', 'Por assinatura em papel'],
+      correct: 1,
+    },
+    {
+      q: 'Qual é um pré-requisito para o meio de hospedagem utilizar o sistema da FNRH Digital?',
+      options: ['Ter alvará da prefeitura', 'Estar com o cadastro ativo no Cadastur', 'Ter CNPJ MEI', 'Ser filiado a uma rede hoteleira'],
+      correct: 1,
+    },
+    {
+      q: 'O que a FNRH Digital substitui definitivamente?',
+      options: ['O contrato de hospedagem', 'O modelo de preenchimento em papel', 'A nota fiscal', 'O cadastro no Cadastur'],
+      correct: 1,
+    },
+    {
+      q: 'Segundo o Governo Federal, a FNRH Digital atende integralmente a qual legislação de proteção de dados?',
+      options: ['Marco Civil da Internet', 'Código de Defesa do Consumidor', 'LGPD (Lei Geral de Proteção de Dados)', 'Lei de Acesso à Informação'],
+      correct: 2,
+    },
+  ],
+};
 
 // Re-exports for existing functionality
 export const RIO_EVENTS: RioEvent[] = [

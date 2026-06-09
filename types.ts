@@ -83,6 +83,28 @@ export interface Course {
   isNew?: boolean;
 }
 
+// Pergunta de avaliação (quiz) de um curso
+export interface QuizQuestion {
+  q: string;
+  options: string[];
+  correct: number; // índice da alternativa correta
+}
+
+// Progresso de um usuário em um curso (salvo no Firestore: coleção course_progress)
+export interface CourseProgress {
+  userId: string;
+  courseId: string;
+  courseTitle?: string;
+  started?: boolean;
+  completed?: boolean;
+  completedAt?: string;
+  quizScore?: number;
+  quizTotal?: number;
+  quizPassed?: boolean;
+  quizAt?: string;
+  updatedAt?: string;
+}
+
 export interface Forum {
   id: string;
   title: string;

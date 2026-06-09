@@ -3,13 +3,16 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   ArrowLeft, Play, Clock, CheckCircle2, Search, Share2, GraduationCap,
   BookOpen, Users, Award, Sparkles, ChevronRight, Tag, Calendar,
+  ListChecks, Lock, RotateCcw, LifeBuoy, XCircle, CircleDashed,
 } from 'lucide-react';
-import { COURSES_DATA } from '../constants';
-import { Course } from '../types';
+import { COURSES_DATA, COURSE_QUIZZES, QUIZ_PASS_RATIO } from '../constants';
+import { Course, CourseProgress } from '../types';
+import { courseProgressService } from '../services/courseProgressService';
 
 interface CoursesPageProps {
   onBack: () => void;
   userName?: string;
+  userId?: string;
 }
 
 const formatTotalDuration = (durations: string[]): string => {
@@ -88,12 +91,19 @@ const CourseThumb: React.FC<CourseThumbProps> = ({ course, className, onBroken }
   );
 };
 
-const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
+const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
   const [searchTerm, setSearchTerm] = useState('');
   const [copied, setCopied] = useState(false);
   const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(new Set());
+
+  // Player + progresso + avaliação
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState<CourseProgress | null>(null);
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [quizResult, setQuizResult] = useState<{ score: number; total: number; passed: boolean } | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -109,6 +119,26 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
     if (scrollable) scrollable.scrollTo({ top: 0, behavior: 'auto' });
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [selectedCourse]);
+
+  // Carrega o progresso do usuário ao abrir um curso e reseta o player/quiz
+  useEffect(() => {
+    setPlaying(false);
+    setQuizOpen(false);
+    setAnswers([]);
+    setQuizResult(null);
+    if (selectedCourse && userId) {
+      courseProgressService.get(userId, selectedCourse.id)
+        .then(p => {
+          setProgress(p);
+          if (p && p.quizScore != null && p.quizTotal != null) {
+            setQuizResult({ score: p.quizScore, total: p.quizTotal, passed: !!p.quizPassed });
+          }
+        })
+        .catch(() => {});
+    } else {
+      setProgress(null);
+    }
+  }, [selectedCourse, userId]);
 
   const markBroken = (id: string) => {
     setBrokenThumbs(prev => {
@@ -255,7 +285,55 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
     win.document.close();
   };
 
+  // ---- Progresso & Avaliação ----
+  const persistProgress = async (course: Course, partial: Partial<CourseProgress>) => {
+    if (!userId) return;
+    try {
+      const updated = await courseProgressService.save(userId, course.id, { courseTitle: course.title, ...partial });
+      setProgress(updated);
+    } catch {
+      // mantém estado atual em caso de falha
+    }
+  };
+
+  const handlePlay = (course: Course) => {
+    setPlaying(true);
+    if (!progress?.started) persistProgress(course, { started: true });
+  };
+
+  const markComplete = (course: Course) => {
+    persistProgress(course, { completed: true, completedAt: new Date().toISOString() });
+  };
+
+  const startQuiz = (quiz: typeof COURSE_QUIZZES[string]) => {
+    setAnswers(new Array(quiz.length).fill(-1));
+    setQuizResult(null);
+    setQuizOpen(true);
+  };
+
+  const submitQuiz = (course: Course, quiz: typeof COURSE_QUIZZES[string]) => {
+    let score = 0;
+    quiz.forEach((item, i) => { if (answers[i] === item.correct) score++; });
+    const total = quiz.length;
+    const passed = score / total >= QUIZ_PASS_RATIO;
+    setQuizResult({ score, total, passed });
+    setQuizOpen(false);
+    persistProgress(course, {
+      quizScore: score,
+      quizTotal: total,
+      quizPassed: passed,
+      quizAt: new Date().toISOString(),
+      ...(passed ? { completed: true, completedAt: new Date().toISOString() } : {}),
+    });
+  };
+
+  const progressPct = progress?.completed ? 100 : progress?.started ? 50 : 0;
+  const progressLabel = progress?.completed ? 'Concluído' : progress?.started ? 'Em andamento' : 'Não iniciado';
+
   if (selectedCourse) {
+    const quiz = COURSE_QUIZZES[selectedCourse.id] || null;
+    const isCompleted = !!progress?.completed;
+    const allAnswered = quiz ? answers.length === quiz.length && answers.every(a => a >= 0) : false;
     const related = COURSES_DATA
       .filter(c => c.category === selectedCourse.category && c.id !== selectedCourse.id)
       .sort((a, b) => (brokenThumbs.has(a.id) ? 1 : 0) - (brokenThumbs.has(b.id) ? 1 : 0))
@@ -293,51 +371,125 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
                   <span className="inline-flex items-center gap-1.5"><GraduationCap className="w-4 h-4" /> Certificado de participação</span>
                 </div>
               </div>
-              <div className="bg-white/10 backdrop-blur rounded-xl p-4 md:p-5 border border-white/15 w-full">
-                <p className="text-[11px] uppercase tracking-widest text-blue-200 font-bold mb-3">Ações</p>
-                <button
-                  onClick={() => shareLink(selectedCourse)}
-                  className="w-full flex items-center justify-center gap-2 bg-white text-blue-900 font-bold rounded-lg py-2.5 text-sm hover:bg-blue-50 transition-colors"
-                >
-                  {copied ? <CheckCircle2 className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4" />}
-                  {copied ? 'Link copiado' : 'Compartilhar curso'}
-                </button>
-                <button
-                  onClick={() => emitCertificate(selectedCourse)}
-                  className="mt-2 w-full flex items-center justify-center gap-2 bg-amber-400 text-blue-950 font-bold rounded-lg py-2.5 text-sm hover:bg-amber-300 transition-colors"
-                >
-                  <Award className="w-4 h-4" /> Emitir Certificado
-                </button>
-                <a
-                  href={`https://youtu.be/${selectedCourse.youtubeId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 w-full flex items-center justify-center gap-2 bg-white/10 text-white font-bold rounded-lg py-2.5 text-sm hover:bg-white/20 transition-colors border border-white/15"
-                >
-                  Abrir no YouTube
-                </a>
+              <div className="w-full">
+                <div className="relative aspect-video rounded-xl overflow-hidden ring-1 ring-white/15 shadow-2xl bg-black">
+                  {playing ? (
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${selectedCourse.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+                      title={selectedCourse.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <button onClick={() => handlePlay(selectedCourse)} className="group absolute inset-0 text-left">
+                      <CourseThumb course={selectedCourse} onBroken={markBroken} className="w-full h-full object-cover" />
+                      <span className="absolute inset-0 bg-gradient-to-t from-blue-950/85 via-blue-950/25 to-transparent" />
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <span className="w-14 h-14 rounded-full bg-blue-600/90 group-hover:bg-blue-600 flex items-center justify-center shadow-lg ring-4 ring-white/20 transition-colors">
+                          <Play className="w-6 h-6 text-white fill-white" />
+                        </span>
+                      </span>
+                      <span className="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 backdrop-blur-sm">
+                        <Clock className="w-3 h-3" /> {selectedCourse.duration}
+                      </span>
+                      <span className="absolute bottom-2 left-3">
+                        <span className="block text-sm font-black text-white leading-4">Assistir ao vídeo</span>
+                        <span className="block text-[10px] text-blue-100 mt-0.5">{selectedCourse.category}</span>
+                      </span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 md:px-8 -mt-3 md:-mt-10 pb-10 md:pb-16">
-          <div className="bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-slate-200">
-            <div className="aspect-video">
-              <iframe
-                width="100%"
-                height="100%"
-                src={`https://www.youtube.com/embed/${selectedCourse.youtubeId}?rel=0&modestbranding=1`}
-                title={selectedCourse.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8 mt-6 md:mt-8">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 mt-6 md:mt-8 pb-10 md:pb-16">
+          <div className="grid lg:grid-cols-[1fr_320px] gap-6 lg:gap-8">
             <div className="space-y-5 md:space-y-8">
+              {/* Seu progresso */}
+              <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
+                <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
+                  <h2 className="text-base md:text-lg font-black text-slate-900 flex items-center gap-2">
+                    <CircleDashed className="w-5 h-5 text-blue-700" /> Seu progresso
+                  </h2>
+                  <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${progress?.completed ? 'bg-emerald-100 text-emerald-700' : progress?.started ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>
+                    {progressLabel}
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full transition-all duration-500 ${progress?.completed ? 'bg-emerald-500' : 'bg-blue-600'}`} style={{ width: `${progressPct}%` }} />
+                </div>
+                {progress?.quizPassed != null && progress?.quizScore != null && (
+                  <p className="text-xs text-slate-500 mt-3">
+                    Avaliação: <strong>{progress.quizScore}/{progress.quizTotal}</strong> — {progress.quizPassed ? 'aprovado' : 'não aprovado'}
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {!isCompleted ? (
+                    <button onClick={() => markComplete(selectedCourse)} className="inline-flex items-center gap-2 bg-blue-900 text-white text-sm font-bold rounded-lg px-4 py-2 hover:bg-blue-800 transition-colors">
+                      <CheckCircle2 className="w-4 h-4" /> Marcar como concluído
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 text-emerald-700 text-sm font-bold">
+                      <CheckCircle2 className="w-4 h-4" /> Curso concluído
+                    </span>
+                  )}
+                </div>
+              </section>
+
+              {/* Avaliação do curso */}
+              {quiz && (
+                <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
+                  <h2 className="text-base md:text-lg font-black text-slate-900 mb-1 flex items-center gap-2">
+                    <ListChecks className="w-5 h-5 text-blue-700" /> Avaliação do curso
+                  </h2>
+                  <p className="text-xs text-slate-500 mb-4">{quiz.length} perguntas — aprovação a partir de {Math.round(QUIZ_PASS_RATIO * 100)}%.</p>
+
+                  {!quizOpen && quizResult && (
+                    <div className={`rounded-lg border p-4 mb-4 ${quizResult.passed ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
+                      <p className="text-sm font-bold flex items-center gap-2">
+                        {quizResult.passed ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-amber-600" />}
+                        Você acertou {quizResult.score} de {quizResult.total} — {quizResult.passed ? 'Aprovado!' : 'Tente novamente.'}
+                      </p>
+                      {quizResult.passed && <p className="text-xs text-slate-600 mt-1">Curso marcado como concluído. Já pode emitir seu certificado.</p>}
+                    </div>
+                  )}
+
+                  {!quizOpen ? (
+                    <button onClick={() => startQuiz(quiz)} className="inline-flex items-center gap-2 bg-blue-900 text-white text-sm font-bold rounded-lg px-4 py-2.5 hover:bg-blue-800 transition-colors">
+                      {quizResult ? <><RotateCcw className="w-4 h-4" /> Refazer avaliação</> : <><ListChecks className="w-4 h-4" /> Iniciar avaliação</>}
+                    </button>
+                  ) : (
+                    <div className="space-y-5">
+                      {quiz.map((item, qi) => (
+                        <div key={qi}>
+                          <p className="text-sm font-bold text-slate-800 mb-2">{qi + 1}. {item.q}</p>
+                          <div className="space-y-1.5">
+                            {item.options.map((opt, oi) => (
+                              <label key={oi} className={`flex items-center gap-2 text-sm rounded-lg border px-3 py-2 cursor-pointer transition-colors ${answers[qi] === oi ? 'border-blue-500 bg-blue-50 text-blue-900' : 'border-slate-200 hover:bg-slate-50 text-slate-700'}`}>
+                                <input type="radio" name={`q-${qi}`} checked={answers[qi] === oi} onChange={() => setAnswers(prev => { const n = [...prev]; n[qi] = oi; return n; })} className="accent-blue-600" />
+                                {opt}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <button disabled={!allAnswered} onClick={() => submitQuiz(selectedCourse, quiz)} className="inline-flex items-center gap-2 bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-lg px-4 py-2.5 hover:bg-emerald-700 transition-colors">
+                          <CheckCircle2 className="w-4 h-4" /> Enviar respostas
+                        </button>
+                        <button onClick={() => setQuizOpen(false)} className="inline-flex items-center gap-2 text-slate-600 text-sm font-bold rounded-lg px-4 py-2.5 hover:bg-slate-100 transition-colors">
+                          Cancelar
+                        </button>
+                        {!allAnswered && <span className="text-xs text-slate-400">Responda todas as perguntas para enviar.</span>}
+                      </div>
+                    </div>
+                  )}
+                </section>
+              )}
               <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
                 <h2 className="text-base md:text-lg font-black text-slate-900 mb-3 flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-blue-700" /> Sobre este curso
@@ -360,6 +512,25 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
             </div>
 
             <aside className="space-y-4">
+              <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+                <h3 className="text-sm font-black text-slate-900 mb-3">Ações</h3>
+                <button onClick={() => shareLink(selectedCourse)} className="w-full flex items-center justify-center gap-2 bg-slate-100 text-blue-900 font-bold rounded-lg py-2.5 text-sm hover:bg-slate-200 transition-colors">
+                  {copied ? <CheckCircle2 className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4" />}
+                  {copied ? 'Link copiado' : 'Compartilhar curso'}
+                </button>
+                <button
+                  onClick={() => { if (isCompleted) emitCertificate(selectedCourse); }}
+                  disabled={!isCompleted}
+                  className={`mt-2 w-full flex items-center justify-center gap-2 font-bold rounded-lg py-2.5 text-sm transition-colors ${isCompleted ? 'bg-amber-400 text-blue-950 hover:bg-amber-300' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+                >
+                  {isCompleted ? <Award className="w-4 h-4" /> : <Lock className="w-4 h-4" />} Emitir Certificado
+                </button>
+                {!isCompleted && <p className="text-[11px] text-slate-400 mt-1.5 text-center">Conclua o curso (ou a avaliação) para emitir o certificado.</p>}
+                <a href={`https://youtu.be/${selectedCourse.youtubeId}`} target="_blank" rel="noreferrer" className="mt-2 w-full flex items-center justify-center gap-2 bg-white text-blue-700 border border-slate-200 font-bold rounded-lg py-2.5 text-sm hover:bg-slate-50 transition-colors">
+                  Abrir no YouTube
+                </a>
+              </div>
+
               <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
                 <h3 className="text-sm font-black text-slate-900 mb-3">Cursos relacionados</h3>
                 {related.length === 0 ? (
@@ -385,6 +556,22 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName }) => {
                 )}
               </div>
             </aside>
+          </div>
+
+          {/* CTA de ajuda */}
+          <div className="mt-6 rounded-xl bg-blue-950 text-white p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 shrink-0">
+                <LifeBuoy className="h-5 w-5 text-amber-300" />
+              </div>
+              <div>
+                <p className="text-sm font-black">Precisa de ajuda?</p>
+                <p className="text-xs text-blue-100">Fale com a equipe da ABIH-RJ sobre este treinamento.</p>
+              </div>
+            </div>
+            <a href="https://abihrj.com.br" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-amber-400 text-blue-950 font-black rounded-lg px-5 py-2.5 text-sm hover:bg-amber-300 transition-colors shrink-0">
+              Fale com a ABIH-RJ <ChevronRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </div>
