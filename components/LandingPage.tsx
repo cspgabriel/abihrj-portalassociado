@@ -2,18 +2,12 @@ import React from 'react';
 import {
   ArrowRight,
   BriefcaseBusiness,
-  CalendarDays,
   ChevronLeft,
   ChevronRight,
-  GalleryHorizontalEnd,
   Gavel,
-  Handshake,
   LayoutGrid,
-  MessageSquareText,
-  Trophy,
   Users,
   Bell,
-  ChartPie,
   Camera,
   Music,
   Building2,
@@ -41,12 +35,12 @@ const featuredCards: Array<{
 }> = [
   {
     title: 'Rock in Rio 2026',
-    body: 'Saiba tudo sobre o maior festival do mundo e o impacto na hotelaria carioca.',
+    body: 'Cadastre seu hotel no hub oficial de beneficios do maior festival de musica e entretenimento do mundo.',
     action: 'Acessar pagina',
     icon: Music,
     view: 'ROCK_IN_RIO',
     image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=85',
-    tone: 'from-slate-950/95 via-purple-950/70 to-blue-700/25',
+    tone: 'from-pink-950/95 via-pink-800/75 to-fuchsia-600/40',
     badge: 'Novo',
   },
   {
@@ -65,23 +59,10 @@ const featuredCards: Array<{
     action: 'Acessar planejador',
     icon: CalendarCheck,
     benefitId: 'planejador-feriados-2026',
-    image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=900&q=85',
-    tone: 'from-blue-950/95 via-blue-900/75 to-blue-700/35',
+    image: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=900&q=85',
+    tone: 'from-emerald-950/95 via-emerald-900/75 to-amber-600/35',
     badge: 'Novo',
   },
-];
-
-const insights = [
-  { label: 'Oportunidades Comerciais', helper: 'Novas oportunidades disponiveis', value: '28', icon: BriefcaseBusiness, color: 'bg-blue-600' },
-  { label: 'Eventos no Mes', helper: 'Participe e conecte-se com o setor', value: '7', icon: CalendarDays, color: 'bg-violet-600' },
-  { label: 'Fornecedores Parceiros', helper: 'Solucoes e condicoes exclusivas', value: '156', icon: Handshake, color: 'bg-emerald-600' },
-  { label: 'Relatorios Disponiveis', helper: 'Estudos e indicadores para decisoes', value: '12', icon: ChartPie, color: 'bg-amber-500' },
-];
-
-const agenda = [
-  { day: '22', month: 'MAI', title: 'Reuniao do Conselho', place: 'Hotel Prodigy Santos Dumont', time: '09:00', color: 'border-blue-100 bg-blue-50' },
-  { day: '28', month: 'MAI', title: 'Workshop Revenue Management', place: 'Online', time: '14:00', color: 'border-emerald-100 bg-emerald-50' },
-  { day: '05', month: 'JUN', title: 'Encontro de Associados', place: 'Windsor Barra Hotel', time: '10:00', color: 'border-amber-100 bg-amber-50' },
 ];
 
 const quickLinks = [
@@ -200,35 +181,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
           <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-end gap-3">
-                <h2 className="text-base font-black text-slate-900">Insights rapidos</h2>
-                <p className="hidden text-xs font-medium text-slate-500 sm:block">Acompanhe o que importa para o seu negocio.</p>
-              </div>
-              <button className="text-xs font-bold text-slate-500">Periodo&nbsp;&nbsp; Este mes</button>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              {insights.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.label} className="rounded-lg border border-slate-100 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.04)]">
-                    <div className="flex gap-4">
-                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${item.color} text-white shadow-lg`}>
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-black leading-6 text-slate-950">{item.value}</p>
-                        <p className="mt-1 text-sm font-black leading-4 text-slate-800">{item.label}</p>
-                        <p className="mt-2 text-xs font-medium leading-4 text-slate-500">{item.helper}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-end gap-3">
                 <h2 className="text-base font-black text-slate-900">Fornecedores em Destaque</h2>
                 <p className="hidden text-xs font-medium text-slate-500 sm:block">Parceiros oficiais com condicoes especiais para associados HoteisRIO.</p>
               </div>
@@ -255,33 +207,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
         </main>
 
         <aside className="space-y-5">
-          <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-base font-black text-blue-950">
-                <CalendarDays className="h-5 w-5 text-blue-600" /> Agenda
-              </h2>
-              <button onClick={() => onNavigate('ASSOCIATION_EVENTS')} className="text-xs font-black text-blue-700">Ver tudo</button>
-            </div>
-            <div className="space-y-3">
-              {agenda.map((item) => (
-                <div key={`${item.day}-${item.title}`} className="flex items-center gap-3">
-                  <div className={`flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-lg border ${item.color}`}>
-                    <span className="text-base font-black leading-4 text-slate-900">{item.day}</span>
-                    <span className="text-[10px] font-black text-slate-500">{item.month}</span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-black text-slate-900">{item.title}</p>
-                    <p className="truncate text-xs font-medium text-slate-500">{item.place}</p>
-                  </div>
-                  <span className="text-xs font-bold text-slate-500">{item.time}</span>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => onNavigate('ASSOCIATION_EVENTS')} className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 py-3 text-xs font-black text-blue-800">
-              <CalendarDays className="h-4 w-4" /> Ver calendario completo
-            </button>
-          </section>
-
           <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <h2 className="mb-4 flex items-center gap-2 text-base font-black text-blue-950">
               <LayoutGrid className="h-5 w-5 text-blue-600" /> Acessos rapidos
