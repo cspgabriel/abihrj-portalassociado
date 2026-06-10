@@ -600,21 +600,21 @@ export const TEAM_CONTACTS = [
 ];
 
 export const WHATSAPP_GROUPS = [
-  { id: 'grupo-01', name: 'Grupo HoteisRio 01', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/GLBN6SipLJa53SET5iu3Az' },
-  { id: 'grupo-02', name: 'Grupo HoteisRio 02', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/HDWSpMh5i4A3evfuFae9ee' },
-  { id: 'grupo-03', name: 'Grupo HoteisRio 03', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LGCPQnGKNsN8FMVtVP2Nx9' },
-  { id: 'grupo-04', name: 'Grupo HoteisRio 04', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LYbTk5WmsAP09eUJGg1ykc' },
-  { id: 'grupo-05', name: 'Grupo HoteisRio 05', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/H51hiL8LKO57saNiSXfuwV' },
-  { id: 'grupo-06', name: 'Grupo HoteisRio 06', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/CxTSUAFseZ8KrjstxtYpWp' },
-  { id: 'grupo-07', name: 'Grupo HoteisRio 07', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/JRs28cGpNOEHWL7Ao4mnwz' },
-  { id: 'grupo-08', name: 'Grupo HoteisRio 08', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/CwZnNICjROREiTLScorQNS' },
-  { id: 'grupo-09', name: 'Grupo HoteisRio 09', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/EpFqo1Wp9UUFHQqrtDkD23' },
-  { id: 'grupo-10', name: 'Grupo HoteisRio 10', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LIUx9xwjNjeAnsiHhFirTu' },
-  { id: 'grupo-11', name: 'Grupo HoteisRio 11', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/KGhGL2Xp1GSBmuEzDa4Onx' },
-  { id: 'grupo-12', name: 'Grupo HoteisRio 12', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/Hoj0XWoAbfA8HzXs4IbKBR' },
-  { id: 'grupo-13', name: 'Grupo HoteisRio 13', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/LDQ96AlFYB38H0NGCTQqlu' },
-  { id: 'grupo-14', name: 'Grupo HoteisRio 14', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/KTkHIwqKGVB78Su3PLgj7Q' },
-  { id: 'grupo-15', name: 'Grupo HoteisRio 15', description: 'Grupo oficial HoteisRio.', link: 'https://chat.whatsapp.com/GPSe932zboL5THzeTeZUgt' }
+  { id: 'grupo-01', name: 'ABIH-RJ 📍C. do Sol ABC', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/GLBN6SipLJa53SET5iu3Az' },
+  { id: 'grupo-02', name: 'ABIH-RJ 📍PARATY - HTL', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/HDWSpMh5i4A3evfuFae9ee' },
+  { id: 'grupo-03', name: 'ABIH-RJ 📍VALE DO CAFÉ - HTL', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/LGCPQnGKNsN8FMVtVP2Nx9' },
+  { id: 'grupo-04', name: 'ABIH-RJ 📍BARRA DO PIRAÍ', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/LYbTk5WmsAP09eUJGg1ykc' },
+  { id: 'grupo-05', name: 'ABIH-RJ 📍ARRAIAL DO CABO', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/H51hiL8LKO57saNiSXfuwV' },
+  { id: 'grupo-06', name: 'ABIH-RJ 📍CACHOEIRA DE MACACU E GUAPIMIRIM', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/CxTSUAFseZ8KrjstxtYpWp' },
+  { id: 'grupo-07', name: 'ABIH-RJ 📍ANGRA/Mangaratiba', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/JRs28cGpNOEHWL7Ao4mnwz' },
+  { id: 'grupo-08', name: 'ABIH-RJ 📍NOVA FRIBURGO', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/CwZnNICjROREiTLScorQNS' },
+  { id: 'grupo-09', name: 'ABIH-RJ 📍RIO D OSTRAS HTL', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/EpFqo1Wp9UUFHQqrtDkD23' },
+  { id: 'grupo-10', name: 'ABIH-RJ 📍MACAÉ (Hotéis)', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/LIUx9xwjNjeAnsiHhFirTu' },
+  { id: 'grupo-11', name: 'ABIH-RJ 📍TERE HOTÉIS', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/KGhGL2Xp1GSBmuEzDa4Onx' },
+  { id: 'grupo-12', name: 'ABIH-RJ 📍AG NEGRAS HTL', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/Hoj0XWoAbfA8HzXs4IbKBR' },
+  { id: 'grupo-13', name: 'ABIH-RJ 📍PETRÓPOLIS HTL', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/LDQ96AlFYB38H0NGCTQqlu' },
+  { id: 'grupo-14', name: 'ABIH-RJ 📍Eng. Paulo Front', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/KTkHIwqKGVB78Su3PLgj7Q' },
+  { id: 'grupo-15', name: 'ABIH-RJ 📍SAQUAREMA E MARICÁ - HTL', description: 'Grupo regional de hotéis associados da ABIH-RJ.', link: 'https://chat.whatsapp.com/GPSe932zboL5THzeTeZUgt' }
 ];
 
 export const ASSOCIATION_EVENTS = [
