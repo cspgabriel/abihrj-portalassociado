@@ -95,7 +95,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
 
   return (
     <div className="min-h-full bg-[#f6f8fc] px-4 py-5 md:px-6 lg:px-8 animate-fade-in">
-      <section className="relative overflow-hidden rounded-2xl min-h-[260px] bg-blue-950 shadow-sm">
+      <section className="relative overflow-hidden rounded-2xl min-h-[180px] bg-blue-950 shadow-sm">
         <img
           src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1800&q=85"
           alt="Vista aerea do Rio de Janeiro"
@@ -107,29 +107,28 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
           <div className="absolute right-28 top-20 h-52 w-52 rounded-full border border-amber-300/30" />
         </div>
 
-        <div className="relative z-10 flex min-h-[260px] flex-col justify-center px-6 py-8 md:px-14">
-          <p className="mb-3 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-blue-100">
+        <div className="relative z-10 flex min-h-[180px] flex-col justify-center px-6 py-6 md:px-12">
+          <p className="mb-2 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.24em] text-blue-100">
             Portal do Associado <span className="h-px w-8 bg-amber-300" />
           </p>
-          <h1 className="max-w-xl text-4xl font-black leading-tight text-white md:text-5xl">
+          <h1 className="max-w-xl text-2xl font-black leading-tight text-white md:text-4xl">
             Bem-vindo, {firstName}
           </h1>
-          <p className="mt-4 max-w-2xl text-sm font-medium leading-6 text-blue-50 md:text-base">
+          <p className="mt-2 max-w-2xl text-xs font-medium leading-5 text-blue-50 md:text-sm">
             Sua central exclusiva de inteligencia, beneficios e gestao hoteleira.
-            Tudo o que voce precisa para fortalecer seu negocio em um so lugar.
           </p>
           <button
             id="explore-benefits-btn"
             onClick={() => onNavigate('ALL_BENEFITS')}
-            className="mt-6 inline-flex w-fit items-center gap-3 rounded-lg bg-[#f5c64b] px-6 py-3 text-sm font-black text-blue-950 shadow-lg shadow-blue-950/20 transition hover:bg-amber-300"
+            className="mt-4 inline-flex w-fit items-center gap-3 rounded-lg bg-[#f5c64b] px-5 py-2.5 text-sm font-black text-blue-950 shadow-lg shadow-blue-950/20 transition hover:bg-amber-300"
           >
             Explorar Beneficios <ArrowRight className="h-4 w-4" />
           </button>
 
-          <div className="mt-6 w-full max-w-sm rounded-xl border border-white/20 bg-white/10 p-4 text-white shadow-2xl backdrop-blur md:absolute md:bottom-8 md:right-10">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-300/70 bg-blue-950/50">
-                <BriefcaseBusiness className="h-6 w-6 text-amber-300" />
+          <div className="mt-4 w-full max-w-xs rounded-xl border border-white/20 bg-white/10 p-3 text-white shadow-2xl backdrop-blur md:absolute md:bottom-5 md:right-10">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-300/70 bg-blue-950/50">
+                <BriefcaseBusiness className="h-5 w-5 text-amber-300" />
               </div>
               <div>
                 <p className="font-black">Juntos somos mais fortes</p>
@@ -260,18 +259,20 @@ const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, userName, onBenef
                 );
               })}
             </div>
-          </section>
 
-          <section className="rounded-xl border border-blue-100 bg-blue-950 p-4 text-white shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
-                <Bell className="h-5 w-5 text-amber-300" />
-              </div>
-              <div>
-                <p className="text-sm font-black">Precisa de ajuda?</p>
-                <p className="text-xs text-blue-100">Fale com nossa equipe</p>
-              </div>
-            </div>
+            {/* Precisa de ajuda? — agora dentro do Acesso Rápido */}
+            <button
+              onClick={() => onNavigate('CONTACTS')}
+              className="mt-3 flex w-full items-center gap-3 rounded-lg bg-blue-950 p-3 text-left text-white transition hover:bg-blue-900"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10">
+                <Bell className="h-4 w-4 text-amber-300" />
+              </span>
+              <span>
+                <span className="block text-sm font-black">Precisa de ajuda?</span>
+                <span className="block text-xs text-blue-100">Fale com nossa equipe</span>
+              </span>
+            </button>
           </section>
 
           <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">

@@ -98,6 +98,7 @@ export interface CourseProgress {
   started?: boolean;
   completed?: boolean;
   completedAt?: string;
+  lessonsWatched?: number[]; // índices das aulas assistidas
   quizScore?: number;
   quizTotal?: number;
   quizPassed?: boolean;

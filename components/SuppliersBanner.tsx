@@ -34,7 +34,7 @@ const SuppliersBanner: React.FC = () => {
             src={buildSrc(col.speed)}
             title={`Fornecedores parceiros — coluna ${i + 1}`}
             className="block w-full"
-            style={{ height: 420, border: 'none', overflow: 'hidden' }}
+            style={{ height: 300, border: 'none', overflow: 'hidden' }}
             scrolling="no"
             loading="lazy"
           />

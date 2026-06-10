@@ -11,7 +11,7 @@ import {
   MonitorPlay, Briefcase, Music, Wine,
   MessageCircle, Phone, UserCog,
   Users, Search, ShoppingBag, Newspaper, Camera,
-  ClipboardCheck, Compass, BadgeCheck,
+  ClipboardCheck, Compass, BadgeCheck, GraduationCap,
 } from 'lucide-react';
 import { BENEFITS_DATA } from '../constants';
 import Breadcrumb from './Breadcrumb';
@@ -137,6 +137,10 @@ const Layout: React.FC<LayoutProps> = ({
 
                 <button id="sidebar-courses" onClick={() => { onNavigate('COURSES_V2'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'COURSES_V2' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                     <MonitorPlay className="w-4 h-4 shrink-0" /> <span className="truncate">Cursos & Treinamentos</span>
+                </button>
+
+                <button id="sidebar-progress" onClick={() => { onNavigate('MY_PROGRESS'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all overflow-hidden ${currentView === 'MY_PROGRESS' ? 'bg-white/10 text-white font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <GraduationCap className="w-4 h-4 shrink-0" /> <span className="truncate">Meu Progresso</span>
                 </button>
 
                 <button id="sidebar-procap" onClick={() => handleOpenBenefit('descubra-rj-procap')} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all overflow-hidden">

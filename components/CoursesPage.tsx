@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   ArrowLeft, Play, Clock, CheckCircle2, Search, Share2, GraduationCap,
   BookOpen, Users, Award, Sparkles, ChevronRight, Tag, Calendar,
-  ListChecks, Lock, RotateCcw, LifeBuoy, XCircle, CircleDashed,
+  ListChecks, Lock, RotateCcw, LifeBuoy, XCircle, CircleDashed, PlayCircle,
 } from 'lucide-react';
 import { COURSES_DATA, COURSE_QUIZZES, QUIZ_PASS_RATIO } from '../constants';
 import { Course, CourseProgress } from '../types';
@@ -13,6 +13,7 @@ interface CoursesPageProps {
   onBack: () => void;
   userName?: string;
   userId?: string;
+  initialCourseId?: string;
 }
 
 const formatTotalDuration = (durations: string[]): string => {
@@ -91,7 +92,7 @@ const CourseThumb: React.FC<CourseThumbProps> = ({ course, className, onBroken }
   );
 };
 
-const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) => {
+const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId, initialCourseId }) => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
   const [searchTerm, setSearchTerm] = useState('');
@@ -113,6 +114,14 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) =
       if (course) setSelectedCourse(course);
     }
   }, []);
+
+  // Abre um curso específico quando vindo da página "Meu Progresso"
+  useEffect(() => {
+    if (initialCourseId) {
+      const course = COURSES_DATA.find(c => c.id === initialCourseId);
+      if (course) setSelectedCourse(course);
+    }
+  }, [initialCourseId]);
 
   useEffect(() => {
     const scrollable = document.getElementById('scrollable-content');
@@ -296,13 +305,21 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) =
     }
   };
 
-  const handlePlay = (course: Course) => {
-    setPlaying(true);
-    if (!progress?.started) persistProgress(course, { started: true });
+  const markLessonWatched = (course: Course, idx: number) => {
+    const watched = Array.from(new Set([...(progress?.lessonsWatched || []), idx]));
+    const hasQuiz = !!COURSE_QUIZZES[course.id];
+    const total = 1 + (hasQuiz ? 1 : 0);
+    const done = Math.min(watched.length, 1) + (progress?.quizPassed ? 1 : 0);
+    persistProgress(course, {
+      started: true,
+      lessonsWatched: watched,
+      ...(done >= total ? { completed: true, completedAt: new Date().toISOString() } : {}),
+    });
   };
 
-  const markComplete = (course: Course) => {
-    persistProgress(course, { completed: true, completedAt: new Date().toISOString() });
+  const handlePlay = (course: Course, lessonIdx = 0) => {
+    setPlaying(true);
+    markLessonWatched(course, lessonIdx);
   };
 
   const startQuiz = (quiz: typeof COURSE_QUIZZES[string]) => {
@@ -318,21 +335,31 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) =
     const passed = score / total >= QUIZ_PASS_RATIO;
     setQuizResult({ score, total, passed });
     setQuizOpen(false);
+    const watched = progress?.lessonsWatched || [];
+    const done = Math.min(watched.length, 1) + (passed ? 1 : 0);
     persistProgress(course, {
       quizScore: score,
       quizTotal: total,
       quizPassed: passed,
       quizAt: new Date().toISOString(),
-      ...(passed ? { completed: true, completedAt: new Date().toISOString() } : {}),
+      ...(done >= 2 ? { completed: true, completedAt: new Date().toISOString() } : {}),
     });
   };
 
-  const progressPct = progress?.completed ? 100 : progress?.started ? 50 : 0;
-  const progressLabel = progress?.completed ? 'Concluído' : progress?.started ? 'Em andamento' : 'Não iniciado';
-
   if (selectedCourse) {
     const quiz = COURSE_QUIZZES[selectedCourse.id] || null;
-    const isCompleted = !!progress?.completed;
+    // Cada curso (1 vídeo) = 1 aula; soma-se a prova de avaliação quando existe
+    const lessons = [{ title: selectedCourse.title, youtubeId: selectedCourse.youtubeId }];
+    const watchedList = progress?.lessonsWatched || [];
+    const watchedCount = Math.min(watchedList.length, lessons.length);
+    const hasQuiz = !!quiz;
+    const totalSteps = lessons.length + (hasQuiz ? 1 : 0);
+    const doneSteps = watchedCount + (progress?.quizPassed ? 1 : 0);
+    const progressPct = totalSteps ? Math.round((doneSteps / totalSteps) * 100) : 0;
+    const progressLabel = progressPct >= 100 ? 'Concluído' : progressPct > 0 ? 'Em andamento' : 'Não iniciado';
+    const isCompleted = progressPct >= 100;
+    const canEmitCert = hasQuiz ? !!progress?.quizPassed : watchedCount >= lessons.length;
+    const isLessonWatched = (i: number) => watchedList.includes(i);
     const allAnswered = quiz ? answers.length === quiz.length && answers.every(a => a >= 0) : false;
     const related = COURSES_DATA
       .filter(c => c.category === selectedCourse.category && c.id !== selectedCourse.id)
@@ -427,17 +454,52 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) =
                     Avaliação: <strong>{progress.quizScore}/{progress.quizTotal}</strong> — {progress.quizPassed ? 'aprovado' : 'não aprovado'}
                   </p>
                 )}
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {!isCompleted ? (
-                    <button onClick={() => markComplete(selectedCourse)} className="inline-flex items-center gap-2 bg-blue-900 text-white text-sm font-bold rounded-lg px-4 py-2 hover:bg-blue-800 transition-colors">
-                      <CheckCircle2 className="w-4 h-4" /> Marcar como concluído
-                    </button>
-                  ) : (
-                    <span className="inline-flex items-center gap-2 text-emerald-700 text-sm font-bold">
-                      <CheckCircle2 className="w-4 h-4" /> Curso concluído
+                <div className="mt-4 text-sm">
+                  {isCompleted ? (
+                    <span className="inline-flex items-center gap-2 font-bold text-emerald-700">
+                      <CheckCircle2 className="w-4 h-4" /> Curso concluído — certificado liberado
                     </span>
+                  ) : (
+                    <span className="text-slate-500">Assista à aula e seja aprovado na avaliação para concluir e liberar o certificado.</span>
                   )}
                 </div>
+              </section>
+
+              {/* Conteúdo do curso: aulas + prova de avaliação */}
+              <section className="bg-white rounded-xl border border-slate-200 p-5 md:p-6 shadow-sm">
+                <h2 className="text-base md:text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
+                  <PlayCircle className="w-5 h-5 text-blue-700" /> Conteúdo do curso
+                </h2>
+                <ul className="divide-y divide-slate-100">
+                  {lessons.map((l, i) => (
+                    <li key={i}>
+                      <button onClick={() => handlePlay(selectedCourse, i)} className="group flex w-full items-center gap-3 py-3 text-left">
+                        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${isLessonWatched(i) ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
+                          {isLessonWatched(i) ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-bold leading-4 text-slate-800 group-hover:text-blue-700">Aula {i + 1} — {l.title}</span>
+                          <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock className="w-3 h-3" /> {selectedCourse.duration}{isLessonWatched(i) ? ' • assistida' : ''}</span>
+                        </span>
+                        <Play className="w-4 h-4 shrink-0 text-blue-600" />
+                      </button>
+                    </li>
+                  ))}
+                  {hasQuiz && (
+                    <li>
+                      <button onClick={() => startQuiz(quiz)} className="group flex w-full items-center gap-3 py-3 text-left">
+                        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${progress?.quizPassed ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                          {progress?.quizPassed ? <CheckCircle2 className="w-4 h-4" /> : <ListChecks className="w-4 h-4" />}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-bold leading-4 text-slate-800 group-hover:text-blue-700">Prova de avaliação</span>
+                          <span className="mt-0.5 block text-[11px] text-slate-500">{quiz.length} perguntas{progress?.quizScore != null ? ` • ${progress.quizScore}/${progress.quizTotal}${progress.quizPassed ? ' (aprovado)' : ''}` : ''}</span>
+                        </span>
+                        <ChevronRight className="w-4 h-4 shrink-0 text-blue-600" />
+                      </button>
+                    </li>
+                  )}
+                </ul>
               </section>
 
               {/* Avaliação do curso */}
@@ -519,13 +581,13 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ onBack, userName, userId }) =
                   {copied ? 'Link copiado' : 'Compartilhar curso'}
                 </button>
                 <button
-                  onClick={() => { if (isCompleted) emitCertificate(selectedCourse); }}
-                  disabled={!isCompleted}
-                  className={`mt-2 w-full flex items-center justify-center gap-2 font-bold rounded-lg py-2.5 text-sm transition-colors ${isCompleted ? 'bg-amber-400 text-blue-950 hover:bg-amber-300' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+                  onClick={() => { if (canEmitCert) emitCertificate(selectedCourse); }}
+                  disabled={!canEmitCert}
+                  className={`mt-2 w-full flex items-center justify-center gap-2 font-bold rounded-lg py-2.5 text-sm transition-colors ${canEmitCert ? 'bg-amber-400 text-blue-950 hover:bg-amber-300' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
                 >
-                  {isCompleted ? <Award className="w-4 h-4" /> : <Lock className="w-4 h-4" />} Emitir Certificado
+                  {canEmitCert ? <Award className="w-4 h-4" /> : <Lock className="w-4 h-4" />} Emitir Certificado
                 </button>
-                {!isCompleted && <p className="text-[11px] text-slate-400 mt-1.5 text-center">Conclua o curso (ou a avaliação) para emitir o certificado.</p>}
+                {!canEmitCert && <p className="text-[11px] text-slate-400 mt-1.5 text-center">Faça a avaliação e seja aprovado para emitir o certificado.</p>}
                 <a href={`https://youtu.be/${selectedCourse.youtubeId}`} target="_blank" rel="noreferrer" className="mt-2 w-full flex items-center justify-center gap-2 bg-white text-blue-700 border border-slate-200 font-bold rounded-lg py-2.5 text-sm hover:bg-slate-50 transition-colors">
                   Abrir no YouTube
                 </a>

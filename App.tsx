@@ -34,6 +34,7 @@ import TalentBankPage from './components/TalentBankPage';
 import BenefitsShowcase from './components/BenefitsShowcase';
 import FNRHDigitalPage from './components/FNRHDigitalPage';
 import CadasturPage from './components/CadasturPage';
+import MyProgressPage from './components/MyProgressPage';
 
 // Modals & Widgets
 import BenefitModal from './components/BenefitModal';
@@ -79,6 +80,9 @@ export default function App() {
   const [onboardingHotel, setOnboardingHotel] = useState('');
   const [onboardingCargo, setOnboardingCargo] = useState('');
   const [onboardingWhatsapp, setOnboardingWhatsapp] = useState('');
+
+  // Curso a abrir ao vir da página "Meu Progresso"
+  const [pendingCourseId, setPendingCourseId] = useState<string | undefined>(undefined);
 
   const scrollToTop = () => {
     try {
@@ -215,6 +219,11 @@ export default function App() {
   const handleGlobalSearch = (term: string) => {
     setGlobalSearchTerm(term);
     navigateTo('ALL_BENEFITS');
+  };
+
+  const openCourseFromId = (courseId: string) => {
+    setPendingCourseId(courseId);
+    navigateTo('COURSES_V2');
   };
 
   const handleLogout = () => {
@@ -721,7 +730,8 @@ export default function App() {
       case 'ROCK_IN_RIO': return <RockInRioPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'CALCULATORS_PAGE': return <CalculatorsPage onBack={() => navigateTo('LANDING_PAGE')} onOpenCalculator={(b) => { setSelectedBenefit(b); setShowCalculatorModal(true); }} />;
       case 'REGISTRATION_UPDATE': return <RegistrationUpdatePage onBack={() => navigateTo('LANDING_PAGE')} />;
-      case 'COURSES_V2': return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} userName={safeUser.name} userId={safeUser.id} />;
+      case 'COURSES_V2': return <CoursesPage onBack={() => navigateTo('LANDING_PAGE')} userName={safeUser.name} userId={safeUser.id} initialCourseId={pendingCourseId} />;
+      case 'MY_PROGRESS': return <MyProgressPage onBack={() => navigateTo('LANDING_PAGE')} userId={safeUser.id} onOpenCourse={openCourseFromId} />;
       case 'BENEFIT_CATEGORIZER': return <BenefitCategorizerPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'COMMERCIAL_ACTIONS_PAGE': return <CommercialActionsPage onBack={() => navigateTo('LANDING_PAGE')} />;
       case 'ADMIN_PANEL': return <AdminPanel user={safeUser} onBack={() => navigateTo('LANDING_PAGE')} />;
